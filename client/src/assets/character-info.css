@@ -1,0 +1,53 @@
+.rect {
+  width: 35px;
+  height: 18px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.attribute {
+  text-align: left;
+  margin: 10px 0;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.attribute-bar {
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  border: 1px solid rgb(201, 201, 201);
+}
+
+.attribute-bar > :not(:last-child) {
+  border-right: 1px solid rgb(201, 201, 201);
+}
+
+.light {
+  background-color: rgb(189, 105, 56);
+}
+
+.strength {
+  background-color: #e76969;
+}
+
+.dexterity {
+  background-color: #5dab5d;
+}
+
+.intelligence {
+  background-color: #4585cf;
+}
+
+.vitality {
+  background-color: #f2915b;
+}
+
+.speed {
+  background-color: #eeee4f;
+}
