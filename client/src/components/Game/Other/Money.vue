@@ -1,19 +1,18 @@
 <script setup>
+import { computed } from "@vue/reactivity";
 import { onMounted, reactive } from "vue";
-const props = defineProps(["silver"]);
+import { usePlayerStore } from "../../../stores/playerStore";
 
-const money = reactive({ gold: null, silver: null });
+const playerStore = usePlayerStore();
 
-onMounted(() => {
-  const silver = props.silver;
+const money = computed(() => {
+  const silver = playerStore.characterData.silver;
 
   const gold = Math.floor(silver / 100);
   const silverRemainder = silver - (gold * 100);
 
-  money.gold = gold;
-  money.silver = silverRemainder;
+  return { gold, silver: silverRemainder };
 })
-
 
 </script>
 
