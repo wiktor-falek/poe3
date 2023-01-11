@@ -1,7 +1,10 @@
 <script setup>
 import { ref } from "vue";
+import { useAuthStore } from "../../stores/authStore";
 import Character from "./Character.vue";
 import CharacterCreation from "./CharacterCreation.vue";
+
+const authStore = useAuthStore();
 
 const fetchCharacters = async () => {
   const url = "http://localhost:3000/api/v1/characters";
@@ -16,7 +19,7 @@ const fetchCharacters = async () => {
   const response = await fetch(url, options);
   if (response.status === 200 || response.status === 304) {
     const data = await response.json();
-    localStorage.setItem("isAuthenticated", "true");
+    authStore.setIsAuthenticated(true);
     return data;
   }
 };

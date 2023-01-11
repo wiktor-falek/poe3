@@ -5,7 +5,6 @@ import LandingView from "./LandingView.vue";
 import { useAuthStore } from "../stores/authStore";
 
 const authStore = useAuthStore();
-// const isAuthenticated = ref(localStorage.getItem("isAuthenticated") === "true");
 
 </script>
 

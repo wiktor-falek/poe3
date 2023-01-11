@@ -5,7 +5,9 @@ import TabInventory from "./Tabs/TabInventory.vue";
 import TabCharacter from "./Tabs/TabCharacter.vue";
 import TabTalents from "./Tabs/TabTalents.vue";
 import { usePlayerStore } from "../../stores/playerStore";
+import { useAuthStore } from "../../stores/authStore";
 
+const authStore = useAuthStore();
 const playerStore = usePlayerStore();
 
 const characterData = ref();
@@ -34,7 +36,7 @@ const fetchCharacter = async () => {
   };
   const response = await fetch(url, options);
   if (response.status === 200 || response.status === 304) {
-    localStorage.setItem("isAuthenticated", "true");
+    authStore.setIsAuthenticated(true);
     const character = await response.json();
     return character;
   }

@@ -1,11 +1,11 @@
 <script setup>
-import { onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
+import { ref } from "vue";
+import { useAuthStore } from "../stores/authStore";
 
-const router = useRouter;
+const authStore = useAuthStore();
 
-const username = ref("kys123xd");
-const password = ref("rudasuka12");
+const username = ref("");
+const password = ref("");
 
 const submit = () => {
   const url = "http://localhost:3000/auth/login";
@@ -23,12 +23,13 @@ const submit = () => {
   };
   fetch(url, options).then((response) => {
     if (response.status === 200 || response.status === 304) {
-      localStorage.setItem("isAuthenticated", "true");
+      
+      authStore.setIsAuthenticated(true);
       window.location.href = "/";
       return;
     }
     if (response.status === 401) {
-      localStorage.setItem("isAuthenticated", "false");
+      authStore.setIsAuthenticated(false);
     }
   });
 };

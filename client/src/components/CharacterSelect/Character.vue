@@ -29,7 +29,8 @@ const isDeleted = ref(false);
 
 <template>
   <div v-if="!isDeleted" class="character border--light">
-    <!-- this is the easiest way to do this -->
+    
+    <!-- not dry but this is the easiest way to do this -->
     <img
       v-if="props.class === 'swordsman'"
       class="character__icon"

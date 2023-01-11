@@ -10,7 +10,7 @@ const deleteCookies = () => {
   document.cookie = "username=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
   document.cookie =
     "sessionId=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-  localStorage.setItem("isAuthenticated", "false");
+  authStore.setIsAuthenticated(false);
   window.location.href = "/";
 };
 
