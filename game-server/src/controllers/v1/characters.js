@@ -23,7 +23,7 @@ router.get("/characters", async (req, res) => {
     }));
     res.json(basicCharactersData);
   } catch (e) {
-    res.status(400).json({ error: "failed to load data of characters" });
+    res.status(204);
   }
 });
 
