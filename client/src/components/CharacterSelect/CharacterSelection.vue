@@ -48,9 +48,6 @@ const redirectToGame = () => {
 
 <template>
   <div class="content" v-show="!showCharacterCreation">
-    <!-- <p v-if="selectedCharacter">
-        (debug) Selected Character ID {{ selectedCharacter }}
-      </p> -->
     <button
       class="character-select margin-vertical"
       @click="showCharacterCreation = !showCharacterCreation"

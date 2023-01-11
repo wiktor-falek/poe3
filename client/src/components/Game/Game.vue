@@ -4,6 +4,9 @@ import { useRoute } from "vue-router";
 import TabInventory from "./Tabs/TabInventory.vue";
 import TabCharacter from "./Tabs/TabCharacter.vue";
 import TabTalents from "./Tabs/TabTalents.vue";
+import { usePlayerStore } from "../../stores/playerStore";
+
+const playerStore = usePlayerStore();
 
 const characterData = ref();
 
@@ -38,6 +41,7 @@ const fetchCharacter = async () => {
 };
 
 fetchCharacter().then((character) => {
+  playerStore.loadCharacterData(character);
   characterData.value = character;
 });
 

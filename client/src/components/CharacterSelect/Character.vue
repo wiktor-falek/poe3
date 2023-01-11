@@ -29,35 +29,49 @@ const isDeleted = ref(false);
 
 <template>
   <div v-if="!isDeleted" class="character border--light">
+    <!-- this is the easiest way to do this -->
+    <img
+      v-if="props.class === 'swordsman'"
+      class="character__icon"
+      src="@/assets/icons/class-icons/swordsman.jpg"
+    />
+    <img
+      v-if="props.class === 'ranger'"
+      class="character__icon"
+      src="@/assets/icons/class-icons/ranger.jpg"
+    />
+    <img
+      v-if="props.class === 'sorcerer'"
+      class="character__icon"
+      src="@/assets/icons/class-icons/sorcerer.jpg"
+    />
+    <img
+      v-if="props.class === 'assassin'"
+      class="character__icon"
+      src="@/assets/icons/class-icons/assassin.jpg"
+    />
+
     <div class="character__wrapper">
       <p class="character__name">{{ props.name }}</p>
       <p class="character__class">{{ props.class }}</p>
-      <p class="character__level">lvl {{ props.level }}</p>
+      <p class="character__level">Level {{ props.level }}</p>
     </div>
 
     <button class="button-close" @click="deleteCharacter(props.id)"></button>
-    <!-- <button class="button-close" @click="deleteCharacter(props.id)"></button> -->
   </div>
-
-  <!-- fuck this fucking piece of shit modal -->
-  <!-- <div v-if="modalIsOpened" class="modal--delete-character">
-    <p>Are you sure you want to delete this character?</p>
-    <p>This action is irreversible!</p>
-    <div class="wrapper">
-      <button class="button--decline" @click="deleteCharacter(props.id); modalIsOpened = false">Yes</button>
-      <button class="button--confirm" @click="modalIsOpened = false">No</button>
-    </div>
-  </div> -->
 </template>
 
 <style scoped>
 .character {
   box-sizing: border-box;
   min-height: 100px;
-  padding-left: 20px;
   min-width: fit-content;
   display: flex;
-  justify-content: space-between;
+  gap: 10px;
+}
+
+.button-close {
+  margin-left: auto;
 }
 
 .character__wrapper {

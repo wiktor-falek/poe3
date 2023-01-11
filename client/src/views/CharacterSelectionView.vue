@@ -1,17 +1,19 @@
 <script setup>
   import { ref } from "vue";
 import CharacterSelection from "../components/CharacterSelect/CharacterSelection.vue";
-import NotSignedInView from "./NotSignedInView.vue";
+import LandingView from "./LandingView.vue";
+import { useAuthStore } from "../stores/authStore";
 
-const isAuthenticated = ref(localStorage.getItem("isAuthenticated") === "true");
+const authStore = useAuthStore();
+// const isAuthenticated = ref(localStorage.getItem("isAuthenticated") === "true");
 
 </script>
 
 <template>
   <main>
-    <CharacterSelection v-if="isAuthenticated" />
+    <CharacterSelection v-if="authStore.isAuthenticated" />
     <div v-else>
-      <NotSignedInView />
+      <LandingView />
     </div>
   </main>
 </template>

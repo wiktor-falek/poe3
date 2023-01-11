@@ -73,7 +73,7 @@ const createCharacter = () => {
   <div class="center">
     <div class="banners" ref="banners">
       <div class="banner">
-        <img src="../../assets/icons/class-icons/swordsman.jpg" class="banner__image" />
+        <img src="@/assets/icons/class-icons/swordsman.jpg" class="banner__image" />
         <p class="banner__class-name">Swordsman</p>
         <p class="banner__flavor-text">Lorem ipsum</p>
         <div class="banner__skill-icons">
@@ -94,18 +94,17 @@ const createCharacter = () => {
           </div>
         </div>
         <p class="banner__description">
-          Actual short description about the playstyle Lorem ipsum dolor sit
-          amet consectetur adipisicing elit.
+          Playstyle description
         </p>
         <button class="select" @click="selectCharacter($event, 'swordsman')">
           Select
         </button>
       </div>
       <div class="banner">
-        <img src="../../assets/icons/class-icons/ranger.jpg" class="banner__image" />
+        <img src="@/assets/icons/class-icons/ranger.jpg" class="banner__image" />
         <p class="banner__class-name">Ranger</p>
         <p class="banner__flavor-text">
-          Graceful in battle and shit something something, precise.
+          Lorem ipsum
         </p>
         <div class="banner__skill-icons">
           <div class="banner__skill-icon">
@@ -133,7 +132,7 @@ const createCharacter = () => {
         </button>
       </div>
       <div class="banner">
-        <img src="../../assets/icons/class-icons/sorcerer.jpg" class="banner__image" />
+        <img src="@/assets/icons/class-icons/sorcerer.jpg" class="banner__image" />
         <p class="banner__class-name">Sorcerer</p>
         <p class="banner__flavor-text">Master of arcane energy and elements</p>
         <div class="banner__skill-icons">
@@ -162,7 +161,7 @@ const createCharacter = () => {
         </button>
       </div>
       <div class="banner">
-        <img src="../../assets/icons/class-icons/assassin.jpg" class="banner__image" />
+        <img src="@/assets/icons/class-icons/assassin.jpg" class="banner__image" />
         <p class="banner__class-name">Assassin</p>
         <p class="banner__flavor-text">Lorem ipsum</p>
         <div class="banner__skill-icons">

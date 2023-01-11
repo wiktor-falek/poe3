@@ -2,8 +2,9 @@
 import { RouterLink, RouterView } from "vue-router";
 import { onMounted, ref } from "vue";
 import router from "./router";
+import { useAuthStore } from "@/stores/authStore";
 
-const isAuthenticated = ref(localStorage.getItem("isAuthenticated") === "true");
+const authStore = useAuthStore();
 
 const deleteCookies = () => {
   document.cookie = "username=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
@@ -28,7 +29,7 @@ const switchButtonShouldRender = () => {
     <div class="logo">
       <p>Path of Exile 3</p>
     </div>
-    <div class="options" v-if="isAuthenticated">
+    <div class="options" v-if="authStore.isAuthenticated">
       <!-- <img src="../src/assets/icons/cogwheel.svg" alt="settings" style="height: 32px; width: auto; background-color: white;"> -->
       <button
         v-if="switchButtonShouldRender()"

@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, onMounted, reactive } from "vue";
+import { onMounted, reactive } from "vue";
 const props = defineProps(["silver"]);
 
 const money = reactive({ gold: null, silver: null });
@@ -12,8 +12,6 @@ onMounted(() => {
 
   money.gold = gold;
   money.silver = silverRemainder;
-
-  console.log(money);
 })
 
 
