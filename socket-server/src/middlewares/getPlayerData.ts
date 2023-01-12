@@ -1,24 +1,25 @@
-import { Document } from "mongodb";
 import { Socket } from "socket.io";
-import User from "../db/User";
+import User from "../db/models/User";
 
 // finds current character that matches username and sessionId passed on handshake
 // and sets it inside socket.data namespace
-const getPlayerData = async (socket: Socket, next: Function): Promise<Document | null> => {
+const getPlayerData = async (socket: Socket, next: Function) => {
   const { username, sessionId } = socket.handshake.auth;
 
   if (!username || !sessionId) {
     return socket.disconnect();
   }
 
-  const playerData = await User.findCurrentCharacter();
-
-  if (playerData === null) {
+  const character = await User.findCurrentCharacter();
+  if (character === null || character === undefined) {
     return socket.disconnect();
   }
 
-  socket.data.userId = playerData._id.toString();
-  socket.data.character = playerData.result[0];
+  console.log(character);
+
+
+
+  socket.data.username = username;
   return next();
 };
 

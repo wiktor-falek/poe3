@@ -1,11 +1,12 @@
-import { Collection, Db, Document, MongoClient } from "mongodb";
-import Mongo from "./Mongo.js";
+import type { Collection, Document } from "mongodb";
+import Mongo from "../Mongo";
 
 class User {
   collection: Collection;
-  constructor(db: Db) {
-    this.collection = db.collection("users");
+  constructor() {
+    this.collection = Mongo.db.collection("users");
   }
+
   async findUser(username: String, sessionId: String): Promise<Document | null> {
     const user = this.collection.findOne({
       "account.username": username,
@@ -14,7 +15,7 @@ class User {
     return user;
   }
   async findCurrentCharacter(): Promise<Document | null> {
-    const currentCharacter = this.collection.aggregate([
+    const currentCharacter = await this.collection.aggregate([
       {
         $project: {
           result: {
@@ -27,10 +28,9 @@ class User {
         },
       },
     ]).toArray()
-    .then((doc) => doc[0])
 
-    return currentCharacter;
+    return currentCharacter[0].result[0];
   }
 }
 
-export default new User(Mongo.db);
+export default new User();
