@@ -1,4 +1,4 @@
-import Items from "../Items.js";
+import Mongo from "../Mongo.js";
 
 
 class Item {
@@ -20,4 +20,4 @@ class Item {
   }
 }
 
-export default new Item(Items.db);
+export default new Item(Mongo.db);

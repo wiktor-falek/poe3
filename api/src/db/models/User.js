@@ -1,4 +1,4 @@
-import Game from "../Game.js";
+import Mongo from "../Mongo.js";
 
 import userSchema from "../schemas/userSchema.js";
 import { logger } from "express-winston";
@@ -87,4 +87,4 @@ class User {
   }
 }
 
-export default new User(Game.db);
+export default new User(Mongo.db);
