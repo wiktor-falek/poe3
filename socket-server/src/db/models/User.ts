@@ -1,4 +1,5 @@
 import type { Collection, Document } from "mongodb";
+import type { Character } from "../../../*";
 import Mongo from "../Mongo";
 
 class User {
@@ -7,14 +8,15 @@ class User {
     this.collection = Mongo.db.collection("users");
   }
 
-  async findUser(username: String, sessionId: String): Promise<Document | null> {
+  findUser(username: String, sessionId: String): Promise<Document | null> {
     const user = this.collection.findOne({
       "account.username": username,
       "account.sessionId": sessionId,
     });
     return user;
   }
-  async findCurrentCharacter(): Promise<Document | null> {
+
+  async findCurrentCharacter(): Promise<Character|null> {
     const currentCharacter = await this.collection.aggregate([
       {
         $project: {

@@ -1,7 +1,8 @@
 import { createServer } from "http";
 import { Server, Socket } from "socket.io";
+import ClientStorage from "./helpers/ClientStorage.js";
 import logger from "./logger.js";
-import getPlayerData from "./middlewares/getPlayerData.js";
+import getPlayerData from "./middlewares/loadClient.js";
 // import InstanceFactory from "./logic/instances/InstanceFactory.js";
 // import Player from "./logic/entities/Player.js";
 
@@ -16,8 +17,8 @@ const io = new Server(httpServer, {
 io.use(getPlayerData);
 
 const onConnection = (socket: Socket) => {
-  const { username } = socket.data;
-  logger.info(`user ${username} connected`);
+  const { client } = socket.data;
+  logger.info(`user ${client.username} connected`);
 };
 
 io.on("connection", onConnection);
