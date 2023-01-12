@@ -24,7 +24,7 @@ const props = defineProps({
 
     
     <CharacterEquipment :equipment="characterData.equipment" />
-    <Money :silver="characterData.silver" />
+    <Money />
     <CharacterInventory />
   </div>
 </template>
