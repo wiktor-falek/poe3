@@ -95,7 +95,7 @@ router.post(
         level: {},
         resources: {},
         attributes: startingAttributes[req.body.class],
-        equipment: startingGear[req.body.class]
+        equipment: startingGear[req.body.class],
       });
     } catch (e) {
       logger.error(`character validation failed, ${e}`);

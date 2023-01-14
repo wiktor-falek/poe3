@@ -80,6 +80,12 @@ const characterSchema = Joi.object({
   }),
   inventory: Joi.array()
   .default(new Array(20).fill(null)),
+  progression: Joi.object()
+  .default({ 
+    mainStory: { 
+      highestFloorId: 1 
+    }
+  })
 });
 
 export default characterSchema;
