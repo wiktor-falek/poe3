@@ -36,21 +36,10 @@ export const startingAttributes = {
 
 export const startingGear = {
   swordsman: {
-    hand: await Item.getBaseById(2000),
+    hand: null,
     offhand: null,
     helmet: null,
     chest: null,
-    // chest: {
-    //   id: 0,
-    //   name: "Worn Leather Tunic",
-    //   type: "gear",
-    //   slot: "chest",
-    //   level_requirement: 1,
-    //   evasion: 4,
-    //   image:
-    //     "https://cdn.discordapp.com/attachments/1025408206765301812/1029734642250682438/dagger.png",
-    //   rarity: "normal",
-    // },
     gloves: null,
     boots: null,
     ring_1: null,
@@ -60,21 +49,10 @@ export const startingGear = {
   },
 
   ranger: {
-    hand: await Item.getBaseById(2001),
+    hand: null,
     offhand: null,
     helmet: null,
     chest: null,
-    // chest: {
-    //   id: 0,
-    //   name: "Worn Leather Tunic",
-    //   type: "gear",
-    //   slot: "chest",
-    //   level_requirement: 1,
-    //   evasion: 4,
-    //   image:
-    //     "https://cdn.discordapp.com/attachments/1025408206765301812/1029734642250682438/dagger.png",
-    //   rarity: "normal",
-    // },
     gloves: null,
     boots: null,
     ring_1: null,
@@ -84,21 +62,10 @@ export const startingGear = {
   },
 
   sorcerer: {
-    hand: await Item.getBaseById(2002),
+    hand: null,
     offhand: null,
     helmet: null,
     chest: null,
-    // chest: {
-    //   id: 0,
-    //   name: "Torn Robe",
-    //   type: "gear",
-    //   slot: "chest",
-    //   level_requirement: 1,
-    //   armor: 3,
-    //   image:
-    //     "https://cdn.discordapp.com/attachments/1025408206765301812/1029734642250682438/dagger.png",
-    //   rarity: "normal",
-    // },
     gloves: null,
     boots: null,
     ring_1: null,
@@ -108,21 +75,10 @@ export const startingGear = {
   },
 
   assassin: {
-    hand: await Item.getBaseById(2003),
+    hand: null,
     offhand: null,
     helmet: null,
     chest: null,
-    // chest: {
-    //   id: 0,
-    //   name: "Homeless Jacket",
-    //   type: "gear",
-    //   slot: "chest",
-    //   level_requirement: 1,
-    //   evasion: 3,
-    //   image:
-    //     "https://cdn.discordapp.com/attachments/1025408206765301812/1029734642250682438/dagger.png",
-    //   rarity: "normal",
-    // },
     gloves: null,
     boots: null,
     ring_1: null,

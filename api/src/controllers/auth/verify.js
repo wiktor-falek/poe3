@@ -49,8 +49,6 @@ router.get(
       return res.status(400).send("Email is already verified");
     }
 
-    // token email matches current unconfirmed email and not already taken
-
     if (email !== user.account.email) {
       return res.status(400).send("Something went wrong");
     }
@@ -59,12 +57,13 @@ router.get(
       return res.status(400).send("This email is already in use");
     }
 
+    // token email matches current unconfirmed email and is not already taken
+
     try {
       const updatedUser = await User.collection.findOneAndUpdate(
         { "account.username": username },
         { $set: { "account.confirmedEmail": email } }
       );
-      console.log(user);
       return res.status(200).send("Your email has been confirmed");
     } catch (e) {
       logger.error(`could not confirm email, ${e}`);
