@@ -1,12 +1,13 @@
 import { Character } from "../../*";
+import Player from "../logic/Player";
 
 class Client {
   username: string;
-  character: Character;
+  player: Player;
 
   constructor(username: string, character: Character) {
     this.username = username;
-    this.character = character;
+    this.player = new Player(character);
   }
 }
 

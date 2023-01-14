@@ -2,9 +2,9 @@ import { createServer } from "http";
 import { Server, Socket } from "socket.io";
 import ClientStorage from "./helpers/ClientStorage.js";
 import logger from "./logger.js";
-import getPlayerData from "./middlewares/loadClient.js";
-// import InstanceFactory from "./logic/instances/InstanceFactory.js";
-// import Player from "./logic/entities/Player.js";
+import loadClient from "./middlewares/loadClient.js";
+
+import type Client from "./helpers/Client.js";
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -14,11 +14,12 @@ const io = new Server(httpServer, {
   },
 });
 
-io.use(getPlayerData);
+io.use(loadClient);
 
 const onConnection = (socket: Socket) => {
-  const { client } = socket.data;
-  logger.info(`user ${client.username} connected`);
+  const client: Client = socket.data.client;
+  logger.info(`user ${client.username} connected as character ${client.player.character.name}`);
+  console.log(client.player.character.progression);
 };
 
 io.on("connection", onConnection);

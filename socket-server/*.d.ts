@@ -84,6 +84,15 @@ interface PlayerResources {
 
 type PlayerInventory = Array<null|any> // TODO: GearSlot instead of any
 
+
+interface MainStoryProgression {
+  highestFloorId: number;
+}
+
+interface CharacterProgression {
+  mainStory: MainStoryProgression;
+}
+
 interface Character {
   _id: ObjectId;
   name: string;
@@ -93,4 +102,5 @@ interface Character {
   silver: number;
   resistances: Resistances;
   inventory: PlayerInventory;
+  progression: Progression;
 }

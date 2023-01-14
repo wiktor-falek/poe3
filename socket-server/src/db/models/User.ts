@@ -1,5 +1,4 @@
-import type { Collection, Document } from "mongodb";
-import type { Character } from "../../../*";
+import { Collection, Document, ObjectId } from "mongodb";
 import Mongo from "../Mongo";
 
 class User {
@@ -8,7 +7,7 @@ class User {
     this.collection = Mongo.db.collection("users");
   }
 
-  findUser(username: String, sessionId: String): Promise<Document | null> {
+  findUser(username: string, sessionId: string): Promise<Document | null> {
     const user = this.collection.findOne({
       "account.username": username,
       "account.sessionId": sessionId,
@@ -16,22 +15,48 @@ class User {
     return user;
   }
 
-  async findCurrentCharacter(): Promise<Character|null> {
-    const currentCharacter = await this.collection.aggregate([
+  async findCurrentCharacter(
+    username: string,
+    sessionId: string
+  ): Promise<any | null> {
+    // 
+    const user = await this.collection.findOne(
       {
-        $project: {
-          result: {
-            $filter: {
-              input: "$characters",
-              as: "character",
-              cond: { $eq: ["$activity.currentCharacter", "$$character._id"] },
-            },
-          },
-        },
+        "account.username": username,
+        "account.sessionId": sessionId,
       },
-    ]).toArray()
+      { projection: { "activity.currentCharacter": 1 }}
+    );
+    if (user === null) return null;
 
-    return currentCharacter[0].result[0];
+    const currentCharacterId = user.activity.currentCharacter;
+
+    const currentCharacter = await this.collection.find(
+      { _id: user._id }
+    ).project({ characters: { $elemMatch: { _id: currentCharacterId } } })
+    .toArray()
+
+    if (currentCharacter === null) return null;
+
+    return currentCharacter[0].characters[0];
+    
+    // THIS WOULD NEED TO FILTER USER BY user._id TO WORK
+    // This is probably the best way to do this, if I can figure out how to filter
+    // const currentCharacter = await this.collection.aggregate([
+    //   {
+    //     $project: {
+    //       result: {
+    //         $filter: {
+    //           input: "$characters",
+    //           as: "character",
+    //           cond: { $eq: ["$activity.currentCharacter", "$$character._id"] },
+    //         },
+    //       },
+    //     },
+    //   },
+    // ]).toArray()
+
+    // return currentCharacter[0].result[0];
   }
 }
 
