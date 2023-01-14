@@ -77,7 +77,7 @@ const redirectToGame = () => {
       @click="redirectToGame"
       :disabled="!selectedCharacter"
     >
-      LOGIN DUDE
+      Play
     </button>
   </div>
   <div class="content" v-show="showCharacterCreation">

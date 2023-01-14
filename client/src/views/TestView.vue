@@ -2,6 +2,8 @@
 import { ref } from "vue";
 import { io } from "socket.io-client";
 
+// there is a better way to share session with socket server with htppOnly cookies
+// TODO (Critical): safely share session with socket server 
 const session = {
   sessionId: document.cookie
     .split("; ")
