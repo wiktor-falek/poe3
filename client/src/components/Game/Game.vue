@@ -1,11 +1,13 @@
 <script setup>
-import { ref } from "vue";
+import { defineAsyncComponent, ref, watch } from "vue";
 import { useRoute } from "vue-router";
+import { usePlayerStore } from "../../stores/playerStore";
+import { useAuthStore } from "../../stores/authStore";
+
 import TabInventory from "./Tabs/TabInventory.vue";
 import TabCharacter from "./Tabs/TabCharacter.vue";
 import TabTalents from "./Tabs/TabTalents.vue";
-import { usePlayerStore } from "../../stores/playerStore";
-import { useAuthStore } from "../../stores/authStore";
+import { computed } from "@vue/reactivity";
 
 const authStore = useAuthStore();
 const playerStore = usePlayerStore();
@@ -48,13 +50,32 @@ fetchCharacter().then((character) => {
 });
 
 const selectedTab = ref("inventory");
+
+const selectedMainView = ref("town");
+const MainView = computed(
+  () =>
+    selectedMainView.value &&
+    defineAsyncComponent(() => {
+      switch (selectedMainView.value) {
+        case "town":
+          return import("./MainViews/TownView.vue");
+        case "mainStory":
+          return import("./MainViews/MainStoryView.vue");
+      }
+    })
+);
+
+function changeView(viewName) {
+  console.log("changing view to ", viewName);
+  selectedMainView.value = viewName;
+}
 </script>
 
 <template>
   <main v-if="characterData" @contextmenu.prevent="">
     <div class="game">
       <div class="panel-left">
-        <button>Town</button>
+        <button @click="changeView('town')">Town</button>
         <button>Blacksmith</button>
         <button>Alchemist</button>
         <button></button>
@@ -74,12 +95,14 @@ const selectedTab = ref("inventory");
         <hr />
         <br />
 
-        <button>Main Story</button>
+        <button @click="changeView('mainStory')">Main Story</button>
         <button class="button-disabled">Dungeons</button>
         <button class="button-disabled">Endgame</button>
         <button class="button-disabled">More Endgame</button>
       </div>
-      <div class="panel-middle"></div>
+      <div class="panel-middle">
+        <MainView />
+      </div>
       <div class="panel-right">
         <TabInventory
           v-if="selectedTab === 'inventory'"

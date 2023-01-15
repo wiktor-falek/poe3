@@ -1,5 +1,0 @@
-<template>
-  <svg>
-    
-  </svg>
-</template>

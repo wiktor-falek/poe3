@@ -8,10 +8,6 @@ const router = createRouter({
       component: () => import("../views/CharacterSelectionView.vue"),
     },
     {
-      path: "/test",
-      component: () => import("../views/TestView.vue")
-    },
-    {
       path: "/game/:characterId",
       component: () => import("../views/GameView.vue"),
     },
