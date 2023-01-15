@@ -18,8 +18,14 @@ io.use(loadClient);
 
 const onConnection = (socket: Socket) => {
   const client: Client = socket.data.client;
-  logger.info(`user ${client.username} connected as character ${client.player.character.name}`);
+  logger.info(
+    `user ${client.username} connected as character ${client.player.character.name}`
+  );
   console.log(client.player.character.progression);
+
+  socket.on("ping", (callback) => {
+    callback();
+  });
 };
 
 io.on("connection", onConnection);

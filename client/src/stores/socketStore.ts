@@ -15,13 +15,24 @@ export const useSocketStore = defineStore("socket", () => {
       auth: getSession(),
     })
   );
+  const ping = ref(0);
 
   const isConnected = watch(socket.value, () => socket.value.connected, { deep: true });
+
+  setInterval(() => {
+    const start = Date.now();
+  
+    socket.value.emit("ping", () => {
+      const duration = Date.now() - start;
+      ping.value = duration;
+    });
+  }, 1000);
 
 
   return {
     socket,
-    isConnected
+    isConnected,
+    ping
   };
 });
 

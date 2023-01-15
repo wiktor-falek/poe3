@@ -7,7 +7,7 @@ const socket = socketStore.socket;
 
 <template>
   <div class="chat">
-    <p>Socket status: {{ socketStore.isConnected ? "connected" : "disconnected" }}</p>
+    <p>{{ socketStore.isConnected ? `CONNECTED PING: ${socketStore.ping}` : "DISCONNECTED" }}</p>
   </div>
 </template>
 
