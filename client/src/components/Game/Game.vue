@@ -58,9 +58,9 @@ const MainView = computed(
     defineAsyncComponent(() => {
       switch (selectedMainView.value) {
         case "town":
-          return import("./MainViews/TownView.vue");
+          return import("./MainViews/Town/TownView.vue");
         case "mainStory":
-          return import("./MainViews/MainStoryView.vue");
+          return import("./MainViews/MainStory/MainStoryView.vue");
       }
     })
 );
