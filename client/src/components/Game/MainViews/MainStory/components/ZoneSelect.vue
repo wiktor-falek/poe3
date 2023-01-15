@@ -8,16 +8,16 @@ const highestFloorId = computed(
 );
 
 const zones = new Map([
-  [1, { name: "Old cellar" }],
-  [2, { name: "Test zone" }],
-  [3, { name: "Test zone" }],
-  [4, { name: "Test zone" }],
-  [5, { name: "Test zone" }],
-  [6, { name: "Test zone" }],
-  [7, { name: "Test zone" }],
-  [8, { name: "Test zone" }],
-  [9, { name: "Test zone" }],
-  [10, { name: "Test zone" }],
+  [1, { name: "Old cellar", ilvl: 1 }],
+  [2, { name: "Test zone", ilvl: 2 }],
+  [3, { name: "Test zone", ilvl: 3 }],
+  [4, { name: "Test zone", ilvl: 4 }],
+  [5, { name: "Test zone", ilvl: 5 }],
+  [6, { name: "Test zone", ilvl: 6 }],
+  [7, { name: "Test zone", ilvl: 7 }],
+  [8, { name: "Test zone", ilvl: 8 }],
+  [9, { name: "Test zone", ilvl: 9 }],
+  [10, { name: "Test zone", ilvl: 10 }],
 ]);
 </script>
 
@@ -28,7 +28,7 @@ const zones = new Map([
       :class="{ locked: id > highestFloorId }"
       v-for="[id, zone] in zones.entries()"
     >
-      {{ zone.name }} ({{ id }})
+      {{ zone.name }} (zone lvl {{ zone.ilvl }})
     </div>
   </div>
 </template>
@@ -40,13 +40,15 @@ const zones = new Map([
   background-color: rgb(66, 66, 66);
   border-radius: 10px;
   flex-shrink: 0;
+  padding: 5px;
+  font-size: 1.4rem;
 }
 
 .zone-select {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-height: 650px;
+  max-height: 554px;
   overflow: scroll;
   padding: 10px;
   border: 2px solid gray;

@@ -8,8 +8,6 @@ const socket = socketStore.socket;
 
 <template>
   <div class="main-story">
-    <h1>Main Story</h1>
-    <p>Socket status: {{ socket.connected ? "connected" : "disconnected" }}</p>
     <ZoneSelect />
   </div>
 </template>

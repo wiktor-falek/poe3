@@ -8,6 +8,8 @@ import TabInventory from "./Tabs/TabInventory.vue";
 import TabCharacter from "./Tabs/TabCharacter.vue";
 import TabTalents from "./Tabs/TabTalents.vue";
 import { computed } from "@vue/reactivity";
+import ChatBox from "../Chat/ChatBox.vue";
+import Settings from "../Game/Settings.vue";
 
 const authStore = useAuthStore();
 const playerStore = usePlayerStore();
@@ -74,7 +76,35 @@ function changeView(viewName) {
 <template>
   <main v-if="characterData" @contextmenu.prevent="">
     <div class="game">
-      <div class="panel-left">
+      <div class="div1">
+        <MainView />
+      </div>
+
+      <div class="div2">
+        <ChatBox />
+      </div>
+
+      <div class="div3">
+        <TabInventory
+          v-if="selectedTab === 'inventory'"
+          :characterData="characterData"
+        />
+        <TabCharacter
+          v-if="selectedTab === 'character'"
+          :characterData="characterData"
+        />
+        <TabTalents
+          v-if="selectedTab === 'talents'"
+          :characterData="characterData"
+        />
+        <div class="tab-buttons">
+          <button @click="selectedTab = 'inventory'">Inventory</button>
+          <button @click="selectedTab = 'character'">Character</button>
+          <button @click="selectedTab = 'talents'">Talents</button>
+        </div>
+      </div>
+
+      <div class="div4">
         <button @click="changeView('town')">Town</button>
         <button class="button-disabled">Blacksmith</button>
         <button class="button-disabled">Alchemist</button>
@@ -100,27 +130,9 @@ function changeView(viewName) {
         <button class="button-disabled">Endgame</button>
         <button class="button-disabled">More Endgame</button>
       </div>
-      <div class="panel-middle">
-        <MainView />
-      </div>
-      <div class="panel-right">
-        <TabInventory
-          v-if="selectedTab === 'inventory'"
-          :characterData="characterData"
-        />
-        <TabCharacter
-          v-if="selectedTab === 'character'"
-          :characterData="characterData"
-        />
-        <TabTalents
-          v-if="selectedTab === 'talents'"
-          :characterData="characterData"
-        />
-        <div class="tab-buttons">
-          <button @click="selectedTab = 'inventory'">Inventory</button>
-          <button @click="selectedTab = 'character'">Character</button>
-          <button @click="selectedTab = 'talents'">Talents</button>
-        </div>
+
+      <div class="div5">
+        <Settings />
       </div>
     </div>
   </main>
@@ -132,33 +144,62 @@ main {
 }
 
 .game {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  display: grid;
+grid-template-columns: 2fr 9fr 3fr;
+grid-template-rows: 3fr 1fr;
+grid-column-gap: 0px;
+grid-row-gap: 0px; 
+  gap: 5px;
+
+  width: 100%;
+  height: 100%;
+}
+.div1 {
+  grid-area: 1 / 2 / 2 / 3;
+
+  border: 2px solid rgb(217, 212, 212);
   width: 100%;
   height: 100%;
 }
 
-.panel-left {
-  /* width: 250px; */
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 15px;
+.div2 {
+  grid-area: 2 / 2 / 3 / 3;
 }
 
-.panel-middle {
-  width: 100%;
-  border: 2px solid orange;
-  margin: 15px 0;
-}
+.div3 {
+  grid-area: 1 / 3 / 2 / 4;
 
-.panel-right {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 15px;
+  border: 2px solid rgb(217, 212, 212);
+  width: 100%;
+  height: 100%;
 }
+
+.div4 {
+  grid-area: 1 / 1 / 3 / 2;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 15px;
+
+  border: 2px solid rgb(217, 212, 212);
+  width: 100%;
+  height: 100%;
+}
+
+.div5 {
+  grid-area: 2 / 3 / 3 / 4;
+}
+
+.div1 { grid-area: 1 / 2 / 2 / 3; }
+.div2 { grid-area: 2 / 2 / 3 / 3; }
+.div3 { grid-area: 1 / 3 / 2 / 4; }
+.div4 { grid-area: 1 / 1 / 3 / 2; }
+.div5 { grid-area: 2 / 3 / 3 / 4; } 
 .tab {
   display: flex;
   align-items: center;
