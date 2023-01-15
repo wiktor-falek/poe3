@@ -76,19 +76,19 @@ function changeView(viewName) {
     <div class="game">
       <div class="panel-left">
         <button @click="changeView('town')">Town</button>
-        <button>Blacksmith</button>
-        <button>Alchemist</button>
-        <button></button>
-        <button>Stash</button>
+        <button class="button-disabled">Blacksmith</button>
+        <button class="button-disabled">Alchemist</button>
+        <button class="button-disabled">Something</button>
+        <button class="button-disabled">Stash</button>
 
         <!-- br go brrr -->
         <br />
         <hr />
         <br />
 
-        <button>Arena</button>
-        <button>Guild</button>
-        <button>Hall of Fame</button>
+        <button class="button-disabled">Arena</button>
+        <button class="button-disabled">Guild</button>
+        <button class="button-disabled">Hall of Fame</button>
 
         <!-- br go brrr -->
         <br />
