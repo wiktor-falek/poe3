@@ -82,8 +82,15 @@ interface PlayerResources {
   mp: number;
 }
 
-type PlayerInventory = Array<null|any> // TODO: GearSlot instead of any
+/*
+interface MainHand {}
+interface OffHand {}
+...
 
+type GearSlot = MainHand | OffHand;
+*/
+
+type PlayerInventory = Array<null | any>; // TODO: GearSlot instead of any
 
 interface MainStoryProgression {
   highestFloorId: number;
