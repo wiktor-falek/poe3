@@ -1,8 +1,12 @@
 <script lang="ts" setup>
 import { computed } from "@vue/reactivity";
 import { usePlayerStore } from "../../../../../stores/playerStore";
+import { ref } from "vue";
+
+const emit = defineEmits(["zoneSelect"]);
 
 const playerStore = usePlayerStore();
+
 const highestFloorId = computed(
   () => playerStore.characterData.progression.mainStory.highestFloorId
 );
@@ -19,18 +23,33 @@ const zones = new Map([
   [9, { name: "Test zone", ilvl: 9 }],
   [10, { name: "Test zone", ilvl: 10 }],
 ]);
+
+const selectedId = ref();
+
+function selectZoneHandle(id: number) {
+  if (highestFloorId.value >= id) {
+    selectedId.value = id;
+  }
+}
+
+function selectZone() {
+  if (!selectedId.value || highestFloorId.value > selectedId.value) return;
+  emit("zoneSelect", selectedId.value);
+}
 </script>
 
 <template>
   <div class="zone-select">
     <div
       class="zone"
-      :class="{ locked: id > highestFloorId }"
+      :class="{ locked: id > highestFloorId, selected: selectedId === id }"
+      @click="selectZoneHandle(id)"
       v-for="[id, zone] in zones.entries()"
     >
       {{ zone.name }} (zone lvl {{ zone.ilvl }})
     </div>
   </div>
+  <button @click="selectZone">Select</button>
 </template>
 
 <style scoped>
@@ -57,5 +76,9 @@ const zones = new Map([
 
 .locked {
   background-color: rgb(40, 40, 40);
+}
+
+.selected {
+  border: 2px solid orange;
 }
 </style>
