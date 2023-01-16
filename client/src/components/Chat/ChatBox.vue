@@ -7,7 +7,8 @@ const socket = socketStore.socket;
 
 <template>
   <div class="chat">
-    <p>{{ socketStore.isConnected ? `CONNECTED PING: ${socketStore.ping}` : "DISCONNECTED" }}</p>
+    <p>STATUS: {{ socketStore.isConnected ? `CONNECTED` : "DISCONNECTED" }}</p>
+    <p v-if="socketStore.isConnected">PING: {{ socketStore.ping }}</p>
   </div>
 </template>
 

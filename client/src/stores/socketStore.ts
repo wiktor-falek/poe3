@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { io } from "socket.io-client";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import getSession from "../utils/getSession";
 
 /*
@@ -15,24 +15,30 @@ export const useSocketStore = defineStore("socket", () => {
       auth: getSession(),
     })
   );
+  const isConnected = ref(false);
   const ping = ref(0);
 
-  const isConnected = watch(socket.value, () => socket.value.connected, { deep: true });
+  socket.value.on("connect", () => {
+    isConnected.value = true;
+  });
+
+  socket.value.on("disconnect", () => {
+    isConnected.value = false;
+  });
 
   setInterval(() => {
     const start = Date.now();
-  
-    socket.value.emit("ping", () => {
+
+    socket.value.emit("utils:ping", () => {
       const duration = Date.now() - start;
       ping.value = duration;
     });
   }, 1000);
 
-
   return {
     socket,
     isConnected,
-    ping
+    ping,
   };
 });
 
