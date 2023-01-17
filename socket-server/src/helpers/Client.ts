@@ -26,6 +26,10 @@ class Client {
 
     return this.instance;
   }
+
+  abandonInstance() {
+    this.instance = null;
+  }
 }
 
 export default Client;

@@ -1,4 +1,5 @@
 import { Character } from "../../*";
+import logger from "../logger";
 import Client from "./Client";
 
 class ClientStorage {
@@ -12,6 +13,12 @@ class ClientStorage {
   }
 
   addClient(username: string, character: Character) {
+    const existingClient = this.getClient(username);
+    if (existingClient) {
+      logger.info(`${username} rejoined`)
+      return existingClient;
+    }
+
     const client = new Client(username, character);
     this.clients.set(username, client);
     return client;
