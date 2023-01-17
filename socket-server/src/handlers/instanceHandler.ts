@@ -8,9 +8,8 @@ function registerInstanceHandler(
   client: Client
 ): void {
   const joinInstance = (zoneId: number) => {
-    logger.info(
-      `created instance for ${client.username} with zoneId=${zoneId}`
-    );
+    const instance = client.joinInstance(zoneId);
+    socket.emit("instance:data", instance.instanceData);
   };
 
   socket.on("instance:join", joinInstance);

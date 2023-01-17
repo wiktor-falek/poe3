@@ -1,6 +1,7 @@
 import { Character } from "../../*";
 import Instance from "../logic/Instance";
 import Player from "../logic/Player";
+import logger from "../logger";
 
 class Client {
   username: string;
@@ -14,7 +15,16 @@ class Client {
   }
 
   joinInstance(zoneId: number) {
-    this.instance = new Instance(zoneId);
+    if (this.instance === null) {
+      this.instance = new Instance(zoneId);
+      logger.info(`created instance for ${this.username} with zoneId=${zoneId}`);
+    } else {
+      logger.info(`${this.username} joined existing instance with zoneId=${zoneId}`);
+    }
+    
+    logger.info(`${this.username} joined instance`);
+
+    return this.instance;
   }
 }
 
