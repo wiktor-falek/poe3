@@ -53,10 +53,9 @@ function joinZone(id: number) {
   })
 })();
 
-function abandonRunHandle() {
+function abandonRun() {
   socket.emit("instance:abandon-run");
   stateService.send("ABANDON");
-
 }
 </script>
 
@@ -66,8 +65,7 @@ function abandonRunHandle() {
       v-if="view === 'zoneSelect'"
       @zone-select="(id) => joinZone(id)"
     />
-    <ZoneView v-if="view === 'zoneSelected'" :zone-id="zoneId" />
-    <button @click="abandonRunHandle" v-if="view === 'zoneSelected'" >Abandon Run</button>
+    <ZoneView v-if="view === 'zoneSelected'" :zone-id="zoneId" @abandon-run="abandonRun" />
   </div>
 </template>
 

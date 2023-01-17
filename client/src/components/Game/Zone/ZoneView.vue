@@ -3,11 +3,13 @@ import { Ref, ref } from "vue";
 import Room from "./Room.vue";
 import useSocketStore from "../../../stores/socketStore";
 
-const socketStore = useSocketStore();
-const socket = socketStore.socket;
 const props = defineProps({
   zoneId: Number,
 });
+const emit = defineEmits(["abandonRun"]);
+
+const socketStore = useSocketStore();
+const socket = socketStore.socket;
 
 socket.emit("instance:join", props.zoneId);
 
@@ -21,10 +23,19 @@ socket.on("instance:data", (instanceData) => {
 const ilvl: Ref<number> = ref();
 const location: Ref<number> = ref(0);
 const rooms: Ref<Array<any>> = ref([]);
+
+function abandonRunHandle() {
+  emit("abandonRun");
+}
 </script>
 <template>
-  <p>zoneId: {{ props.zoneId }}</p>
-  <p>ilvl: {{ ilvl }}</p>
+  <div class="top">
+    <div class="top-wrapper">
+      <p>zoneId: {{ props.zoneId }}</p>
+      <p>ilvl: {{ ilvl }}</p>
+    </div>
+    <button @click="abandonRunHandle">Abandon Run</button>
+  </div>
   <div class="rooms">
     <Room
       :name="room.name"
@@ -35,6 +46,10 @@ const rooms: Ref<Array<any>> = ref([]);
 </template>
 
 <style scoped>
+.top {
+  display: flex;
+  justify-content: space-between;
+}
 .rooms {
   display: flex;
   flex-direction: column-reverse;
