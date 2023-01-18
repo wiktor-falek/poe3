@@ -1,5 +1,4 @@
 import { Character } from "../../*";
-import logger from "../logger";
 import Client from "./Client";
 
 class ClientStorage {
