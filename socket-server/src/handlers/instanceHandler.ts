@@ -7,13 +7,26 @@ function registerInstanceHandler(
   socket: Socket,
   client: Client
 ): void {
-  const joinInstance = (zoneId: number) => {
+  const joinMainStoryInstance = (zoneId: number) => {
+    const highestFloorId =
+      client.player.character.progression.mainStory.highestFloorId;
+    if (highestFloorId === undefined || highestFloorId === null) {
+      logger.error(`could not read progression data`);
+      return socket.emit("error:instance:join", {
+        message: "Failed to read character progression data",
+      });
+    }
+    if (highestFloorId < zoneId) {
+      return socket.emit("error:instance:join", {
+        message: "You are not permitted to access this zone",
+      });
+    }
+
     const instance = client.joinInstance(zoneId);
     if (instance === null) {
-      socket.emit("error:instance:data", {
-        message: "Failed to join instance"
-      })
-      return;
+      return socket.emit("error:instance:data", {
+        message: "Failed to join instance",
+      });
     }
     socket.emit("instance:data", instance.instanceData);
   };
@@ -48,7 +61,7 @@ function registerInstanceHandler(
     socket.emit("instance:room-data", emitData);
   };
 
-  socket.on("instance:join", joinInstance);
+  socket.on("instance:join:main-story", joinMainStoryInstance);
   socket.on("instance:already-exists?", doesInstanceAlreadyExist);
   socket.on("instance:abandon-run", abandonInstance);
   socket.on("instance:join-room", joinRoom);

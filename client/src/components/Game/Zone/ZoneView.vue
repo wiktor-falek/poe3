@@ -16,7 +16,7 @@ const location: Ref<number> = ref(0);
 const rooms: Ref<Array<any>> = ref([]);
 const availableRoomIds: Ref<Array<number>> = ref();
 
-socket.emit("instance:join", props.zoneId);
+socket.emit("instance:join:main-story", props.zoneId);
 
 socket.on("instance:data", (instanceData) => {
   console.log("here", instanceData);
@@ -29,7 +29,12 @@ socket.on("instance:data", (instanceData) => {
 socket.on("error:instance:data", (error) => {
   // TODO: toast
   console.log(error.message);
-})
+});
+
+socket.on("error:instance:join", (error) => {
+  // TODO: toast
+  console.log(error.message);
+});
 
 function abandonRunHandle() {
   emit("abandonRun");

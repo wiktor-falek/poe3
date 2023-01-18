@@ -24,8 +24,8 @@ const stateMachine = createMachine({
     zoneSelected: {
       // type: "final",
       on: {
-        ABANDON: "zoneSelect"
-      }
+        ABANDON: "zoneSelect",
+      },
     },
   },
 });
@@ -48,9 +48,9 @@ function joinZone(id: number) {
   socket.on("instance:already-exists", (data) => {
     console.log(data);
     if (data.instanceAlreadyExists) {
-      joinZone(data.zoneId)
+      joinZone(data.zoneId);
     }
-  })
+  });
 })();
 
 function abandonRun() {
@@ -65,7 +65,11 @@ function abandonRun() {
       v-if="view === 'zoneSelect'"
       @zone-select="(id) => joinZone(id)"
     />
-    <ZoneView v-if="view === 'zoneSelected'" :zone-id="zoneId" @abandon-run="abandonRun" />
+    <ZoneView
+      v-if="view === 'zoneSelected'"
+      :zone-id="zoneId"
+      @abandon-run="abandonRun"
+    />
   </div>
 </template>
 
