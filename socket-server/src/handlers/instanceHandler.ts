@@ -9,6 +9,12 @@ function registerInstanceHandler(
 ): void {
   const joinInstance = (zoneId: number) => {
     const instance = client.joinInstance(zoneId);
+    if (instance === null) {
+      socket.emit("error:instance:data", {
+        message: "Failed to join instance"
+      })
+      return;
+    }
     socket.emit("instance:data", instance.instanceData);
   };
 

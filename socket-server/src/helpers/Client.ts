@@ -14,14 +14,23 @@ class Client {
     this.instance = null;
   }
 
-  joinInstance(zoneId: number) {
-    if (this.instance === null) {
-      this.instance = new Instance(zoneId);
-      logger.info(`created instance for ${this.username} with zoneId=${zoneId}`);
-    } else {
-      logger.info(`${this.username} joined existing instance with zoneId=${zoneId}`);
+  joinInstance(zoneId: number): Instance | null {
+    if (this.instance !== null) {
+      logger.info(
+        `${this.username} joined existing instance with zoneId=${zoneId}`
+      );
+      return this.instance;
     }
-    
+
+    try {
+      this.instance = new Instance(zoneId);
+    } catch {
+      logger.error(
+        `failed to create instance for ${this.username} (zoneId=${zoneId})`
+      );
+      return null;
+    }
+    logger.info(`created instance for ${this.username} with zoneId=${zoneId}`);
     logger.info(`${this.username} joined instance`);
 
     return this.instance;

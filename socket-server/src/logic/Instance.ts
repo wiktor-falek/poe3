@@ -1,7 +1,6 @@
 import Floors from "./Floors";
 import MainStoryFloor from "./MainStoryFloor";
 
-
 interface InstanceData {
   rooms: Array<Object>;
   currentLocation: number;
@@ -15,7 +14,11 @@ class Instance {
   constructor(zoneId: number) {
     this.zoneId = zoneId;
     this.floor = new MainStoryFloor(0, "temp", 1);
-    // this.floor = Floors.getFloorById(zoneId)!; // TODO: might be undefined 
+    const floor = Floors.getFloorById(zoneId);
+    if (floor === undefined) {
+      throw new Error(`Floor does not exist (zoneId=${zoneId})`);
+    }
+    this.floor = floor;
   }
 
   public get instanceData(): InstanceData {
