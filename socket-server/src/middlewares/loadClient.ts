@@ -3,8 +3,8 @@ import User from "../db/models/User";
 import ClientStorage from "../helpers/ClientStorage";
 import type { Character } from "../../*";
 
-// authenticates by credentials passed on client
-// and creates a Client object stored in ClientStorage
+// authenticates using credentials passed by client
+// and creates a Client object stored in ClientStorage if not already existing
 const loadClient = async (socket: Socket, next: Function) => {
   const { username, sessionId } = socket.handshake.auth;
 

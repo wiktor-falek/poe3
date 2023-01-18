@@ -1,45 +1,58 @@
 <script lang="ts" setup>
 import { computed } from "@vue/reactivity";
 import { usePlayerStore } from "../../../../../stores/playerStore";
-import { ref } from "vue";
+import { onBeforeMount, ref, Ref } from "vue";
+import useSocketStore from "../../../../../stores/socketStore";
 
 const emit = defineEmits(["zoneSelect"]);
 
+const socketStore = useSocketStore();
+const socket = socketStore.socket;
 const playerStore = usePlayerStore();
 
 const highestFloorId = computed(
   () => playerStore.characterData.progression.mainStory.highestFloorId
 );
 
-const zones = new Map([
-  [1, { name: "Old cellar", ilvl: 1 }],
-  [2, { name: "Test zone", ilvl: 2 }],
-  [3, { name: "Test zone", ilvl: 3 }],
-  [4, { name: "Test zone", ilvl: 4 }],
-  [5, { name: "Test zone", ilvl: 5 }],
-  [6, { name: "Test zone", ilvl: 6 }],
-  [7, { name: "Test zone", ilvl: 7 }],
-  [8, { name: "Test zone", ilvl: 8 }],
-  [9, { name: "Test zone", ilvl: 9 }],
-  [10, { name: "Test zone", ilvl: 10 }],
-]);
-
 const selectedId = ref();
 
 function selectZoneHandle(id: number) {
   if (highestFloorId.value >= id) {
+    console.log("selecting", id);
     selectedId.value = id;
   }
 }
 
 function selectZone() {
-  if (!selectedId.value || highestFloorId.value > selectedId.value) return;
+  if (
+    selectedId.value === null ||
+    selectedId.value === undefined ||
+    highestFloorId.value > selectedId.value
+  )
+    return;
   emit("zoneSelect", selectedId.value);
 }
+
+const zones: Ref<Map<number, any>> = ref();
+
+onBeforeMount(() => {
+  socket.emit("floors:get-main-story");
+  socket.on("floors:main-story", (zonesData: Array<any>) => {
+    // console.log(zonesData);
+    const map = new Map(
+      zonesData.map((zone) => {
+        const { id, ...rest } = zone;
+        return [id, rest];
+      })
+    );
+    zones.value = map;
+    console.log(map);
+  });
+});
 </script>
 
 <template>
-  <div class="zone-select">
+  <div class="zone-select" v-if="zones">
     <div
       class="zone"
       :class="{ locked: id > highestFloorId, selected: selectedId === id }"

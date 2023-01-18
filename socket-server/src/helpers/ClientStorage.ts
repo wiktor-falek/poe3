@@ -15,7 +15,6 @@ class ClientStorage {
   addClient(username: string, character: Character) {
     const existingClient = this.getClient(username);
     if (existingClient) {
-      logger.info(`${username} rejoined`)
       return existingClient;
     }
 

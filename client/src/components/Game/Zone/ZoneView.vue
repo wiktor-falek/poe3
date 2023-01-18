@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Ref, ref } from "vue";
-import Room from "./Room.vue";
+import MapRoom from "./MapRoom.vue";
 import useSocketStore from "../../../stores/socketStore";
 
 const props = defineProps({
@@ -11,33 +11,43 @@ const emit = defineEmits(["abandonRun"]);
 const socketStore = useSocketStore();
 const socket = socketStore.socket;
 
+const ilvl: Ref<number> = ref();
+const location: Ref<number> = ref(0);
+const rooms: Ref<Array<any>> = ref([]);
+const availableRoomIds: Ref<Array<number>> = ref();
+
 socket.emit("instance:join", props.zoneId);
 
 socket.on("instance:data", (instanceData) => {
-  console.log(instanceData);
+  console.log("here", instanceData);
   location.value = instanceData.currentLocation;
+  availableRoomIds.value = instanceData.availableRoomIds;
   rooms.value = instanceData.rooms;
   ilvl.value = instanceData.ilvl;
 });
 
-const ilvl: Ref<number> = ref();
-const location: Ref<number> = ref(0);
-const rooms: Ref<Array<any>> = ref([]);
-
 function abandonRunHandle() {
   emit("abandonRun");
+}
+
+function joinRoom(roomNumber: number) {
+  socket.emit("instance:join-room", roomNumber);
+  // get updated location from the server
 }
 </script>
 <template>
   <div class="top">
-    <div class="top-wrapper">
+    <div class="top__wrapper-left">
       <p>zoneId: {{ props.zoneId }}</p>
       <p>ilvl: {{ ilvl }}</p>
     </div>
-    <button @click="abandonRunHandle">Abandon Run</button>
+    <div class="top__wrapper-right">
+      <button @click="abandonRunHandle">Abandon Run</button>
+      <button @click="joinRoom(location)">Join Room Test</button>
+    </div>
   </div>
   <div class="rooms">
-    <Room
+    <MapRoom
       :name="room.name"
       v-for="(room, idx) in rooms"
       :class="{ current: idx === location }"
