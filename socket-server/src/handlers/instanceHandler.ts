@@ -28,7 +28,7 @@ function registerInstanceHandler(
         message: "Failed to join instance",
       });
     }
-    socket.emit("instance:data", instance.instanceData);
+    socket.emit("instance:data", instance.data);
   };
 
   const doesInstanceAlreadyExist = () => {
@@ -55,8 +55,9 @@ function registerInstanceHandler(
 
     room.init();
 
-    let emitData;
-    // TODO: const emitData: room.data
+    const emitData = {
+      room,
+    };
 
     socket.emit("instance:room-data", emitData);
   };

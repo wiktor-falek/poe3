@@ -21,13 +21,13 @@ class Instance {
     this.floor = floor;
   }
 
-  public get instanceData(): InstanceData {
+  public get data(): InstanceData {
     const ilvl = this.floor.ilvl;
     const currentLocation = this.floor.currentLocation;
     const rooms = this.floor.rooms.map((room) => {
       return { name: room.name };
     });
-    const availableRoomIds: number[] = []; // TODO
+    const availableRoomIds: number[] = [1]; // TODO: unhardcode and return valid room choices
 
     return { ilvl, currentLocation, rooms, availableRoomIds };
   }
