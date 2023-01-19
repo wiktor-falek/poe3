@@ -1,4 +1,4 @@
-import MainStoryFloor from "./MainStoryFloor";
+import MainStoryZone from "./MainStoryZone";
 
 export const mainStoryFloorsData = [
   { id: 0, name: "Old cellar", ilvl: 1 },
@@ -10,22 +10,21 @@ export const mainStoryFloorsData = [
 
 export const _someOtherContent = [{ id: 100, name: "TODO", ilvl: 80 }];
 
-
 // TODO: Refactor this
 // This needs a function that creates a new Floor instance
 // this.mainStoryFloors is actually unnecessary, as mainStoryFloorsData will be used for emit
-class Floors {
-  mainStoryFloors: Array<MainStoryFloor>;
+class Zones {
+  mainStoryFloors: Array<MainStoryZone>;
   // someOtherContent: Array<any>;
   constructor() {
     this.mainStoryFloors = mainStoryFloorsData.map(
       (floorData) =>
-        new MainStoryFloor(floorData.id, floorData.name, floorData.ilvl)
+        new MainStoryZone(floorData.id, floorData.name, floorData.ilvl)
     );
-    // this.someOtherContent = someOtherContent.map(floorData => new MainStoryFloor(idx, floorData.ilvl));
+    // this.someOtherContent = someOtherContent.map(floorData => new MainStoryZone(idx, floorData.ilvl));
   }
 
-  getFloorById(id: number): MainStoryFloor | undefined {
+  getFloorById(id: number): MainStoryZone | undefined {
     return this.mainStoryFloors[id];
   }
 
@@ -38,4 +37,4 @@ class Floors {
   }
 }
 
-export default new Floors();
+export default new Zones();

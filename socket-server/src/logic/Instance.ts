@@ -1,5 +1,5 @@
-import Floors from "./Floors";
-import MainStoryFloor from "./MainStoryFloor";
+import Zones from "./Zones";
+import MainStoryZone from "./MainStoryZone";
 
 interface InstanceData {
   rooms: Array<Object>;
@@ -9,12 +9,12 @@ interface InstanceData {
 }
 
 class Instance {
-  floor: MainStoryFloor;
+  floor: MainStoryZone;
   zoneId: number;
   constructor(zoneId: number) {
     this.zoneId = zoneId;
-    this.floor = new MainStoryFloor(0, "temp", 1);
-    const floor = Floors.getFloorById(zoneId);
+    this.floor = new MainStoryZone(0, "temp", 1);
+    const floor = Zones.getFloorById(zoneId);
     if (floor === undefined) {
       throw new Error(`Floor does not exist (zoneId=${zoneId})`);
     }
@@ -24,7 +24,7 @@ class Instance {
   public get data(): InstanceData {
     const ilvl = this.floor.ilvl;
     const currentLocation = this.floor.currentLocation;
-    const rooms = this.floor.rooms.map((room) => {
+    const rooms = this.floor.rooms.map((room: any) => {
       return { name: room.name };
     });
     const availableRoomIds: number[] = [1]; // TODO: unhardcode and return valid room choices

@@ -1,6 +1,6 @@
 import Room from "./Room";
 
-class MainStoryFloor {
+class MainStoryZone {
   id: number;
   ilvl: number;
   name: string;
@@ -26,4 +26,4 @@ class MainStoryFloor {
   }
 }
 
-export default MainStoryFloor;
+export default MainStoryZone;

@@ -6,7 +6,7 @@ import loadClient from "./middlewares/loadClient.js";
 import type Client from "./helpers/Client.js";
 import registerInstanceHandler from "./handlers/instanceHandler.js";
 import registerUtilsHandler from "./handlers/utilsHandler.js";
-import registerFloorHandler from "./handlers/floorHandler.js";
+import registerZoneHandler from "./handlers/zoneHandler.js";
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -31,7 +31,7 @@ const onConnection = (socket: Socket) => {
   // HANDLERS
   registerInstanceHandler(io, socket, client);
   registerUtilsHandler(io, socket);
-  registerFloorHandler(io, socket, client);
+  registerZoneHandler(io, socket, client);
 
   socket.on("disconnect", (reason) => {
     logger.info(`client ${client.username} disconnected (${reason})`);

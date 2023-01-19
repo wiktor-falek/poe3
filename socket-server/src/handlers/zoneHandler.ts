@@ -1,6 +1,6 @@
 import type Client from "../helpers/Client";
 import type { Socket } from "socket.io";
-import { mainStoryFloorsData } from "../logic/Floors";
+import { mainStoryFloorsData } from "../logic/Zones";
 
 function registerFloorHandler(io: any, socket: Socket, client: Client): void {
   const getMainStoryZones = () => {
