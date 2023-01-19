@@ -7,7 +7,7 @@ class Mongo {
     this.URI =
       process.env.NODE_ENV === "production"
         ? `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.4zrjv3n.mongodb.net/items?retryWrites=true&w=majority`
-        : "mongodb://127.0.0.1:27017/game";
+        : "mongodb://127.0.0.1:27017";
 
     this.client = new MongoClient(this.URI);
     this.client.connect();
