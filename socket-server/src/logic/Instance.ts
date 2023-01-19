@@ -13,10 +13,10 @@ class Instance {
   zoneId: number;
   constructor(zoneId: number) {
     this.zoneId = zoneId;
-    this.zone = new MainStoryZone(0, "temp", 1);
-    const zone = Zones.getZoneById(zoneId);
-    if (zone === undefined) {
-      throw new Error(`Floor does not exist (zoneId=${zoneId})`);
+
+    const zone = Zones.createZone(zoneId);
+    if (zone === null) {
+      throw new Error(`Zone does not exist (zoneId=${zoneId})`);
     }
     this.zone = zone;
   }
