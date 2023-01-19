@@ -18,19 +18,18 @@ class Zones {
   // someOtherContent: Array<any>;
   constructor() {
     this.mainStoryFloors = mainStoryFloorsData.map(
-      (floorData) =>
-        new MainStoryZone(floorData.id, floorData.name, floorData.ilvl)
+      (zoneData) =>
+        new MainStoryZone(zoneData.id, zoneData.name, zoneData.ilvl)
     );
-    // this.someOtherContent = someOtherContent.map(floorData => new MainStoryZone(idx, floorData.ilvl));
   }
 
-  getFloorById(id: number): MainStoryZone | undefined {
+  getZoneById(id: number): MainStoryZone | undefined {
     return this.mainStoryFloors[id];
   }
 
   public get basicMainStoryData(): any {
-    const data = this.mainStoryFloors.map((floor) => {
-      return { name: floor.name, ilvl: floor.ilvl };
+    const data = this.mainStoryFloors.map((zone) => {
+      return { name: zone.name, ilvl: zone.ilvl };
     });
     console.log(data);
     return data;

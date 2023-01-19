@@ -9,22 +9,22 @@ interface InstanceData {
 }
 
 class Instance {
-  floor: MainStoryZone;
+  zone: MainStoryZone;
   zoneId: number;
   constructor(zoneId: number) {
     this.zoneId = zoneId;
-    this.floor = new MainStoryZone(0, "temp", 1);
-    const floor = Zones.getFloorById(zoneId);
-    if (floor === undefined) {
+    this.zone = new MainStoryZone(0, "temp", 1);
+    const zone = Zones.getZoneById(zoneId);
+    if (zone === undefined) {
       throw new Error(`Floor does not exist (zoneId=${zoneId})`);
     }
-    this.floor = floor;
+    this.zone = zone;
   }
 
   public get data(): InstanceData {
-    const ilvl = this.floor.ilvl;
-    const currentLocation = this.floor.currentLocation;
-    const rooms = this.floor.rooms.map((room: any) => {
+    const ilvl = this.zone.ilvl;
+    const currentLocation = this.zone.currentLocation;
+    const rooms = this.zone.rooms.map((room: any) => {
       return { name: room.name };
     });
     const availableRoomIds: number[] = [1]; // TODO: unhardcode and return valid room choices
@@ -33,7 +33,7 @@ class Instance {
   }
 
   joinRoom(roomNumber: number) {
-    const currentRoom = this.floor.currentRoom;
+    const currentRoom = this.zone.currentRoom;
     return currentRoom;
   }
 }
