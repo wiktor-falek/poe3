@@ -32,7 +32,7 @@ class Instance {
     return { ilvl, currentLocation, rooms, availableRoomIds };
   }
 
-  joinRoom(roomNumber: number) {
+  getCurrentRoom(roomNumber: number) {
     const currentRoom = this.zone.currentRoom;
     return currentRoom;
   }

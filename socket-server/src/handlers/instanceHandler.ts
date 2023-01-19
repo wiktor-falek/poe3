@@ -51,14 +51,15 @@ function registerInstanceHandler(
       return logger.warn(
         `${client.username} tried to join while not in an instance`
       );
-    const room = instance.joinRoom(roomNumber);
+    const room = instance.getCurrentRoom(roomNumber);
 
-    room.init();
+    if (!room.initialized) {
+      room.init();
+    }
 
     const emitData = {
       room,
     };
-
     socket.emit("instance:room-data", emitData);
   };
 
