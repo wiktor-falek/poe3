@@ -34,11 +34,10 @@ function selectZone() {
 }
 
 const zones: Ref<Map<number, any>> = ref();
-
 onBeforeMount(() => {
-  socket.emit("floors:get-main-story");
-  socket.on("floors:main-story", (zonesData: Array<any>) => {
-    // console.log(zonesData);
+  socket.emit("zones:get-main-story");
+  socket.on("zones:main-story", (zonesData: Array<any>) => {
+    console.log(zonesData);
     const map = new Map(
       zonesData.map((zone) => {
         const { id, ...rest } = zone;
@@ -46,7 +45,7 @@ onBeforeMount(() => {
       })
     );
     zones.value = map;
-    console.log(map);
+    // console.log(map);
   });
 });
 </script>

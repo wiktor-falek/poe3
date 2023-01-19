@@ -68,7 +68,6 @@ const MainView = computed(
 );
 
 function changeView(viewName) {
-  console.log("changing view to ", viewName);
   selectedMainView.value = viewName;
 }
 </script>

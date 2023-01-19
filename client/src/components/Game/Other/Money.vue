@@ -1,6 +1,5 @@
 <script setup>
 import { computed } from "@vue/reactivity";
-import { onMounted, reactive } from "vue";
 import { usePlayerStore } from "../../../stores/playerStore";
 
 const playerStore = usePlayerStore();

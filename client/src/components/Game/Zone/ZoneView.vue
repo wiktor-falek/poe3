@@ -40,10 +40,22 @@ function abandonRunHandle() {
   emit("abandonRun");
 }
 
+// TODO: add state machine
+//
+
 function joinRoom(roomNumber: number) {
   socket.emit("instance:join-room", roomNumber);
-  // get updated location from the server
 }
+
+socket.on("instance:room-data", (data) => {
+    console.log(data);
+    // TODO: update location
+    // location.value = data.location
+
+    // TODO:
+    // 1. change view state to display a room
+    // 2. set room data ref
+  });
 </script>
 <template>
   <div class="top">
