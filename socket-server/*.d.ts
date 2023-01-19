@@ -93,7 +93,7 @@ type GearSlot = MainHand | OffHand;
 type PlayerInventory = Array<null | any>; // TODO: GearSlot instead of any
 
 interface MainStoryProgression {
-  highestFloorId: number;
+  highestZoneId: number;
 }
 
 interface CharacterProgression {

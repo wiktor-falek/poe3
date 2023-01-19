@@ -83,7 +83,7 @@ const characterSchema = Joi.object({
   progression: Joi.object()
   .default({ 
     mainStory: { 
-      highestFloorId: 0
+      highestZoneId: 0
     }
   })
 });

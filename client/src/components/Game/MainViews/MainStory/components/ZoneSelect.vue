@@ -10,14 +10,14 @@ const socketStore = useSocketStore();
 const socket = socketStore.socket;
 const playerStore = usePlayerStore();
 
-const highestFloorId = computed(
-  () => playerStore.characterData.progression.mainStory.highestFloorId
+const highestZoneId = computed(
+  () => playerStore.characterData.progression.mainStory.highestZoneId
 );
 
 const selectedId = ref();
 
 function selectZoneHandle(id: number) {
-  if (highestFloorId.value >= id) {
+  if (highestZoneId.value >= id) {
     console.log("selecting", id);
     selectedId.value = id;
   }
@@ -27,7 +27,7 @@ function selectZone() {
   if (
     selectedId.value === null ||
     selectedId.value === undefined ||
-    highestFloorId.value > selectedId.value
+    highestZoneId.value > selectedId.value
   )
     return;
   emit("zoneSelect", selectedId.value);
@@ -54,7 +54,7 @@ onBeforeMount(() => {
   <div class="zone-select" v-if="zones">
     <div
       class="zone"
-      :class="{ locked: id > highestFloorId, selected: selectedId === id }"
+      :class="{ locked: id > highestZoneId, selected: selectedId === id }"
       @click="selectZoneHandle(id)"
       v-for="[id, zone] in zones.entries()"
     >

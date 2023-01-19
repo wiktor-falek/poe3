@@ -8,15 +8,15 @@ function registerInstanceHandler(
   client: Client
 ): void {
   const joinMainStoryInstance = (zoneId: number) => {
-    const highestFloorId =
-      client.player.character.progression.mainStory.highestFloorId;
-    if (highestFloorId === undefined || highestFloorId === null) {
+    const highestZoneId =
+      client.player.character.progression.mainStory.highestZoneId;
+    if (highestZoneId === undefined || highestZoneId === null) {
       logger.error(`could not read progression data`);
       return socket.emit("error:instance:join", {
         message: "Failed to read character progression data",
       });
     }
-    if (highestFloorId < zoneId) {
+    if (highestZoneId < zoneId) {
       return socket.emit("error:instance:join", {
         message: "You are not permitted to access this zone",
       });
