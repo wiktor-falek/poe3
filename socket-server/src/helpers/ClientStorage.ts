@@ -14,8 +14,11 @@ class ClientStorage {
   addClient(username: string, character: Character) {
     const existingClient = this.getClient(username);
 
-    // use existing client if the same character clicks on Main Story to allow reconnecting
-    if (existingClient && existingClient.player.character.name === character.name) {
+    // use existing client if the same character tries to access MainStory (or other content)
+    if (
+      existingClient &&
+      existingClient.player.character.name === character.name
+    ) {
       return existingClient;
     }
 
@@ -23,6 +26,10 @@ class ClientStorage {
     this.clients.set(username, client);
     return client;
   }
+
+  // meant to run in a cron-job to remove Client objects that haven't
+  // been connected to for specified amout of time (defaults to 5 min)
+  deleteInactiveClients(timeMs = 300000) {}
 }
 
 export default new ClientStorage();

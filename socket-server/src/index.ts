@@ -2,7 +2,7 @@ import { createServer } from "http";
 import { Server, Socket } from "socket.io";
 import ClientStorage from "./helpers/ClientStorage.js";
 import logger from "./logger.js";
-import loadClient from "./middlewares/loadClient.js";
+import initClient from "./middlewares/initClient.js";
 import type Client from "./helpers/Client.js";
 import registerInstanceHandler from "./handlers/instanceHandler.js";
 import registerUtilsHandler from "./handlers/utilsHandler.js";
@@ -17,7 +17,7 @@ const io = new Server(httpServer, {
 });
 
 // MIDDLEWARES
-io.use(loadClient);
+io.use(initClient);
 
 const onConnection = (socket: Socket) => {
   const client: Client = socket.data.client;
@@ -26,7 +26,7 @@ const onConnection = (socket: Socket) => {
     `client ${client.username} connected as character ${client.player.character.name}`
   );
 
-  // console.log(ClientStorage.clients);
+  console.log(ClientStorage.clients);
 
   // HANDLERS
   registerInstanceHandler(io, socket, client);
@@ -35,10 +35,9 @@ const onConnection = (socket: Socket) => {
 
   socket.on("disconnect", (reason) => {
     logger.info(`client ${client.username} disconnected (${reason})`);
+    console.log(ClientStorage.clients);
   });
 };
-
-
 
 io.on("connection", onConnection);
 

@@ -3,10 +3,11 @@ import ClientStorage from "../helpers/ClientStorage";
 import CharacterModel from "../db/models/CharacterModel";
 import logger from "../logger";
 
-// authenticates using credentials passed by client
-// and creates a Client object stored in ClientStorage if not already existing
-const loadClient = async (socket: Socket, next: Function) => {
+// fetches the character from the database and creates a
+// Client object stored in ClientStorage if not already existing
+const initClient = async (socket: Socket, next: Function) => {
   const { username, sessionId, characterId } = socket.handshake.auth;
+  // basic validation
   if (!username || !sessionId || !characterId || characterId.length !== 24) {
     return socket.disconnect();
   }
@@ -16,8 +17,9 @@ const loadClient = async (socket: Socket, next: Function) => {
   const character = await characterModel.data();
 
   if (character === null) {
+    // character not found which means credentials were incorrect
     logger.info("failed to get character data");
-    socket.disconnect();
+    return socket.disconnect();
   }
 
   const client = ClientStorage.addClient(username, character);
@@ -26,4 +28,4 @@ const loadClient = async (socket: Socket, next: Function) => {
   return next();
 };
 
-export default loadClient;
+export default initClient;
