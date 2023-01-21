@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
 import { io } from "socket.io-client";
-import { computed, ref, watch } from "vue";
+import { ref } from "vue";
 import getSession from "../utils/getSession";
+import getCharacterId from "../utils/getCharacterId";
 
 /*
   ---USAGE EXAMPLE---
@@ -12,10 +13,10 @@ import getSession from "../utils/getSession";
 export const useSocketStore = defineStore("socket", () => {
   const socket = ref(
     io("http://localhost:4000", {
-      auth: getSession(),
+      auth: { ...getSession(), characterId: getCharacterId() },
     })
   );
-  const isConnected = ref(false);
+  const isConnected = ref(true);
   const ping = ref(0);
 
   socket.value.on("connect", () => {

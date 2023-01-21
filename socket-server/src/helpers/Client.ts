@@ -2,13 +2,14 @@ import { Character } from "../../*";
 import Instance from "../logic/Instance";
 import Player from "../logic/Player";
 import logger from "../logger";
+import CharacterModel from "../db/models/CharacterModel";
 
 class Client {
   username: string;
   player: Player;
   instance: Instance | null;
-
-  constructor(username: string, character: Character) {
+  character: any;
+  constructor(username: string, character: any) {
     this.username = username;
     this.player = new Player(character);
     this.instance = null;

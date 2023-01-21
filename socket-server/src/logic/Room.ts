@@ -1,15 +1,18 @@
 import Enemy from "./Enemy";
 
 interface RoomOptions {}
+type RoomType = "combat" | "reward";
 
 class Room {
   name: string;
+  type: RoomType;
   ilvl: number;
   enemies: Array<Enemy>;
   initialized: boolean;
   completed: boolean;
-  constructor(name: string, ilvl: number) {
+  constructor(name: string, type: RoomType, ilvl: number) {
     this.name = name;
+    this.type = type;
     this.ilvl = ilvl;
     this.enemies = [];
     this.initialized = false;

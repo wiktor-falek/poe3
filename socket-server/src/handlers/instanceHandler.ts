@@ -34,6 +34,7 @@ function registerInstanceHandler(
   const doesInstanceAlreadyExist = () => {
     const instance = client.instance;
     const instanceAlreadyExists: boolean = instance !== null;
+    // const sameCharacterHasJoined: boolean = 
     const emitData: any = { instanceAlreadyExists };
     if (instance !== null) {
       emitData.zoneId = instance.zoneId;

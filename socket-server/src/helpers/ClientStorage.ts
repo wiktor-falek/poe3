@@ -11,11 +11,12 @@ class ClientStorage {
     return this.clients.get(username);
   }
 
-  addClient(username: string, character: Character) {
+  addClient(username: string, character: any) { // TODO: any
     const existingClient = this.getClient(username);
-    if (existingClient) {
-      return existingClient;
-    }
+    // if (existingClient) {
+    //   existingClient.character = character;
+    //   return existingClient;
+    // }
 
     const client = new Client(username, character);
     this.clients.set(username, client);

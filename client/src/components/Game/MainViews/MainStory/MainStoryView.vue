@@ -5,6 +5,7 @@ import { createMachine, interpret } from "xstate";
 import { ref } from "vue";
 import type { Ref } from "vue";
 import ZoneView from "../../Zone/ZoneView.vue";
+import RoomView from "../../Zone/RoomView.vue";
 
 const socketStore = useSocketStore();
 const socket = socketStore.socket;
@@ -25,8 +26,14 @@ const stateMachine = createMachine({
       // type: "final",
       on: {
         ABANDON: "zoneSelect",
+        JOIN_ROOM: "inRoom"
       },
     },
+    inRoom: {
+      on: {
+        ABANDON: "zoneSelect"
+      }
+    }
   },
 });
 
@@ -38,7 +45,6 @@ const stateService = interpret(stateMachine)
   .start();
 
 function joinZone(id: number) {
-  console.log("joining zone ", id);
   zoneId.value = id;
   stateService.send("SELECT");
 }
@@ -54,8 +60,15 @@ function joinZone(id: number) {
 })();
 
 function abandonRun() {
-  socket.emit("instance:abandon-run");
+  // TODO: check with the server whether it was successfull and then change state
+  socket.emit("instance:abandon-run"); 
   stateService.send("ABANDON");
+}
+
+function joinRoom(roomId: number) {
+  // TODO: check with the server whether it was successfull and then change state
+  socket.emit("instance:join-room", roomId);
+  stateService.send("JOIN_ROOM")
 }
 </script>
 
@@ -69,7 +82,9 @@ function abandonRun() {
       v-if="view === 'zoneSelected'"
       :zone-id="zoneId"
       @abandon-run="abandonRun"
+      @join-room="joinRoom"
     />
+    <RoomView v-if="view === 'inRoom'" />
   </div>
 </template>
 

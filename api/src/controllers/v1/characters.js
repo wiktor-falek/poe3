@@ -6,7 +6,10 @@ import logger from "../../../logger.js";
 import characterSchema from "../../db/schemas/characterSchema.js";
 import User from "../../db/models/User.js";
 
-import { startingAttributes, startingGear } from "../../globals/playerClasses.js";
+import {
+  startingAttributes,
+  startingGear,
+} from "../../globals/playerClasses.js";
 
 const router = Router();
 
@@ -66,8 +69,6 @@ router.get(
     } catch (e) {
       return res.status(400).json({ error: "character does not exist" });
     }
-
-    User.collection.updateOne({ _id: ObjectId(userId) }, { $set : { "activity.currentCharacter": ObjectId(characterId) } });
 
     res.json(character);
   }

@@ -5,7 +5,7 @@ interface InstanceData {
   rooms: Array<Object>;
   currentLocation: number;
   ilvl: number;
-  availableRoomIds: Array<number>;
+  validRoomChoices: Array<number>;
 }
 
 class Instance {
@@ -25,11 +25,11 @@ class Instance {
     const ilvl = this.zone.ilvl;
     const currentLocation = this.zone.currentLocation;
     const rooms = this.zone.rooms.map((room: any) => {
-      return { name: room.name };
+      return { name: room.name, type: room.type }; // TODO: add ids to the rooms
     });
-    const availableRoomIds: number[] = [1]; // TODO: unhardcode and return valid room choices
+    const validRoomChoices = this.zone.validRoomChoices;
 
-    return { ilvl, currentLocation, rooms, availableRoomIds };
+    return { ilvl, currentLocation, rooms, validRoomChoices };
   }
 
   getCurrentRoom(roomNumber: number) {

@@ -18,7 +18,6 @@ const selectedId = ref();
 
 function selectZoneHandle(id: number) {
   if (highestZoneId.value >= id) {
-    console.log("selecting", id);
     selectedId.value = id;
   }
 }
