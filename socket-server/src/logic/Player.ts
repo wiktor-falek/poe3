@@ -6,10 +6,6 @@ class Player {
   constructor(character: Character) {
     this.character = character;
   }
-
-  loadCharacterData(character: Character) {
-    this.character = character;
-  }
 }
 
 export default Player;

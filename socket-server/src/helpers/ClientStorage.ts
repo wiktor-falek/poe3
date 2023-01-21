@@ -11,12 +11,13 @@ class ClientStorage {
     return this.clients.get(username);
   }
 
-  addClient(username: string, character: any) { // TODO: any
+  addClient(username: string, character: Character) {
     const existingClient = this.getClient(username);
-    // if (existingClient) {
-    //   existingClient.character = character;
-    //   return existingClient;
-    // }
+
+    // use existing client if the same character clicks on Main Story to allow reconnecting
+    if (existingClient && existingClient.player.character.name === character.name) {
+      return existingClient;
+    }
 
     const client = new Client(username, character);
     this.clients.set(username, client);
