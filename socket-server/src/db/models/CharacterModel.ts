@@ -28,6 +28,7 @@ class CharacterModel {
     };
   }
 
+  // queries the database and returns the whole character object
   async data() {
     const result = await this.collection.findOne(
       this.filterQuery,
