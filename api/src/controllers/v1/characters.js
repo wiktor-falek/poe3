@@ -146,8 +146,7 @@ router.delete(
         .json({ error: `'${characterId}' is not valid id` });
     }
 
-    // for now this will just straight up remove the character
-    // in the future it will move the character to an array of deleted characters
+    // TODO: move character to 'graveyard' instead of straight up deleting to allow restoring
     const result = await User.collection.updateOne(
       { _id: ObjectId(userId) },
       { $pull: { characters: { _id: ObjectId(characterId) } } }
