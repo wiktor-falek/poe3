@@ -7,6 +7,7 @@ import type Client from "./helpers/Client.js";
 import registerInstanceHandler from "./handlers/instanceHandler.js";
 import registerUtilsHandler from "./handlers/utilsHandler.js";
 import registerZoneHandler from "./handlers/zoneHandler.js";
+import registerRewardHandler from "./handlers/rewardHandler.js";
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -29,9 +30,10 @@ const onConnection = (socket: Socket) => {
   console.log(ClientStorage.clients);
 
   // HANDLERS
-  registerInstanceHandler(io, socket, client);
   registerUtilsHandler(io, socket);
+  registerInstanceHandler(io, socket, client);
   registerZoneHandler(io, socket, client);
+  registerRewardHandler(io, socket, client)
 
   socket.on("disconnect", (reason) => {
     logger.info(`client ${client.username} disconnected (${reason})`);

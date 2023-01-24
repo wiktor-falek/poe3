@@ -40,18 +40,15 @@ class CharacterModel {
     return character;
   }
 
-  async addSilver(silverAmount: number) {
+  async addSilver(silverAmount: number): Promise<boolean> {
     const result = await this.collection.updateOne(
       { ...this.filter },
       { $inc: { "characters.$.silver": silverAmount } }
     );
     if (result.acknowledged && result.modifiedCount === 1) {
-      // character.silver += silverAmount
-      // then it needs to be emitted
+      return true;
     }
-    if (result.modifiedCount > 1) {
-      logger.error("addSilver query modified more than 1 character")
-    }
+    return false;
   }
 }
 

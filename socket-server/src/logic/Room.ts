@@ -12,7 +12,7 @@ class Room {
   completed: boolean;
   constructor(name: string, type: RoomType, ilvl: number) {
     this.name = name;
-    this.type = type;
+    this.type = "reward"; //
     this.ilvl = ilvl;
     this.enemies = [];
     this.initialized = false;
