@@ -1,4 +1,5 @@
 import { Character } from "../../*";
+import CharacterModel from "../db/models/CharacterModel";
 import Client from "./Client";
 
 class ClientStorage {
@@ -11,10 +12,9 @@ class ClientStorage {
     return this.clients.get(username);
   }
 
-  addClient(username: string, character: Character) {
+  addClient(username: string, character: Character, characterModel: CharacterModel) {
     const existingClient = this.getClient(username);
 
-    // use existing client if the same character tries to access MainStory (or other content)
     if (
       existingClient &&
       existingClient.player.character.name === character.name
@@ -22,7 +22,7 @@ class ClientStorage {
       return existingClient;
     }
 
-    const client = new Client(username, character);
+    const client = new Client(username, character, characterModel);
     this.clients.set(username, client);
     return client;
   }

@@ -13,6 +13,7 @@ const initClient = async (socket: Socket, next: Function) => {
   }
 
   const characterModel = new CharacterModel(username, sessionId, characterId);
+  // characterModel.addSilver(50);
 
   const character = await characterModel.data();
 
@@ -22,7 +23,7 @@ const initClient = async (socket: Socket, next: Function) => {
     return socket.disconnect();
   }
 
-  const client = ClientStorage.addClient(username, character);
+  const client = ClientStorage.addClient(username, character, characterModel);
   socket.data.client = client;
 
   return next();
