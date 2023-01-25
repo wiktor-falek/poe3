@@ -23,7 +23,7 @@ class Client {
       return this.instance;
     }
 
-    this.instance = new Instance(zoneId);
+    this.instance = new Instance(zoneId, this.player.character.name);
     if (this.instance === null) {
       logger.error(
         `failed to create instance for ${this.username} (zoneId=${zoneId})`

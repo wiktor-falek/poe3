@@ -9,9 +9,11 @@ interface InstanceData {
 }
 
 class Instance {
+  characterName: string;
   zone: MainStoryZone | null;
   zoneId: number;
-  constructor(zoneId: number) {
+  constructor(zoneId: number, characterName: string) {
+    this.characterName = characterName;
     this.zoneId = zoneId;
     this.zone = Zones.createZone(zoneId);
   }
@@ -41,8 +43,10 @@ class Instance {
   /**
    * Returns ids of rooms that player can proceed to
    */
-  public get validRoomChoices(): number[] | null {
-    return this.zone?.validRoomChoices || null;
+  public get validRoomChoices(): number[] | [] {
+    const roomsIds = this.zone?.validRoomChoices ?? [];
+    console.log("here", roomsIds);
+    return roomsIds;
   }
 }
 
