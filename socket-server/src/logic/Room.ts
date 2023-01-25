@@ -4,17 +4,20 @@ interface RoomOptions {}
 type RoomType = "combat" | "reward";
 
 class Room {
+  id: number;
   name: string;
   type: RoomType;
   ilvl: number;
   enemies: Array<Enemy>;
   initialized: boolean;
   completed: boolean;
-  constructor(name: string, type: RoomType, ilvl: number) {
+  constructor(id: number, name: string, type: RoomType, ilvl: number) {
+    this.id = id;
     this.name = name;
-    this.type = "reward"; //
+    this.type = type;
     this.ilvl = ilvl;
-    this.enemies = [];
+    this.enemies = []; // move to CombatRoom
+    // static get reward // add to RewardRoom
     this.initialized = false;
     this.completed = false;
   }

@@ -42,26 +42,37 @@ function abandonRunHandle() {
 }
 
 function joinRoomHandle(roomId: number) {
+  if (!validRoomChoices.value.includes(roomId)) {
+    return;
+  }
   emit("joinRoom", roomId);
 }
-
 </script>
 <template>
   <div class="top">
     <div class="top__wrapper-left">
       <p>zoneId: {{ props.zoneId }}</p>
       <p>ilvl: {{ ilvl }}</p>
+      <p>
+        valid room choices:
+        <span>[ </span>
+        <span v-for="id in validRoomChoices">
+          {{ id }},
+        </span>
+        <span> ]</span>
+      </p>
     </div>
     <div class="top__wrapper-right">
       <button @click="abandonRunHandle">Abandon Run</button>
-      <button @click="joinRoomHandle(location)">Join Room Test</button>
     </div>
   </div>
   <div class="rooms">
     <MapRoom
       :name="room.name"
-      v-for="(room, idx) in rooms"
-      :class="{ current: idx === location }"
+      :id="room.id"
+      v-for="room in rooms"
+      :class="{ selectable: validRoomChoices.includes(room.id) }"
+      @click="joinRoomHandle(room.id)"
     />
   </div>
 </template>
@@ -78,7 +89,8 @@ function joinRoomHandle(roomId: number) {
   gap: 20px;
 }
 
-.current {
-  border-color: orange;
+.selectable {
+  border-color: white;
+  opacity: 1;
 }
 </style>

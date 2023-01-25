@@ -5,36 +5,44 @@ interface InstanceData {
   rooms: Array<Object>;
   currentLocation: number;
   ilvl: number;
-  validRoomChoices: Array<number>;
+  validRoomChoices: Array<number> | null;
 }
 
 class Instance {
-  zone: MainStoryZone;
+  zone: MainStoryZone | null;
   zoneId: number;
   constructor(zoneId: number) {
     this.zoneId = zoneId;
-
-    const zone = Zones.createZone(zoneId);
-    if (zone === null) {
-      throw new Error(`Zone does not exist (zoneId=${zoneId})`);
-    }
-    this.zone = zone;
+    this.zone = Zones.createZone(zoneId);
   }
 
-  public get data(): InstanceData {
+  public get data(): InstanceData | null {
+    if (this.zone === null) return null;
     const ilvl = this.zone.ilvl;
     const currentLocation = this.zone.currentLocation;
     const rooms = this.zone.rooms.map((room: any) => {
-      return { name: room.name, type: room.type }; // TODO: add ids to the rooms
+      return { name: room.name, type: room.type, id: room.id };
     });
-    const validRoomChoices = this.zone.validRoomChoices;
 
-    return { ilvl, currentLocation, rooms, validRoomChoices };
+    return {
+      ilvl,
+      currentLocation,
+      rooms,
+      validRoomChoices: this.validRoomChoices,
+    };
   }
 
-  getCurrentRoom(roomNumber: number) {
+  public get currentRoom() {
+    if (this.zone === null) return null;
     const currentRoom = this.zone.currentRoom;
     return currentRoom;
+  }
+
+  /**
+   * Returns ids of rooms that player can proceed to
+   */
+  public get validRoomChoices(): number[] | null {
+    return this.zone?.validRoomChoices || null;
   }
 }
 

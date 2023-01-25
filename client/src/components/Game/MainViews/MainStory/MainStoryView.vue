@@ -19,10 +19,10 @@ const stateMachine = createMachine({
   states: {
     zoneSelect: {
       on: {
-        SELECT: "zoneSelected",
+        SELECT: "roomSelect",
       },
     },
-    zoneSelected: {
+    roomSelect: {
       // type: "final",
       on: {
         ABANDON: "zoneSelect",
@@ -31,7 +31,8 @@ const stateMachine = createMachine({
     },
     inRoom: {
       on: {
-        ABANDON: "zoneSelect"
+        ABANDON: "zoneSelect",
+        LEAVE_ROOM: "roomSelect"
       }
     }
   },
@@ -70,6 +71,11 @@ function joinRoom(roomId: number) {
   socket.emit("instance:join-room", roomId);
   stateService.send("JOIN_ROOM")
 }
+
+function leaveRoom() {
+  console.log("leaving room");
+  stateService.send("")
+}
 </script>
 
 <template>
@@ -79,12 +85,12 @@ function joinRoom(roomId: number) {
       @zone-select="(id) => joinZone(id)"
     />
     <ZoneView
-      v-if="view === 'zoneSelected'"
+      v-if="view === 'roomSelect'"
       :zone-id="zoneId"
       @abandon-run="abandonRun"
       @join-room="joinRoom"
     />
-    <RoomView v-if="view === 'inRoom'" />
+    <RoomView v-if="view === 'inRoom'" @leave-room="leaveRoom" />
   </div>
 </template>
 

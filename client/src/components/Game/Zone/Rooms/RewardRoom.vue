@@ -11,7 +11,7 @@ const rewardIsClaimed: Ref<boolean> = ref(false);
 // TODO:
 function handleClick() {
   socket.emit("reward:get-silver-test");
-  rewardIsClaimed.value = true; // TODO: implement event listener on the server
+  rewardIsClaimed.value = true;
 }
 
 socket.on("reward:silver-test", (data) => {

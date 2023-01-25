@@ -31,7 +31,7 @@ function registerInstanceHandler(
     socket.emit("instance:data", instance.data);
   };
 
-  const doesInstanceAlreadyExist = () => {
+  const doesInstanceAlreadyExist = (): void => {
     const instance = client.instance;
     const instanceAlreadyExists: boolean = instance !== null;
     const emitData: any = { instanceAlreadyExists };
@@ -51,7 +51,11 @@ function registerInstanceHandler(
       return logger.warn(
         `${client.username} tried to join while not in an instance`
       );
-    const room = instance.getCurrentRoom(roomNumber);
+    const room = instance.zone?.currentRoom;
+    if (room === undefined || room === null) {
+      logger.error("room is null")
+      return null;
+    }
 
     if (!room.initialized) {
       room.init();

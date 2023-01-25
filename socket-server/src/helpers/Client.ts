@@ -15,6 +15,7 @@ class Client {
   }
 
   joinInstance(zoneId: number): Instance | null {
+    // joins existing instance or creates a new one
     if (this.instance !== null) {
       logger.info(
         `${this.username} joined existing instance with zoneId=${zoneId}`
@@ -22,15 +23,15 @@ class Client {
       return this.instance;
     }
 
-    try {
-      this.instance = new Instance(zoneId);
-    } catch {
+    this.instance = new Instance(zoneId);
+    if (this.instance === null) {
       logger.error(
         `failed to create instance for ${this.username} (zoneId=${zoneId})`
       );
       return null;
     }
-    logger.info(`created instance for ${this.username} with zoneId=${zoneId}`);
+    
+    logger.info(`created instance for ${this.username} (zoneId=${zoneId})`);
     logger.info(`${this.username} joined instance`);
 
     return this.instance;
