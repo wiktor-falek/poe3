@@ -21,6 +21,27 @@ class MainStoryZone {
     return this.rooms[this.currentLocation];
   }
 
+  public get validRoomChoices(): Array<number> {
+    // returns ids of the rooms that the player can proceed to (if current room is completed)
+    const validRoomChoices: Array<number> = [];
+
+    // TODO: unnest
+    if (this.currentRoom.completed) {
+      const nextRoom = this.rooms[this.currentLocation];
+      console.log({ nextRoom: nextRoom });
+      if (nextRoom === undefined) {
+        return [];
+      }
+      validRoomChoices.push(nextRoom.id);
+    }
+
+    if (this.currentLocation === 0) {
+      return [0];
+    }
+
+    return validRoomChoices;
+  }
+
   joinRoom(roomId: number): Room | null {
     if (
       !this.validRoomChoices?.includes(roomId) ||
@@ -33,17 +54,12 @@ class MainStoryZone {
     return this.currentRoom;
   }
 
-  public get validRoomChoices(): Array<number> {
-    // returns ids of the rooms that the player can proceed to (if current room is completed)
-    const currentRoom = this.currentRoom;
-
-    if (currentRoom.completed) {
-      return [1]; // TODO: unhardcode
+  leaveRoom(): boolean {
+    if (!this.currentRoom.completed) {
+      return false;
     }
-
-    const validRoomChoices: Array<number> = [this.currentLocation];
-
-    return validRoomChoices;
+    this.currentLocation++;
+    return true;
   }
 }
 

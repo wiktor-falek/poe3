@@ -3,6 +3,8 @@ import { ref, Ref } from "vue";
 
 const props = defineProps(["room"]);
 
+const emit = defineEmits(["leaveRoom"]);
+
 // TODO: render enemies
 // TODO: render player party
 // TODO: basic combat ui

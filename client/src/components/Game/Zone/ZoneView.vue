@@ -2,15 +2,14 @@
 import { Ref, ref } from "vue";
 import MapRoom from "./MapRoom.vue";
 import useSocketStore from "../../../stores/socketStore";
-import { createMachine } from "xstate";
+
+const socketStore = useSocketStore();
+const socket = socketStore.socket;
 
 const props = defineProps({
   zoneId: Number,
 });
 const emit = defineEmits(["abandonRun", "joinRoom"]);
-
-const socketStore = useSocketStore();
-const socket = socketStore.socket;
 
 const ilvl: Ref<number> = ref();
 const location: Ref<number> = ref(0);
@@ -56,9 +55,7 @@ function joinRoomHandle(roomId: number) {
       <p>
         valid room choices:
         <span>[ </span>
-        <span v-for="id in validRoomChoices">
-          {{ id }},
-        </span>
+        <span v-for="id in validRoomChoices"> {{ id }}, </span>
         <span> ]</span>
       </p>
     </div>

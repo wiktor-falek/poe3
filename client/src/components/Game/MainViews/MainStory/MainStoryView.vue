@@ -74,7 +74,7 @@ function joinRoom(roomId: number) {
 
 function leaveRoom() {
   console.log("leaving room");
-  stateService.send("")
+  stateService.send("LEAVE_ROOM")
 }
 </script>
 
@@ -89,6 +89,7 @@ function leaveRoom() {
       :zone-id="zoneId"
       @abandon-run="abandonRun"
       @join-room="joinRoom"
+      @leave-room="leaveRoom"
     />
     <RoomView v-if="view === 'inRoom'" @leave-room="leaveRoom" />
   </div>

@@ -11,6 +11,7 @@ class Room {
   enemies: Array<Enemy>;
   initialized: boolean;
   completed: boolean;
+  rewardClaimed: boolean;
   constructor(id: number, name: string, type: RoomType, ilvl: number) {
     this.id = id;
     this.name = name;
@@ -20,6 +21,7 @@ class Room {
     // static get reward // add to RewardRoom
     this.initialized = false;
     this.completed = false;
+    this.rewardClaimed = false;
   }
 
   init(options?: RoomOptions): void {
@@ -29,6 +31,13 @@ class Room {
     this.enemies.push(hardCodedEnemy());
 
     this.initialized = true;
+  }
+
+  claimReward() {
+    const isClaimed = this.rewardClaimed;
+    if (isClaimed) return false
+    this.rewardClaimed = true;
+    return this.rewardClaimed;
   }
 }
 

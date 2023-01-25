@@ -53,7 +53,7 @@ function registerInstanceHandler(
       );
     const room = instance.zone?.currentRoom;
     if (room === undefined || room === null) {
-      logger.error("room is null")
+      logger.error("room is null");
       return null;
     }
 
@@ -67,10 +67,23 @@ function registerInstanceHandler(
     socket.emit("instance:room-data", emitData);
   };
 
+  const leaveRoom = () => {
+    // TODO: PROCEED
+    // check if room is actually completed
+    // if (client.instance?.currentRoom?.completed) {}
+    const hasLeft = client.instance?.zone?.leaveRoom() ?? false;
+    console.log({hasLeft});
+    socket.emit("instance:has-left-room", hasLeft);
+    if (hasLeft && client.instance) {
+      socket.emit("instance:data", client.instance.data);
+    }
+  };
+
   socket.on("instance:join:main-story", joinMainStoryInstance);
   socket.on("instance:already-exists?", doesInstanceAlreadyExist);
   socket.on("instance:abandon-run", abandonInstance);
   socket.on("instance:join-room", joinRoom);
+  socket.on("instance:leave-room", leaveRoom);
 }
 
 export default registerInstanceHandler;
