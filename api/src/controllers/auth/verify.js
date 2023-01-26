@@ -43,8 +43,6 @@ router.get(
       res.status(404).json({ error: "User does not exist" });
     }
 
-    console.log("here", user);
-
     if (user.account.confirmedEmail !== null) {
       return res.status(400).send("Email is already verified");
     }
