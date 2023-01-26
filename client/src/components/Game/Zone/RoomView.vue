@@ -34,4 +34,8 @@ socket.on("instance:room-data", (data) => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.room {
+  height: 100%;
+}
+</style>

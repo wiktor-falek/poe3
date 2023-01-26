@@ -97,6 +97,6 @@ function leaveRoom() {
 
 <style scoped>
 .main-story {
-  padding: 5px;
+  height: 100%;
 }
 </style>

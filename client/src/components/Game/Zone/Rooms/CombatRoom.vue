@@ -1,10 +1,9 @@
 <script lang="ts" setup>
-
 const props = defineProps(["room"]);
 
 const emit = defineEmits(["leaveRoom"]);
 
-console.log(props.room)
+console.log(props.room);
 
 // TODO: render enemies
 // TODO: render player party
@@ -22,21 +21,32 @@ console.log(props.room)
     <div class="party party--ally">
       <div class="entity">Player</div>
     </div>
+
+    <div class="hud">
+    </div>
   </div>
 </template>
 
 <style scoped>
 .combat {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 100px;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(3, 1fr);
+  grid-column-gap: px;
+  grid-row-gap: 0px;
+  height: 100%;
 }
+
+.party--enemy {
+}
+.party--ally {
+}
+.hud {
+}
+
 .party {
   display: flex;
   justify-content: center;
-  width: 80%;
   border: 2px solid gray;
   box-sizing: content-box;
 }

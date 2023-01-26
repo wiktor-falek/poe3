@@ -155,6 +155,7 @@ main {
 .div1 {
   grid-area: 1 / 2 / 2 / 3;
   border: 2px solid rgb(217, 212, 212);
+  overflow: hidden;
 }
 
 .div2 {
