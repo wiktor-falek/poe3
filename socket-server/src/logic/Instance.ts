@@ -1,5 +1,6 @@
 import Zones from "./Zones";
 import MainStoryZone from "./MainStoryZone";
+import { CombatRoom, RewardRoom } from "./Room";
 
 interface InstanceData {
   rooms: Array<Object>;
@@ -34,7 +35,7 @@ class Instance {
     };
   }
 
-  public get currentRoom() {
+  public get currentRoom(): CombatRoom | RewardRoom | null {
     if (this.zone === null) return null;
     const currentRoom = this.zone.currentRoom;
     return currentRoom;
@@ -43,9 +44,8 @@ class Instance {
   /**
    * Returns ids of rooms that player can proceed to
    */
-  public get validRoomChoices(): number[] | [] {
+  public get validRoomChoices(): number[] {
     const roomsIds = this.zone?.validRoomChoices ?? [];
-    console.log("here", roomsIds);
     return roomsIds;
   }
 }

@@ -1,23 +1,24 @@
-import Room from "./Room";
+import { CombatRoom, RewardRoom } from "./Room";
 
 class MainStoryZone {
   id: number;
   ilvl: number;
   name: string;
-  rooms: Array<Room>;
+  rooms: Array<RewardRoom | CombatRoom>;
   currentLocation: number;
   constructor(id: number, name: string, ilvl: number) {
     this.id = id;
     this.ilvl = ilvl;
     this.name = name;
+    // TODO: make a graph of rooms instead of an array
     this.currentLocation = 0;
     this.rooms = [
-      new Room(0, "Old Cellar (level 1)", "reward", ilvl),
-      new Room(1, "Old Cellar (level 2)", "combat", ilvl),
+      new RewardRoom(0, "Old Cellar (level 1)", ilvl),
+      new CombatRoom(1, "Old Cellar (level 1)", ilvl),
     ];
   }
 
-  public get currentRoom(): Room {
+  public get currentRoom(): RewardRoom | CombatRoom {
     return this.rooms[this.currentLocation];
   }
 
@@ -28,14 +29,13 @@ class MainStoryZone {
     return validRooms;
   }
 
-  joinRoom(roomId: number): Room | null {
+  joinRoom(roomId: number): RewardRoom | CombatRoom | null {
     if (
       !this.validRoomChoices?.includes(roomId) ||
       !this.currentRoom?.completed
     ) {
       return null;
     }
-    // TODO: unhardcode
     this.currentLocation++;
     return this.currentRoom;
   }
