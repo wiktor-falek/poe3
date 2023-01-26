@@ -19,7 +19,6 @@ const validRoomChoices: Ref<Array<number>> = ref();
 socket.emit("instance:join:main-story", props.zoneId);
 
 socket.on("instance:data", (instanceData) => {
-  console.log("here", instanceData);
   location.value = instanceData.currentLocation;
   validRoomChoices.value = instanceData.validRoomChoices;
   rooms.value = instanceData.rooms;
