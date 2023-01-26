@@ -1,6 +1,6 @@
 import Zones from "./Zones";
 import MainStoryZone from "./MainStoryZone";
-import { CombatRoom, RewardRoom } from "./Room";
+import { CombatRoom, RewardRoom } from "./Rooms";
 
 interface InstanceData {
   rooms: Array<Object>;

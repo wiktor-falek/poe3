@@ -1,7 +1,7 @@
 import type Client from "../helpers/Client";
 import type { Socket } from "socket.io";
 import logger from "../logger";
-import { CombatRoom } from "../logic/Room";
+import { CombatRoom } from "../logic/Rooms";
 
 function registerInstanceHandler(
   io: any,
@@ -61,8 +61,8 @@ function registerInstanceHandler(
     // if (!room.initialized) {
     //   room.init();
     // }
-    if (room instanceof CombatRoom) { 
-      room.init() 
+    if (room instanceof CombatRoom) {
+      room.init();
     }
 
     // TODO: select individual properties from room or make others private
@@ -77,7 +77,7 @@ function registerInstanceHandler(
     // check if room is actually completed
     // if (client.instance?.currentRoom?.completed) {}
     const hasLeft = client.instance?.zone?.leaveRoom() ?? false;
-    console.log({hasLeft});
+    console.log({ hasLeft });
     socket.emit("instance:has-left-room", hasLeft);
     if (hasLeft && client.instance) {
       socket.emit("instance:data", client.instance.data);
@@ -89,15 +89,14 @@ function registerInstanceHandler(
     if (!currentRoom || currentRoom.type !== "combat") {
       return socket.emit("error");
     }
-
-  }
+  };
 
   socket.on("instance:join:main-story", joinMainStoryInstance);
   socket.on("instance:already-exists?", doesInstanceAlreadyExist);
   socket.on("instance:abandon-run", abandonInstance);
   socket.on("instance:join-room", joinRoom);
   socket.on("instance:leave-room", leaveRoom);
-  socket.on("instance:get-combat-state", getCombatState)
+  socket.on("instance:get-combat-state", getCombatState);
 }
 
 export default registerInstanceHandler;

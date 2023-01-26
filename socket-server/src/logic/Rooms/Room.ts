@@ -1,5 +1,3 @@
-import Enemy from "./Enemy";
-
 type RoomType = "reward" | "combat";
 
 class Room {
@@ -27,5 +25,5 @@ class Room {
   }
 }
 
-
-export default Room;
+export { Room };
+export type { RoomType };

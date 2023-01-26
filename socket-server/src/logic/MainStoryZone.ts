@@ -1,4 +1,4 @@
-import { CombatRoom, RewardRoom } from "./Room";
+import { CombatRoom, RewardRoom } from "./Rooms";
 
 class MainStoryZone {
   id: number;
