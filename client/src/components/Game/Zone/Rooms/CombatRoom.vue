@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { ref, Ref } from "vue";
 
 const props = defineProps(["room"]);
 
 const emit = defineEmits(["leaveRoom"]);
+
+console.log(props.room)
 
 // TODO: render enemies
 // TODO: render player party

@@ -16,7 +16,8 @@ function registerRewardHandler(io: any, socket: Socket, client: Client): void {
     room.completed = true;
 
     return socket.emit("reward:silver-test", {
-      silver: client.player.character.silver,
+      silver: silverAmount,
+      totalSilver: client.player.character.silver,
       items: [],
     });
   };
