@@ -144,21 +144,17 @@ main {
 
 .game {
   display: grid;
-grid-template-columns: 2fr 9fr 3fr;
-grid-template-rows: 3fr 1fr;
-grid-column-gap: 0px;
-grid-row-gap: 0px; 
+  grid-template-columns: 2fr 9fr 3fr;
+  grid-template-rows: 3fr 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
   gap: 5px;
 
-  width: 100%;
   height: 100%;
 }
 .div1 {
   grid-area: 1 / 2 / 2 / 3;
-
   border: 2px solid rgb(217, 212, 212);
-  width: 100%;
-  height: 100%;
 }
 
 .div2 {
@@ -167,38 +163,27 @@ grid-row-gap: 0px;
 
 .div3 {
   grid-area: 1 / 3 / 2 / 4;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 15px;
   border: 2px solid rgb(217, 212, 212);
-  width: 100%;
-  height: 100%;
 }
 
 .div4 {
   grid-area: 1 / 1 / 3 / 2;
-
   display: flex;
   flex-direction: column;
   gap: 10px;
   padding: 15px;
 
   border: 2px solid rgb(217, 212, 212);
-  width: 100%;
-  height: 100%;
 }
 
 .div5 {
   grid-area: 2 / 3 / 3 / 4;
 }
 
-.div1 { grid-area: 1 / 2 / 2 / 3; }
-.div2 { grid-area: 2 / 2 / 3 / 3; }
-.div3 { grid-area: 1 / 3 / 2 / 4; }
-.div4 { grid-area: 1 / 1 / 3 / 2; }
-.div5 { grid-area: 2 / 3 / 3 / 4; } 
 .tab {
   display: flex;
   align-items: center;
