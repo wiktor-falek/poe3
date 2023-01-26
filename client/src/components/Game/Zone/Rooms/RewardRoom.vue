@@ -31,15 +31,15 @@ socket.on("reward:silver-test", (data) => {
 // TODO: PROCEED
 function leaveRoomHandle() {
   if (!rewardIsClaimed) return;
-  socket.emit("instance:leave-room")
+  socket.emit("instance:leave-room");
 }
 
 socket.on("instance:has-left-room", (leftSuccessfully) => {
   if (!leftSuccessfully) {
-    return console.log("u cant")
+    return console.log("u cant");
   }
-  emit('leaveRoom');
-})
+  emit("leaveRoom");
+});
 </script>
 
 <template>
@@ -47,7 +47,9 @@ socket.on("instance:has-left-room", (leftSuccessfully) => {
     *Reward Chest*
   </div>
   <div class="chest" v-else>You received {{ silverGained }} silver</div>
-  <button @click="leaveRoomHandle" v-if="leaveButtonIsVisible">GG Noobs</button>
+  <button @click="leaveRoomHandle" v-if="leaveButtonIsVisible">
+    Leave Room
+  </button>
 </template>
 
 <style scoped>
