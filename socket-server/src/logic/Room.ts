@@ -48,6 +48,10 @@ class CombatRoom extends Room {
     this.initialized = false;
   }
 
+  // All of this is logic is contained here because when a Zone is instantiated
+  // 1. there will be a lot of rooms
+  // 2. during a run there might be a lot of different variables that change behavior
+  // 3. saves a bit of computing power, which is likely to be the bottleneck
   init(options?: RoomOptions): void {
     const hardCodedEnemy = () => new Enemy("Rat", this.ilvl);
 
