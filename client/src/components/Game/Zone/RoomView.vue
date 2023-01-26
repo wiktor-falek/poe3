@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { Ref, ref } from "vue";
 import useSocketStore from "../../../stores/socketStore";
-import CombatRoom from "./Rooms/CombatRoom.vue";
+import CombatRoom from "./Rooms/Combat/CombatRoom.vue";
 import RewardRoom from "./Rooms/RewardRoom.vue";
 
 const socketStore = useSocketStore();

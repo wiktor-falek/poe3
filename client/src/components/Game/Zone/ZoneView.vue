@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Ref, ref } from "vue";
-import MapRoom from "./MapRoom.vue";
+import RoomSelectView from "./RoomSelectView.vue";
 import useSocketStore from "../../../stores/socketStore";
 
 const socketStore = useSocketStore();
@@ -63,7 +63,7 @@ function joinRoomHandle(roomId: number) {
     </div>
   </div>
   <div class="rooms">
-    <MapRoom
+    <RoomSelectView
       :name="room.name"
       :id="room.id"
       v-for="room in rooms"

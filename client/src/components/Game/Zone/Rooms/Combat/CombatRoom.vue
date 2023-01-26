@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import HUD from './HUD/HUD.vue';
+
 const props = defineProps(["room"]);
 
 const emit = defineEmits(["leaveRoom"]);
@@ -22,8 +24,7 @@ console.log(props.room);
       <div class="entity">Player</div>
     </div>
 
-    <div class="hud">
-    </div>
+    <HUD />
   </div>
 </template>
 
