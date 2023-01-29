@@ -1,13 +1,25 @@
+import { Level } from "../../*";
+
+interface EnemyResources {
+  maxHp: number;
+  hp: number;
+}
+
 class Enemy {
   name: string;
-  lvl: number;
-  hp: number;
+  level: Level;
+  resources: EnemyResources;
 
   #internalData: string = "";
   constructor(name: string, lvl: number) {
     this.name = name;
-    this.lvl = lvl;
-    this.hp = 10;
+    this.level = {
+      value: lvl,
+    };
+    this.resources = {
+      maxHp: 10,
+      hp: 10,
+    };
   }
 }
 

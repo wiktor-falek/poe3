@@ -17,9 +17,9 @@ const props = defineProps({
       :playerClass="characterData.class"
       :level="characterData.level.value"
       :hp="characterData.resources.hp"
-      :max_hp="characterData.resources.max_hp"
+      :maxHp="characterData.resources.maxHp"
       :mp="characterData.resources.mp"
-      :max_mp="characterData.resources.max_mp"
+      :maxMp="characterData.resources.maxMp"
     />
 
     

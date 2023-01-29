@@ -3,11 +3,11 @@ import { ref } from "vue";
 
 const props = defineProps(["apCost", "mpCost", "imgId"]);
 
+// placeholder icons
 const imgSrc = ref(
   props.imgId ? `https://nosapki.com/images/icons/${props.imgId}.png` : ""
 );
 
-console.log(imgSrc);
 </script>
 
 <template>
@@ -23,22 +23,27 @@ console.log(imgSrc);
   flex-direction: column;
   width: 48px;
   height: 48px;
-  border: 1px solid rgb(241, 241, 241);
+  border: 2px solid rgb(241, 241, 241);
   box-sizing: content-box;
   justify-content: space-between;
   background-repeat: no-repeat;
   background-size: cover;
+  background-color: rgb(42, 42, 42);
 }
 
 p {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 20px;
-  width: 16px;
   font-size: 24px;
-  /* this needs a font with a black outline */
+  height: 20px;
   color: rgb(207, 207, 207);
+  /*
+  TODO: 
+  this is barely visible on some background images, 
+  needs either a font with a black outline
+  or to be positioned differently
+  */
 }
 
 .ap-cost {

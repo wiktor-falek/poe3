@@ -2,17 +2,18 @@ import Enemy from "../Enemy";
 import { Room } from "./Room";
 import type { RoomType } from "./Room";
 
-
 interface RoomOptions {}
 
 class CombatRoom extends Room {
   type: RoomType;
   initialized: boolean;
-  enemies: Array<Enemy>;
+  allyParty: Array<any>;
+  enemyParty: Array<Enemy>;
   constructor(id: number, name: string, ilvl: number) {
     super(id, name, ilvl);
     this.type = "combat";
-    this.enemies = [];
+    this.allyParty = [];
+    this.enemyParty = [];
     this.initialized = false;
   }
 
@@ -20,7 +21,7 @@ class CombatRoom extends Room {
   // 1. there will be a lot of rooms
   // 2. during a run there might be a lot of different variables that change behavior
   // 3. saves a bit of computing power, which is likely to be the bottleneck
-  init(options?: RoomOptions): void {
+  init(characters: Array<any>, options?: RoomOptions): void {
     const hardCodedEnemy = () => new Enemy("Rat", this.ilvl);
 
     const amountOfEnemies = Math.floor(Math.random() * 3) + 1;
@@ -29,7 +30,8 @@ class CombatRoom extends Room {
     for (let i = 0; i < amountOfEnemies; i++) {
       enemies.push(hardCodedEnemy());
     }
-    this.enemies = enemies;
+    this.enemyParty = enemies;
+    this.allyParty = [...characters];
     this.initialized = true;
   }
 }

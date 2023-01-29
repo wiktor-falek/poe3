@@ -16,11 +16,11 @@ import SkillIcon from "./SkillIcon.vue";
       <SkillIcon :ap-cost="1" :mp-cost="5" :imgId="5834" />
       <SkillIcon :ap-cost="2" :mp-cost="5" :imgId="5835" />
       <SkillIcon :ap-cost="1" :mp-cost="5" :imgId="5836" />
-      <SkillIcon :ap-cost="1" :mp-cost="5" :imgId="5837" />
-      <SkillIcon :ap-cost="2" :mp-cost="5" :imgId="5838" />
-      <SkillIcon :ap-cost="2" :mp-cost="5" :imgId="5839" />
-      <SkillIcon :ap-cost="3" :mp-cost="8" :imgId="5840" />
-      <SkillIcon :ap-cost="3" :mp-cost="10" :imgId="5841" />
+      <SkillIcon />
+      <SkillIcon />
+      <SkillIcon />
+      <SkillIcon />
+      <SkillIcon />
     </div>
   </div>
 </template>

@@ -27,16 +27,16 @@ const characterSchema = Joi.object({
     hp: Joi.number()
       .integer()
       .min(0)
-      .default(Joi.ref('max_hp')),
-    max_hp: Joi.number()
+      .default(Joi.ref('maxHp')),
+    maxHp: Joi.number()
       .integer()
       .min(0)
       .default(10),
     mp: Joi.number()
       .integer()
       .min(0)
-      .default(Joi.ref('max_mp')),
-    max_mp: Joi.number()
+      .default(Joi.ref('maxMp')),
+    maxMp: Joi.number()
       .integer()
       .min(0)
       .default(10)

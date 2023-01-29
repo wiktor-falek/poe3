@@ -58,11 +58,10 @@ function registerInstanceHandler(
       return null;
     }
 
-    // if (!room.initialized) {
-    //   room.init();
-    // }
-    if (room instanceof CombatRoom) {
-      room.init();
+    if (room instanceof CombatRoom && !room.initialized) {
+      // TODO: figure out how to actually support multi player parties
+      const party = [client.player.character];
+      room.init(party);
     }
 
     // TODO: select individual properties from room or make others private
@@ -77,7 +76,6 @@ function registerInstanceHandler(
     // check if room is actually completed
     // if (client.instance?.currentRoom?.completed) {}
     const hasLeft = client.instance?.zone?.leaveRoom() ?? false;
-    console.log({ hasLeft });
     socket.emit("instance:has-left-room", hasLeft);
     if (hasLeft && client.instance) {
       socket.emit("instance:data", client.instance.data);

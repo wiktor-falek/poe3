@@ -5,9 +5,9 @@ const props = defineProps({
   playerClass: String,
   level: Number,
   hp: Number,
-  max_hp: Number,
+  maxHp: Number,
   mp: Number,
-  max_mp: Number,
+  maxMp: Number,
 })
 
 </script>
@@ -20,8 +20,8 @@ const props = defineProps({
       <span class="level">Lv {{ level }}</span>
     </p>
     <div class="resources">
-      <div class="resources__hp">{{ hp }} / {{ max_hp }}</div>
-      <div class="resources__mp">{{ mp }} / {{ max_mp }}</div>
+      <div class="resources__hp">{{ hp }} / {{ maxHp }}</div>
+      <div class="resources__mp">{{ mp }} / {{ maxMp }}</div>
     </div>
   </div>
 </template>
