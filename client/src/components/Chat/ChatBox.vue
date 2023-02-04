@@ -1,27 +1,18 @@
 <script lang="ts" setup>
+import { isUndefined } from "util";
 import { ref } from "vue";
 import { usePlayerStore } from "../../stores/playerStore";
 import useSocketStore from "../../stores/socketStore";
+import ClientSideSystemMessage from "../../utils/ClientSideSystemMessage";
 
 const socketStore = useSocketStore();
 const socket = socketStore.socket;
 
 const playerStore = usePlayerStore();
 
-const room = ref();
 const messages = ref([]);
 
-socket.emit("chat:join");
-
-socket.on("chat:join", (roomNumber) => {
-  room.value = roomNumber;
-  const message = {
-    sender: "SYSTEM",
-    content: `You joined Global ${roomNumber}`,
-    timestamp: Date.now(),
-  };
-  messages.value.push(message);
-});
+socket.emit("chat:join", 1);
 
 socket.on("chat:message", (message) => {
   messages.value.push({ ...message, timestamp: Date.now() });
@@ -35,14 +26,45 @@ function timestampToHoursAndMinutes(timestamp: number): string {
 const inputMessage = ref("");
 
 function sendMessage() {
-  const message = inputMessage.value;
+  const message = inputMessage.value.trim();
   // TODO: client side validation
   if (!message) {
     return;
   }
 
-  socket.emit("chat:message", message);
   inputMessage.value = "";
+
+  if (message.startsWith("/")) {
+    const [command, ...args] = message.split(" ");
+
+    switch (command) {
+      case "/clear":
+        messages.value = [];
+        return;
+
+      case "/global":
+        const roomNumber = +args[0];
+        if (!roomNumber || roomNumber < 0 || roomNumber > 999) {
+          const message = new ClientSideSystemMessage(
+            "Command requires a number (1-999) as an argument"
+          );
+
+          messages.value.push(message);
+          return;
+        }
+
+        console.log(roomNumber);
+        socket.emit("chat:join", roomNumber);
+        break;
+
+      default:
+        messages.value.push(
+          new ClientSideSystemMessage(`Invalid command '${message}'`)
+        );
+    }
+    return;
+  }
+  socket.emit("chat:message", message);
 }
 </script>
 
@@ -90,7 +112,9 @@ function sendMessage() {
       </div>
       <div class="status__right">
         <!-- icon -->
-        <p class="player-count bold" v-if="socketStore.isConnected">{{ socketStore.playerCount }}</p>
+        <p class="player-count bold" v-if="socketStore.isConnected">
+          {{ socketStore.playerCount }}
+        </p>
       </div>
     </div>
   </div>
