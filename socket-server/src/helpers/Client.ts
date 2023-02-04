@@ -5,10 +5,12 @@ import logger from "../logger";
 import CharacterModel from "../db/models/CharacterModel";
 
 class Client {
+  isConnected: boolean;
   username: string;
   player: Player;
   instance: Instance | null;
   constructor(username: string, character: Character, characterModel: CharacterModel) {
+    this.isConnected = false;
     this.username = username;
     this.player = new Player(character, characterModel);
     this.instance = null;

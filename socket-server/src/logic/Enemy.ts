@@ -17,8 +17,8 @@ class Enemy {
       value: lvl,
     };
     this.resources = {
-      maxHp: 10,
-      hp: 10,
+      maxHp: 5,
+      hp: 5,
     };
   }
 }

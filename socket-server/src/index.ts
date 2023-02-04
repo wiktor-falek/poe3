@@ -24,6 +24,12 @@ io.use(initClient);
 const onConnection = (socket: Socket) => {
   const client: Client = socket.data.client;
 
+  // client already connected, multiple connections are not allowed
+  if (client.isConnected) {
+    return socket.emit("error:connection-already-exists");
+  }
+  client.isConnected = true;
+
   logger.info(
     `client ${client.username} connected as character ${client.player.character.name}`
   );
@@ -38,6 +44,7 @@ const onConnection = (socket: Socket) => {
   registerCombatHandler(io, socket, client);
 
   socket.on("disconnect", (reason) => {
+    client.isConnected = false;
     logger.info(`client ${client.username} disconnected (${reason})`);
     console.log(ClientStorage.clients);
   });
