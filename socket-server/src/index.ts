@@ -9,6 +9,7 @@ import registerUtilsHandler from "./handlers/utilsHandler.js";
 import registerZoneHandler from "./handlers/zoneHandler.js";
 import registerRewardHandler from "./handlers/rewardHandler.js";
 import registerCombatHandler from "./handlers/combatHandler.js";
+import registerChatHandler from "./handlers/chatHandler.js";
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -29,6 +30,7 @@ const onConnection = (socket: Socket) => {
     return socket.emit("error:connection-already-exists");
   }
   client.isConnected = true;
+  io.emit("player-count", ClientStorage.clientCount);
 
   logger.info(
     `client ${client.username} connected as character ${client.player.character.name}`
@@ -38,6 +40,7 @@ const onConnection = (socket: Socket) => {
 
   // HANDLERS
   registerUtilsHandler(io, socket);
+  registerChatHandler(io, socket, client);
   registerInstanceHandler(io, socket, client);
   registerZoneHandler(io, socket, client);
   registerRewardHandler(io, socket, client);
@@ -47,6 +50,7 @@ const onConnection = (socket: Socket) => {
     client.isConnected = false;
     logger.info(`client ${client.username} disconnected (${reason})`);
     console.log(ClientStorage.clients);
+    io.emit("player-count", ClientStorage.clientCount);
   });
 };
 

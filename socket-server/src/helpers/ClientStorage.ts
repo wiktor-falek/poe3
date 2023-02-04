@@ -8,11 +8,28 @@ class ClientStorage {
     this.clients = new Map();
   }
 
+  public get clientCount(): number {
+    // TODO: optimize this to be O(1)
+    // by having count as a property, which is updated
+    // whenever a property isConnected of a Client mutates
+    let count = 0;
+    for (const client of this.clients.values()) {
+      if (client.isConnected) {
+        count++;
+      }
+    }
+    return count;
+  }
+
   getClient(username: string): Client | undefined {
     return this.clients.get(username);
   }
 
-  addClient(username: string, character: Character, characterModel: CharacterModel) {
+  addClient(
+    username: string,
+    character: Character,
+    characterModel: CharacterModel
+  ) {
     const existingClient = this.getClient(username);
 
     if (

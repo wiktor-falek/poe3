@@ -25,11 +25,12 @@ const props = defineProps(["resources"]);
   width: 100%;
   border-radius: 5px;
   font-size: 18px;
-  height: 18px;
+  height: 22px;
   color: black;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 2px solid white;
 }
 
 .resource-bar__hp-bar {

@@ -19,6 +19,7 @@ export const useSocketStore = defineStore("socket", () => {
   const isConnected = ref(true);
   const ping = ref(0);
   const playerCount = ref(0);
+  const chatRoom = ref(0);
 
   socket.value.on("connect", () => {
     isConnected.value = true;
@@ -30,11 +31,11 @@ export const useSocketStore = defineStore("socket", () => {
 
   socket.value.on("error:connection-already-exists", () => {
     isConnected.value = false;
-  })
+  });
 
-  socket.value.on("player-count", count => {
+  socket.value.on("player-count", (count) => {
     playerCount.value = count;
-  })
+  });
 
   setInterval(() => {
     const start = Date.now();
