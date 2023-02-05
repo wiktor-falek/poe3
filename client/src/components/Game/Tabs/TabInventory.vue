@@ -36,6 +36,9 @@ const props = defineProps({
 
 .money {
   margin-left: auto;
-  padding-right: 30px;
+  width: 150px;
+  display: flex;
+  justify-content: end;
+  padding: 0px 5px;
 }
 </style>
