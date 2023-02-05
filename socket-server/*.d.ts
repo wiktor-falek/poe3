@@ -3,7 +3,7 @@ import type { ObjectId } from "mongodb";
 interface Level {
   value: number;
   xp?: number;
-  required_xp?: number;
+  requiredXp?: number;
 }
 
 interface Resistances {

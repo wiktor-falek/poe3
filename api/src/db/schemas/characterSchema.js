@@ -18,7 +18,7 @@ const characterSchema = Joi.object({
       .integer()
       .min(0)
       .default(0),
-    required_xp: Joi.number()
+    requiredXp: Joi.number()
       .integer()
       .min(10)
       .default(10)
