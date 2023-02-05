@@ -160,6 +160,7 @@ function sendMessage() {
 }
 
 .message {
+  user-select: text; /* weird that i had to set this explicitly */
   white-space: pre-line;
   font-size: 17px;
 }
