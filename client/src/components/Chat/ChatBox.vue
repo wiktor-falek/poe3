@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref } from "vue";
+import { useMessageStore } from "../../stores/messageStore";
 import { usePlayerStore } from "../../stores/playerStore";
 import useSocketStore from "../../stores/socketStore";
 import ClientSideSystemMessage from "../../utils/ClientSideSystemMessage";
@@ -9,12 +10,15 @@ const socket = socketStore.socket;
 
 const playerStore = usePlayerStore();
 
-const messages = ref([]);
+const messageStore = useMessageStore();
+
+const messages = messageStore.messages;
 
 socket.emit("chat:join");
 
 socket.on("chat:message", (message) => {
-  messages.value.push({ ...message, timestamp: Date.now() });
+  console.log("here", message);
+  messageStore.push(message);
 });
 
 function unixToReadable(timestamp: number): string {
@@ -26,7 +30,7 @@ const inputMessage = ref("");
 
 function sendMessage() {
   const message = inputMessage.value.trim();
-  console.log(message);
+
   // TODO: validate length
   if (!message) {
     return;
@@ -39,35 +43,31 @@ function sendMessage() {
 
     switch (command) {
       case "/help":
-        messages.value.push(
-          new ClientSideSystemMessage(
-            "List of all commands:\n/help - display this message\n/clear - clear the chat\n/global n - join a chat room number n (1-999)"
-          )
+        messageStore.pushClientSideSystemMessage(
+          "List of all commands:\n/help - display this message\n/clear - clear the chat\n/global n - join a chat room number n (1-999)"
         );
+
         return;
 
       case "/clear":
-        messages.value = [];
+        messageStore.clear();
         return;
 
       case "/global":
         const roomNumber = +args[0];
         if (!roomNumber || roomNumber < 0 || roomNumber > 999) {
-          const message = new ClientSideSystemMessage(
+          messageStore.pushClientSideSystemMessage(
             "Command requires a number (1-999) as an argument"
           );
-
-          messages.value.push(message);
           return;
         }
 
-        console.log(roomNumber);
         socket.emit("chat:join", roomNumber);
         break;
 
       default:
-        messages.value.push(
-          new ClientSideSystemMessage(`Invalid command '${message}'`)
+        messageStore.pushClientSideSystemMessage(
+          `Invalid command '${message}'`
         );
     }
     return;
@@ -107,9 +107,9 @@ function sendMessage() {
         </p>
       </div>
       <div class="input-area">
-          <input type="text" v-model="inputMessage" @keyup.enter="sendMessage" />
-          <button @click="sendMessage">Send</button>
-        </div>
+        <input type="text" v-model="inputMessage" @keyup.enter="sendMessage" />
+        <button @click="sendMessage">Send</button>
+      </div>
     </div>
 
     <div class="status">
