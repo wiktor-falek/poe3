@@ -24,6 +24,7 @@ export const useMessageStore = defineStore("message", () => {
   }
 
   function clear() {
+    // 'reassign' to empty array while maintaining reactivity
     messages.value.splice(0);
   }
 

@@ -17,7 +17,6 @@ const messages = messageStore.messages;
 socket.emit("chat:join");
 
 socket.on("chat:message", (message) => {
-  console.log("here", message);
   messageStore.push(message);
 });
 
