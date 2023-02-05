@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { isUndefined } from "util";
 import { ref } from "vue";
 import { usePlayerStore } from "../../stores/playerStore";
 import useSocketStore from "../../stores/socketStore";
@@ -12,22 +11,23 @@ const playerStore = usePlayerStore();
 
 const messages = ref([]);
 
-socket.emit("chat:join", 1);
+socket.emit("chat:join");
 
 socket.on("chat:message", (message) => {
   messages.value.push({ ...message, timestamp: Date.now() });
 });
 
-function timestampToHoursAndMinutes(timestamp: number): string {
+function unixToReadable(timestamp: number): string {
   const date = new Date(timestamp);
-  return `${date.getHours()}:${date.getMinutes()}`;
+  return date.toTimeString().slice(0, 5);
 }
 
 const inputMessage = ref("");
 
 function sendMessage() {
   const message = inputMessage.value.trim();
-  // TODO: client side validation
+  console.log(message);
+  // TODO: validate length
   if (!message) {
     return;
   }
@@ -38,6 +38,14 @@ function sendMessage() {
     const [command, ...args] = message.split(" ");
 
     switch (command) {
+      case "/help":
+        messages.value.push(
+          new ClientSideSystemMessage(
+            "List of all commands:\n/help - display this message\n/clear - clear the chat\n/global n - join a chat room number n (1-999)"
+          )
+        );
+        return;
+
       case "/clear":
         messages.value = [];
         return;
@@ -70,33 +78,40 @@ function sendMessage() {
 
 <template>
   <div class="chat-box">
-    <div class="messages">
-      <p class="message" v-for="message in messages">
-        <span v-if="message.timestamp && message.sender !== 'SYSTEM'">
-          [ {{ timestampToHoursAndMinutes(message.timestamp) }} ]
-        </span>
-        <span v-if="message.sender !== 'SYSTEM'" class="message__sender">
+    <div class="left">
+      <div class="messages">
+        <p class="message" v-for="message in messages">
           <span
-            class="message__sender__name"
-            :class="{
-              'this-sender': message.sender === playerStore.characterData.name,
-            }"
-            >{{ message.sender }}</span
+            class="message__timestamp"
+            v-if="message.timestamp && message.sender !== 'SYSTEM'"
           >
-          <span class="message__sender__separator">:&nbsp;</span>
-        </span>
-        <span
-          class="message__content"
-          :class="{ 'message__content--system': message.sender === 'SYSTEM' }"
-        >
-          {{ message.content }}
-        </span>
-      </p>
-      <div class="input-area">
-        <input v-model="inputMessage" type="text" class="input" />
-        <button @click="sendMessage">Send</button>
+            [ {{ unixToReadable(message.timestamp) }} ]
+          </span>
+          <span v-if="message.sender !== 'SYSTEM'" class="message__sender">
+            <span
+              class="message__sender__name"
+              :class="{
+                'this-sender':
+                  message.sender === playerStore.characterData.name,
+              }"
+              >{{ message.sender }}</span
+            >
+            <span class="message__sender__separator">:&nbsp;</span>
+          </span>
+          <span
+            class="message__content"
+            :class="{ 'message__content--system': message.sender === 'SYSTEM' }"
+          >
+            {{ message.content }}
+          </span>
+        </p>
       </div>
+      <div class="input-area">
+          <input type="text" v-model="inputMessage" @keyup.enter="sendMessage" />
+          <button @click="sendMessage">Send</button>
+        </div>
     </div>
+
     <div class="status">
       <div class="status__left">
         <div
@@ -111,7 +126,7 @@ function sendMessage() {
         </p>
       </div>
       <div class="status__right">
-        <!-- icon -->
+        <!-- TODO: users icon -->
         <p class="player-count bold" v-if="socketStore.isConnected">
           {{ socketStore.playerCount }}
         </p>
@@ -124,24 +139,29 @@ function sendMessage() {
 .bold {
   font-weight: bold;
 }
+
 .chat-box {
+  display: flex;
   border: 2px solid rgb(217, 212, 212);
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: row;
   padding: 5px;
   gap: 5px;
   font-size: 20px;
 }
 .messages {
-  border: 2px solid rgb(217, 212, 212);
+  max-height: 167px;
+  overflow: scroll;
   display: flex;
   flex-grow: 1;
   flex-direction: column;
+  min-width: 0;
+  padding-right: 10%;
 }
 
 .message {
+  white-space: pre-line;
+  font-size: 17px;
 }
 
 .message__sender {
@@ -159,10 +179,17 @@ function sendMessage() {
   color: orange;
 }
 
+.left {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 .status {
+  min-width: 150px;
+  width: 150px;
   padding: 5px;
   border: 2px solid rgb(217, 212, 212);
-  width: 200px;
   display: flex;
   justify-content: space-between;
 }
@@ -195,13 +222,14 @@ function sendMessage() {
 }
 
 .input-area {
-  margin-top: auto;
   font-size: 20px;
   display: flex;
+  gap: 5px;
   flex-direction: row;
 }
 
 .input-area > input {
+  padding: 0;
   flex-grow: 1;
 }
 
