@@ -51,15 +51,13 @@ function registerChatHandler(io: any, socket: Socket, client: Client): void {
   };
 
   const sendMessage = (message: string) => {
-    // TODO: get current room
-    const roomName = "global:1";
-    // TODO: validation
-    /*
-      message must:
-      - be a string
-      - be trimmed
-      - 0 < length < messageLengthLimit
-    */
+    let roomName = "";
+    for (const room of socket.rooms.values()) {
+      if (room.startsWith("global:")) {
+        roomName = room;
+      }
+    }
+
     const content = message;
     const sender = client.player.character.name;
     io.to(roomName).emit("chat:message", { content, sender });
