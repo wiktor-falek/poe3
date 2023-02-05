@@ -23,7 +23,6 @@ socket.on("reward:silver-test", (data) => {
   const { totalSilver, silver, items } = data;
   playerStore.setSilver(totalSilver);
   silverGained.value = silver;
-  console.log(data);
   rewardIsClaimed.value = true;
   leaveButtonIsVisible.value = true;
 });
@@ -43,16 +42,31 @@ socket.on("instance:has-left-room", (leftSuccessfully) => {
 </script>
 
 <template>
-  <div class="chest" v-if="!rewardIsClaimed" @click="handleClick">
-    *Reward Chest*
+  <div class="reward-room">
+    <div class="chest" v-if="!rewardIsClaimed" @click="handleClick">
+      *Reward Chest*
+    </div>
+    <div class="chest" v-else>You received {{ silverGained }} silver</div>
+    <button @click="leaveRoomHandle" v-if="leaveButtonIsVisible">
+      Proceed
+    </button>
   </div>
-  <div class="chest" v-else>You received {{ silverGained }} silver</div>
-  <button @click="leaveRoomHandle" v-if="leaveButtonIsVisible">
-    Leave Room
-  </button>
 </template>
 
 <style scoped>
+.reward-room {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .chest {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
+  width: 250px;
+  border: 2px solid white;
 }
 </style>
