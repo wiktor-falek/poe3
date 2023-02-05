@@ -1,27 +1,21 @@
 <script setup>
+import { usePlayerStore } from '../../../../stores/playerStore';
+import ResourceBars from '../../Zone/Rooms/Combat/ResourceBars.vue';
 
-const props = defineProps({
-  name: String,
-  playerClass: String,
-  level: Number,
-  hp: Number,
-  maxHp: Number,
-  mp: Number,
-  maxMp: Number,
-})
+const playerStore = usePlayerStore();
+const character = playerStore.characterData;
 
 </script>
 
 <template>
   <div class="character-overview">
-    <p class="name">{{ name }}</p>
+    <p class="name">{{ character.name }}</p>
     <p>
-      <span class="class">{{ playerClass }} &nbsp;</span>
-      <span class="level">Lv {{ level }}</span>
+      <span class="player-class">{{ character.class }} &nbsp;</span>
+      <span>Lv {{ character.level.value }}</span>
     </p>
     <div class="resources">
-      <div class="resources__hp">{{ hp }} / {{ maxHp }}</div>
-      <div class="resources__mp">{{ mp }} / {{ maxMp }}</div>
+      <ResourceBars :resources="character.resources" :level="character.level" />
     </div>
   </div>
 </template>
@@ -35,40 +29,11 @@ const props = defineProps({
   font-size: 20px;
   user-select: none;
 }
-.class {
+.player-class {
   text-transform: capitalize;
 }
+
 .resources {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 180px;
-  letter-spacing: 0.05em;
-  gap: 2px;
-  background-color: grey;
-  border: 2px solid grey;
-}
-
-.resources > *:not(:last-child) {
-  border-bottom: 1px solid rgb(180, 180, 180);
-}
-
-.resources > * {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 20px;
-  color: rgb(199, 199, 199);
-  font-weight: 600;
-}
-
-.resources__hp {
-  background-color: #db3f3f;
-}
-
-.resources__mp {
-  background-color: #483ebe;
+  width: 150px;
 }
 </style>
