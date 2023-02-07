@@ -34,7 +34,7 @@ class ClientStorage {
 
     if (
       existingClient &&
-      existingClient.player.character.name === character.name
+      existingClient.playerModel.character.name === character.name
     ) {
       return existingClient;
     }

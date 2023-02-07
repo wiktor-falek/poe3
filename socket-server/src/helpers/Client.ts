@@ -7,12 +7,12 @@ import CharacterModel from "../db/models/CharacterModel";
 class Client {
   isConnected: boolean;
   username: string;
-  player: PlayerModel;
+  playerModel: PlayerModel;
   instance: Instance | null;
   constructor(username: string, character: Character, characterModel: CharacterModel) {
     this.isConnected = false;
     this.username = username;
-    this.player = new PlayerModel(character, characterModel);
+    this.playerModel = new PlayerModel(character, characterModel);
     this.instance = null;
   }
 
@@ -25,7 +25,7 @@ class Client {
       return this.instance;
     }
 
-    this.instance = new Instance(zoneId, this.player.character.name);
+    this.instance = new Instance(zoneId, this.playerModel.character.name);
     if (this.instance === null) {
       logger.error(
         `failed to create instance for ${this.username} (zoneId=${zoneId})`

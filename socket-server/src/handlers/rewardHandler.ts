@@ -8,7 +8,7 @@ function registerRewardHandler(io: any, socket: Socket, client: Client): void {
     if (!room.claimReward()) return socket.emit("error");
 
     const silverAmount = 10;
-    const result = await client.player.addSilver(silverAmount);
+    const result = await client.playerModel.addSilver(silverAmount);
     if (!result.ok) {
       return socket.emit("error");
     }
@@ -17,7 +17,7 @@ function registerRewardHandler(io: any, socket: Socket, client: Client): void {
 
     return socket.emit("reward:silver-test", {
       silver: silverAmount,
-      totalSilver: client.player.character.silver,
+      totalSilver: client.playerModel.character.silver,
       items: [],
     });
   };

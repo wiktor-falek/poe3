@@ -12,7 +12,7 @@ function registerInstanceHandler(
 ): void {
   const joinMainStoryInstance = (zoneId: number) => {
     const highestZoneId =
-      client.player.character.progression.mainStory.highestZoneId;
+      client.playerModel.character.progression.mainStory.highestZoneId;
     if (highestZoneId === undefined || highestZoneId === null) {
       logger.error(`could not read progression data`);
       return socket.emit("error:instance:join", {
@@ -61,18 +61,12 @@ function registerInstanceHandler(
     }
 
     if ("combat" in room && !room.combat) {
-      const character: Character = client.player.character;
-      /*
-      name: string;
-      resources: Resources;
-      attributes: Attributes;
-      level: Level;
-      */
-      const { name, resources, attributes, level } = character;
-      // const playerCharacterEntity: Entity = { name, resources, attributes, level };
+      const { name, resources, attributes, level } = client.playerModel.character;
+
       const player = new Player(name, level, resources, attributes);
 
       const party = [player];
+
       room.startCombat(party);
     }
 

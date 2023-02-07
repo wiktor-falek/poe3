@@ -33,7 +33,7 @@ const onConnection = (socket: Socket) => {
   io.emit("player-count", ClientStorage.clientCount);
 
   logger.info(
-    `client ${client.username} connected as character ${client.player.character.name}`
+    `client ${client.username} connected as character ${client.playerModel.character.name}`
   );
 
   console.log(ClientStorage.clients);
