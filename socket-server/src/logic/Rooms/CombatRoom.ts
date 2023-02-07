@@ -1,40 +1,41 @@
-import Enemy from "../Enemy";
 import { Room } from "./Room";
 import type { RoomType } from "./Room";
+import Entity from "../combat/Entity";
+import Combat from "../combat/Combat";
+import Enemy from "../combat/Enemy";
 
 interface RoomOptions {}
 
 class CombatRoom extends Room {
   type: RoomType;
-  initialized: boolean;
-  allyParty: Array<any>;
-  enemyParty: Array<Enemy>;
+  combat: Combat | null;
   constructor(id: number, name: string, ilvl: number) {
     super(id, name, ilvl);
     this.type = "combat";
-    this.allyParty = [];
-    this.enemyParty = [];
-    this.initialized = false;
+    this.combat = null;
   }
 
-  // All of this is logic is contained here because when a Zone is instantiated
-  // 1. there will be a lot of rooms
-  // 2. during a run there might be a lot of different variables that change behavior
-  // 3. saves a bit of computing power, which is likely to be the bottleneck
-  init(characters: Array<any>, options?: RoomOptions): void {
-    const hardCodedEnemy = () => new Enemy("Rat", this.ilvl);
+  startCombat(allyParty: Array<Entity>) {
+    const level = { value: 1 };
+    const resources = { hp: 5, maxHp: 5 };
+    const attributes = {
+      strength: 1,
+      dexterity: 1,
+      intelligence: 1,
+      vitality: 1,
+      speed: 1,
+    };
+    const hardCodedEnemy = () => new Enemy("Rat", level, resources, attributes);
 
     const amountOfEnemies = Math.floor(Math.random() * 3) + 1;
 
-    const enemies = [];
+    const enemyParty = [];
     for (let i = 0; i < amountOfEnemies; i++) {
-      enemies.push(hardCodedEnemy());
+      enemyParty.push(hardCodedEnemy());
     }
-    this.enemyParty = enemies;
-    this.allyParty = [...characters];
-    this.initialized = true;
+    this.combat = new Combat(allyParty, enemyParty);
   }
 }
 
 export { CombatRoom };
-export type { RoomOptions }
+export type { RoomOptions };

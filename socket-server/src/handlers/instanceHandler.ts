@@ -1,7 +1,9 @@
 import type Client from "../helpers/Client";
 import type { Socket } from "socket.io";
 import logger from "../logger";
-import { CombatRoom } from "../logic/Rooms";
+import Entity from "../logic/combat/Entity";
+import { Character } from "../../*";
+import Player from "../logic/combat/Player";
 
 function registerInstanceHandler(
   io: any,
@@ -58,10 +60,20 @@ function registerInstanceHandler(
       return null;
     }
 
-    if (room instanceof CombatRoom && !room.initialized) {
-      // TODO: figure out how to actually support multi player parties
-      const party = [client.player.character];
-      room.init(party);
+    if ("combat" in room && !room.combat) {
+      const character: Character = client.player.character;
+      /*
+      name: string;
+      resources: Resources;
+      attributes: Attributes;
+      level: Level;
+      */
+      const { name, resources, attributes, level } = character;
+      // const playerCharacterEntity: Entity = { name, resources, attributes, level };
+      const player = new Player(name, level, resources, attributes);
+
+      const party = [player];
+      room.startCombat(party);
     }
 
     // TODO: select individual properties from room or make others private

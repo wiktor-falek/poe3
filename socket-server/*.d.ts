@@ -17,7 +17,7 @@ interface Resistances {
 
 type PlayerClass = "swordsman" | "ranger" | "sorcerer" | "assassin";
 
-interface PlayerAttributes {
+interface Attributes {
   strength: number;
   dexterity: number;
   intelligence: number;
@@ -25,11 +25,11 @@ interface PlayerAttributes {
   speed: number;
 }
 
-interface PlayerResources {
+interface Resources {
   maxHp: number;
   hp: number;
-  maxMp: number;
-  mp: number;
+  maxMp?: number;
+  mp?: number;
 }
 
 /*
@@ -55,7 +55,8 @@ interface Character {
   name: string;
   class: PlayerClass;
   level: Level;
-  attributes: PlayerAttributes;
+  attributes: Attributes;
+  resources: Resources; //
   equipment: Object<any>; // TODO: {hand: GearSlot, offhand: GearSlot,...} instead of any
   silver: number;
   resistances: Resistances;

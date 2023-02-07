@@ -1,18 +1,18 @@
 import { Character } from "../../*";
 import Instance from "../logic/Instance";
-import Player from "../logic/Player";
+import PlayerModel from "../logic/PlayerModel";
 import logger from "../logger";
 import CharacterModel from "../db/models/CharacterModel";
 
 class Client {
   isConnected: boolean;
   username: string;
-  player: Player;
+  player: PlayerModel;
   instance: Instance | null;
   constructor(username: string, character: Character, characterModel: CharacterModel) {
     this.isConnected = false;
     this.username = username;
-    this.player = new Player(character, characterModel);
+    this.player = new PlayerModel(character, characterModel);
     this.instance = null;
   }
 

@@ -13,8 +13,8 @@ class MainStoryZone {
     // TODO: make a graph of rooms instead of an array
     this.currentLocation = 0;
     this.rooms = [
-      new RewardRoom(0, "Old Cellar (floor 2)", ilvl),
-      new CombatRoom(1, "Old Cellar (floor 1)", ilvl),
+      new CombatRoom(0, "Old Cellar (floor 1)", ilvl),
+      new RewardRoom(1, "Old Cellar (floor 2)", ilvl),
       new CombatRoom(2, "Old Cellar (floor 0)", ilvl),
     ];
   }

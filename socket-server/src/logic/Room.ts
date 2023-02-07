@@ -1,4 +1,4 @@
-import Enemy from "./Enemy";
+import Enemy from "./combat/Enemy";
 
 type RoomType = "reward" | "combat";
 

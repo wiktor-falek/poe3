@@ -6,7 +6,7 @@ interface Result {
   value?: any;
 }
 
-class Player {
+class PlayerModel {
   character: Character;
   #characterModel: CharacterModel;
 
@@ -25,4 +25,4 @@ class Player {
   }
 }
 
-export default Player;
+export default PlayerModel;

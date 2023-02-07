@@ -4,15 +4,18 @@ import CombatRoom from "../logic/Room";
 function registerCombatHandler(io: any, socket: Socket, client: Client): void {
   const getCombatData = () => {
     const room = client.instance?.currentRoom;
-    if (!room) return socket.emit("error");
-    if (!(room instanceof CombatRoom)) {
-      return socket.emit("error");
+    if (!room) return socket.emit("error", "Room does not exist");
+    if (!("combat" in room)) {
+      return socket.emit("error", "Room is not a combat room");
     }
-    // if (!room.initialized) return socket.emit("error");
-    // room is a combat room, and is already initialized
+    if (room.combat) {
+      return socket.emit("combat:data", room.combat);
+    }
+
+    const combat = room.combat;
   };
 
-  socket.on("TODO:", getCombatData);
+  socket.on("combat:get-data", getCombatData);
 }
 
 export default registerCombatHandler;
