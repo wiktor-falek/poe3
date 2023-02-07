@@ -10,12 +10,13 @@ const props = defineProps(["room"]);
 const emit = defineEmits(["leaveRoom"]);
 
 console.log(props.room);
+
 </script>
 
 <template>
   <div class="combat">
     <div class="party party--enemy">
-      <div class="entity" v-for="entity in room.enemyParty">
+      <div class="entity" v-for="entity in room.combat.enemyParty">
         <div class="entity__top">
           <p>
             {{ entity.name }}
@@ -30,7 +31,7 @@ console.log(props.room);
     </div>
 
     <div class="party party--ally">
-      <div class="entity" v-for="entity in room.allyParty">
+      <div class="entity" v-for="entity in room.combat.allyParty">
         <div class="entity__top">
           <p
             :class="{

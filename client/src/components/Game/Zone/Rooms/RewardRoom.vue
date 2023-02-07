@@ -12,7 +12,7 @@ const emit = defineEmits(["leaveRoom"]);
 const rewardIsClaimed: Ref<boolean> = ref(false);
 const leaveButtonIsVisible: Ref<boolean> = ref(false);
 const silverGained: Ref<number> = ref(0);
-// TODO:
+  
 function handleClick() {
   socket.emit("reward:get-silver-test");
   rewardIsClaimed.value = true;
@@ -25,6 +25,7 @@ socket.on("reward:silver-test", (data) => {
   silverGained.value = silver;
   rewardIsClaimed.value = true;
   leaveButtonIsVisible.value = true;
+  // TODO: ClientSideSystemMessage
 });
 
 // TODO: PROCEED

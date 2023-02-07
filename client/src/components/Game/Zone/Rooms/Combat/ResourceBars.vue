@@ -1,10 +1,9 @@
 <script lang="ts" setup>
-import { onMounted } from "vue";
 
 const props = defineProps(["resources", "level"]);
 
 function percent(value: number, maxValue: number) {
-  return Math.round((maxValue / value) * 100);
+  return Math.round((value / maxValue) * 100);
 }
 </script>
 
