@@ -1,5 +1,6 @@
 import Enemy from "./Enemy";
 import Entity from "./Entity";
+import Player from "./Player";
 
 class Combat {
   turn: number;
@@ -22,15 +23,28 @@ class Combat {
     return entities.sort((a, b) => a.attributes.speed - b.attributes.speed);
   }
 
-  *nextStep() {
+  /*
+  true = player action
+  false = enemy action
+  null = turn ended
+  */
+  *nextStep(): Generator<boolean | null> {
     for (const entity of this.turnOrder) {
       if (entity instanceof Enemy) {
-
+        // entity.takeAction()
+        yield false;
+      }
+      if (entity instanceof Player) {
+        // player action is required
+        this.waitingForPlayerAction = true;
+        yield true;
       }
     }
+
+    // turn ended
+    this.waitingForPlayerAction = false;
+    yield null;
   }
-
-
 }
 
 export default Combat;
