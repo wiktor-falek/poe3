@@ -5,6 +5,7 @@ class Entity {
   level: Level;
   resources: Resources;
   attributes: Attributes;
+  id: number | null;
   constructor(
     name: string,
     level: Level,
@@ -15,6 +16,7 @@ class Entity {
     this.level = level;
     this.resources = resources;
     this.attributes = attributes;
+    this.id = null;
   }
 }
 

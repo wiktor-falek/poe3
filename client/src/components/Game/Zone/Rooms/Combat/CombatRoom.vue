@@ -1,7 +1,12 @@
 <script setup>
+import { onMounted, ref } from "vue";
 import { usePlayerStore } from "../../../../../stores/playerStore";
+import useSocketStore from "../../../../../stores/socketStore";
 import HUD from "./HUD/HUD.vue";
 import ResourceBars from "./ResourceBars.vue";
+
+const socketStore = useSocketStore();
+const socket = socketStore.socket;
 
 const playerStore = usePlayerStore();
 
@@ -11,20 +16,50 @@ const emit = defineEmits(["leaveRoom"]);
 
 console.log(props.room);
 
+onMounted(() => {
+  socket.emit("combat:next-step");
+});
+
+const isPlayerTurn = ref(false);
+
+socket.on("combat:data", (data) => {
+  console.log("combat:data", data);
+});
+
+socket.on("combat:player-turn", (data) => {
+  console.log("player turn", data.logs);
+  isPlayerTurn.value = true;
+});
+
+socket.on("combat:take-next-step", () => {
+  // player action was successful
+  isPlayerTurn.value = false;
+  console.log("Next turn is ready to started");
+
+  // TODO: this doesn't work? or everything is fucked idk
+  socket.emit("combat:next-step");
+  socket.emit("combat:get-data");
+});
+
+function playerInput() {
+  socket.emit("combat:player-action");
+}
 </script>
 
 <template>
+  <p>turn order = {{ room.combat.turnOrder }}</p>
+  <button v-if="isPlayerTurn" @click="playerInput">Player Action</button>
   <div class="combat">
     <div class="party party--enemy">
       <div class="entity" v-for="entity in room.combat.enemyParty">
         <div class="entity__top">
-          <p>
-            {{ entity.name }}
-          </p>
+          <p>{{ entity.name }} (id={{ entity.id }})</p>
           <p>Lv {{ entity.level.value }}</p>
         </div>
         <div src="" class="entity__sprite">
-          <img src="../../../../../assets/icons/dbx7dgp-62d50af9-12c9-4a2f-b56d-0fff6149f505.gif" />
+          <img
+            src="../../../../../assets/icons/dbx7dgp-62d50af9-12c9-4a2f-b56d-0fff6149f505.gif"
+          />
         </div>
         <ResourceBars :resources="entity.resources" />
       </div>
@@ -39,7 +74,7 @@ console.log(props.room);
                 playerStore.characterData.name === entity.name,
             }"
           >
-            {{ entity.name }}
+            {{ entity.name }} (id={{ entity.id }})
           </p>
           <p>Lv {{ entity.level.value }}</p>
         </div>

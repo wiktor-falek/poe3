@@ -61,7 +61,8 @@ function registerInstanceHandler(
     }
 
     if ("combat" in room && !room.combat) {
-      const { name, resources, attributes, level } = client.playerModel.character;
+      const { name, resources, attributes, level } =
+        client.playerModel.character;
 
       const player = new Player(name, level, resources, attributes);
 
@@ -100,7 +101,7 @@ function registerInstanceHandler(
   socket.on("instance:abandon-run", abandonInstance);
   socket.on("instance:join-room", joinRoom);
   socket.on("instance:leave-room", leaveRoom);
-  socket.on("instance:get-combat-state", getCombatState);
+  // socket.on("instance:get-combat-state", getCombatState);
 }
 
 export default registerInstanceHandler;

@@ -20,6 +20,10 @@ socket.on("chat:message", (message) => {
   messageStore.push(message);
 });
 
+socket.on("error", (message) => {
+  messageStore.push(message);
+});
+
 function unixToReadable(timestamp: number): string {
   const date = new Date(timestamp);
   return date.toTimeString().slice(0, 5);
