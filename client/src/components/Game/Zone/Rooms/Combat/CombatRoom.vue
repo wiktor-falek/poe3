@@ -12,7 +12,7 @@ const playerStore = usePlayerStore();
 
 const props = defineProps(["room"]);
 
-const emit = defineEmits(["leaveRoom"]);
+const emit = defineEmits(["leaveRoom", "abandonRun"]);
 
 console.log(props.room);
 
@@ -60,6 +60,7 @@ function playerInput() {
 <template>
   <p>turn order = {{ room.combat.turnOrder }}</p>
   <button v-if="isPlayerTurn" @click="playerInput">Player Action</button>
+  <button @click="emit('abandonRun')">Abandon Run</button>
   <div class="combat">
     <div class="party party--enemy">
       <div class="entity" v-for="entity in room.combat.enemyParty">

@@ -7,7 +7,7 @@ import RewardRoom from "./Rooms/RewardRoom.vue";
 const socketStore = useSocketStore();
 const socket = socketStore.socket;
 
-const emit = defineEmits(["leaveRoom"]);
+const emit = defineEmits(["leaveRoom", "abandonRun"]);
 
 const roomType: Ref<string> = ref();
 const room = ref();
@@ -25,11 +25,13 @@ socket.on("instance:room-data", (data) => {
       v-if="roomType === 'combat'"
       :room="room"
       @leave-room="emit('leaveRoom')"
+      @abandon-run="emit('abandonRun')"
     />
     <RewardRoom
       v-else-if="roomType === 'reward'"
       :room="room"
       @leave-room="emit('leaveRoom')"
+      @abandon-run="emit('abandonRun')"
     />
   </div>
 </template>

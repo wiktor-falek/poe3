@@ -7,7 +7,7 @@ const playerStore = usePlayerStore();
 const socketStore = useSocketStore();
 const socket = socketStore.socket;
 
-const emit = defineEmits(["leaveRoom"]);
+const emit = defineEmits(["leaveRoom", "abandonRun"]);
 
 const rewardIsClaimed: Ref<boolean> = ref(false);
 const leaveButtonIsVisible: Ref<boolean> = ref(false);
@@ -43,6 +43,7 @@ socket.on("instance:has-left-room", (leftSuccessfully) => {
 </script>
 
 <template>
+  <button @click="emit('abandonRun')">Abandon Run</button>
   <div class="reward-room">
     <div class="chest" v-if="!rewardIsClaimed" @click="handleClick">
       *Reward Chest*

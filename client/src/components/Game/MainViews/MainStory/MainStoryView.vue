@@ -93,7 +93,7 @@ function leaveRoom() {
       @join-room="joinRoom"
       @leave-room="leaveRoom"
     />
-    <RoomView v-if="view === 'inRoom'" @leave-room="leaveRoom" />
+    <RoomView v-if="view === 'inRoom'" @leave-room="leaveRoom" @abandon-run="abandonRun" />
   </div>
 </template>
 
