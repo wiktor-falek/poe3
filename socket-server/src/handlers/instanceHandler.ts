@@ -89,19 +89,11 @@ function registerInstanceHandler(
     }
   };
 
-  const getCombatState = () => {
-    const currentRoom = client.instance?.currentRoom;
-    if (!currentRoom || currentRoom.type !== "combat") {
-      return socket.emit("error");
-    }
-  };
-
   socket.on("instance:join:main-story", joinMainStoryInstance);
   socket.on("instance:already-exists?", doesInstanceAlreadyExist);
   socket.on("instance:abandon-run", abandonInstance);
   socket.on("instance:join-room", joinRoom);
   socket.on("instance:leave-room", leaveRoom);
-  // socket.on("instance:get-combat-state", getCombatState);
 }
 
 export default registerInstanceHandler;

@@ -9,7 +9,6 @@ class Combat {
   allyParty: Array<Entity>;
   enemyParty: Array<Entity>;
   turnOrder: Array<number>;
-  hasEnded: boolean;
   waitingForPlayerAction: boolean;
   logs: Array<CombatLog>;
   gen: Generator<boolean | null> | null;
@@ -19,11 +18,26 @@ class Combat {
     this.enemyParty = enemyParty;
     this.turnOrder = this.createTurnOrder();
 
-    this.hasEnded = false;
     this.waitingForPlayerAction = false;
 
     this.logs = [];
     this.gen = null;
+  }
+
+  public get hasEnded(): boolean {
+    const allyPartyHpValues = this.allyParty.map(
+      (entity) => entity.resources.hp
+    );
+
+    const enemyPartyHpValues = this.enemyParty.map(
+      (entity) => entity.resources.hp
+    );
+
+    const aliveAllies = allyPartyHpValues.filter((hp) => hp > 0);
+    const aliveEnemies = enemyPartyHpValues.filter((hp) => hp > 0);
+
+    const ended = aliveAllies.length === 0 || aliveEnemies.length === 0;
+    return ended;
   }
 
   getEntityById(id: number) {
@@ -75,10 +89,17 @@ class Combat {
     for (const id of this.turnOrder) {
       const entity = this.getEntityById(id);
       if (entity instanceof Enemy) {
-        // entity.takeAction()
+        const action = entity.takeAction(this.allyParty);
 
-        // test log
-        this.logs.push({ message: "Rat attacked Apdo and dealt 1 damage" });
+        let message: string = "Unhandled action";
+        if (action.type === "attack") {
+          const target = this.getEntityById(action.targetId!);
+          target!.resources.hp -= action.damage;
+
+          message = `$id=${action.attackerId} attacked (id=${action.targetId}) for ${action.damage} damage`;
+        }
+
+        this.logs.push({ message });
         yield false;
       }
       if (entity instanceof Player) {

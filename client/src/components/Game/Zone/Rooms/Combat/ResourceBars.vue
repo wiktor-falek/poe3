@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-
 const props = defineProps(["resources", "level"]);
 
 function percent(value: number, maxValue: number) {
@@ -9,7 +8,10 @@ function percent(value: number, maxValue: number) {
 
 <template>
   <div class="resource-bars">
-    <div class="resource-bar resource-bar__hp-bar" v-if="props.resources.hp">
+    <div
+      class="resource-bar resource-bar__hp-bar"
+      v-if="props.resources.hp !== undefined && props.resources.hp !== null"
+    >
       <div
         class="resource-bar__progress resource-bar__progress--hp-bar"
         :style="{
@@ -20,7 +22,10 @@ function percent(value: number, maxValue: number) {
         {{ props.resources.hp }} / {{ props.resources.maxHp }}
       </div>
     </div>
-    <div class="resource-bar resource-bar__mp-bar" v-if="props.resources.mp">
+    <div
+      class="resource-bar resource-bar__mp-bar"
+      v-if="props.resources.mp !== undefined && props.resources.mp !== null"
+    >
       <div
         class="resource-bar__progress resource-bar__progress--mp-bar"
         :style="{

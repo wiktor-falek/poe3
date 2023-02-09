@@ -27,18 +27,27 @@ socket.on("combat:data", (data) => {
 });
 
 socket.on("combat:player-turn", (data) => {
-  console.log("player turn", data.logs);
+  const { logs, allyParty, enemyParty } = data;
+  console.log("player turn", logs);
+  props.room.combat.allyParty = allyParty;
+  props.room.combat.enemyParty = enemyParty;
   isPlayerTurn.value = true;
 });
 
-socket.on("combat:take-next-step", () => {
+socket.on("combat:take-next-step", (data) => {
+  console.log(data.logs);
   // player action was successful
   isPlayerTurn.value = false;
-  console.log("Next turn is ready to started");
 
-  // TODO: this doesn't work? or everything is fucked idk
   socket.emit("combat:next-step");
-  socket.emit("combat:get-data");
+});
+
+socket.on("combat:end", (data) => {
+  const { logs, allyParty, enemyParty } = data;
+  props.room.combat.allyParty = allyParty;
+  props.room.combat.enemyParty = enemyParty;
+  console.log("Combat has ended");
+  console.log(logs);
 });
 
 function playerInput() {

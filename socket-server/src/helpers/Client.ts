@@ -40,6 +40,7 @@ class Client {
   }
 
   abandonInstance() {
+    logger.info(`${this.username} abandoned instance (zoneId=${this.instance?.zoneId})`)
     this.instance = null;
   }
 }

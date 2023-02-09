@@ -28,16 +28,24 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
     }
 
     if (combat.waitingForPlayerAction) {
-      return socket.emit("combat:player-turn", { logs: combat.logs });
+      return socket.emit("combat:player-turn", {
+        logs: combat.logs,
+        allyParty: combat.allyParty,
+        enemyParty: combat.enemyParty,
+      });
     }
 
     combat.gen ?? combat.startTurn();
     let step = combat.next();
 
-    // until turn doesn't end
     while (!combat.hasEnded) {
       if (step.value === true) {
-        return socket.emit("combat:player-turn", { logs: combat.logs });
+        // player turn
+        return socket.emit("combat:player-turn", {
+          logs: combat.logs,
+          allyParty: combat.allyParty,
+          enemyParty: combat.enemyParty,
+        });
       }
       if (step.value === false) {
         // enemy is taking action
@@ -45,10 +53,16 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
       }
       if (step.value === null) {
         // turn has ended
+        combat.startTurn();
         step = combat.next();
       }
     }
-    return socket.emit("combat:end");
+    combat.logs.push({ message: "Combat has ended" });
+    return socket.emit("combat:end", {
+      logs: combat.logs,
+      allyParty: combat.allyParty,
+      enemyParty: combat.enemyParty,
+    });
   };
 
   const playerAction = () => {
@@ -65,11 +79,11 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
       return socket.emit("error", "Not player turn");
     }
     // combat.gen;
-    combat.logs.push({ message: "Player did absolutely nothing" });
+    combat.logs.push({ message: "Player did nothing" });
     combat.waitingForPlayerAction = false;
 
     // notify the client that next step is ready to be taken
-    socket.emit("combat:take-next-step");
+    socket.emit("combat:take-next-step", { logs: combat.logs });
   };
 
   socket.on("combat:get-data", getData);
