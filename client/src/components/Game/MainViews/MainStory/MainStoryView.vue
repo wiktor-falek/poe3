@@ -26,15 +26,15 @@ const stateMachine = createMachine({
       // type: "final",
       on: {
         ABANDON: "zoneSelect",
-        JOIN_ROOM: "inRoom"
+        JOIN_ROOM: "inRoom",
       },
     },
     inRoom: {
       on: {
         ABANDON: "zoneSelect",
-        LEAVE_ROOM: "roomSelect"
-      }
-    }
+        LEAVE_ROOM: "roomSelect",
+      },
+    },
   },
 });
 
@@ -53,28 +53,30 @@ function joinZone(id: number) {
 (function checkIfInstanceAlreadyExists() {
   socket.emit("instance:already-exists?");
   socket.on("instance:already-exists", (data) => {
-    console.log(data);
-    if (data.instanceAlreadyExists) {
-      joinZone(data.zoneId);
+    const { instanceAlreadyExists, zoneId, roomId } = data;
+    console.log("already-exists", data);
+    if (instanceAlreadyExists) {
+      joinZone(zoneId);
+      joinRoom(roomId);
     }
   });
 })();
 
 function abandonRun() {
   // TODO: check with the server whether it was successfull and then change state
-  socket.emit("instance:abandon-run"); 
+  socket.emit("instance:abandon-run");
   stateService.send("ABANDON");
 }
 
 function joinRoom(roomId: number) {
   // TODO: check with the server whether it was successfull and then change state
   socket.emit("instance:join-room", roomId);
-  stateService.send("JOIN_ROOM")
+  stateService.send("JOIN_ROOM");
 }
 
 function leaveRoom() {
   console.log("leaving room");
-  stateService.send("LEAVE_ROOM")
+  stateService.send("LEAVE_ROOM");
 }
 </script>
 

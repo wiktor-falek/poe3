@@ -15,22 +15,26 @@ function registerInstanceHandler(
       client.playerModel.character.progression.mainStory.highestZoneId;
     if (highestZoneId === undefined || highestZoneId === null) {
       logger.error(`could not read progression data`);
-      return socket.emit("error:instance:join", {
+      return socket.emit("error", {
         message: "Failed to read character progression data",
       });
     }
     if (highestZoneId < zoneId) {
-      return socket.emit("error:instance:join", {
+      return socket.emit("error", {
         message: "You are not permitted to access this zone",
       });
     }
 
     const instance = client.joinInstance(zoneId);
     if (instance === null) {
-      return socket.emit("error:instance:data", {
+      return socket.emit("error", {
         message: "Failed to join instance",
       });
     }
+
+    // restore hp before joining new instance
+    client.playerModel.character.resources.hp =
+      client.playerModel.character.resources.maxHp;
     socket.emit("instance:data", instance.data);
   };
 
@@ -40,6 +44,9 @@ function registerInstanceHandler(
     const emitData: any = { instanceAlreadyExists };
     if (instance !== null) {
       emitData.zoneId = instance.zoneId;
+    }
+    if (instance?.currentRoom) {
+      emitData.roomId = instance.currentRoom.id
     }
     socket.emit("instance:already-exists", emitData);
   };

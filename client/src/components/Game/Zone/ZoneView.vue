@@ -25,16 +25,6 @@ socket.on("instance:data", (instanceData) => {
   ilvl.value = instanceData.ilvl;
 });
 
-socket.on("error:instance:data", (error) => {
-  // TODO: toast
-  console.log(error.message);
-});
-
-socket.on("error:instance:join", (error) => {
-  // TODO: toast
-  console.log(error.message);
-});
-
 function abandonRunHandle() {
   emit("abandonRun");
 }
