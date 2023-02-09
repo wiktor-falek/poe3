@@ -10,6 +10,15 @@ class Player extends Entity {
   ) {
     super(name, level, resources, attributes);
   }
+
+  basicAttack(enemyParty: Array<Entity>, target: Entity) {
+    const attackerId = this.id;
+    const targetId = target.id;
+    console.log({targetId});
+    const damage = 1;
+    return { type: "attack", attackerId, targetId, damage };
+  }
+
 }
 
 export default Player;

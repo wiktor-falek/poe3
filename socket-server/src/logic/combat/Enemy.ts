@@ -11,7 +11,7 @@ class Enemy extends Entity {
     super(name, level, resources, attributes);
   }
 
-  attack(allyParty: Array<Entity>) {
+  basicAttack(allyParty: Array<Entity>) {
     const target = allyParty[0];
 
     const attackerId = this.id;
@@ -21,7 +21,7 @@ class Enemy extends Entity {
   }
 
   takeAction(allyParty: Array<Entity>) {
-    return this.attack(allyParty);
+    return this.basicAttack(allyParty);
   }
 }
 

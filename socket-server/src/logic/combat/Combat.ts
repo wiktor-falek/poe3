@@ -25,30 +25,20 @@ class Combat {
   }
 
   public get hasEnded(): boolean {
-    const allyPartyHpValues = this.allyParty.map(
-      (entity) => entity.resources.hp
-    );
-
-    const enemyPartyHpValues = this.enemyParty.map(
-      (entity) => entity.resources.hp
-    );
-
-    const aliveAllies = allyPartyHpValues.filter((hp) => hp > 0);
-    const aliveEnemies = enemyPartyHpValues.filter((hp) => hp > 0);
+    const aliveAllies = this.allyParty.filter((entity) => entity.isAlive);
+    const aliveEnemies = this.enemyParty.filter((entity) => entity.isAlive);
 
     const ended = aliveAllies.length === 0 || aliveEnemies.length === 0;
     return ended;
   }
 
   getEntityById(id: number) {
-    let result = null;
     for (const entity of [...this.allyParty, ...this.enemyParty]) {
       if (entity.id === id) {
-        result = entity;
-        break;
+        return entity;
       }
     }
-    return result;
+    return null;
   }
 
   createTurnOrder() {
@@ -76,6 +66,7 @@ class Combat {
   }
 
   startTurn() {
+    this.turn++;
     this.gen = this.turnGen();
     return this.gen;
   }
@@ -91,19 +82,16 @@ class Combat {
       if (entity instanceof Enemy) {
         const action = entity.takeAction(this.allyParty);
 
-        let message: string = "Unhandled action";
+        let message: string = "UNHANDLED ACTION";
         if (action.type === "attack") {
           const target = this.getEntityById(action.targetId!);
-          target!.resources.hp -= action.damage;
-
+          target!.takeDamage(action.damage);
           message = `$id=${action.attackerId} attacked (id=${action.targetId}) for ${action.damage} damage`;
         }
-
         this.logs.push({ message });
         yield false;
       }
       if (entity instanceof Player) {
-        // player action is required
         this.waitingForPlayerAction = true;
         yield true;
       }

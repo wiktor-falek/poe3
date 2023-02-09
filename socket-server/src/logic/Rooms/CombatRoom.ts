@@ -22,22 +22,20 @@ class CombatRoom extends Room {
       return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
     }
 
-    const level = { value: 1 };
-    const resources = { hp: 5, maxHp: 5 };
-    const attributes = {
-      strength: 1,
-      dexterity: 1,
-      intelligence: 1,
-      vitality: 1,
-      speed: randint(0, 3),
-    };
-    const hardCodedEnemy = () => new Enemy("Rat", level, resources, attributes);
-
     const amountOfEnemies = randint(2, 4);
 
     const enemyParty = [];
     for (let i = 0; i < amountOfEnemies; i++) {
-      enemyParty.push(hardCodedEnemy());
+      const level = { value: 1 };
+      const resources = { hp: 5, maxHp: 5 };
+      const attributes = {
+        strength: 1,
+        dexterity: 1,
+        intelligence: 1,
+        vitality: 1,
+        speed: randint(0, 3),
+      };
+      enemyParty.push(new Enemy("Rat", level, resources, attributes));
     }
 
     // assign incremental id to each entity

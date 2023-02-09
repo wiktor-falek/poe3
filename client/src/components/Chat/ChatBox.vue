@@ -21,7 +21,8 @@ socket.on("chat:message", (message) => {
 });
 
 socket.on("error", (message) => {
-  messageStore.push(message);
+  console.log(message);
+  messageStore.push({ content: message, sender: "ERROR" });
 });
 
 function unixToReadable(timestamp: number): string {

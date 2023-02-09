@@ -24,6 +24,7 @@ const isPlayerTurn = ref(false);
 
 socket.on("combat:data", (data) => {
   console.log("combat:data", data);
+  props.room.combat = data.combat
 });
 
 socket.on("combat:player-turn", (data) => {
@@ -51,7 +52,8 @@ socket.on("combat:end", (data) => {
 });
 
 function playerInput() {
-  socket.emit("combat:player-action");
+  const action = { name: "basic-attack", targetId: 1 };
+  socket.emit("combat:player-action", action);
 }
 </script>
 
