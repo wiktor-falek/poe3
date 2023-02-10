@@ -1,7 +1,9 @@
 <script lang="ts" setup>
+import { computed } from "@vue/reactivity";
 import { onMounted, ref, Ref } from "vue";
 import { usePlayerStore } from "../../../../../stores/playerStore";
 import useSocketStore from "../../../../../stores/socketStore";
+import RoomSelectView from "../../RoomSelectView.vue";
 import Entity from "./Entity.vue";
 import HUD from "./HUD/HUD.vue";
 
@@ -17,6 +19,15 @@ const emit = defineEmits(["leaveRoom", "abandonRun"]);
 onMounted(() => {
   socket.emit("combat:next-step");
 });
+
+const playerEntity = computed(() => {
+  const player = props.room.combat.allyParty.find(
+    (entity: any) => entity.name === playerStore.characterData.name
+  );
+  return player;
+});
+
+console.log("AP", playerEntity.value.actionPoints);
 
 const isPlayerTurn = ref(false);
 
@@ -89,7 +100,7 @@ function playerAction() {
       <button v-if="isPlayerTurn" @click="playerAction">Player Action</button>
       <HUD
         @select-skill="(skillId: number) => selectSkill(skillId)"
-        :actionPoints="{ ap: 1, maxAp: 1 }"
+        :actionPoints="playerEntity.actionPoints"
       />
     </div>
   </div>
