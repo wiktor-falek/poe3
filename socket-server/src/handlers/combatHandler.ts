@@ -20,6 +20,7 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
   };
 
   const nextStep = () => {
+    // TODO: there has to be a differnt event handler for player action, and player turn end
     const room = client.instance?.currentRoom;
     if (!room) return socket.emit("error", "Room does not exist");
     if (!("combat" in room)) {

@@ -59,7 +59,7 @@ class Entity {
     }
     this.actionPoints.ap -= apCost;
 
-    const damage = 1;
+    const damage = 1; // TODO: unhardcore damage
     target.takeDamage(damage);
 
     const message = `${this.name} attacked ${target.name} for ${damage} damage`;

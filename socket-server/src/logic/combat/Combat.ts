@@ -87,6 +87,11 @@ class Combat {
   }
 
   startTurn() {
+    // restore action points of each entity
+    for (const entity of [...this.allyParty, ...this.enemyParty]) {
+      entity.actionPoints.ap = entity.actionPoints.maxAp;
+    }
+
     this.turn++;
     this.gen = this.turnGen();
     return this.gen;
