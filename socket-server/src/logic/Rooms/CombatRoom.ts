@@ -9,8 +9,8 @@ interface RoomOptions {}
 class CombatRoom extends Room {
   type: RoomType;
   combat: Combat | null;
-  constructor(id: number, name: string, ilvl: number) {
-    super(id, name, ilvl);
+  constructor(id: number, name: string, zoneLvl: number) {
+    super(id, name, zoneLvl);
     this.type = "combat";
     this.combat = null;
   }
@@ -35,13 +35,16 @@ class CombatRoom extends Room {
         vitality: 1,
         speed: randint(0, 3),
       };
-      enemyParty.push(new Enemy("Rat", level, resources, attributes));
+      const actionPoints = { ap: 3, maxAp: 3 };
+      enemyParty.push(
+        new Enemy("Rat", level, resources, attributes, actionPoints)
+      );
     }
 
     // assign incremental id to each entity
     let id = -1;
     for (const entity of [...allyParty, ...enemyParty]) {
-      id++;
+      id++; 
       entity.id = id;
     }
 

@@ -32,9 +32,11 @@ function registerInstanceHandler(
       });
     }
 
-    // restore hp before joining new instance
-    client.playerModel.character.resources.hp =
-      client.playerModel.character.resources.maxHp;
+    // restore hp and mp before joining new instance
+    const resources = client.playerModel.character.resources;
+    resources.hp = resources.maxHp;
+    resources.mp = resources.maxMp;
+
     socket.emit("instance:data", instance.data);
   };
 
@@ -46,7 +48,7 @@ function registerInstanceHandler(
       emitData.zoneId = instance.zoneId;
     }
     if (instance?.currentRoom) {
-      emitData.roomId = instance.currentRoom.id
+      emitData.roomId = instance.currentRoom.id;
     }
     socket.emit("instance:already-exists", emitData);
   };
@@ -71,7 +73,8 @@ function registerInstanceHandler(
       const { name, resources, attributes, level } =
         client.playerModel.character;
 
-      const player = new Player(name, level, resources, attributes);
+      const actionPoints = { ap: 2, maxAp: 2 };
+      const player = new Player(client.username, name, level, resources, attributes, actionPoints);
 
       const party = [player];
 

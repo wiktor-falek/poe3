@@ -14,7 +14,9 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
       return socket.emit("error", "Combat is not initialized");
     }
 
-    return socket.emit("combat:data", { combat: room.combat });
+    return socket.emit("combat:data", {
+      combat: room.combat,
+    });
   };
 
   const nextStep = () => {
@@ -81,7 +83,6 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
     }
 
     // checks if client input is a valid object
-    // NOTE: doesn't check if target exists, this has to be checked later
     function isValidAction(action: any) {
       if (action == null) return false;
       if (!("name" in action)) return false;
@@ -94,31 +95,27 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
       }
       return false;
     }
-    if (!isValidAction(action)) return socket.emit("error", "Invalid input");
+    if (!isValidAction(action)) return socket.emit("error", "Invalid action");
 
-    const characterName = client.playerModel.character.name;
-    const player = combat.allyParty.find(
-      (ally) => ally.name === characterName
-    ) as Player;
-    const target = combat.getEntityById(action.targetId);
-    // console.log({ player, target });
+    const player = combat.getPlayerByUsername(client.username);
     if (!player) return socket.emit("error", "Could not find player");
-    if (!target) return socket.emit("error", "Could not find target");
 
+    const target = combat.getEntityById(action.targetId);
+    if (!target) return socket.emit("error", "Could not find target");
 
     switch (action.name) {
       case "basic-attack":
-        const action = player.basicAttack(combat.enemyParty, target);
-        console.log("BEFORE", combat.enemyParty);
-        target.takeDamage(action.damage);
-        console.log("AFTER", combat.enemyParty);
+        let action = player.basicAttack(target);
+        if (action.type === "error") {
+          return socket.emit("error", action.message);
+        }
+        socket.emit("chat:message", { content: action.message, sender: "COMBAT" });
         break;
 
       default:
-        socket.emit("error", "Unhandled action");
+        return socket.emit("error", "Unhandled action");
     }
-
-    combat.logs.push({ message: "Player did nothing" });
+    // action was successful
     combat.waitingForPlayerAction = false;
 
     // notify the client that next step is ready to be taken

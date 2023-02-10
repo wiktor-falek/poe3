@@ -2,20 +2,20 @@ import { CombatRoom, RewardRoom } from "./Rooms";
 
 class MainStoryZone {
   id: number;
-  ilvl: number;
+  zoneLvl: number;
   name: string;
   rooms: Array<RewardRoom | CombatRoom>;
   currentLocation: number;
-  constructor(id: number, name: string, ilvl: number) {
+  constructor(id: number, name: string, zoneLvl: number) {
     this.id = id;
-    this.ilvl = ilvl;
+    this.zoneLvl = zoneLvl;
     this.name = name;
     // TODO: make a graph of rooms instead of an array
     this.currentLocation = 0;
     this.rooms = [
-      // new RewardRoom(0, "Old Cellar (floor 2)", ilvl),
-      new CombatRoom(0, "Old Cellar (floor 1)", ilvl),
-      new CombatRoom(1, "Old Cellar (floor 0)", ilvl),
+      // new RewardRoom(0, "Old Cellar (floor 2)", zoneLvl),
+      new CombatRoom(0, "Old Cellar (floor 1)", zoneLvl),
+      new CombatRoom(1, "Old Cellar (floor 0)", zoneLvl),
     ];
   }
 

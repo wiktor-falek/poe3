@@ -32,6 +32,11 @@ interface Resources {
   mp?: number;
 }
 
+interface ActionPoints {
+  ap: number;
+  maxAp: number;
+}
+
 /*
 interface MainHand {}
 interface OffHand {}

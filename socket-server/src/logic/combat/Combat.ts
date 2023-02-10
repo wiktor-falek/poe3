@@ -6,7 +6,7 @@ interface CombatLog {}
 
 class Combat {
   turn: number;
-  allyParty: Array<Entity>;
+  allyParty: Array<Entity | Player>;
   enemyParty: Array<Entity>;
   turnOrder: Array<number>;
   waitingForPlayerAction: boolean;
@@ -20,8 +20,9 @@ class Combat {
 
     this.waitingForPlayerAction = false;
 
-    this.logs = [];
     this.gen = null;
+
+    this.logs = [];
   }
 
   public get hasEnded(): boolean {
@@ -39,6 +40,26 @@ class Combat {
       }
     }
     return null;
+  }
+
+  getPlayerByUsername(username: string): Player | null {
+    const result = this.allyParty.find((entity) => {
+      if (!(entity instanceof Player)) {
+        return false;
+      }
+      return entity.username === username;
+    });
+    return (result as Player) ?? null;
+  }
+
+  getPlayerByName(characterName: string): Player | null {
+    const result = this.allyParty.find((entity) => {
+      if (!(entity instanceof Player)) {
+        return false;
+      }
+      return entity.name === characterName;
+    });
+    return (result as Player) ?? null;
   }
 
   createTurnOrder() {
@@ -80,15 +101,11 @@ class Combat {
     for (const id of this.turnOrder) {
       const entity = this.getEntityById(id);
       if (entity instanceof Enemy) {
-        const action = entity.takeAction(this.allyParty);
-
-        let message: string = "UNHANDLED ACTION";
-        if (action.type === "attack") {
-          const target = this.getEntityById(action.targetId!);
-          target!.takeDamage(action.damage);
-          message = `$id=${action.attackerId} attacked (id=${action.targetId}) for ${action.damage} damage`;
+        const action = entity.takeAction(this.allyParty, this.enemyParty);
+        if (action.type === "error") {
+          // TODO: handle error
         }
-        this.logs.push({ message });
+        this.logs.push({ message: action.message });
         yield false;
       }
       if (entity instanceof Player) {

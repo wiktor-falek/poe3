@@ -1,4 +1,4 @@
-import { Attributes, Level, Resources } from "../../../*";
+import { ActionPoints, Attributes, Level, Resources } from "../../../*";
 import Entity from "./Entity";
 
 class Enemy extends Entity {
@@ -6,22 +6,15 @@ class Enemy extends Entity {
     name: string,
     level: Level,
     resources: Resources,
-    attributes: Attributes
+    attributes: Attributes,
+    actionPoints: ActionPoints
   ) {
-    super(name, level, resources, attributes);
+    super(name, level, resources, attributes, actionPoints);
   }
 
-  basicAttack(allyParty: Array<Entity>) {
+  takeAction(allyParty: Array<Entity>, enemyParty: Array<Entity>) {
     const target = allyParty[0];
-
-    const attackerId = this.id;
-    const targetId = target.id;
-    const damage = 1;
-    return { type: "attack", attackerId, targetId, damage };
-  }
-
-  takeAction(allyParty: Array<Entity>) {
-    return this.basicAttack(allyParty);
+    return this.basicAttack(target);
   }
 }
 

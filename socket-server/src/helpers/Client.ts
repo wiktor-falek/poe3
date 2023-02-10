@@ -9,7 +9,11 @@ class Client {
   username: string;
   playerModel: PlayerModel;
   instance: Instance | null;
-  constructor(username: string, character: Character, characterModel: CharacterModel) {
+  constructor(
+    username: string,
+    character: Character,
+    characterModel: CharacterModel
+  ) {
     this.isConnected = false;
     this.username = username;
     this.playerModel = new PlayerModel(character, characterModel);
@@ -32,7 +36,7 @@ class Client {
       );
       return null;
     }
-    
+
     logger.info(`created instance for ${this.username} (zoneId=${zoneId})`);
     logger.info(`${this.username} joined instance`);
 
@@ -40,7 +44,9 @@ class Client {
   }
 
   abandonInstance() {
-    logger.info(`${this.username} abandoned instance (zoneId=${this.instance?.zoneId})`)
+    logger.info(
+      `${this.username} abandoned instance (zoneId=${this.instance?.zoneId})`
+    );
     this.instance = null;
   }
 }
