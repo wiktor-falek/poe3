@@ -1,15 +1,43 @@
 <script lang="ts" setup>
+import { ref, Ref } from "vue";
 import SkillIcon from "./SkillIcon.vue";
+
+const props = defineProps(["actionPoints"]);
+
+const emit = defineEmits(["selectSkill"]);
+
+const selectedSkill: Ref<number | null> = ref(null);
+
+function handleSkillIconClick(event: any, skillId: number) {
+  const skillIconElement = event.target;
+
+  // TODO: remove selected from ALL SkillIcon components
+
+  // check if this skill is currently selected, if so unselect and emit null
+  if (selectedSkill.value === skillId) {
+    selectedSkill.value = null;
+    skillIconElement.classList.remove("selected");
+  } else {
+    selectedSkill.value = skillId;
+    skillIconElement.classList.add("selected");
+  }
+
+  emit("selectSkill", selectedSkill.value);
+}
 </script>
 
 <template>
   <div class="hud">
     <div class="idk">
       <div class="resources">
-        <p class="action-points">AP: 3/3</p>
+        <p class="action-points">{{ actionPoints.ap }} / {{ actionPoints.maxAp }} AP</p>
       </div>
       <div class="side-skills">
-        <SkillIcon :ap-cost="1" :imgId="5833" />
+        <SkillIcon
+          @click="handleSkillIconClick($event, 0)"
+          :ap-cost="1"
+          :imgId="5833"
+        />
         <SkillIcon :ap-cost="0" />
       </div>
       <div class="main-skills">
@@ -27,7 +55,9 @@ import SkillIcon from "./SkillIcon.vue";
 </template>
 
 <style scoped>
-
+.selected {
+  border-color: orange;
+}
 .action-points {
   height: 100%;
   color: rgb(245, 245, 101);

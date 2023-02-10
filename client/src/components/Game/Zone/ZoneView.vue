@@ -11,7 +11,7 @@ const props = defineProps({
 });
 const emit = defineEmits(["abandonRun", "joinRoom"]);
 
-const ilvl: Ref<number> = ref();
+const zoneLvl: Ref<number> = ref();
 const location: Ref<number> = ref(0);
 const rooms: Ref<Array<any>> = ref([]);
 const validRoomChoices: Ref<Array<number>> = ref();
@@ -22,7 +22,7 @@ socket.on("instance:data", (instanceData) => {
   location.value = instanceData.currentLocation;
   validRoomChoices.value = instanceData.validRoomChoices;
   rooms.value = instanceData.rooms;
-  ilvl.value = instanceData.ilvl;
+  zoneLvl.value = instanceData.zoneLvl;
 });
 
 function abandonRunHandle() {
@@ -40,7 +40,7 @@ function joinRoomHandle(roomId: number) {
   <div class="top">
     <div class="top__wrapper-left">
       <p>zoneId: {{ props.zoneId }}</p>
-      <p>ilvl: {{ ilvl }}</p>
+      <p>zoneLvl: {{ zoneLvl }}</p>
       <p>
         valid room choices:
         <span>[ </span>
