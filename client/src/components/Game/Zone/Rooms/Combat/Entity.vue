@@ -5,7 +5,7 @@ import ResourceBars from "./ResourceBars.vue";
 const playerStore = usePlayerStore();
 const character = playerStore.characterData;
 
-const props = defineProps(["entity"]);
+const props = defineProps(["entity", "selected"]);
 </script>
 
 <template>
@@ -24,7 +24,7 @@ const props = defineProps(["entity"]);
       </p>
       <p>Lv {{ entity.level.value }}</p>
     </div>
-    <div src="" class="entity__sprite">
+    <div src="" class="entity__sprite" :class="{ selected: props.selected === true }">
       <!-- TODO: unhardcore sprite -->
       <img
         src="../../../../../assets/icons/dbx7dgp-62d50af9-12c9-4a2f-b56d-0fff6149f505.gif"
@@ -35,6 +35,10 @@ const props = defineProps(["entity"]);
 </template>
 
 <style scoped>
+.selected {
+  border: 2px solid orange;
+}
+
 .player-name-highlight {
   color: rgb(156, 156, 231);
 }

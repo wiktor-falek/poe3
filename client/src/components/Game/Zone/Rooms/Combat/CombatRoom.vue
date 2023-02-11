@@ -75,19 +75,32 @@ socket.on("combat:end", (data) => {
   console.log(logs);
 });
 
-const target: Ref<number | null> = ref(null);
+const selectedTarget: Ref<number | null> = ref(null);
 const selectedSkill: Ref<number | null> = ref(null);
 
-function selectTarget(event: any) {
-  const enemyEntityElement = event.target;
+function selectTarget(targetId: number) {
+  console.log(targetId);
+  if (selectedTarget.value === targetId) {
+    selectedTarget.value = null;
+  } else {
+    selectedTarget.value = targetId;
+  }
 }
 
 function selectSkill(skillId: number) {
+  selectedSkill.value = skillId;
   console.log("selected skill", skillId);
 }
 
 function playerAction() {
-  const action = { name: "basic-attack", targetId: 1 };
+  const skillId = selectedSkill.value;
+  const targetId = selectedTarget.value;
+  if (skillId == null || targetId == null) {
+    return messageStore.pushClientSideSystemMessage(
+      `Invalid action skillId=${skillId}, targetId=${targetId}`
+    );
+  }
+  const action = { skillId, targetId };
   socket.emit("combat:player-action", action);
 }
 </script>
@@ -98,24 +111,28 @@ function playerAction() {
       <Entity
         v-for="entity in room.combat.enemyParty"
         :entity="entity"
-        @click="selectTarget($event)"
+        :selected="selectedTarget === entity.id"
+        @click="selectTarget(entity.id)"
       />
+      <!-- @select-target="(targetId: number) => selectSkill(targetId)" -->
     </div>
 
     <div class="party party--ally">
       <Entity
         v-for="entity in room.combat.allyParty"
         :entity="entity"
-        @click="selectTarget($event)"
+        :selected="selectedTarget === entity.id"
+        @click="selectTarget(entity.id)"
       />
+      <!-- @select-target="(targetId: number) => selectSkill(targetId)" -->
     </div>
     <div class="">
       <p>turn order = {{ room.combat.turnOrder }}</p>
       <button @click="emit('abandonRun')">Abandon Run</button>
       <button v-if="isPlayerTurn" @click="playerAction">Player Action</button>
       <HUD
-        @select-skill="(skillId: number) => selectSkill(skillId)"
         :actionPoints="playerEntity.actionPoints"
+        @select-skill="(skillId: number) => selectSkill(skillId)"
       />
     </div>
   </div>
@@ -123,7 +140,7 @@ function playerAction() {
 
 <style scoped>
 .selected {
-  border-color: orange;
+  border: 2px solid orange;
 }
 
 .combat {

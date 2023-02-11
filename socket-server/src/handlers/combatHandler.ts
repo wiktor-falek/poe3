@@ -91,12 +91,13 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
 
     // checks if client input is a valid object
     function isValidAction(action: any) {
+      console.log(action);
       if (action == null) return false;
-      if (!("name" in action)) return false;
+      if (!("skillId" in action)) return false;
       if (
-        action.name === "basic-attack" &&
+        action.skillId === 0 &&
         action.targetId != null &&
-        combat!.getEntityById(action.targetId)
+        combat!.getEnemyById(action.targetId)
       ) {
         return true;
       }
@@ -110,8 +111,8 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
     const target = combat.getEntityById(action.targetId);
     if (!target) return socket.emit("error", "Could not find target");
 
-    switch (action.name) {
-      case "basic-attack":
+    switch (action.skillId) {
+      case 0:
         let action = player.basicAttack(target);
         if (action.type === "error") {
           return socket.emit("error", action.message);

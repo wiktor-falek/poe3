@@ -42,6 +42,15 @@ class Combat {
     return null;
   }
 
+  getEnemyById(id: number) {
+    for (const entity of this.enemyParty) {
+      if (entity.id === id) {
+        return entity;
+      }
+    }
+    return null;
+  }
+
   getPlayerByUsername(username: string): Player | null {
     const result = this.allyParty.find((entity) => {
       if (!(entity instanceof Player)) {

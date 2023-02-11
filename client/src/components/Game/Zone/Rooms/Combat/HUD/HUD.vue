@@ -2,9 +2,8 @@
 import { ref, Ref } from "vue";
 import SkillIcon from "./SkillIcon.vue";
 
-const props = defineProps(["actionPoints"]);
-
 const emit = defineEmits(["selectSkill"]);
+const props = defineProps(["actionPoints"]);
 
 const selectedSkill: Ref<number | null> = ref(null);
 
@@ -30,7 +29,9 @@ function handleSkillIconClick(event: any, skillId: number) {
   <div class="hud">
     <div class="idk">
       <div class="resources">
-        <p class="action-points">{{ actionPoints.ap }} / {{ actionPoints.maxAp }} AP</p>
+        <p class="action-points">
+          {{ props.actionPoints.ap }} / {{ props.actionPoints.maxAp }} AP
+        </p>
       </div>
       <div class="side-skills">
         <SkillIcon
