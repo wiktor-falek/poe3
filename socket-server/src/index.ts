@@ -60,9 +60,9 @@ io.on("connection", onConnection);
 
 httpServer.listen(4000);
 
-cron.schedule("*/5 * * * * *", () => {
-  const memory = process.memoryUsage();
-  const heapUsed = prettyBytes(memory.heapUsed);
-  const heapTotal = prettyBytes(memory.heapTotal);
-  console.log(`HEAP USAGE: ${heapUsed} / ${heapTotal}`);
-});
+// cron.schedule("*/5 * * * * *", () => {
+//   const memory = process.memoryUsage();
+//   const heapUsed = prettyBytes(memory.heapUsed);
+//   const heapTotal = prettyBytes(memory.heapTotal);
+//   console.log(`HEAP USAGE: ${heapUsed} / ${heapTotal}`);
+// });

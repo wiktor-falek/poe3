@@ -70,9 +70,6 @@ class Entity {
   takeDamage(value: number) {
     const newHp = this.resources.hp - value;
     this.resources.hp = Math.max(0, newHp); // Prevent hp going below 0
-    logger.info(
-      `id=${this.id} took ${value} damage and now has ${this.resources.hp} hp`
-    );
   }
 }
 

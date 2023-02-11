@@ -39,29 +39,35 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
       });
     }
 
-    combat.gen ?? combat.startTurn();
-    let step = combat.next();
+    if (!combat.hasEnded) {
+      combat.gen ?? combat.startTurn();
+      let step = combat.next();
 
-    while (!combat.hasEnded) {
-      if (step.value === true) {
-        // player turn
-        return socket.emit("combat:player-turn", {
-          logs: combat.logs,
-          allyParty: combat.allyParty,
-          enemyParty: combat.enemyParty,
-        });
+      while (!combat.hasEnded) {
+        if (step.value === true) {
+          // player turn
+          return socket.emit("combat:player-turn", {
+            logs: combat.logs,
+            allyParty: combat.allyParty,
+            enemyParty: combat.enemyParty,
+          });
+        }
+        if (step.value === false) {
+          // enemy is taking action
+          step = combat.next();
+          socket.emit("combat:recent-logs", combat.getRecentLogsAndClear());
+          // emit recent logs and clear them
+        }
+        if (step.value === null) {
+          // turn has ended
+          combat.startTurn();
+          step = combat.next();
+        }
       }
-      if (step.value === false) {
-        // enemy is taking action
-        step = combat.next();
-      }
-      if (step.value === null) {
-        // turn has ended
-        combat.startTurn();
-        step = combat.next();
-      }
+      combat.addLog({ type: "combat-end", message: "Combat has ended" });
     }
-    combat.logs.push({ message: "Combat has ended" });
+
+    socket.emit("combat:recent-logs", combat.getRecentLogsAndClear());
     return socket.emit("combat:end", {
       logs: combat.logs,
       allyParty: combat.allyParty,
@@ -110,7 +116,8 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
         if (action.type === "error") {
           return socket.emit("error", action.message);
         }
-        socket.emit("chat:message", { content: action.message, sender: "COMBAT" });
+        combat.addLog(action);
+        socket.emit("combat:recent-logs", combat.getRecentLogsAndClear());
         break;
 
       default:

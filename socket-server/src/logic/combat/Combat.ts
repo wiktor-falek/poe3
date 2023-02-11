@@ -2,16 +2,15 @@ import Enemy from "./Enemy";
 import Entity from "./Entity";
 import Player from "./Player";
 
-interface CombatLog {}
-
 class Combat {
   turn: number;
   allyParty: Array<Entity | Player>;
   enemyParty: Array<Entity>;
   turnOrder: Array<number>;
   waitingForPlayerAction: boolean;
-  logs: Array<CombatLog>;
   gen: Generator<boolean | null> | null;
+  logs: Array<any>;
+  recentLogs: Array<any>;
   constructor(allyParty: Array<Entity>, enemyParty: Array<Entity>) {
     this.turn = 0;
     this.allyParty = allyParty;
@@ -23,6 +22,7 @@ class Combat {
     this.gen = null;
 
     this.logs = [];
+    this.recentLogs = [];
   }
 
   public get hasEnded(): boolean {
@@ -110,7 +110,7 @@ class Combat {
         if (action.type === "error") {
           // TODO: handle error
         }
-        this.logs.push({ message: action.message });
+        this.addLog(action);
         yield false;
       }
       if (entity instanceof Player) {
@@ -121,8 +121,19 @@ class Combat {
 
     // turn ended
     this.waitingForPlayerAction = false;
-    this.logs.push({ message: "Turn has ended" });
+    this.addLog({ type: "turn-end", message: "Turn has ended" });
     yield null;
+  }
+
+  addLog(log: any): void {
+    this.logs.push(log);
+    this.recentLogs.push(log);
+  }
+
+  getRecentLogsAndClear(): Array<any> {
+    const logs = [...this.recentLogs];
+    this.recentLogs = [];
+    return logs;
   }
 }
 

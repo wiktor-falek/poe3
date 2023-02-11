@@ -69,12 +69,20 @@ function registerInstanceHandler(
       return null;
     }
 
+    // initialize combat instance if doesn't already exist in the room
     if ("combat" in room && !room.combat) {
       const { name, resources, attributes, level } =
         client.playerModel.character;
 
       const actionPoints = { ap: 2, maxAp: 2 };
-      const player = new Player(client.username, name, level, resources, attributes, actionPoints);
+      const player = new Player(
+        client.username,
+        name,
+        level,
+        resources,
+        attributes,
+        actionPoints
+      );
 
       const party = [player];
 

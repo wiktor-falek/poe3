@@ -36,7 +36,6 @@ const zones: Ref<Map<number, any>> = ref();
 onBeforeMount(() => {
   socket.emit("zones:get-main-story");
   socket.on("zones:main-story", (zonesData: Array<any>) => {
-    console.log(zonesData);
     const map = new Map(
       zonesData.map((zone) => {
         const { id, ...rest } = zone;
@@ -44,7 +43,6 @@ onBeforeMount(() => {
       })
     );
     zones.value = map;
-    // console.log(map);
   });
 });
 </script>

@@ -48,6 +48,9 @@ function joinZone(id: number) {
   zoneId.value = id;
   stateService.send("SELECT");
 }
+// Prevent event being registered multiple times when closing Main Story View and coming back
+
+socket.off("instance:already-exists");
 
 (function checkIfInstanceAlreadyExists() {
   socket.emit("instance:already-exists?");
@@ -92,7 +95,11 @@ function leaveRoom() {
       @join-room="joinRoom"
       @leave-room="leaveRoom"
     />
-    <RoomView v-if="view === 'inRoom'" @leave-room="leaveRoom" @abandon-run="abandonRun" />
+    <RoomView
+      v-if="view === 'inRoom'"
+      @leave-room="leaveRoom"
+      @abandon-run="abandonRun"
+    />
   </div>
 </template>
 

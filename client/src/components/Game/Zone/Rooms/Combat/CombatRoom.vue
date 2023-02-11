@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed } from "@vue/reactivity";
 import { onMounted, ref, Ref } from "vue";
+import { useMessageStore } from "../../../../../stores/messageStore";
 import { usePlayerStore } from "../../../../../stores/playerStore";
 import useSocketStore from "../../../../../stores/socketStore";
 import RoomSelectView from "../../RoomSelectView.vue";
@@ -9,6 +10,8 @@ import HUD from "./HUD/HUD.vue";
 
 const socketStore = useSocketStore();
 const socket = socketStore.socket;
+
+const messageStore = useMessageStore();
 
 const playerStore = usePlayerStore();
 
@@ -34,9 +37,23 @@ socket.on("combat:data", (data) => {
   props.room.combat = data.combat;
 });
 
+socket.off("combat:recent-logs");
+socket.on("combat:recent-logs", (logs) => {
+  for (const log of logs) {
+    // console.log("combat:log", log.message);
+    messageStore.pushClientSideSystemMessage(log.message);
+  }
+});
+
+// Prevent event being registered multiple times when closing Main Story View and coming back
+socket.off("combat:player-turn");
+
 socket.on("combat:player-turn", (data) => {
   const { logs, allyParty, enemyParty } = data;
-  console.log("player turn", logs);
+  console.log(
+    "all-logs",
+    logs.map((log: any) => log.message)
+  );
   props.room.combat.allyParty = allyParty;
   props.room.combat.enemyParty = enemyParty;
   isPlayerTurn.value = true;
@@ -54,7 +71,7 @@ socket.on("combat:end", (data) => {
   const { logs, allyParty, enemyParty } = data;
   props.room.combat.allyParty = allyParty;
   props.room.combat.enemyParty = enemyParty;
-  console.log("Combat has ended");
+  // messageStore.pushClientSideSystemMessage(log.message);
   console.log(logs);
 });
 
