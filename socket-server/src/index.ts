@@ -10,6 +10,8 @@ import registerZoneHandler from "./handlers/zoneHandler.js";
 import registerRewardHandler from "./handlers/rewardHandler.js";
 import registerCombatHandler from "./handlers/combatHandler.js";
 import registerChatHandler from "./handlers/chatHandler.js";
+import prettyBytes from "./utils/prettyBytes.js";
+import cron from "node-cron";
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -57,3 +59,10 @@ const onConnection = (socket: Socket) => {
 io.on("connection", onConnection);
 
 httpServer.listen(4000);
+
+cron.schedule("*/5 * * * * *", () => {
+  const memory = process.memoryUsage();
+  const heapUsed = prettyBytes(memory.heapUsed);
+  const heapTotal = prettyBytes(memory.heapTotal);
+  console.log(`HEAP USAGE: ${heapUsed} / ${heapTotal}`);
+});
