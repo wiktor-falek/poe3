@@ -40,7 +40,6 @@ const stateMachine = createMachine({
 
 const stateService = interpret(stateMachine)
   .onTransition((state) => {
-    console.log("new state", state.value);
     view.value = state.value as string;
   })
   .start();

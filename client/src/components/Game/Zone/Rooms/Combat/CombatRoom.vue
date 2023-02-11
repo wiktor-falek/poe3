@@ -27,8 +27,6 @@ const playerEntity = computed(() => {
   return player;
 });
 
-console.log("AP", playerEntity.value.actionPoints);
-
 const isPlayerTurn = ref(false);
 
 socket.on("combat:data", (data) => {
