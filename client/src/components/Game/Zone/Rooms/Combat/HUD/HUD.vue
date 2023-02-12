@@ -8,7 +8,7 @@ const props = defineProps(["actionPoints"]);
 const selectedSkill: Ref<number | null> = ref(null);
 
 function handleSkillIconClick(event: any, skillId: number) {
-  const skillIconElement = event.target;
+  const skillIconElement = event.currentTarget;
 
   // TODO: remove selected from ALL SkillIcon components
 
