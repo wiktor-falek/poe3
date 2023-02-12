@@ -79,7 +79,6 @@ const selectedTarget: Ref<number | null> = ref(null);
 const selectedSkill: Ref<number | null> = ref(null);
 
 function selectTarget(targetId: number) {
-  console.log(targetId);
   if (selectedTarget.value === targetId) {
     selectedTarget.value = null;
   } else {
@@ -89,7 +88,6 @@ function selectTarget(targetId: number) {
 
 function selectSkill(skillId: number) {
   selectedSkill.value = skillId;
-  console.log("selected skill", skillId);
 }
 
 function playerAction() {
@@ -102,6 +100,10 @@ function playerAction() {
   }
   const action = { skillId, targetId };
   socket.emit("combat:player-action", action);
+}
+
+function endTurn() {
+  socket.emit("combat:player-end-turn");
 }
 </script>
 
@@ -130,6 +132,7 @@ function playerAction() {
       <p>turn order = {{ room.combat.turnOrder }}</p>
       <button @click="emit('abandonRun')">Abandon Run</button>
       <button v-if="isPlayerTurn" @click="playerAction">Player Action</button>
+      <button @click="endTurn">End turn</button>
       <HUD
         :actionPoints="playerEntity.actionPoints"
         @select-skill="(skillId: number) => selectSkill(skillId)"

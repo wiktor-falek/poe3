@@ -13,6 +13,9 @@ class Enemy extends Entity {
   }
 
   takeAction(allyParty: Array<Entity>, enemyParty: Array<Entity>) {
+    if (!this.isAlive) {
+      return null;
+    }
     const target = allyParty[0];
     return this.basicAttack(target);
   }

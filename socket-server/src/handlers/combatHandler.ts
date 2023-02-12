@@ -1,16 +1,29 @@
 import type Client from "../helpers/Client";
 import type { Socket } from "socket.io";
-import Player from "../logic/combat/Player";
+import type { CombatRoom } from "../logic/Rooms";
+
+function getCurrentCombatRoom(
+  socket: Socket,
+  client: Client
+): CombatRoom | null {
+  const room = client.instance?.currentRoom;
+  if (!room) {
+    socket.emit("error", "Room does not exist");
+    return null;
+  }
+  if (!("combat" in room)) {
+    socket.emit("error", "Room is not a combat room");
+    return null;
+  }
+  return room;
+}
 
 function registerCombatHandler(io: any, socket: Socket, client: Client): void {
   const getData = () => {
-    const room = client.instance?.currentRoom;
-    if (!room) return socket.emit("error", "Room does not exist");
-    if (!("combat" in room)) {
-      return socket.emit("error", "Room is not a combat room");
-    }
-    const combat = room.combat;
-    if (combat === null) {
+    const room = getCurrentCombatRoom(socket, client);
+    if (room == null) return socket.emit("error", "Room does not exist");
+
+    if (room.combat === null) {
       return socket.emit("error", "Combat is not initialized");
     }
 
@@ -20,13 +33,10 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
   };
 
   const nextStep = () => {
-    // TODO: there has to be a differnt event handler for player action, and player turn end
-    const room = client.instance?.currentRoom;
-    if (!room) return socket.emit("error", "Room does not exist");
-    if (!("combat" in room)) {
-      return socket.emit("error", "Room is not a combat room");
-    }
-    const combat = room.combat;
+    const room = getCurrentCombatRoom(socket, client);
+    if (room == null) return socket.emit("error", "Room does not exist");
+    const { combat } = room;
+
     if (combat === null) {
       return socket.emit("error", "Combat is not initialized");
     }
@@ -43,7 +53,7 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
       combat.gen ?? combat.startTurn();
       let step = combat.next();
 
-      while (!combat.hasEnded) {
+      while (true) {
         if (step.value === true) {
           // player turn
           return socket.emit("combat:player-turn", {
@@ -63,10 +73,13 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
           combat.startTurn();
           step = combat.next();
         }
+        if (combat.hasEnded) {
+          break;
+        }
       }
-      combat.addLog({ type: "combat-end", message: "Combat has ended" });
     }
-
+    
+    combat.addLog({ type: "combat-end", message: "Combat has ended" });
     socket.emit("combat:recent-logs", combat.getRecentLogsAndClear());
     return socket.emit("combat:end", {
       logs: combat.logs,
@@ -76,22 +89,20 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
   };
 
   const playerAction = (action: any) => {
-    const room = client.instance?.currentRoom;
-    if (!room) return socket.emit("error", "Room does not exist");
-    if (!("combat" in room)) {
-      return socket.emit("error", "Room is not a combat room");
-    }
-    const combat = room.combat;
+    const room = getCurrentCombatRoom(socket, client);
+    if (room == null) return socket.emit("error", "Room does not exist");
+    const { combat } = room;
+
     if (combat == null) {
       return socket.emit("error", "Combat is not initialized");
     }
+
     if (!combat.waitingForPlayerAction) {
       return socket.emit("error", "Not player turn");
     }
 
     // checks if client input is a valid object
     function isValidAction(action: any) {
-      console.log(action);
       if (action == null) return false;
       if (!("skillId" in action)) return false;
       if (
@@ -124,8 +135,6 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
       default:
         return socket.emit("error", "Unhandled action");
     }
-    // action was successful
-    combat.waitingForPlayerAction = false;
 
     // notify the client that next step is ready to be taken
     socket.emit("combat:take-next-step", { logs: combat.logs });
@@ -134,9 +143,28 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
     socket.emit("combat:data", { combat: room.combat });
   };
 
+  const playerEndTurn = () => {
+    const room = getCurrentCombatRoom(socket, client);
+    if (room == null) return socket.emit("error", "Room does not exist");
+    const { combat } = room;
+
+    if (combat == null) {
+      return socket.emit("error", "Combat is not initialized");
+    }
+    
+    if (!combat.waitingForPlayerAction) {
+      return socket.emit("error", "Not player turn");
+    }
+
+    combat.waitingForPlayerAction = false;
+
+    socket.emit("combat:take-next-step", { logs: combat.logs });
+  };
+
   socket.on("combat:get-data", getData);
   socket.on("combat:next-step", nextStep);
   socket.on("combat:player-action", playerAction);
+  socket.on("combat:player-end-turn", playerEndTurn);
 }
 
 export default registerCombatHandler;

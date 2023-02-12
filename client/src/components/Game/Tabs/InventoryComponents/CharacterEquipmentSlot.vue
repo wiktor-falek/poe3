@@ -3,20 +3,16 @@ import { ref } from "vue";
 import ItemTooltip from "../../Tooltips/ItemTooltip.vue";
 const props = defineProps(["item"]);
 
-const hover = ref();
-
-function itemContextMenu(event) {
-  console.log(event);
-  console.log("context");
-}
+const hover = ref(false);
 </script>
 
 <template>
-  <ItemTooltip v-if="hover === true" :itemData="item" />
+  <Teleport to="body">
+    <ItemTooltip v-if="hover === true" :item="item" />
+  </Teleport>
   <div
     v-if="item"
     class="equipment-slot"
-    @contextmenu="itemContextMenu($event)"
     @mouseover="hover = true"
     @mouseleave="hover = false"
     :class="{

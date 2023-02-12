@@ -116,10 +116,13 @@ class Combat {
       const entity = this.getEntityById(id);
       if (entity instanceof Enemy) {
         const action = entity.takeAction(this.allyParty, this.enemyParty);
-        if (action.type === "error") {
-          // TODO: handle error
+        if (action != null) {
+          if (action.type === "error") {
+            // TODO: handle error
+          }
+          this.addLog(action);
         }
-        this.addLog(action);
+
         yield false;
       }
       if (entity instanceof Player) {

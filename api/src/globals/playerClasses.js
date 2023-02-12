@@ -49,13 +49,59 @@ export const startingGear = {
   },
 
   ranger: {
-    hand: null,
+    hand: {
+      base: "Short Bow",
+      type: "weapon",
+      rarity: "normal",
+      requirements: {
+        level: 1,
+      },
+      baseMods: [
+        {
+          modId: "base_crit_chance",
+          values: [5],
+          description: "Critical Strike Chance: #",
+        },
+        {
+          modId: "base_phys_dmg",
+          values: [2, 4],
+          description: "Physical damage: # to #",
+        },
+      ],
+    },
     offhand: null,
     helmet: null,
     chest: null,
     gloves: null,
     boots: null,
-    ring_1: null,
+    ring_1: {
+      base: "Gold Ring",
+      type: "ring",
+      rarity: "unique",
+      name: "The One Ring",
+      description: "One ring to rule them all, one ring to find them, One ring to bring them all, and in the darkness bind them; In the Land of Mordor where the shadows lie.",
+      requirements: {
+        level: 1,
+      },
+      implicits: [
+        {
+          modId: "to_life",
+          description: "+# to Life",
+          values: [5],
+        },
+      ],
+      affixes: [
+        { modId: "to_dexterity", description: "+# to Dexterity", values: [1] },
+        { modId: "to_strength", description: "+# to Strength", values: [1] },
+        {
+          modId: "to_intelligence",
+          description: "+# to Intelligence",
+          values: [1],
+        },
+        { modId: "to_vitality", description: "+# to Vitality", values: [1] },
+        { modId: "to_speed", description: "+# to Speed", values: [1] },
+      ],
+    },
     ring_2: null,
     amulet: null,
     belt: null,
