@@ -23,7 +23,7 @@ export const BASE_MODIFIERS: { [key: string]: BaseModifier } = {
   },
   armor: {
     modId: "armor",
-    description: "Evasion: #"
+    description: "Armor: #"
   }
 };
 // critical strike chance
