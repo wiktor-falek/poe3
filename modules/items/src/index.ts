@@ -1,5 +1,4 @@
-import RingBase from "./gear/bases/RingBase";
-import WeaponBase from "./gear/bases/WeaponBase";
+import { RingBase, WeaponBase } from "./gear/bases";
 import { BASE_MODIFIERS } from "./modifiers/modifiers";
 
 const goldRing = new RingBase("Gold Ring", { level: 5 }, [], []);

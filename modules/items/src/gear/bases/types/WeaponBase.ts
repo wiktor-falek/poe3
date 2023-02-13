@@ -3,10 +3,10 @@ import {
   GearImplicits,
   GearTypeName,
   Requirements,
-} from "../../*";
-import GearBase from "./GearBase";
+} from "../../../*";
+import GearBase from "../GearBase";
 
-class RingBase extends GearBase {
+class WeaponBase extends GearBase {
   type: GearTypeName;
   constructor(
     name: string,
@@ -19,4 +19,4 @@ class RingBase extends GearBase {
   }
 }
 
-export default RingBase;
+export default WeaponBase;
