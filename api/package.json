@@ -7,7 +7,8 @@
   "scripts": {
     "start": "NODE_ENV=production nodemon .",
     "dev": "nodemon index.js",
-    "db": "mongod"
+    "db": "mongod",
+    "items": "npm r items && npm i \"../modules/items\""
   },
   "keywords": [],
   "author": "",
@@ -21,6 +22,7 @@
     "express-rate-limit": "^6.5.1",
     "express-validator": "^6.14.2",
     "express-winston": "^4.2.0",
+    "items": "file:../modules/items",
     "joi": "^17.6.1",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "4.10",
