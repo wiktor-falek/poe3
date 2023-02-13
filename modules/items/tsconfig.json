@@ -3,8 +3,7 @@
     "target": "ES6",
     "module": "CommonJS",
     "moduleResolution": "node",
-    // "rootDir": "./src",
-    "outDir": "./dist",
+    "outDir": "./build",
     "noImplicitAny": true
   }
 }

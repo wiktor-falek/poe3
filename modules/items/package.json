@@ -2,7 +2,10 @@
   "name": "items",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/index.js",
+  "main": "./build/index.js",
+  "_moduleAliases": {
+    "items": "build/items"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc-watch --onSuccess \"node .\" "

@@ -2,7 +2,7 @@ import { WeaponBase, ChestBase } from "../gear/bases";
 import GearBase from "../gear/bases/GearBase";
 import { BASE_MODIFIERS, IMPLICIT_MODIFIERS } from "../modifiers/modifiers";
 
-export const WARRIOR_STARTING_ITEMS: { [key in GearSlot]?: GearBase } = {
+export const SWORDSMAN_STARTING_ITEMS: { [key in GearSlot]?: GearBase } = {
   hand: new WeaponBase(
     "Broken Sword",
     1,
@@ -17,7 +17,7 @@ export const WARRIOR_STARTING_ITEMS: { [key in GearSlot]?: GearBase } = {
     "Rusted Plate Armor",
     1,
     { level: 1 },
-    [{ ...BASE_MODIFIERS.evasion, values: [6] }],
+    [{ ...BASE_MODIFIERS.armor, values: [6] }],
     []
   ),
 };

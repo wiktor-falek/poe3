@@ -1,9 +1,8 @@
-
 // IMPLICITS - can exist on any type of GearBase, regardless of rarity
 export const IMPLICIT_MODIFIERS: { [key: string]: BaseModifier } = {
   cold_damage_to_spells: {
     modId: "cold_damage_to_spells",
-    description: "Adds # to # cold damage to spells",
+    description: "Adds # to # Cold Damage to Spells",
   },
 };
 
@@ -11,20 +10,20 @@ export const IMPLICIT_MODIFIERS: { [key: string]: BaseModifier } = {
 export const BASE_MODIFIERS: { [key: string]: BaseModifier } = {
   critical_strike_chance: {
     modId: "critical_strike_chance",
-    description: "Critical Strike Chance: #",
+    description: "Critical Strike Chance: #%",
   },
   physical_damage: {
     modId: "physical_damage",
-    description: "Physical damage: # to #",
+    description: "Physical Damage: # to #",
   },
   evasion: {
     modId: "evasion",
-    description: "Evasion: #"
+    description: "Evasion: #",
   },
   armor: {
     modId: "armor",
-    description: "Armor: #"
-  }
+    description: "Armor: #",
+  },
 };
 // critical strike chance
 // physical damage
