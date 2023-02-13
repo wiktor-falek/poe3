@@ -51,12 +51,12 @@ function renderTemplateModDescription(mod: Mod) {
         'color--unique': item.rarity === 'unique',
       }"
     >
-      <p v-if="item.rarity === 'unique'" class="item-tooltip__top__name">
-        {{ item.name }}
+      <p v-if="item.rarity === 'unique'" class="item-tooltip__top__unique-name">
+        {{ item.uniqueName }}
       </p>
 
-      <p class="item-tooltip__top__base" v-if="item.base">
-        {{ item.base }}
+      <p class="item-tooltip__top__name" v-if="item.name">
+        {{ item.name }}
       </p>
     </div>
 
@@ -89,17 +89,17 @@ function renderTemplateModDescription(mod: Mod) {
             {{ item.requirements.attributes.strength }} STR
           </span>
           <span v-if="item.requirements.attributes.dexterity">
-            {{ item.requirements.attributes.dexterity }} STR
+            {{ item.requirements.attributes.dexterity }} DEX
           </span>
           <span v-if="item.requirements.attributes.intelligence">
-            {{ item.requirements.attributes.intelligence }} STR
+            {{ item.requirements.attributes.intelligence }} ING
           </span>
         </span>
       </p>
     </div>
 
     <!-- Implicits -->
-    <hr v-if="item.implicits" />
+    <hr v-if="item.implicits && item.implicits.length" />
     <div class="item-tooltips__implicits" v-if="item.implicits">
       <div
         class="item-tooltip__implicits__implicit color--magic"
@@ -159,8 +159,8 @@ function renderTemplateModDescription(mod: Mod) {
   font-size: 1.3rem;
 }
 
-.item-tooltip__top__base,
-.item-tooltip__top__name {
+.item-tooltip__top__name,
+.item-tooltip__top__unique-name {
   font-weight: bold;
 }
 
