@@ -1,4 +1,4 @@
-import RingBase from "./gear/bases/RingBase";
+import { RingBase, WeaponBase } from "./gear/bases";
 
 type GearRarity = "normal" | "magic" | "rare" | "unique";
 
@@ -13,7 +13,7 @@ type GearTypeName =
   | "amulet"
   | "belt";
 
-type GearType = RingBase;
+type GearType = RingBase | WeaponBase; // TODO: add all bases once they're finished
 
 /*
 {
