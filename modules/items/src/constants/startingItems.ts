@@ -44,7 +44,7 @@ export const RANGER_STARTING_ITEMS: { [key in GearSlot]?: GearBase } = {
 
 export const SORCERER_STARTING_ITEMS: { [key in GearSlot]?: GearBase } = {
   hand: new WeaponBase(
-    "Silver Branch",
+    "Branch",
     1,
     { level: 1 },
     [
