@@ -55,7 +55,7 @@ function renderTemplateModDescription(mod: Mod) {
         {{ item.name }}
       </p>
 
-      <p class="item-tooltip__base" v-if="item.base">
+      <p class="item-tooltip__top__base" v-if="item.base">
         {{ item.base }}
       </p>
     </div>
@@ -146,17 +146,22 @@ function renderTemplateModDescription(mod: Mod) {
   top: 130px;
   width: 300px;
   min-height: 150px;
-  background-color: rgb(40, 40, 40);
+  background-color: rgb(15, 15, 15);
   border: 1px solid;
-  opacity: 0.95;
+  /* opacity: 0.95; */
   z-index: 10000;
   padding: 15px 20px;
   text-align: center;
-
   display: flex;
-  line-height: 1.2;
   flex-direction: column;
   align-items: center;
+  line-height: 1.35;
+  font-size: 1.3rem;
+}
+
+.item-tooltip__top__base,
+.item-tooltip__top__name {
+  font-weight: bold;
 }
 
 hr {
