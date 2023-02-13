@@ -1,5 +1,3 @@
-import Item from "../db/models/Item.js";
-
 export const startingAttributes = {
   swordsman: {
     strength: 8,
