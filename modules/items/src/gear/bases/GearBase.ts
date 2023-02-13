@@ -1,18 +1,19 @@
-import { BaseModifier, GearImplicits, GearRarity, Requirements } from "../../*";
-
 class GearBase {
   name: string;
+  ilvl: number;
   rarity: GearRarity;
   requirements: Requirements;
   baseMods: Array<BaseModifier>;
-  implicits: GearImplicits;
+  implicits: Array<ImplicitModifier>;
   constructor(
     name: string,
+    ilvl: number,
     requirements: Requirements,
     baseMods: Array<BaseModifier>,
-    implicits: GearImplicits
+    implicits: Array<ImplicitModifier>
   ) {
     this.name = name;
+    this.ilvl = ilvl;
     this.rarity = "normal";
     this.requirements = requirements;
     this.baseMods = baseMods;

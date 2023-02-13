@@ -1,11 +1,9 @@
-import { GearType, Modifier } from "../*";
+import GearBase from "./bases/GearBase";
 
 class UniqueItem {
   base: string;
-  // type: GearTypeName;
-  constructor(base: GearType, description: string, affixes: Array<Modifier>) {
+  constructor(base: GearBase, description: string, affixes: Array<Modifier>) {
     this.base = base.name;
-    // this.type = base.type;
   }
 }
 

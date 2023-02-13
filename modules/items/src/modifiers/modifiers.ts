@@ -1,7 +1,11 @@
-import { BaseModifier, ImplicitModifier, Modifier } from "../*";
 
-// IMPLICITS - exist on every type of GearBase, but they have separate pools
-const IMPLICIT_MODIFIERS: { [key: string]: ImplicitModifier } = {};
+// IMPLICITS - can exist on any type of GearBase, regardless of rarity
+export const IMPLICIT_MODIFIERS: { [key: string]: BaseModifier } = {
+  cold_damage_to_spells: {
+    modId: "cold_damage_to_spells",
+    description: "Adds # to # cold damage to spells",
+  },
+};
 
 // BASE MODIFIERS - mods tied to the base, like critical strike chance on a weapon
 export const BASE_MODIFIERS: { [key: string]: BaseModifier } = {
@@ -13,6 +17,14 @@ export const BASE_MODIFIERS: { [key: string]: BaseModifier } = {
     modId: "physical_damage",
     description: "Physical damage: # to #",
   },
+  evasion: {
+    modId: "evasion",
+    description: "Evasion: #"
+  },
+  armor: {
+    modId: "armor",
+    description: "Evasion: #"
+  }
 };
 // critical strike chance
 // physical damage

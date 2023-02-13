@@ -1,8 +1,6 @@
-import { RingBase, WeaponBase } from "./gear/bases";
-
 type GearRarity = "normal" | "magic" | "rare" | "unique";
 
-type GearTypeName =
+type GearSlot =
   | "hand"
   | "offhand"
   | "helmet"
@@ -12,51 +10,6 @@ type GearTypeName =
   | "ring"
   | "amulet"
   | "belt";
-
-type GearType = RingBase | WeaponBase; // TODO: add all bases once they're finished
-
-/*
-{
-  base: "Sapphire Ring",
-  type: "ring",
-  rarity: "rare",
-  requirements: {
-    level: 5,
-  },
-  implicits: [
-    {
-      modId: "to_mana",
-      description: "+# to Mana",
-      values: [10],
-    },
-  ],
-  affixes: {
-    prefixes: [
-      {
-        modId: "to_life",
-        description: "+# to Life",
-        values: [1],
-      },
-      {
-        modId: "to_mana",
-        description: "+# to Mana",
-        values: [2],
-      },
-      {
-        modId: "physical_damage_to_attacks",
-        description: "Adds # to # Physical Damage to Attacks",
-        values: [1, 2],
-      },
-    ],
-    suffixes: [
-      {
-        modId: "to_intelligence",
-        description: "+# to Intelligence",
-        values: [2],
-      },
-    ],
-  },
-*/
 
 interface Tier {
   range: Array<number>;
@@ -76,6 +29,12 @@ interface ModifierTiers {
   1?: Tier;
 }
 
+interface ImplicitModifier {
+  modId: string;
+  description: string;
+  values?: Array<number>;
+}
+
 interface BaseModifier {
   modId: string;
   description: string;
@@ -88,8 +47,6 @@ interface Modifier {
   tiers: ModifierTiers;
 }
 
-type GearImplicits = Array<Modifier>;
-
 interface Requirements {
   level?: number;
   attributes?: {
@@ -98,5 +55,3 @@ interface Requirements {
     intelligence?: number;
   };
 }
-
-interface ImplicitModifier {}

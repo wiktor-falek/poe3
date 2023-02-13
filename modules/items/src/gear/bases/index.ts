@@ -1,4 +1,5 @@
-import RingBase from "./types/RingBase";
-import WeaponBase from "./types/WeaponBase";
+import RingBase from "./slots/RingBase";
+import WeaponBase from "./slots/WeaponBase";
+import ChestBase from "./slots/ChestBase";
 
-export { RingBase, WeaponBase };
+export { RingBase, WeaponBase, ChestBase };
