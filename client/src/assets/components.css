@@ -1,25 +1,29 @@
 .color--normal {
-  color: rgb(240, 234, 234) !important;
+  color: var(--item-rarity--normal);
 }
 
 .color--magic {
-  color: rgb(56, 92, 211) !important;
+  color: var(--item-rarity--magic);
 }
 
 .color--rare {
-  color: gold !important;
+  color: var(--item-rarity--rare);
 }
 
 .color--unique {
-  color: rgb(221, 119, 3) !important;
+  color: var(--item-rarity--unique);
+}
+
+.color--disabled {
+  color: rgba(203, 25, 25, 0.875);
 }
 
 .border--dark {
-  border: 2px solid #3C454B;
+  border: 2px solid #3c454b;
 }
 
 .border--light {
-  border: 2px solid #B3AF9B;
+  border: 2px solid #b3af9b;
 }
 
 .content {
@@ -29,7 +33,7 @@
 }
 
 .focus {
-  border: 2px solid rgb(189, 134, 34) !important;
+  border: 2px solid rgb(189, 134, 34);
 }
 
 /* ui components */
@@ -44,12 +48,13 @@
   opacity: 0.8;
 }
 
-.button-close:before, .button-close:after {
+.button-close:before,
+.button-close:after {
   height: 32px;
   position: absolute;
   left: 23px;
   width: 2px;
-  content: ' ';
+  content: " ";
   background-color: rgb(212, 33, 33);
 }
 
