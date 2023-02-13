@@ -79,7 +79,8 @@ export const startingGear = {
       type: "ring",
       rarity: "unique",
       name: "The One Ring",
-      description: "One ring to rule them all, one ring to find them, One ring to bring them all, and in the darkness bind them; In the Land of Mordor where the shadows lie.",
+      description:
+        "One ring to rule them all, one ring to find them, One ring to bring them all, and in the darkness bind them; In the Land of Mordor where the shadows lie.",
       requirements: {
         level: 1,
       },
@@ -91,8 +92,8 @@ export const startingGear = {
         },
       ],
       affixes: [
-        { modId: "to_dexterity", description: "+# to Dexterity", values: [1] },
         { modId: "to_strength", description: "+# to Strength", values: [1] },
+        { modId: "to_dexterity", description: "+# to Dexterity", values: [1] },
         {
           modId: "to_intelligence",
           description: "+# to Intelligence",
@@ -102,7 +103,47 @@ export const startingGear = {
         { modId: "to_speed", description: "+# to Speed", values: [1] },
       ],
     },
-    ring_2: null,
+    ring_2: {
+      base: "Sapphire Ring",
+      type: "ring",
+      rarity: "rare",
+      requirements: {
+        level: 5,
+      },
+      implicits: [
+        {
+          modId: "to_mana",
+          description: "+# to Mana",
+          values: [10],
+        },
+      ],
+      affixes: {
+        prefixes: [
+          {
+            modId: "to_life",
+            description: "+# to Life",
+            values: [1],
+          },
+          {
+            modId: "to_mana",
+            description: "+# to Mana",
+            values: [2],
+          },
+          {
+            modId: "physical_damage_to_attacks",
+            description: "Adds # to # Physical Damage to Attacks",
+            values: [1, 2],
+          },
+        ],
+        suffixes: [
+          {
+            modId: "to_intelligence",
+            description: "+# to Intelligence",
+            values: [2],
+          },
+        ],
+      },
+    },
     amulet: null,
     belt: null,
   },

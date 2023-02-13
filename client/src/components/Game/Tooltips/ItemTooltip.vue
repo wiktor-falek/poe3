@@ -1,5 +1,10 @@
 <script lang="ts" setup>
+import { usePlayerStore } from "../../../stores/playerStore";
+
 const props = defineProps(["item"]);
+
+const playerStore = usePlayerStore();
+const characterLvl = playerStore.characterData.level.value;
 
 interface Mod {
   description: string;
@@ -12,8 +17,8 @@ function renderTemplateModDescription(mod: Mod) {
   const { description, values } = mod;
   const parts: Array<string> = description.split("#");
 
-  let renderedDescription = "";
   let idx = 0;
+  let renderedDescription = "";
   for (let i = 0; i < parts.length; i++) {
     const s = parts[i];
     renderedDescription += s;
@@ -29,7 +34,13 @@ function renderTemplateModDescription(mod: Mod) {
 </script>
 
 <template>
-  <div class="item-tooltip" v-if="props">
+  <div
+    class="item-tooltip"
+    v-if="props"
+    :style="{
+      'border-color': `var(--item-rarity--${item.rarity})`,
+    }"
+  >
     <!-- Name -->
     <div
       class="item-tooltip__top"
@@ -60,12 +71,30 @@ function renderTemplateModDescription(mod: Mod) {
     <!-- Requirements -->
     <hr v-if="item.requirements" />
     <div class="item-tooltip__level-requirement" v-if="item.requirements">
+      <!-- TODO: comma signs between each span -->
       <p>
         Requires
         <span v-if="item.requirements.level">
-          Level {{ item.requirements.level }}
+          Level
+          <span
+            :class="{
+              'color--disabled': item.requirements.level > characterLvl,
+            }"
+          >
+            {{ item.requirements.level }}
+          </span>
         </span>
-        <!-- <span v-if="item.requirements.attributes"></span> -->
+        <span v-if="item.requirements.attributes">
+          <span v-if="item.requirements.attributes.strength">
+            {{ item.requirements.attributes.strength }} STR
+          </span>
+          <span v-if="item.requirements.attributes.dexterity">
+            {{ item.requirements.attributes.dexterity }} STR
+          </span>
+          <span v-if="item.requirements.attributes.intelligence">
+            {{ item.requirements.attributes.intelligence }} STR
+          </span>
+        </span>
       </p>
     </div>
 
@@ -84,6 +113,14 @@ function renderTemplateModDescription(mod: Mod) {
     <hr v-if="item.affixes" />
     <div class="item-tooltip__mods" v-if="item.affixes">
       <div
+        v-if="item.affixes.prefixes || item.affixes.suffixes"
+        class="item-tooltip__mods__mod color--magic"
+        v-for="affix in [...item.affixes.prefixes, ...item.affixes.suffixes]"
+      >
+        {{ renderTemplateModDescription(affix) }}
+      </div>
+      <div
+        v-else
         class="item-tooltip__mods__mod color--magic"
         v-for="affix in item.affixes"
       >
@@ -109,9 +146,9 @@ function renderTemplateModDescription(mod: Mod) {
   top: 130px;
   width: 300px;
   min-height: 150px;
-  background-color: rgb(30, 30, 30);
+  background-color: rgb(40, 40, 40);
+  border: 1px solid;
   opacity: 0.95;
-  border: 2px solid orange;
   z-index: 10000;
   padding: 15px 20px;
   text-align: center;
