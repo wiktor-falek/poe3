@@ -1,5 +1,5 @@
 import { Collection, ObjectId } from "mongodb";
-import logger from "../../logger";
+import { Character } from "../../../*";
 import Mongo from "../Mongo";
 
 class CharacterModel {
@@ -49,6 +49,39 @@ class CharacterModel {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Adds an item to the characters first inventory array index that is null
+   */
+  async addItem(item: any, character: Character): Promise<any> {
+    // TODO: turn all of this into a query
+
+    // find first index in characters inventory that equals null
+    const firstEmptyInventoryIndex = character.inventory.indexOf(null);
+
+    if (firstEmptyInventoryIndex === -1) {
+      return { ok: false, reason: "Inventory is full" };
+    }
+
+    const dbArrayIndex = `characters.$.inventory.${firstEmptyInventoryIndex}`;
+    const result = await this.collection.updateOne(
+      { ...this.filter },
+      {
+        $set: { [dbArrayIndex]: item },
+      }
+    );
+
+    if (result.modifiedCount === 1) {
+      return { ok: true, inventoryIndex: firstEmptyInventoryIndex };
+    }
+
+    return { ok: false, reason: "Query did not modify" };
+  }
+
+  async swapIndices(firstIndex: number, secondIndex: number): Promise<any> {
+    return { ok: false };
+    return { ok: true, swappedIndices: [0, 1] };
   }
 }
 

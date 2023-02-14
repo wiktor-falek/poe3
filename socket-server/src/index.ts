@@ -12,6 +12,7 @@ import registerCombatHandler from "./handlers/combatHandler.js";
 import registerChatHandler from "./handlers/chatHandler.js";
 import prettyBytes from "./utils/prettyBytes.js";
 import cron from "node-cron";
+import registerInventoryHandler from "./handlers/inventoryHandler.js";
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -47,6 +48,7 @@ const onConnection = (socket: Socket) => {
   registerZoneHandler(io, socket, client);
   registerRewardHandler(io, socket, client);
   registerCombatHandler(io, socket, client);
+  registerInventoryHandler(io, socket, client);
 
   socket.on("disconnect", (reason) => {
     client.isConnected = false;

@@ -78,7 +78,7 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
         }
       }
     }
-    
+
     combat.addLog({ type: "combat-end", message: "Combat has ended" });
     socket.emit("combat:recent-logs", combat.getRecentLogsAndClear());
     return socket.emit("combat:end", {
@@ -151,7 +151,7 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
     if (combat == null) {
       return socket.emit("error", "Combat is not initialized");
     }
-    
+
     if (!combat.waitingForPlayerAction) {
       return socket.emit("error", "Not player turn");
     }

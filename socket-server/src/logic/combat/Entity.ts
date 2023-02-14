@@ -1,5 +1,5 @@
 import { ActionPoints, Attributes, Level, Resources } from "../../../*";
-import logger from "../../logger";
+import { randint } from "pyrand";
 
 interface ActionSuccess {
   type: "attack";
@@ -59,7 +59,12 @@ class Entity {
     }
     this.actionPoints.ap -= apCost;
 
-    const damage = 1; // TODO: unhardcore damage
+    const { strength } = this.attributes;
+    const DAMAGE_RANGE: [number, number] = [
+      1 + Math.floor(strength / 4),
+      1 + Math.floor(strength / 2),
+    ];
+    const damage = randint(...DAMAGE_RANGE);
     target.takeDamage(damage);
 
     const message = `${this.name} attacked ${target.name} for ${damage} damage`;
