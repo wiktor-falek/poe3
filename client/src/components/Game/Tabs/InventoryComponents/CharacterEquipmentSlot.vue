@@ -39,7 +39,6 @@ const hover = ref(false);
   justify-content: center;
   width: 48px;
   height: 48px;
-  border: 1px solid rgb(117, 117, 117);
 }
 
 .equipment-slot--empty {
@@ -47,18 +46,18 @@ const hover = ref(false);
 }
 
 .equipment-slot--normal {
-  border-color: white;
+  border: 1px solid var(--item-rarity--normal);
 }
 
 .equipment-slot--magic {
-  border-color: rgb(24, 67, 206);
+  border: 1px solid var(--item-rarity--magic);
 }
 
 .equipment-slot--rare {
-  border-color: rgb(194, 202, 81);
+  border: 1px solid var(--item-rarity--rare);
 }
 
 .equipment-slot--unique {
-  border-color: rgb(221, 119, 3);
+  border: 1px solid var(--item-rarity--unique);
 }
 </style>
