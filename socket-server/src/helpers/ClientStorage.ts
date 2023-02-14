@@ -25,6 +25,10 @@ class ClientStorage {
     return this.clients.get(username);
   }
 
+
+  /**
+   * Returns existing client, or creates a new one and returns it
+   */
   addClient(
     username: string,
     character: Character,
