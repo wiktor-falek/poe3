@@ -32,7 +32,8 @@ const onConnection = (socket: Socket) => {
   if (client.isConnected) {
     return socket.emit("error:connection-already-exists");
   }
-  client.isConnected = true;
+  client.connect();
+  console.log(client.isConnected);
   io.emit("player-count", ClientStorage.clientCount);
 
   logger.info(
@@ -51,7 +52,8 @@ const onConnection = (socket: Socket) => {
   registerInventoryHandler(io, socket, client);
 
   socket.on("disconnect", (reason) => {
-    client.isConnected = false;
+    client.disconnect();
+    console.log(client.isConnected);
     logger.info(`client ${client.username} disconnected (${reason})`);
     console.log(ClientStorage.clients);
     io.emit("player-count", ClientStorage.clientCount);
@@ -69,3 +71,11 @@ httpServer.listen(4000);
 //   const heapTotal = prettyBytes(memory.heapTotal);
 //   console.log(`HEAP USAGE: ${heapUsed} / ${heapTotal}`);
 // });
+
+cron.schedule("*/5 * * * * *", () => {
+  // every 5 seconds remove inactive clients from ClientStorage
+  const removedClients = ClientStorage.deleteInactiveClients();
+  if (removedClients.length) {
+    console.log(removedClients);
+  }
+});

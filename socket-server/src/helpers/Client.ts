@@ -6,6 +6,7 @@ import CharacterModel from "../db/models/CharacterModel";
 
 class Client {
   isConnected: boolean;
+  disconnectTimestamp: number | null;
   username: string;
   characterModelProxy: CharacterModelProxy;
   instance: Instance | null;
@@ -15,12 +16,23 @@ class Client {
     characterModel: CharacterModel
   ) {
     this.isConnected = false;
+    this.disconnectTimestamp = null;
     this.username = username;
     this.characterModelProxy = new CharacterModelProxy(
       character,
       characterModel
     );
     this.instance = null;
+  }
+
+  connect() {
+    this.isConnected = true;
+    this.disconnectTimestamp = null;
+  }
+
+  disconnect() {
+    this.isConnected = false;
+    this.disconnectTimestamp = Date.now();
   }
 
   joinInstance(zoneId: number): Instance | null {

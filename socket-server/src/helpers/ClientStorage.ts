@@ -36,12 +36,7 @@ class ClientStorage {
       existingClient?.characterModelProxy.character._id.toString();
     const currentId = character._id.toString();
 
-    if (
-      existingClient &&
-      existingId &&
-      currentId &&
-      existingId === currentId
-    ) {
+    if (existingClient && existingId && currentId && existingId === currentId) {
       return existingClient;
     }
     const client = new Client(username, character, characterModel);
@@ -49,10 +44,26 @@ class ClientStorage {
     return client;
   }
 
-  // meant to run in a cron-job to remove Client objects that haven't
-  // been connected to for specified amout of time (defaults to 5 min)
-  deleteInactiveClients(timeMs = 300000) {
-
+  /**
+   * Meant to run in a cron-job to remove Client objects that haven't
+   * been connected to for specified amout of time (defaults to 5 min)
+   */
+  deleteInactiveClients(timeMs = 1000 * 60 * 5): Array<string> {
+    const now = Date.now();
+    const deletedClients: Array<string> = [];
+    this.clients.forEach((client, key) => {
+      if (
+        !client.isConnected &&
+        client.disconnectTimestamp &&
+        now - client.disconnectTimestamp >= timeMs
+      ) {
+        const deleted = this.clients.delete(key);
+        if (deleted) {
+          deletedClients.push(key);
+        }
+      }
+    });
+    return deletedClients;
   }
 }
 
