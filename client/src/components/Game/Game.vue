@@ -167,7 +167,6 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 15px;
   border: 2px solid rgb(217, 212, 212);
 }
 
