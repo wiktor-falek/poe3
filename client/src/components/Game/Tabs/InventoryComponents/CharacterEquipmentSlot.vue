@@ -39,8 +39,7 @@ const hover = ref(false);
   justify-content: center;
   width: 48px;
   height: 48px;
-  border: 2px solid rgb(117, 117, 117);
-  background-color: rgb(41, 41, 41);
+  border: 1px solid rgb(117, 117, 117);
 }
 
 .equipment-slot--empty {

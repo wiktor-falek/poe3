@@ -8,28 +8,48 @@ const props = defineProps(["equipment"]);
     <!-- empty element for positioning -->
     <div class="equipment-slot equipment-slot--empty"></div>
 
-    <CharacterEquipmentSlot :item="props.equipment.helmet" />
+    <div class="background-wrapper">
+      <CharacterEquipmentSlot :item="props.equipment.helmet" />
+    </div>
 
-    <CharacterEquipmentSlot :item="props.equipment.amulet" />
+    <div class="background-wrapper">
+      <CharacterEquipmentSlot :item="props.equipment.amulet" />
+    </div>
 
-    <CharacterEquipmentSlot :item="props.equipment.hand" />
+    <div class="background-wrapper">
+      <CharacterEquipmentSlot :item="props.equipment.hand" />
+    </div>
 
-    <CharacterEquipmentSlot :item="props.equipment.chest" />
+    <div class="background-wrapper">
+      <CharacterEquipmentSlot :item="props.equipment.chest" />
+    </div>
 
-    <CharacterEquipmentSlot :item="props.equipment.offhand" />
+    <div class="background-wrapper">
+      <CharacterEquipmentSlot :item="props.equipment.offhand" />
+    </div>
 
-    <CharacterEquipmentSlot :item="props.equipment.ring_1" />
+    <div class="background-wrapper">
+      <CharacterEquipmentSlot :item="props.equipment.ring_1" />
+    </div>
 
-    <CharacterEquipmentSlot :item="props.equipment.belt" />
+    <div class="background-wrapper">
+      <CharacterEquipmentSlot :item="props.equipment.belt" />
+    </div>
 
-    <CharacterEquipmentSlot :item="props.equipment.ring_2" />
+    <div class="background-wrapper">
+      <CharacterEquipmentSlot :item="props.equipment.ring_2" />
+    </div>
 
-    <CharacterEquipmentSlot :item="props.equipment.gloves" />
+    <div class="background-wrapper">
+      <CharacterEquipmentSlot :item="props.equipment.gloves" />
+    </div>
 
     <!-- empty element for positioning -->
-    <div class="equipment-slot equipment-slot--empty"></div>
+      <div class="equipment-slot equipment-slot--empty"></div>
 
-    <CharacterEquipmentSlot :item="props.equipment.boots" />
+    <div class="background-wrapper">
+      <CharacterEquipmentSlot :item="props.equipment.boots" />
+    </div>
   </div>
 </template>
 
@@ -37,6 +57,10 @@ const props = defineProps(["equipment"]);
 .equipment {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr; /* fr fr no cap */
-  gap: 10px;
+  gap: 5px;
+}
+
+.background-wrapper {
+  background-color: rgb(28, 28, 28);
 }
 </style>
