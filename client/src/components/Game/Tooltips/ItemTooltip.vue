@@ -143,7 +143,7 @@ function renderTemplateModDescription(mod: Mod) {
 .item-tooltip {
   position: absolute;
   right: 300px;
-  top: 130px;
+  top: 115px;
   width: 300px;
   min-height: 150px;
   background-color: rgb(15, 15, 15);
