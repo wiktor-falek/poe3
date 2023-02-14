@@ -59,7 +59,7 @@ function registerChatHandler(io: any, socket: Socket, client: Client): void {
     }
 
     const content = message;
-    const sender = client.playerModel.character.name;
+    const sender = client.characterModelProxy.character.name;
     io.to(roomName).emit("chat:message", { content, sender });
   };
 

@@ -1,13 +1,13 @@
 import { Character } from "../../*";
 import Instance from "../logic/Instance";
-import PlayerModel from "../logic/PlayerModel";
+import CharacterModelProxy from "../logic/CharacterModelProxy";
 import logger from "../logger";
 import CharacterModel from "../db/models/CharacterModel";
 
 class Client {
   isConnected: boolean;
   username: string;
-  playerModel: PlayerModel;
+  characterModelProxy: CharacterModelProxy;
   instance: Instance | null;
   constructor(
     username: string,
@@ -16,7 +16,10 @@ class Client {
   ) {
     this.isConnected = false;
     this.username = username;
-    this.playerModel = new PlayerModel(character, characterModel);
+    this.characterModelProxy = new CharacterModelProxy(
+      character,
+      characterModel
+    );
     this.instance = null;
   }
 
@@ -29,7 +32,10 @@ class Client {
       return this.instance;
     }
 
-    this.instance = new Instance(zoneId, this.playerModel.character.name);
+    this.instance = new Instance(
+      zoneId,
+      this.characterModelProxy.character.name
+    );
     if (this.instance === null) {
       logger.error(
         `failed to create instance for ${this.username} (zoneId=${zoneId})`

@@ -39,7 +39,7 @@ function registerInventoryHandler(
       },
     };
 
-    client.playerModel.addItem(item).then((result) => {
+    client.characterModelProxy.addItem(item).then((result) => {
       if (!result.ok) {
         return socket.emit("error", result.reason);
       }

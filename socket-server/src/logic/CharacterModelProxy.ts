@@ -7,11 +7,11 @@ interface Result {
 }
 
 /**
- * Interface for querying CharacterModel, which also modifies the character object if query is successful
+ * Interface for querying CharacterModel
+ * Methods are identical to CharacterModel, but have a side effect that mutate
+ * this.character object to match the updated result of the query in CharacterModel
  */
-// TODO: Name of this class is kinda confusing, because it doesn't even have anything to do with Player
-// It's more like a proxy for CharacterModel that has some side effect
-class PlayerModel {
+class CharacterModelProxy {
   character: Character;
   #characterModel: CharacterModel;
 
@@ -23,6 +23,7 @@ class PlayerModel {
   async addSilver(amount: number): Promise<Result> {
     const result = await this.#characterModel.addSilver(amount);
     if (result) {
+      // mutate character
       this.character.silver += amount;
       return { ok: true, value: this.character.silver };
     }
@@ -32,7 +33,7 @@ class PlayerModel {
   async addItem(item: any) {
     const result = await this.#characterModel.addItem(item, this.character);
     if (result.ok) {
-      // mutate this.character.inventory
+      // mutate character
       const idx = result.inventoryIndex;
       this.character.inventory[idx] = item;
     }
@@ -52,4 +53,4 @@ class PlayerModel {
   }
 }
 
-export default PlayerModel;
+export default CharacterModelProxy;

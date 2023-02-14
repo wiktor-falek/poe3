@@ -12,7 +12,7 @@ function registerInstanceHandler(
 ): void {
   const joinMainStoryInstance = (zoneId: number) => {
     const highestZoneId =
-      client.playerModel.character.progression.mainStory.highestZoneId;
+      client.characterModelProxy.character.progression.mainStory.highestZoneId;
     if (highestZoneId === undefined || highestZoneId === null) {
       logger.error(`could not read progression data`);
       return socket.emit("error", {
@@ -33,7 +33,7 @@ function registerInstanceHandler(
     }
 
     // restore hp and mp before joining new instance
-    const resources = client.playerModel.character.resources;
+    const resources = client.characterModelProxy.character.resources;
     resources.hp = resources.maxHp;
     resources.mp = resources.maxMp;
 
@@ -72,7 +72,7 @@ function registerInstanceHandler(
     // initialize combat instance if doesn't already exist in the room
     if ("combat" in room && !room.combat) {
       const { name, resources, attributes, level } =
-        client.playerModel.character;
+        client.characterModelProxy.character;
 
       const actionPoints = { ap: 2, maxAp: 2 };
       const player = new Player(

@@ -13,7 +13,7 @@ function registerRewardHandler(io: any, socket: Socket, client: Client): void {
 
     const { silver, items } = reward;
     if (silver) {
-      const result = await client.playerModel.addSilver(silver);
+      const result = await client.characterModelProxy.addSilver(silver);
       if (!result.ok) {
         return socket.emit("error");
       }
@@ -24,7 +24,7 @@ function registerRewardHandler(io: any, socket: Socket, client: Client): void {
     return socket.emit("reward:silver-test", {
       silver,
       items,
-      totalSilver: client.playerModel.character.silver,
+      totalSilver: client.characterModelProxy.character.silver,
     });
   };
 
