@@ -1,12 +1,25 @@
 <script lang="ts" setup>
-import useSocketStore from '../../../../stores/socketStore';
+import { usePlayerStore } from "../../../../stores/playerStore";
+import useSocketStore from "../../../../stores/socketStore";
 
 const socketStore = useSocketStore();
 const socket = socketStore.socket;
+
+const playerStore = usePlayerStore();
+const inventory = playerStore.characterData.inventory;
+
+function addItemTest() {
+  socket.emit("inventory:add-test-item");
+}
+socket.on("inventory:add-item", (data) => {
+  const { index, item } = data;
+  inventory[index] = item;
+}); 
 </script>
 
 <template>
   <h1>Town</h1>
+  <button @click="addItemTest">Add Item Test</button>
 </template>
 
 <style scoped></style>
