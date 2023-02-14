@@ -36,8 +36,8 @@ class CharacterModel {
       this.projection
     );
     if (result === null) return null;
-    const { _id, ...character } = result.characters[0];
-    return character;
+
+    return result.characters[0];
   }
 
   async addSilver(silverAmount: number): Promise<boolean> {

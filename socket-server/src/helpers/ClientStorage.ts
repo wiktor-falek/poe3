@@ -32,13 +32,18 @@ class ClientStorage {
   ) {
     const existingClient = this.getClient(username);
 
+    const existingId =
+      existingClient?.characterModelProxy.character._id.toString();
+    const currentId = character._id.toString();
+
     if (
       existingClient &&
-      existingClient.characterModelProxy.character.name === character.name
+      existingId &&
+      currentId &&
+      existingId === currentId
     ) {
       return existingClient;
     }
-
     const client = new Client(username, character, characterModel);
     this.clients.set(username, client);
     return client;
@@ -46,7 +51,9 @@ class ClientStorage {
 
   // meant to run in a cron-job to remove Client objects that haven't
   // been connected to for specified amout of time (defaults to 5 min)
-  deleteInactiveClients(timeMs = 300000) {}
+  deleteInactiveClients(timeMs = 300000) {
+
+  }
 }
 
 export default new ClientStorage();

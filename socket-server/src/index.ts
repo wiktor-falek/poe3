@@ -10,9 +10,9 @@ import registerZoneHandler from "./handlers/zoneHandler.js";
 import registerRewardHandler from "./handlers/rewardHandler.js";
 import registerCombatHandler from "./handlers/combatHandler.js";
 import registerChatHandler from "./handlers/chatHandler.js";
-import prettyBytes from "./utils/prettyBytes.js";
-import cron from "node-cron";
 import registerInventoryHandler from "./handlers/inventoryHandler.js";
+import cron from "node-cron";
+import prettyBytes from "./utils/prettyBytes.js";
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -39,7 +39,7 @@ const onConnection = (socket: Socket) => {
     `client ${client.username} connected as character ${client.characterModelProxy.character.name}`
   );
 
-  console.log(ClientStorage.clients);
+  console.log("New Connection", ClientStorage.clients);
 
   // HANDLERS
   registerUtilsHandler(io, socket);
@@ -55,6 +55,7 @@ const onConnection = (socket: Socket) => {
     logger.info(`client ${client.username} disconnected (${reason})`);
     console.log(ClientStorage.clients);
     io.emit("player-count", ClientStorage.clientCount);
+    console.log("Disconnect", ClientStorage.clients);
   });
 };
 

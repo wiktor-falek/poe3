@@ -7,13 +7,13 @@ import logger from "../logger";
 // Client object stored in ClientStorage if not already existing
 const initClient = async (socket: Socket, next: Function) => {
   const { username, sessionId, characterId } = socket.handshake.auth;
+
   // basic validation
   if (!username || !sessionId || !characterId || characterId.length !== 24) {
     return socket.disconnect();
   }
 
   const characterModel = new CharacterModel(username, sessionId, characterId);
-  // characterModel.addSilver(50);
 
   const character = await characterModel.data();
 
