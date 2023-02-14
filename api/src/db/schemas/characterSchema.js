@@ -79,7 +79,7 @@ const characterSchema = Joi.object({
     belt: null
   }),
   inventory: Joi.array()
-  .default(new Array(20).fill(null)),
+  .default(new Array(32).fill(null)),
   progression: Joi.object()
   .default({ 
     mainStory: { 
