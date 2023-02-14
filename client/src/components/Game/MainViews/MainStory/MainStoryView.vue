@@ -48,21 +48,16 @@ function joinZone(id: number) {
   zoneId.value = id;
   stateService.send("SELECT");
 }
-// Prevent event being registered multiple times when closing Main Story View and coming back
 
-socket.off("instance:already-exists");
-
-(function checkIfInstanceAlreadyExists() {
-  socket.emit("instance:already-exists?");
-  socket.on("instance:already-exists", (data) => {
-    const { instanceAlreadyExists, zoneId, roomId } = data;
-    console.log("already-exists", data);
-    if (instanceAlreadyExists) {
-      joinZone(zoneId);
-      joinRoom(roomId);
-    }
-  });
-})();
+socket.emit("instance:already-exists?");
+socket.once("instance:already-exists", (data) => {
+  const { instanceAlreadyExists, zoneId, roomId } = data;
+  console.log("already-exists", data);
+  if (instanceAlreadyExists) {
+    joinZone(zoneId);
+    joinRoom(roomId);
+  }
+});
 
 function abandonRun() {
   // TODO: check with the server whether it was successfull and then change state

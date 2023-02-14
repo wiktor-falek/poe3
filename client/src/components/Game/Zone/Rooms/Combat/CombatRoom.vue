@@ -37,18 +37,14 @@ socket.on("combat:data", (data) => {
   props.room.combat = data.combat;
 });
 
-socket.off("combat:recent-logs");
-socket.on("combat:recent-logs", (logs) => {
+socket.once("combat:recent-logs", (logs) => {
   for (const log of logs) {
     // console.log("combat:log", log.message);
     messageStore.pushClientSideSystemMessage(log.message);
   }
 });
 
-// Prevent event being registered multiple times when closing Main Story View and coming back
-socket.off("combat:player-turn");
-
-socket.on("combat:player-turn", (data) => {
+socket.once("combat:player-turn", (data) => {
   const { logs, allyParty, enemyParty } = data;
   console.log(
     "all-logs",

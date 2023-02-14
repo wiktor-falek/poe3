@@ -48,7 +48,18 @@ function registerInventoryHandler(
     });
   };
 
+  const swapInventoryIncides = () => {
+    console.log("swap");
+    client.characterModelProxy.swapInventoryIncides(0, 1).then((result) => {
+      console.log(result);
+      socket.emit("inventory:swap-inventory-indices", {
+        swappedIndices: result.swappedIndices,
+      });
+    });
+  };
+
   socket.on("inventory:add-test-item", addTestItem);
+  socket.on("inventory:swap-inventory-indices", swapInventoryIncides);
 }
 
 export default registerInventoryHandler;

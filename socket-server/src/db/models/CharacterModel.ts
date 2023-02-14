@@ -79,9 +79,25 @@ class CharacterModel {
     return { ok: false, reason: "Query did not modify" };
   }
 
-  async swapIndices(firstIndex: number, secondIndex: number): Promise<any> {
+  async swapInventoryIncides(
+    first: { index: number; item: any },
+    second: { index: number; item: any }
+  ): Promise<any> {
+    const result = await this.collection.updateOne(
+      { ...this.filter },
+      {
+        $set: {
+          [`characters.$.inventory.${first.index}`]: second.item,
+          [`characters.$.inventory.${second.index}`]: first.item,
+        },
+      }
+    );
+
+    if (result.modifiedCount === 1) {
+      return { ok: true, swappedIndices: [first.index, second.index] };
+    }
+
     return { ok: false };
-    return { ok: true, swappedIndices: [0, 1] };
   }
 }
 

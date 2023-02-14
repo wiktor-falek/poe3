@@ -23,7 +23,7 @@ class CharacterModelProxy {
   async addSilver(amount: number): Promise<Result> {
     const result = await this.#characterModel.addSilver(amount);
     if (result) {
-      // mutate character
+      // mutate character.silver
       this.character.silver += amount;
       return { ok: true, value: this.character.silver };
     }
@@ -33,21 +33,36 @@ class CharacterModelProxy {
   async addItem(item: any) {
     const result = await this.#characterModel.addItem(item, this.character);
     if (result.ok) {
-      // mutate character
+      // mutate character.inventory
       const idx = result.inventoryIndex;
       this.character.inventory[idx] = item;
     }
     return result;
   }
-  async swapIndices(firstIndex: number, secondIndex: number) {
-    const result = await this.#characterModel.swapIndices(
-      firstIndex,
-      secondIndex
+  async swapInventoryIncides(firstIndex: number, secondIndex: number) {
+    const inventory = this.character.inventory;
+
+    if (
+      firstIndex < 0 ||
+      secondIndex < 0 ||
+      firstIndex >= inventory.length ||
+      secondIndex >= inventory.length
+    ) {
+      return { ok: false, reason: "Array index out of range" };
+    }
+
+    const result = await this.#characterModel.swapInventoryIncides(
+      { index: firstIndex, item: inventory[firstIndex] },
+      { index: secondIndex, item: inventory[secondIndex] }
     );
     if (result.ok) {
+      // mutate character.inventory
       const [first, second] = result.swappedIndices;
       const inventory = this.character.inventory;
-      // [inventory[0], inventory[1]] = [inventory[1], inventory[0]];
+      [inventory[first], inventory[second]] = [
+        inventory[second],
+        inventory[first],
+      ];
     }
     return result;
   }
