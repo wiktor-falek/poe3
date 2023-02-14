@@ -26,20 +26,14 @@ const io = new Server(httpServer, {
 io.use(initClient);
 
 const onConnection = (socket: Socket) => {
-  const client: Client = socket.data.client;
-
-  // client already connected, multiple connections are not allowed
-  if (client.isConnected) {
-    return socket.emit("error:connection-already-exists");
-  }
+  const { client } = socket.data;
   client.connect();
-  console.log(client.isConnected);
+
   io.emit("player-count", ClientStorage.clientCount);
 
   logger.info(
     `client ${client.username} connected as character ${client.characterModelProxy.character.name}`
   );
-
   console.log("New Connection", ClientStorage.clients);
 
   // HANDLERS
@@ -53,10 +47,10 @@ const onConnection = (socket: Socket) => {
 
   socket.on("disconnect", (reason) => {
     client.disconnect();
-    console.log(client.isConnected);
-    logger.info(`client ${client.username} disconnected (${reason})`);
-    console.log(ClientStorage.clients);
+
     io.emit("player-count", ClientStorage.clientCount);
+
+    logger.info(`client ${client.username} disconnected (${reason})`);
     console.log("Disconnect", ClientStorage.clients);
   });
 };
@@ -76,6 +70,6 @@ cron.schedule("*/5 * * * * *", () => {
   // every 5 seconds remove inactive clients from ClientStorage
   const removedClients = ClientStorage.deleteInactiveClients();
   if (removedClients.length) {
-    console.log(removedClients);
+    console.log("Removed inactive clients", removedClients);
   }
 });

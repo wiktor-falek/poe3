@@ -23,9 +23,12 @@ const initClient = async (socket: Socket, next: Function) => {
     return socket.disconnect();
   }
 
+  // TODO: make getting a client take characterId as a parameter
+  // which would allow to NOT allow connection if another character was used
+  // (right now multiple characters can connect at once, and access instance, but they disappear if reloaded )
   const client = ClientStorage.addClient(username, character, characterModel);
-  socket.data.client = client;
 
+  socket.data.client = client;
   return next();
 };
 
