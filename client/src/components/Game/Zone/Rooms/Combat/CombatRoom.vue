@@ -4,7 +4,6 @@ import { onMounted, ref, Ref } from "vue";
 import { useMessageStore } from "../../../../../stores/messageStore";
 import { usePlayerStore } from "../../../../../stores/playerStore";
 import useSocketStore from "../../../../../stores/socketStore";
-import RoomSelectView from "../../RoomSelectView.vue";
 import Entity from "./Entity.vue";
 import HUD from "./HUD/HUD.vue";
 
@@ -37,14 +36,16 @@ socket.on("combat:data", (data) => {
   props.room.combat = data.combat;
 });
 
-socket.once("combat:recent-logs", (logs) => {
+socket.off("combat:recent-logs")
+socket.on("combat:recent-logs", (logs) => {
   for (const log of logs) {
     // console.log("combat:log", log.message);
     messageStore.pushClientSideSystemMessage(log.message);
   }
 });
 
-socket.once("combat:player-turn", (data) => {
+socket.off("combat:player-turn")
+socket.on("combat:player-turn", (data) => {
   const { logs, allyParty, enemyParty } = data;
   console.log(
     "all-logs",
@@ -57,8 +58,6 @@ socket.once("combat:player-turn", (data) => {
 
 socket.on("combat:take-next-step", (data) => {
   console.log(data.logs);
-  // player action was successful
-  isPlayerTurn.value = false;
 
   socket.emit("combat:next-step");
 });
@@ -127,7 +126,7 @@ function endTurn() {
     <div class="">
       <p>turn order = {{ room.combat.turnOrder }}</p>
       <button @click="emit('abandonRun')">Abandon Run</button>
-      <button v-if="isPlayerTurn" @click="playerAction">Player Action</button>
+      <button @click="playerAction">Player Action</button>
       <button @click="endTurn">End turn</button>
       <HUD
         :actionPoints="playerEntity.actionPoints"

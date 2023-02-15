@@ -19,8 +19,8 @@ const inventory = playerStore.characterData.inventory;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; /* fr fr no cap */
   border: 1px solid grey;
-  gap: 1px;
   background-color: grey;
+  gap: 1px;
 }
 
 .inventory__slot {
