@@ -1,7 +1,5 @@
 <script setup>
-import { RouterLink, RouterView } from "vue-router";
-import { onMounted, ref } from "vue";
-import router from "./router";
+import { RouterView } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 
 const authStore = useAuthStore();
@@ -15,7 +13,7 @@ const deleteCookies = () => {
 };
 
 const iKnowThisShouldBeAnchor = () => {
-  // but im lazy so 🤷
+  // TODO: make this button into an anchor with href="/" while preserving same style
   window.location.href = "/";
 };
 

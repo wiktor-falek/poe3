@@ -1,15 +1,22 @@
-<script setup>
+<script lang="ts" setup>
 import { ref } from "vue";
+import ItemContextMenu from "../../Tooltips/ItemContextMenu.vue";
 import ItemTooltip from "../../Tooltips/ItemTooltip.vue";
-const props = defineProps(["item", "idx"]);
+
+const props = defineProps(["item", "idx", "displayContextMenu"]);
+const emit = defineEmits(["closeContextMenu"]);
 
 const hover = ref(false);
 
-function startDrag(event, index) {
+function startDrag(event: any, index: number) {
   console.log("startDrag", index);
   event.dataTransfer.dropEffect = "move";
   event.dataTransfer.effectAllowed = "move";
   event.dataTransfer.setData("index", index);
+}
+
+function closeContextMenu() {
+  emit("closeContextMenu");
 }
 </script>
 
@@ -35,20 +42,27 @@ function startDrag(event, index) {
   </div>
   <!-- empty element if item is null -->
   <div class="equipment-slot" v-else></div>
+
+  <ItemContextMenu
+    v-if="props.displayContextMenu"
+    :idx="props.idx"
+    @closeContextMenu="closeContextMenu"
+  />
 </template>
 
 <style scoped>
-.equipment-slot > img {
-  width: 48px;
-  height: auto;
-}
-
 .equipment-slot {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 48px;
   height: 48px;
+  position: relative;
+}
+
+.equipment-slot > img {
+  width: 48px;
+  height: auto;
 }
 
 .equipment-slot--normal {

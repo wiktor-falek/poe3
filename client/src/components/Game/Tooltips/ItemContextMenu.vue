@@ -1,0 +1,59 @@
+<script lang="ts" setup>
+import { usePlayerStore } from "../../../stores/playerStore";
+import useSocketStore from "../../../stores/socketStore";
+import { ref } from "vue";
+
+const socketStore = useSocketStore();
+const socket = socketStore.socket;
+
+const playerStore = usePlayerStore();
+const inventory = playerStore.characterData.inventory;
+
+const props = defineProps(["idx"]);
+const emit = defineEmits(["closeContextMenu"]);
+
+function equipItem() {
+  console.log("Not implemented");
+}
+
+function destroyItem() {
+  socket.emit("inventory:delete-item", props.idx);
+}
+
+socket.off("inventory:delete-item");
+socket.on("inventory:delete-item", (data) => {
+  console.log("deleted item", data);
+  inventory[props.idx] = null;
+  emit("closeContextMenu");
+});
+
+function bruh() {
+  emit("closeContextMenu");
+}
+</script>
+
+<template>
+  <div class="context-menu" v-click-outside-element="bruh">
+    <button @click="equipItem">Equip Item</button>
+    <button @click="destroyItem">Destroy Item</button>
+  </div>
+</template>
+
+<style scoped>
+.context-menu {
+  position: absolute;
+  width: 160px;
+  border: 2px solid orange;
+  background-color: black;
+  bottom: calc(60px + 10px);
+  z-index: 1000;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+button {
+}
+</style>

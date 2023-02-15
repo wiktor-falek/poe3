@@ -1,4 +1,5 @@
-<script setup>
+<script lang="ts" setup>
+import { ref, Ref } from "vue";
 import { usePlayerStore } from "../../../../stores/playerStore";
 import useSocketStore from "../../../../stores/socketStore";
 import CharacterEquipmentSlot from "./CharacterEquipmentSlot.vue";
@@ -9,7 +10,7 @@ const socket = socketStore.socket;
 const playerStore = usePlayerStore();
 const inventory = playerStore.characterData.inventory;
 
-function onDrop(event, index) {
+function onDrop(event: any, index: number) {
   const dragIndex = event.dataTransfer.getData("index");
   if (!index && !dragIndex) {
   }
@@ -32,6 +33,19 @@ socket.on("inventory:swap-inventory-indices", (data) => {
     inventory[firstIndex],
   ];
 });
+
+const itemContextMenuIndex: Ref<null | number> = ref(null);
+
+function changeContextMenuIndex(idx: number | null) {
+  if (idx == null) {
+    itemContextMenuIndex.value = null;
+    return;
+  }
+  if (inventory[idx] == null) {
+    return;
+  }
+  itemContextMenuIndex.value = idx;
+}
 </script>
 
 <template>
@@ -42,8 +56,14 @@ socket.on("inventory:swap-inventory-indices", (data) => {
       @drop="onDrop($event, idx - 1)"
       @dragenter.prevent
       @dragover.prevent
+      @contextmenu="changeContextMenuIndex(idx - 1)"
     >
-      <CharacterEquipmentSlot :item="inventory[idx - 1]" :idx="idx - 1" />
+      <CharacterEquipmentSlot
+        :item="inventory[idx - 1]"
+        :idx="idx - 1"
+        :displayContextMenu="itemContextMenuIndex === idx - 1"
+        @closeContextMenu="changeContextMenuIndex(null)"
+      />
     </div>
   </div>
 </template>
