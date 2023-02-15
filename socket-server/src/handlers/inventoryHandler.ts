@@ -51,6 +51,9 @@ function registerInventoryHandler(
   const swapInventoryIncides = () => {
     client.characterModelProxy.swapInventoryIncides(0, 1).then((result) => {
       console.log(result);
+      if (!result.ok) {
+        return socket.emit("error", result.reason)
+      }
       socket.emit("inventory:swap-inventory-indices", {
         swappedIndices: result.swappedIndices,
       });
