@@ -51,9 +51,16 @@ class CharacterModelProxy {
       return { ok: false, reason: "Array index out of range" };
     }
 
+    const firstItem = inventory[firstIndex];
+    const secondItem = inventory[secondIndex];
+
+    if (firstItem == null && secondItem == null) {
+      return { ok: false, reason: "No items found" };
+    }
+
     const result = await this.#characterModel.swapInventoryIncides(
-      { index: firstIndex, item: inventory[firstIndex] },
-      { index: secondIndex, item: inventory[secondIndex] }
+      { index: firstIndex, item: firstItem },
+      { index: secondIndex, item: secondItem }
     );
     if (result.ok) {
       // mutate character.inventory
