@@ -1,9 +1,16 @@
 <script setup>
 import { ref } from "vue";
 import ItemTooltip from "../../Tooltips/ItemTooltip.vue";
-const props = defineProps(["item"]);
+const props = defineProps(["item", "idx"]);
 
 const hover = ref(false);
+
+function startDrag(event, index) {
+  console.log("startDrag", index);
+  event.dataTransfer.dropEffect = "move";
+  event.dataTransfer.effectAllowed = "move";
+  event.dataTransfer.setData("index", index);
+}
 </script>
 
 <template>
@@ -11,8 +18,10 @@ const hover = ref(false);
     <ItemTooltip v-if="hover === true" :item="item" />
   </Teleport>
   <div
-    v-if="item"
+    v-if="props.item"
     class="equipment-slot"
+    draggable="true"
+    @dragstart="startDrag($event, props.idx)"
     @mouseover="hover = true"
     @mouseleave="hover = false"
     :class="{
@@ -24,7 +33,8 @@ const hover = ref(false);
   >
     <img v-if="item" :src="item.image" />
   </div>
-  <div v-else class="equipment-slot"></div>
+  <!-- empty element if item is null -->
+  <div class="equipment-slot" v-else></div>
 </template>
 
 <style scoped>
@@ -39,10 +49,6 @@ const hover = ref(false);
   justify-content: center;
   width: 48px;
   height: 48px;
-}
-
-.equipment-slot--empty {
-  visibility: hidden;
 }
 
 .equipment-slot--normal {

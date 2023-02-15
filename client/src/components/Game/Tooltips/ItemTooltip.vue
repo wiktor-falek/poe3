@@ -36,7 +36,7 @@ function renderTemplateModDescription(mod: Mod) {
 <template>
   <div
     class="item-tooltip"
-    v-if="props"
+    v-if="props.item"
     :style="{
       'border-color': `var(--item-rarity--${item.rarity})`,
     }"
@@ -142,7 +142,7 @@ function renderTemplateModDescription(mod: Mod) {
 <style scoped>
 .item-tooltip {
   position: absolute;
-  right: 300px;
+  right: 430px;
   top: 115px;
   width: 300px;
   min-height: 150px;
