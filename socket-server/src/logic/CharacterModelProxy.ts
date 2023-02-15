@@ -73,6 +73,24 @@ class CharacterModelProxy {
     }
     return result;
   }
+
+  async deleteItem(index: number) {
+    const inventory = this.character.inventory;
+
+    if (index < 0 || index >= inventory.length) {
+      return { ok: false, reason: "Array index out of range" };
+    }
+
+    if (inventory[index] == null) {
+      return { ok: false, reason: "Target item not found" };
+    }
+
+    const result = await this.#characterModel.deleteItem(index);
+    if (result.ok) {
+      inventory[index] = null;
+    }
+    return result;
+  }
 }
 
 export default CharacterModelProxy;

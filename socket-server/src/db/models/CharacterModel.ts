@@ -2,6 +2,13 @@ import { Collection, ObjectId } from "mongodb";
 import { Character } from "../../../*";
 import Mongo from "../Mongo";
 
+interface Result {
+  ok: boolean;
+  reason?: string; // if not ok
+  data?: object; // if ok
+}
+// TODO: return Promise<Result> for all the methods
+
 class CharacterModel {
   collection: Collection;
   username: string;
@@ -98,6 +105,21 @@ class CharacterModel {
     }
 
     return { ok: false };
+  }
+
+  async deleteItem(index: number): Promise<Result> {
+    const result = await this.collection.updateOne(
+      { ...this.filter },
+      {
+        $set: {
+          [`characters.$.inventory.${index}`]: undefined,
+        },
+      }
+    );
+    if (result.modifiedCount === 1) {
+      return { ok: true, data: { item: null } };
+    }
+    return { ok: false, reason: "Failed to delete item" };
   }
 }
 

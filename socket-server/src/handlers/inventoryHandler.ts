@@ -121,8 +121,21 @@ function registerInventoryHandler(
       });
   };
 
+  const deleteItem = (index: any) => {
+    if (typeof index !== "number") {
+      return socket.emit("error", "Invalid parameter");
+    }
+    client.characterModelProxy.deleteItem(index).then((result) => {
+      if (!result.ok) {
+        return socket.emit("error", result.reason ?? "Action failed");
+      }
+      socket.emit("inventory:delete-item", result.data);
+    });
+  };
+
   socket.on("inventory:add-test-item", addTestItem);
   socket.on("inventory:swap-inventory-indices", swapInventoryIncides);
+  socket.on("inventory:delete-item", deleteItem);
 }
 
 export default registerInventoryHandler;
