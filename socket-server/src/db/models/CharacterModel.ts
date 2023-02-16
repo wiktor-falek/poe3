@@ -138,12 +138,15 @@ class CharacterModel {
         },
       }
     );
-    console.log(result);
 
     if (result.modifiedCount === 1) {
       return { ok: true, data: { index, slot } };
     }
-    return { ok: false, reason: "Failed to equip the item (items were identical, will have unique id in the future)" };
+    return {
+      ok: false,
+      reason:
+        "Failed to equip the item (items were identical, will have unique id in the future)",
+    };
   }
 }
 
