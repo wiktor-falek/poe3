@@ -94,6 +94,7 @@ function registerInventoryHandler(
         ],
       },
     ];
+
     const item = choice(items);
 
     client.characterModelProxy.addItem(item).then((result) => {
@@ -133,9 +134,26 @@ function registerInventoryHandler(
     });
   };
 
+  const equipItem = (index: any) => {
+    if (typeof index !== "number") {
+      return socket.emit("error", "Invalid parameter");
+    }
+    client.characterModelProxy.equipItem(index).then((result) => {
+      if (!result.ok) {
+        return socket.emit("error", result.reason ?? "Action failed");
+      }
+      return socket.emit("inventory:equip-item", result.data);
+    });
+  };
+
+  const unequipItem = (gearSlot: any) => {
+    return socket.emit("error", "Not implemented");
+  };
+
   socket.on("inventory:add-test-item", addTestItem);
   socket.on("inventory:swap-inventory-indices", swapInventoryIncides);
   socket.on("inventory:delete-item", deleteItem);
+  socket.on("inventory:equip-item", equipItem);
 }
 
 export default registerInventoryHandler;

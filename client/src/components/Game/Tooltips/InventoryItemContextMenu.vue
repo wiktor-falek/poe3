@@ -8,13 +8,21 @@ const socket = socketStore.socket;
 
 const playerStore = usePlayerStore();
 const inventory = playerStore.characterData.inventory;
+const equipment = playerStore.characterData.equipment;
 
 const props = defineProps(["idx"]);
 const emit = defineEmits(["closeContextMenu"]);
 
 function equipItem() {
-  console.log("Not implemented");
+  socket.emit("inventory:equip-item", props.idx);
 }
+socket.off("inventory:equip-item");
+socket.on("inventory:equip-item", (data) => {
+  const { index, slot } = data;
+  console.log(data);
+  [inventory[index], equipment[slot]] = [equipment[slot], inventory[index]];
+  emit("closeContextMenu");
+});
 
 function destroyItem() {
   socket.emit("inventory:delete-item", props.idx);

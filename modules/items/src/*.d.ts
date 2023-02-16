@@ -47,6 +47,13 @@ interface Modifier {
   tiers: ModifierTiers;
 }
 
+interface ModifierWithWeight {
+  modId: string;
+  description: string;
+  tiers: ModifierTiers;
+  weight: number;
+}
+
 interface Requirements {
   level?: number;
   attributes?: {
@@ -54,4 +61,9 @@ interface Requirements {
     dexterity?: number;
     intelligence?: number;
   };
+}
+
+interface Affixes {
+  prefixes: Array<Modifier>;
+  suffixes: Array<Modifier>;
 }

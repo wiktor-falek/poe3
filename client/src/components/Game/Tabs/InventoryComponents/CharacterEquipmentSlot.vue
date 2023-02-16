@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref } from "vue";
-import ItemContextMenu from "../../Tooltips/ItemContextMenu.vue";
+import InventoryItemContextMenu from "../../Tooltips/InventoryItemContextMenu.vue";
 import ItemTooltip from "../../Tooltips/ItemTooltip.vue";
 
 const props = defineProps(["item", "idx", "displayContextMenu"]);
@@ -43,7 +43,7 @@ function closeContextMenu() {
   <!-- empty element if item is null -->
   <div class="equipment-slot" v-else></div>
 
-  <ItemContextMenu
+  <InventoryItemContextMenu
     v-if="props.displayContextMenu"
     :idx="props.idx"
     @closeContextMenu="closeContextMenu"

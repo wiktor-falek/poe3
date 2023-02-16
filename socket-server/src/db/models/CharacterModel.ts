@@ -1,5 +1,5 @@
 import { Collection, ObjectId } from "mongodb";
-import { Character } from "../../../*";
+import { Character, EquipmentSlot } from "../../../*";
 import Mongo from "../Mongo";
 
 interface Result {
@@ -120,6 +120,30 @@ class CharacterModel {
       return { ok: true, data: { item: null } };
     }
     return { ok: false, reason: "Failed to delete item" };
+  }
+
+  async equipItem(
+    itemToEquip: { index: number; inventoryItem: any },
+    targetEquipmentSlot: { slot: EquipmentSlot; equippedItem: any }
+  ): Promise<Result> {
+    const { index, inventoryItem } = itemToEquip;
+    const { slot, equippedItem } = targetEquipmentSlot;
+
+    const result = await this.collection.updateOne(
+      { ...this.filter },
+      {
+        $set: {
+          [`characters.$.equipment.${slot}`]: inventoryItem,
+          [`characters.$.inventory.${index}`]: equippedItem,
+        },
+      }
+    );
+    console.log(result);
+
+    if (result.modifiedCount === 1) {
+      return { ok: true, data: { index, slot } };
+    }
+    return { ok: false, reason: "Failed to equip the item (items were identical, will have unique id in the future)" };
   }
 }
 

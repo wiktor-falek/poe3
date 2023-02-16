@@ -45,7 +45,7 @@ interface OffHand {}
 type GearSlot = MainHand | OffHand;
 */
 
-type PlayerInventory = Array<null | any>; // TODO: GearSlot instead of any
+type CharacterInventory = Array<null | any>;
 
 interface MainStoryProgression {
   highestZoneId: number;
@@ -55,16 +55,53 @@ interface CharacterProgression {
   mainStory: MainStoryProgression;
 }
 
+// TODO: change any to WeaponBase, RingBase,...
+interface CharacterEquipment {
+  hand: null | any;
+  offhand: null | any;
+  helmet: null | any;
+  chest: null | any;
+  gloves: null | any;
+  boots: null | any;
+  ring_1: null | any;
+  ring_2: null | any;
+  amulet: null | any;
+  belt: null | any;
+}
+
+type InventorySlot =
+  | "hand"
+  | "offhand"
+  | "helmet"
+  | "chest"
+  | "gloves"
+  | "boots"
+  | "ring"
+  | "amulet"
+  | "belt";
+
+type EquipmentSlot =
+  | "hand"
+  | "offhand"
+  | "helmet"
+  | "chest"
+  | "gloves"
+  | "boots"
+  | "ring_1"
+  | "ring_2"
+  | "amulet"
+  | "belt";
+
 interface Character {
   _id: ObjectId;
   name: string;
   class: PlayerClass;
   level: Level;
   attributes: Attributes;
-  resources: Resources; //
-  equipment: Object<any>; // TODO: {hand: GearSlot, offhand: GearSlot,...} instead of any
+  resources: Resources;
   silver: number;
   resistances: Resistances;
-  inventory: PlayerInventory;
+  inventory: CharacterInventory;
+  equipment: CharacterEquipment; // TODO: {hand: GearSlot, offhand: GearSlot,...} instead of any
   progression: Progression;
 }
