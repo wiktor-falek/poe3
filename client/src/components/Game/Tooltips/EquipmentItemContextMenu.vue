@@ -9,28 +9,17 @@ const playerStore = usePlayerStore();
 const inventory = playerStore.characterData.inventory;
 const equipment = playerStore.characterData.equipment;
 
-const props = defineProps(["idx"]);
+const props = defineProps(["slot"]);
 const emit = defineEmits(["closeContextMenu"]);
 
-function equipItem() {
-  socket.emit("inventory:equip-item", props.idx);
+function unequipItem() {
+  socket.emit("inventory:unequip-item", props.slot);
 }
-socket.off("inventory:equip-item");
-socket.on("inventory:equip-item", (data) => {
+socket.off("inventory:unequip-item");
+socket.on("inventory:unequip-item", (data) => {
   const { index, slot } = data;
   console.log(data);
   [inventory[index], equipment[slot]] = [equipment[slot], inventory[index]];
-  emit("closeContextMenu");
-});
-
-function destroyItem() {
-  socket.emit("inventory:delete-item", props.idx);
-}
-
-socket.off("inventory:delete-item");
-socket.on("inventory:delete-item", (data) => {
-  console.log("deleted item", data);
-  inventory[props.idx] = null;
   emit("closeContextMenu");
 });
 
@@ -41,8 +30,7 @@ function closeContextMenu() {
 
 <template>
   <div class="context-menu" v-click-outside-element="closeContextMenu">
-    <button @click="equipItem">Equip Item</button>
-    <button @click="destroyItem">Destroy Item</button>
+    <button @click="unequipItem">Unequip Item</button>
   </div>
 </template>
 

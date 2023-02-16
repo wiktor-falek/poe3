@@ -2,7 +2,7 @@
 import { ref, Ref } from "vue";
 import { usePlayerStore } from "../../../../stores/playerStore";
 import useSocketStore from "../../../../stores/socketStore";
-import CharacterEquipmentSlot from "./CharacterEquipmentSlot.vue";
+import Item from "./Item.vue";
 
 const socketStore = useSocketStore();
 const socket = socketStore.socket;
@@ -58,7 +58,7 @@ function changeContextMenuIndex(idx: number | null) {
       @dragover.prevent
       @contextmenu="changeContextMenuIndex(idx - 1)"
     >
-      <CharacterEquipmentSlot
+      <Item
         :item="inventory[idx - 1]"
         :idx="idx - 1"
         :displayContextMenu="itemContextMenuIndex === idx - 1"

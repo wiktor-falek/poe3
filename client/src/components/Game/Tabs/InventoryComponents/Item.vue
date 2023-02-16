@@ -1,9 +1,16 @@
 <script lang="ts" setup>
 import { ref } from "vue";
+import EquipmentItemContextMenu from "../../Tooltips/EquipmentItemContextMenu.vue";
 import InventoryItemContextMenu from "../../Tooltips/InventoryItemContextMenu.vue";
 import ItemTooltip from "../../Tooltips/ItemTooltip.vue";
 
-const props = defineProps(["item", "idx", "displayContextMenu"]);
+const props = defineProps([
+  "slot",
+  "item",
+  "idx",
+  "displayContextMenu",
+  "displayEquipmentContextMenu",
+]);
 const emit = defineEmits(["closeContextMenu"]);
 
 const hover = ref(false);
@@ -26,7 +33,7 @@ function closeContextMenu() {
   </Teleport>
   <div
     v-if="props.item"
-    class="equipment-slot"
+    class="item"
     draggable="true"
     @dragstart="startDrag($event, props.idx)"
     @mouseover="hover = true"
@@ -38,20 +45,25 @@ function closeContextMenu() {
       'equipment-slot--unique': item && item.rarity === 'unique',
     }"
   >
-  <div class="icon"></div>
+    <div class="icon"></div>
   </div>
   <!-- empty element if item is null -->
-  <div class="equipment-slot" v-else></div>
+  <div class="item" v-else></div>
 
   <InventoryItemContextMenu
     v-if="props.displayContextMenu"
     :idx="props.idx"
     @closeContextMenu="closeContextMenu"
   />
+  <EquipmentItemContextMenu
+    v-if="props.displayEquipmentContextMenu"
+    :slot="props.slot"
+    @closeContextMenu="closeContextMenu"
+  />
 </template>
 
 <style scoped>
-.equipment-slot {
+.item {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -60,7 +72,7 @@ function closeContextMenu() {
   position: relative;
 }
 
-.equipment-slot > .icon {
+.item > .icon {
   height: 46px;
   width: 46px;
   background-image: url("../../../../assets/119a1779829398a.jpg");

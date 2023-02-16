@@ -1,13 +1,12 @@
 <script setup>
 import CharacterOverview from "./InventoryComponents/CharacterOverview.vue";
-import CharacterEquipment from "./InventoryComponents/CharacterEquipment.vue";
 import CharacterInventory from "./InventoryComponents/CharacterInventory.vue";
 import Money from "../Other/Money.vue";
+import CharacterEquipment from "./InventoryComponents/CharacterEquipment.vue";
 
 const props = defineProps({
   characterData: Object,
 });
-
 </script>
 
 <template>
@@ -22,7 +21,6 @@ const props = defineProps({
       :maxMp="characterData.resources.maxMp"
     />
 
-    
     <CharacterEquipment :equipment="characterData.equipment" />
     <Money />
     <CharacterInventory />

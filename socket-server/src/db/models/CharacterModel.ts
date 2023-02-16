@@ -148,6 +148,27 @@ class CharacterModel {
         "Failed to equip the item (items were identical, will have unique id in the future)",
     };
   }
+
+  async unequipItem(
+    equipmentSlot: { slot: EquipmentSlot; item: any },
+    inventorySlot: { index: number; value: null }
+  ) {
+    const { slot, item } = equipmentSlot;
+    const { index, value } = inventorySlot;
+    const result = await this.collection.updateOne(
+      { ...this.filter },
+      {
+        $set: {
+          [`characters.$.equipment.${slot}`]: value,
+          [`characters.$.inventory.${index}`]: item,
+        },
+      }
+    );
+    if (result.modifiedCount === 1) {
+      return { ok: true, data: { slot, index } };
+    }
+    return { ok: false, reason: "Failed to unequip item" };
+  }
 }
 
 export default CharacterModel;

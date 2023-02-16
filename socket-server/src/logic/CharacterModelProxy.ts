@@ -1,11 +1,7 @@
-import type {
-  Character,
-  CharacterEquipment,
-  EquipmentSlot,
-  InventorySlot,
-} from "../../*";
+import type { Character, EquipmentSlot, InventorySlot } from "../../*";
 import CharacterModel from "../db/models/CharacterModel";
 
+// TODO: use Result from CharacterModel and add Promise<Result> as return type of each method
 interface Result {
   ok: boolean;
   value?: any;
@@ -28,7 +24,7 @@ class CharacterModelProxy {
   async addSilver(amount: number): Promise<Result> {
     const result = await this.#characterModel.addSilver(amount);
     if (result) {
-      // mutate character.silver
+      // mutate
       this.character.silver += amount;
       return { ok: true, value: this.character.silver };
     }
@@ -38,7 +34,7 @@ class CharacterModelProxy {
   async addItem(item: any) {
     const result = await this.#characterModel.addItem(item, this.character);
     if (result.ok) {
-      // mutate character.inventory
+      // mutate
       const idx = result.inventoryIndex;
       this.character.inventory[idx] = item;
     }
@@ -68,7 +64,7 @@ class CharacterModelProxy {
       { index: secondIndex, item: secondItem }
     );
     if (result.ok) {
-      // mutate character.inventory
+      // mutate
       const [first, second] = result.swappedIndices;
       const inventory = this.character.inventory;
       [inventory[first], inventory[second]] = [
@@ -92,6 +88,7 @@ class CharacterModelProxy {
 
     const result = await this.#characterModel.deleteItem(index);
     if (result.ok) {
+      // mutate
       inventory[index] = null;
     }
     return result;
@@ -134,9 +131,41 @@ class CharacterModelProxy {
       }
     );
     if (result.ok) {
+      // mutate
       [inventory[index], equipment[equipmentSlot]] = [
         equipment[equipmentSlot],
         inventory[index],
+      ];
+    }
+    return result;
+  }
+
+  async unequipItem(equipmentSlot: EquipmentSlot): Promise<any> {
+    const { inventory, equipment } = this.character;
+
+    const equipmentItem = equipment[equipmentSlot];
+    if (equipmentItem == null) {
+      return { ok: false, reason: "Target item not found" };
+    }
+
+    // find first empty inventory slot
+    const firstEmptyInventorySlotIdx = inventory.indexOf(null);
+
+    if (firstEmptyInventorySlotIdx === -1) {
+      return { ok: false, reason: "Inventory is full" };
+    }
+    
+    const inventoryItem = inventory[firstEmptyInventorySlotIdx];
+
+    const result = await this.#characterModel.unequipItem(
+      { slot: equipmentSlot, item: equipmentItem },
+      { index: firstEmptyInventorySlotIdx, value: inventoryItem }
+    );
+    if (result.ok) {
+      // mutate
+      [inventory[firstEmptyInventorySlotIdx], equipment[equipmentSlot]] = [
+        equipment[equipmentSlot],
+        inventory[firstEmptyInventorySlotIdx],
       ];
     }
     return result;

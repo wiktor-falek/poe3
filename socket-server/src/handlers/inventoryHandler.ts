@@ -1,6 +1,8 @@
 import type Client from "../helpers/Client";
 import type { Socket } from "socket.io";
 import { choice } from "pyrand";
+import { EquipmentSlot } from "../../*";
+import isEquipmentSlot from "../utils/isEquipmentSlot";
 
 function registerInventoryHandler(
   io: any,
@@ -146,14 +148,25 @@ function registerInventoryHandler(
     });
   };
 
-  const unequipItem = (gearSlot: any) => {
-    return socket.emit("error", "Not implemented");
+  const unequipItem = (equipmentSlot: any) => {
+    if (typeof equipmentSlot !== "string" || !isEquipmentSlot(equipmentSlot)) {
+      return socket.emit("error", "Invalid parameter");
+    }
+    client.characterModelProxy
+      .unequipItem(equipmentSlot as EquipmentSlot)
+      .then((result) => {
+        if (!result.ok) {
+          return socket.emit("error", result.reason ?? "Action failed");
+        }
+        return socket.emit("inventory:unequip-item", result.data);
+      });
   };
 
   socket.on("inventory:add-test-item", addTestItem);
   socket.on("inventory:swap-inventory-indices", swapInventoryIncides);
   socket.on("inventory:delete-item", deleteItem);
   socket.on("inventory:equip-item", equipItem);
+  socket.on("inventory:unequip-item", unequipItem);
 }
 
 export default registerInventoryHandler;
