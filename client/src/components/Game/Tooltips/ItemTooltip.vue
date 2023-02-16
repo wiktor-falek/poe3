@@ -110,7 +110,7 @@ function renderTemplateModDescription(mod: Mod) {
     </div>
 
     <!-- Affixes -->
-    <hr v-if="item.affixes" />
+    <hr v-if="item.affixes && item.rarity !== 'normal'" />
     <div class="item-tooltip__mods" v-if="item.affixes">
       <div
         v-if="item.affixes.prefixes || item.affixes.suffixes"

@@ -113,4 +113,9 @@ const isDeleted = ref(false);
 .wrapper {
   margin: auto;
 }
+
+.character__icon {
+  width: 96px;
+  height: 96px;
+}
 </style>

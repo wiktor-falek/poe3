@@ -155,7 +155,8 @@ function sendMessage() {
 }
 .messages {
   max-height: 167px;
-  overflow: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-grow: 1;
   flex-direction: column;
@@ -167,6 +168,8 @@ function sendMessage() {
   user-select: text; /* set explicitly, because everywhere else disabled by default */
   white-space: pre-line;
   font-size: 17px;
+  max-width: 100ch;
+  word-wrap: break-word;
 }
 
 .message__sender {

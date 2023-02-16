@@ -38,7 +38,7 @@ function closeContextMenu() {
       'equipment-slot--unique': item && item.rarity === 'unique',
     }"
   >
-    <img v-if="item" :src="item.image" />
+  <div class="icon"></div>
   </div>
   <!-- empty element if item is null -->
   <div class="equipment-slot" v-else></div>
@@ -60,9 +60,14 @@ function closeContextMenu() {
   position: relative;
 }
 
-.equipment-slot > img {
-  width: 48px;
-  height: auto;
+.equipment-slot > .icon {
+  height: 46px;
+  width: 46px;
+  background-image: url("../../../../assets/119a1779829398a.jpg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: block;
+  object-fit: contain;
 }
 
 .equipment-slot--normal {

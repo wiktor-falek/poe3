@@ -96,7 +96,8 @@ const redirectToGame = () => {
   display: flex;
   flex-direction: column;
   height: 600px;
-  overflow: scroll;
+  overflow-y: auto;
+  overflow-x: none;
   width: 300px;
   padding: 10px;
   box-sizing: content-box;
