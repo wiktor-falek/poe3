@@ -7,7 +7,6 @@ import characterSchema from "../../db/schemas/characterSchema.js";
 import User from "../../db/models/User.js";
 
 import {
-  startingAttributes,
   startingGear,
 } from "../../globals/playerClasses.js";
 
@@ -100,8 +99,6 @@ router.post(
       logger.error(`character validation failed, ${e}`);
       return res.status(400).json({ error: e.details[0].message });
     }
-
-    console.log("character", character);
 
     const user = res.locals.user;
 
