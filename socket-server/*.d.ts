@@ -15,7 +15,7 @@ interface Resistances {
   necrotic: number;
 }
 
-type PlayerClass = "swordsman" | "ranger" | "sorcerer" | "assassin";
+type CharacterClass = "swordsman" | "ranger" | "sorcerer" | "assassin";
 
 interface Attributes {
   strength: number;
@@ -95,13 +95,13 @@ type EquipmentSlot =
 interface Character {
   _id: ObjectId;
   name: string;
-  class: PlayerClass;
+  class: CharacterClass;
   level: Level;
-  attributes: Attributes;
-  resources: Resources;
-  silver: number;
-  resistances: Resistances;
-  inventory: CharacterInventory;
-  equipment: CharacterEquipment; // TODO: {hand: GearSlot, offhand: GearSlot,...} instead of any
   progression: Progression;
+  silver: number;
+  inventory: CharacterInventory;
+  equipment: CharacterEquipment;
+  resources?: Resources;
+  attributes?: Attributes;
+  resistances?: Resistances;
 }

@@ -2,6 +2,8 @@ import { Socket } from "socket.io";
 import ClientStorage from "../helpers/ClientStorage";
 import CharacterModel from "../db/models/CharacterModel";
 import logger from "../logger";
+import { startingAttributes } from "../constants/attributes";
+import { CharacterClass } from "../../*";
 
 // fetches the character from the database and creates a
 // Client object stored in ClientStorage if not already existing
@@ -27,6 +29,13 @@ const initClient = async (socket: Socket, next: Function) => {
   // which would allow to NOT allow connection if another character was used
   // (right now multiple characters can connect at once, and access instance, but they disappear if reloaded )
   const client = ClientStorage.addClient(username, character, characterModel);
+
+  
+  // calculate properties like hp, mp, attributes, resistances
+  startingAttributes[character.class as CharacterClass]
+  
+  // emit the character data
+  socket.emit("character:data", client.characterModelProxy.character);
 
   socket.data.client = client;
   return next();

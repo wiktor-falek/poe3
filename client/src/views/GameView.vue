@@ -1,9 +1,24 @@
 <script setup>
 import Game from "../components/Game/Game.vue";
+import { usePlayerStore } from "../stores/playerStore";
+import useSocketStore from "../stores/socketStore";
+
+const socketStore = useSocketStore();
+const socket = socketStore.socket;
+const playerStore = usePlayerStore();
+
+socket.on("character:data", (characterData) => {
+  if (characterData != null) {
+    playerStore.loadCharacterData(characterData);
+  } else {
+    console.log("Failed to load character data emitted by the server");
+  }
+});
 </script>
 
 <template>
   <main>
-    <Game />
+    <Game v-if="socketStore.isConnected && playerStore.characterData != null" />
+    <p v-else>Something went wrong</p>
   </main>
 </template>

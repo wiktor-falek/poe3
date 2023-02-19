@@ -1,14 +1,14 @@
 <script setup>
-  const props = defineProps({
-    characterData: Object,
-  });
-  </script>
-  
-  <template>
-    <div class="tab">
-      <div>
-        <p>Talents</p>
-      </div>
+import { usePlayerStore } from "../../../stores/playerStore";
+
+const playerStore = usePlayerStore();
+const characterData = playerStore.characterData;
+</script>
+
+<template>
+  <div class="tab">
+    <div>
+      <p>Talents</p>
     </div>
-  </template>
-  
+  </div>
+</template>

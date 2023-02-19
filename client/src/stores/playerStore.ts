@@ -2,21 +2,18 @@ import { defineStore } from "pinia";
 import { Ref, ref } from "vue";
 
 export const usePlayerStore = defineStore("player", () => {
-  const characterData: Ref<any> = ref({});
+  const characterData: Ref<any> = ref(null);
 
-  function loadCharacterData(_characterData: Object) {
-    characterData.value = _characterData;
-  }
-
-  function _objectIsEmpty() {
-    return !!Object.keys(characterData.value);
+  function loadCharacterData(_characterData: object) {
+    if (characterData.value == null) {
+      characterData.value = _characterData;
+    } else {
+      Object.assign(characterData.value, _characterData);
+    }
+    console.log(characterData.value);
   }
 
   function setSilver(amount: number) {
-    if (!_objectIsEmpty()) {
-      console.log("Character data does not exist");
-      return;
-    }
     characterData.value.silver = amount;
   }
 

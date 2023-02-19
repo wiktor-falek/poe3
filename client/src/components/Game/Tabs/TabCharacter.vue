@@ -1,11 +1,10 @@
 <script setup>
 import Attributes from './CharacterComponents/Attributes.vue';
 import Resistances from './CharacterComponents/Resistances.vue';
+import { usePlayerStore } from '../../../stores/playerStore';
 
-const props = defineProps(['characterData']);
-
-console.log(props.characterData);
-
+const playerStore = usePlayerStore();
+const characterData = playerStore.characterData;
 </script>
 
 <template>

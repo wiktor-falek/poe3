@@ -1,8 +1,7 @@
 <script setup>
-import { defineAsyncComponent, ref, watch } from "vue";
-import { useRoute } from "vue-router";
+import { defineAsyncComponent, ref } from "vue";
 import { usePlayerStore } from "../../stores/playerStore";
-import { useAuthStore } from "../../stores/authStore";
+
 
 import TabInventory from "./Tabs/TabInventory.vue";
 import TabCharacter from "./Tabs/TabCharacter.vue";
@@ -11,45 +10,8 @@ import { computed } from "@vue/reactivity";
 import ChatBox from "../Chat/ChatBox.vue";
 import Settings from "../Game/Settings.vue";
 
-const authStore = useAuthStore();
 const playerStore = usePlayerStore();
-
-const characterData = ref();
-
-const fetchCharacter = async () => {
-  const validateCharacterId = (id) => {
-    if (!id || typeof id !== "string" || id.length !== 24) {
-      return false;
-    }
-    return id;
-  };
-  const id = validateCharacterId(useRoute().params.characterId);
-  if (!id) {
-    window.location.href = "/";
-    return;
-  }
-
-  const url = `http://localhost:3000/api/v1/character/${id}`;
-  const options = {
-    method: "GET",
-    credentials: "include",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json;charset=UTF-8",
-    },
-  };
-  const response = await fetch(url, options);
-  if (response.status === 200 || response.status === 304) {
-    authStore.setIsAuthenticated(true);
-    const character = await response.json();
-    return character;
-  }
-};
-
-fetchCharacter().then((character) => {
-  playerStore.loadCharacterData(character);
-  characterData.value = character;
-});
+const characterData = playerStore.characterData;
 
 const selectedTab = ref("inventory");
 
@@ -73,7 +35,7 @@ function changeView(viewName) {
 </script>
 
 <template>
-  <main v-if="characterData" @contextmenu.prevent="">
+  <main @contextmenu.prevent="">
     <div class="game">
       <div class="div1">
         <MainView />
@@ -86,15 +48,12 @@ function changeView(viewName) {
       <div class="div3">
         <TabInventory
           v-if="selectedTab === 'inventory'"
-          :characterData="characterData"
         />
         <TabCharacter
           v-if="selectedTab === 'character'"
-          :characterData="characterData"
         />
         <TabTalents
           v-if="selectedTab === 'talents'"
-          :characterData="characterData"
         />
         <div class="tab-buttons">
           <button @click="selectedTab = 'inventory'">Inventory</button>

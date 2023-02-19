@@ -3,14 +3,14 @@ import CharacterOverview from "./InventoryComponents/CharacterOverview.vue";
 import CharacterInventory from "./InventoryComponents/CharacterInventory.vue";
 import Money from "../Other/Money.vue";
 import CharacterEquipment from "./InventoryComponents/CharacterEquipment.vue";
+import { usePlayerStore } from "../../../stores/playerStore";
 
-const props = defineProps({
-  characterData: Object,
-});
+const playerStore = usePlayerStore();
+const characterData = playerStore.characterData;
 </script>
 
 <template>
-  <div class="tab">
+  <div class="tab" v-if="characterData">
     <CharacterOverview
       :name="characterData.name"
       :playerClass="characterData.class"

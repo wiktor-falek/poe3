@@ -6,7 +6,7 @@ const socketStore = useSocketStore();
 const socket = socketStore.socket;
 
 const playerStore = usePlayerStore();
-const { inventory, equipment } = playerStore.characterData;
+const inventory = playerStore.characterData.inventory;
 
 function addItemTest() {
   socket.emit("inventory:add-test-item");
@@ -21,5 +21,3 @@ socket.on("inventory:add-item", (data) => {
   <h1>Town</h1>
   <button @click="addItemTest">Add Item Test</button>
 </template>
-
-<style scoped></style>
