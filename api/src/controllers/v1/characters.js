@@ -94,14 +94,14 @@ router.post(
         name: req.body.name,
         class: req.body.class,
         level: {},
-        resources: {},
-        attributes: startingAttributes[req.body.class],
         equipment: startingGear[req.body.class],
       });
     } catch (e) {
       logger.error(`character validation failed, ${e}`);
       return res.status(400).json({ error: e.details[0].message });
     }
+
+    console.log("character", character);
 
     const user = res.locals.user;
 

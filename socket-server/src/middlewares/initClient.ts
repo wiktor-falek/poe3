@@ -4,6 +4,7 @@ import CharacterModel from "../db/models/CharacterModel";
 import logger from "../logger";
 import { startingAttributes } from "../constants/attributes";
 import { CharacterClass } from "../../*";
+import calculateCharacterProperties from "../helpers/calculateCharacterProperties";
 
 // fetches the character from the database and creates a
 // Client object stored in ClientStorage if not already existing
@@ -30,10 +31,15 @@ const initClient = async (socket: Socket, next: Function) => {
   // (right now multiple characters can connect at once, and access instance, but they disappear if reloaded )
   const client = ClientStorage.addClient(username, character, characterModel);
 
-  
-  // calculate properties like hp, mp, attributes, resistances
-  startingAttributes[character.class as CharacterClass]
-  
+  // calculate properties that don't get stored in db like maxHp, maxMmp, attributes, resistances
+  calculateCharacterProperties(character);
+
+  // restore hp and mp if character is not in an instance
+  if (client.instance == null) {
+    character.resources.hp = character.resources.maxHp;
+    character.resources.mp = character.resources.maxMp;
+  }
+
   // emit the character data
   socket.emit("character:data", client.characterModelProxy.character);
 

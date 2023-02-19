@@ -101,7 +101,7 @@ interface Character {
   silver: number;
   inventory: CharacterInventory;
   equipment: CharacterEquipment;
-  resources?: Resources;
-  attributes?: Attributes;
-  resistances?: Resistances;
+  resources: Resources;
+  attributes: Attributes;
+  resistances: Resistances;
 }

@@ -1,6 +1,6 @@
 import type { Socket } from "socket.io";
 import type Client from "../helpers/Client";
-import SystemMessage from "../helpers/SystemMessage";
+import SystemMessage from "../utils/SystemMessage";
 
 function validateRoomNumber(roomNumber: any): number | null {
   const MAX_ROOM = 999;
@@ -28,7 +28,7 @@ function registerChatHandler(io: any, socket: Socket, client: Client): void {
   const joinRoom = (roomNumber: number = 1) => {
     const validatedRoomNumber = validateRoomNumber(roomNumber);
     if (validatedRoomNumber === null) {
-      socket.emit("chat:message", new SystemMessage("Room does not exist"));
+      socket.emit("error", "Room does not exist");
       return;
     }
 

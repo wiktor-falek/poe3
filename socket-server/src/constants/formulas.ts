@@ -5,14 +5,14 @@ export function maxHp(
   // increased?: number,
   // multiplier?: number
 ) {
-  return base + level * 2 + vitality * 2;
+  return base + (level - 1) * 2 + vitality * 1;
 }
 
-export function maxMp(base: number = 20, level: number, intelligence: number) {
-  return base + level * 2 + intelligence * 2;
+export function maxMp(base: number, level: number, intelligence: number) {
+  return base + (level - 1) * 2 + intelligence * 1;
 }
 
-export function evasion(base: number = 0, evasion: number, dexterity: number) {
+export function evasion(base: number, evasion: number, dexterity: number) {
   return base + evasion + dexterity * 2;
 }
 
