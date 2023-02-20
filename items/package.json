@@ -2,16 +2,9 @@
   "name": "items",
   "version": "1.0.0",
   "description": "",
-  "main": "build/",
-  "files": [
-    "build/*"
-  ],
-  "_moduleAliases": {
-    "items": "build/index.js"
-  },
+  "main": "./dist/index.js",
   "scripts": {
-    "build": "npx tsc",
-    "preinstall": "npm run build",
+    "build": "tsc",
     "dev": "tsc-watch --onSuccess \"node .\" "
   },
   "keywords": [],

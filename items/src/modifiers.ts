@@ -4,6 +4,14 @@ export const IMPLICIT_MODIFIERS: { [key: string]: BaseModifier } = {
     modId: "cold_damage_to_spells",
     description: "Adds # to # Cold Damage to Spells",
   },
+  to_life: {
+    modId: "to_life",
+    description: "+# to Life",
+  },
+  to_mana: {
+    modId: "to_mana",
+    description: "+# to Mana",
+  },
 };
 
 // BASE MODIFIERS - mods tied to the base, like critical strike chance on a weapon
@@ -25,8 +33,6 @@ export const BASE_MODIFIERS: { [key: string]: BaseModifier } = {
     description: "Armor: #",
   },
 };
-// critical strike chance
-// physical damage
 
 // AFFIXES
 //   0 prefixes and   0 suffixex on normal rarity item,

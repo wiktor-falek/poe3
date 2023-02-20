@@ -1,5 +1,3 @@
-type GearRarity = "normal" | "magic" | "rare" | "unique";
-
 type GearSlot =
   | "hand"
   | "offhand"
@@ -10,6 +8,8 @@ type GearSlot =
   | "ring"
   | "amulet"
   | "belt";
+
+type GearRarity = "normal" | "magic" | "rare" | "unique";
 
 interface Tier {
   range: Array<number>;
@@ -55,7 +55,7 @@ interface ModifierWithWeight {
 }
 
 interface Requirements {
-  level?: number;
+  level: number;
   attributes?: {
     strength?: number;
     dexterity?: number;

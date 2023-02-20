@@ -1,10 +1,6 @@
-// @ts-ignore w chuju to mam
-import * as pyrand from "../../../../items/build/index.js";
+import pyrand from "pyrand";
 
 class GearBase {
-  PREFIX_MODIFIER_POOL: null | Array<ModifierWithWeight> = null;
-  SUFFIX_MODIFIER_POOL: null | Array<ModifierWithWeight> = null;
-
   name: string;
   ilvl: number;
   rarity: GearRarity;
@@ -35,19 +31,10 @@ class GearBase {
     return this;
   }
 
-  /**
-   * Returns true if item was of normal rarity
-   */
-  normalToMagicRarity(): this {
-    if (
-      this.PREFIX_MODIFIER_POOL == null ||
-      this.SUFFIX_MODIFIER_POOL == null
-    ) {
-      console.error(
-        `GearBase class needs to be extended by a class that assigns
-        PREFIX_MODIFIER_POOL and SUFFIX_MODIFIER_POOL to use this method`
-      );
-    }
+  normalToMagicRarity(
+    PREFIX_MODIFIER_POOL: Array<ModifierWithWeight>,
+    SUFFIX_MODIFIER_POOL: Array<ModifierWithWeight>
+  ): this {
     if (this.rarity !== "normal") {
       console.error(
         `Failed to upgrade to magic rarity, item is not of normal rarity`
@@ -55,14 +42,19 @@ class GearBase {
       return this;
     }
 
+
+    // filter out modifiers where ilvl requirement is not met
+    const prefix_pool = PREFIX_MODIFIER_POOL.filter(() => false);
+    const suffix_pool = PREFIX_MODIFIER_POOL.filter(() => false);
+
     const amountOfMods = pyrand.randint(1, 4); // TODO: add weights when pyrand.sample is finished
     {
-      const randomPrefix = pyrand.choice(this.PREFIX_MODIFIER_POOL);
+      const randomPrefix = pyrand.choice(PREFIX_MODIFIER_POOL);
       const { weight, ...modifier } = randomPrefix;
       this.affixes.prefixes.push(modifier);
     }
     {
-      const randomSuffix = pyrand.choice(this.SUFFIX_MODIFIER_POOL);
+      const randomSuffix = pyrand.choice(SUFFIX_MODIFIER_POOL);
       const { weight, ...modifier } = randomSuffix;
       this.affixes.suffixes.push(modifier);
     }

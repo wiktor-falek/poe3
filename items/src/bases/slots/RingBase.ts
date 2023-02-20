@@ -1,16 +1,13 @@
+import { PREFIX_MODIFIERS, SUFFIX_MODIFIERS } from "../../modifiers";
 import GearBase from "../GearBase";
-import {
-  PREFIX_MODIFIERS,
-  SUFFIX_MODIFIERS,
-} from "../../../modifiers/modifiers";
 
 class RingBase extends GearBase {
-  PREFIX_MODIFIER_POOL = [
+  #PREFIX_MODIFIER_POOL = [
     { ...PREFIX_MODIFIERS.to_life, weight: 1000 },
     { ...PREFIX_MODIFIERS.to_mana, weight: 1000 },
   ];
 
-  SUFFIX_MODIFIER_POOL = [
+  #SUFFIX_MODIFIER_POOL = [
     { ...SUFFIX_MODIFIERS.to_strength, weight: 1000 },
     { ...SUFFIX_MODIFIERS.to_dexterity, weight: 1000 },
     { ...SUFFIX_MODIFIERS.to_intelligence, weight: 1000 },
@@ -27,6 +24,13 @@ class RingBase extends GearBase {
   ) {
     super(name, ilvl, requirements, baseMods, implicits);
     this.slot = "ring";
+  }
+
+  normalToMagicRarity() {
+    return super.normalToMagicRarity(
+      this.#PREFIX_MODIFIER_POOL,
+      this.#SUFFIX_MODIFIER_POOL
+    );
   }
 }
 
