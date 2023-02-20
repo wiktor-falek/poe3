@@ -5,7 +5,7 @@ import { usePlayerStore } from "../../stores/playerStore";
 
 import TabInventory from "./Tabs/TabInventory.vue";
 import TabCharacter from "./Tabs/TabCharacter.vue";
-import TabTalents from "./Tabs/TabTalents.vue";
+import TabStats from "./Tabs/TabPlaceholder.vue";
 import { computed } from "@vue/reactivity";
 import ChatBox from "../Chat/ChatBox.vue";
 import Settings from "../Game/Settings.vue";
@@ -52,13 +52,13 @@ function changeView(viewName) {
         <TabCharacter
           v-if="selectedTab === 'character'"
         />
-        <TabTalents
-          v-if="selectedTab === 'talents'"
+        <TabStats
+          v-if="selectedTab === 'placeholder'"
         />
         <div class="tab-buttons">
           <button @click="selectedTab = 'inventory'">Inventory</button>
           <button @click="selectedTab = 'character'">Character</button>
-          <button @click="selectedTab = 'talents'">Talents</button>
+          <button @click="selectedTab = 'placeholder'">Placeholder</button>
         </div>
       </div>
 

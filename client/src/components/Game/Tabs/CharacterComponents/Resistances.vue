@@ -52,7 +52,7 @@ const displayWithParenthesis = (resistance) => {
 .resistances {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 30px;
+  gap: 10px;
   margin-top: 20px;
 }
 

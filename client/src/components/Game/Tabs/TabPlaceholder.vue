@@ -8,7 +8,7 @@ const characterData = playerStore.characterData;
 <template>
   <div class="tab">
     <div>
-      <p>Talents</p>
+      <p>Placeholder</p>
     </div>
   </div>
 </template>
