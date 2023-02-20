@@ -2,7 +2,7 @@ import { RingBase, WeaponBase } from "./bases";
 import { BASE_MODIFIERS, IMPLICIT_MODIFIERS } from "./modifiers";
 import { inspect } from "./utils";
 
-function SapphireRing() {
+export function SapphireRing() {
   return new RingBase(
     "Sapphire Ring",
     1,
@@ -12,7 +12,7 @@ function SapphireRing() {
   );
 }
 
-function GoldRing() {
+export function GoldRing() {
   return new RingBase(
     "Gold Ring",
     1,
@@ -22,7 +22,7 @@ function GoldRing() {
   );
 }
 
-function Branch() {
+export function Branch() {
   return new WeaponBase(
     "Branch",
     20,
@@ -33,4 +33,4 @@ function Branch() {
 }
 
 const item = Branch().magic();
-console.log(inspect(item));
+// console.log(inspect(item));

@@ -3,6 +3,7 @@ import type { Socket } from "socket.io";
 import { choice } from "pyrand";
 import { EquipmentSlot } from "../../*";
 import isEquipmentSlot from "../utils/isEquipmentSlot";
+import { Branch, GoldRing, SapphireRing } from "items";
 
 function registerInventoryHandler(
   io: any,
@@ -11,57 +12,12 @@ function registerInventoryHandler(
 ): void {
   const addTestItem = () => {
     const items = [
-      {
-        name: "Gold Ring",
-        slot: "ring",
-        rarity: "magic",
-        requirements: {
-          level: 5,
-        },
-        implicits: [
-          {
-            modId: "to_life",
-            description: "+# to Life",
-            values: [5],
-          },
-        ],
-        affixes: {
-          prefixes: [
-            {
-              modId: "to_life",
-              description: "+# to Life",
-              values: [2],
-            },
-          ],
-          suffixes: [
-            {
-              modId: "to_dexterity",
-              description: "+# to Dexterity",
-              values: [2],
-            },
-          ],
-        },
-      },
-
-      {
-        name: "Sapphire Ring",
-        slot: "ring",
-        rarity: "normal",
-        requirements: {
-          level: 5,
-        },
-        implicits: [
-          {
-            modId: "to_mana",
-            description: "+# to Mana",
-            values: [5],
-          },
-        ],
-        affixes: {
-          prefixes: [],
-          suffixes: [],
-        },
-      },
+      Branch(),
+      Branch().magic(),
+      GoldRing(),
+      GoldRing().magic(),
+      SapphireRing(),
+      SapphireRing().magic(),
       {
         base: "Gold Ring",
         slot: "ring",

@@ -11,10 +11,11 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.0.3",
+    "items": "file:../items",
     "jest": "^29.1.2",
     "mongodb": "^4.10.0",
     "node-cron": "^3.0.2",
-    "pyrand": "^1.0.4",
+    "pyrand": "^1.0.13",
     "socket.io": "^4.5.2",
     "winston": "^3.8.2"
   },
