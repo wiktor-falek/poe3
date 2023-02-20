@@ -25,30 +25,56 @@ class GearBase {
         this.implicits = implicits;
         this.affixes = { prefixes: [], suffixes: [] };
     }
-    setIlvl(ilvl) {
-        if (ilvl > 0 && ilvl <= 100) {
-            this.ilvl = ilvl;
+    magic(PREFIX_MODIFIER_POOL, SUFFIX_MODIFIER_POOL) {
+        if (PREFIX_MODIFIER_POOL.length === 0 || SUFFIX_MODIFIER_POOL.length === 0) {
+            throw new Error("Method requires #PREFIX_MODIFIER_POOL and #SUFFIX_MODIFIER_POOL to have at least one modifier");
         }
-        return this;
-    }
-    normalToMagicRarity(PREFIX_MODIFIER_POOL, SUFFIX_MODIFIER_POOL) {
         if (this.rarity !== "normal") {
             console.error(`Failed to upgrade to magic rarity, item is not of normal rarity`);
             return this;
         }
-        // filter out modifiers where ilvl requirement is not met
-        const prefix_pool = PREFIX_MODIFIER_POOL.filter(() => false);
-        const suffix_pool = PREFIX_MODIFIER_POOL.filter(() => false);
-        const amountOfMods = pyrand_1.default.randint(1, 4); // TODO: add weights when pyrand.sample is finished
+        // filter tiers that don't satisfy ilvl requirement, and filter mods that have no tiers left
+        const prefix_pool = PREFIX_MODIFIER_POOL.map((mod) => {
+            const availableTiers = Object.values(mod.tiers).filter((tier) => tier.ilvl <= this.ilvl);
+            return Object.assign(Object.assign({}, mod), { tiers: availableTiers });
+        }).filter((mod) => Object.keys(mod.tiers).length > 0);
+        const suffix_pool = SUFFIX_MODIFIER_POOL.map((mod) => {
+            const availableTiers = Object.values(mod.tiers).filter((tier) => tier.ilvl <= this.ilvl);
+            return Object.assign(Object.assign({}, mod), { tiers: availableTiers });
+        }).filter((mod) => Object.keys(mod.tiers).length > 0);
+        // {
+        //   console.log("************");
+        //   console.log("BEFORE");
+        //   for (const mod of PREFIX_MODIFIER_POOL) {
+        //     console.log(inspect(mod));
+        //   }
+        // }
+        // console.log("************");
+        // console.log("AFTER");
+        // {
+        //   for (const mod of prefix_pool) {
+        //     console.log(inspect(mod));
+        //   }
+        // }
+        const amountOfAffixes = pyrand_1.default.randint(1, 4); // TODO: add weights for different amounts once pyrand.sample is ready
+        // TODO: unhardcode 1 prefix + 1 suffix
         {
-            const randomPrefix = pyrand_1.default.choice(PREFIX_MODIFIER_POOL);
-            const { weight } = randomPrefix, modifier = __rest(randomPrefix, ["weight"]);
-            this.affixes.prefixes.push(modifier);
+            const randomPrefix = pyrand_1.default.choice(prefix_pool);
+            const { weight, tiers } = randomPrefix, modifier = __rest(randomPrefix, ["weight", "tiers"]);
+            // assign modifier.
+            const randomTier = pyrand_1.default.choice(tiers);
+            const value = pyrand_1.default.randint(randomTier.range[0], randomTier.range[1]);
+            // assign values array from range(s) in the modifier.tier
+            this.affixes.prefixes.push(Object.assign(Object.assign({}, modifier), { values: [value] }));
         }
         {
-            const randomSuffix = pyrand_1.default.choice(SUFFIX_MODIFIER_POOL);
-            const { weight } = randomSuffix, modifier = __rest(randomSuffix, ["weight"]);
-            this.affixes.suffixes.push(modifier);
+            const randomSuffix = pyrand_1.default.choice(suffix_pool);
+            const { weight, tiers } = randomSuffix, modifier = __rest(randomSuffix, ["weight", "tiers"]);
+            // assign modifier.
+            const randomTier = pyrand_1.default.choice(tiers);
+            const value = pyrand_1.default.randint(randomTier.range[0], randomTier.range[1]);
+            // assign values array from range(s) in the modifier.tier
+            this.affixes.suffixes.push(Object.assign(Object.assign({}, modifier), { values: [value] }));
         }
         this.rarity = "magic";
         return this;

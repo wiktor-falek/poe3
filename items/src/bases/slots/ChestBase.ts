@@ -10,8 +10,8 @@ class ChestBase extends GearBase {
     name: string,
     ilvl: number,
     requirements: Requirements,
-    baseMods: Array<BaseModifier>,
-    implicits: Array<ImplicitModifier>
+    baseMods: Array<ModifierWithValues>,
+    implicits: Array<ModifierWithValues>
   ) {
     super(name, ilvl, requirements, baseMods, implicits);
     this.slot = "chest";

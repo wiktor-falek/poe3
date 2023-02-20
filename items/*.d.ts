@@ -29,16 +29,15 @@ interface ModifierTiers {
   1?: Tier;
 }
 
-interface ImplicitModifier {
+interface ModifierWithValues {
   modId: string;
   description: string;
-  values?: Array<number>;
+  values: Array<number>;
 }
 
 interface BaseModifier {
   modId: string;
   description: string;
-  values?: Array<number>;
 }
 
 interface Modifier {
