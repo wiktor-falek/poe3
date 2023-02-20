@@ -36,29 +36,29 @@ const props = defineProps({
 #strength {
   left: 39.94px;
   top: calc(42px - (var(--size)));
-  border-color: #e76969;
+  border-color: var(--attribute-strength);
 }
 
 #dexterity {
   left: 0px;
   top: calc(71.02px - var(--size));
-  border-color: #5dab5d;
+  border-color: var(--attribute-dexterity);
 }
 
 #intelligence {
   left: 79.89px;
   top: calc(71.02px - (var(--size)));
-  border-color: #4585cf;
+  border-color: var(--attribute-intelligence);
 }
 
 #vitality {
   left: 15.26px;
   top: calc(117.98px - (var(--size)));
-  border-color: #f2915b;
+  border-color: var(--attribute-vitality);
 }
 #speed {
   left: 64.63px;
   top: calc(117.98px - (var(--size)));
-  border-color: #eeee4f;
+  border-color: var(--attribute-speed);
 }
 </style>

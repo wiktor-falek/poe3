@@ -33,21 +33,21 @@
 }
 
 .strength {
-  background-color: #e76969;
+  background-color: var(--attribute-strength);
 }
 
 .dexterity {
-  background-color: #5dab5d;
+  background-color: var(--attribute-dexterity);
 }
 
 .intelligence {
-  background-color: #4585cf;
+  background-color: var(--attribute-intelligence);
 }
 
 .vitality {
-  background-color: #f2915b;
+  background-color: var(--attribute-vitality);
 }
 
 .speed {
-  background-color: #eeee4f;
+  background-color: var(--attribute-speed);
 }

@@ -26,12 +26,16 @@ const createCharacter = () => {
   if (
     !["swordsman", "ranger", "sorcerer", "assassin"].includes(characterClass)
   ) {
-    //
+    // TODO: toast
     return;
   }
 
-  if (characterNickname.length < 4) {
-    //
+  if (characterNickname.length < 3) {
+    // TODO: toast
+    return;
+  }
+  if (characterNickname.length > 24) {
+    // TODO: toast
     return;
   }
 
@@ -73,7 +77,10 @@ const createCharacter = () => {
   <div class="center">
     <div class="banners" ref="banners">
       <div class="banner">
-        <img src="@/assets/icons/class-icons/swordsman.jpg" class="banner__image" />
+        <img
+          src="@/assets/icons/class-icons/swordsman.jpg"
+          class="banner__image"
+        />
         <p class="banner__class-name">Swordsman</p>
         <p class="banner__flavor-text">Lorem ipsum</p>
         <div class="banner__skill-icons">
@@ -89,23 +96,19 @@ const createCharacter = () => {
           <div class="banner__skill-icon">
             <!-- <img src="" alt=""> -->
           </div>
-          <div class="banner__skill-icon">
-            <!-- <img src="" alt=""> -->
-          </div>
         </div>
-        <p class="banner__description">
-          Playstyle description
-        </p>
+        <p class="banner__description">Playstyle description</p>
         <button class="select" @click="selectCharacter($event, 'swordsman')">
           Select
         </button>
       </div>
       <div class="banner">
-        <img src="@/assets/icons/class-icons/ranger.jpg" class="banner__image" />
+        <img
+          src="@/assets/icons/class-icons/ranger.jpg"
+          class="banner__image"
+        />
         <p class="banner__class-name">Ranger</p>
-        <p class="banner__flavor-text">
-          Lorem ipsum
-        </p>
+        <p class="banner__flavor-text">Lorem ipsum</p>
         <div class="banner__skill-icons">
           <div class="banner__skill-icon">
             <!-- <img src="" alt=""> -->
@@ -119,20 +122,17 @@ const createCharacter = () => {
           <div class="banner__skill-icon">
             <!-- <img src="" alt=""> -->
           </div>
-          <div class="banner__skill-icon">
-            <!-- <img src="" alt=""> -->
-          </div>
         </div>
-        <p class="banner__description">
-          Actual short description about the playstyle Lorem ipsum dolor sit
-          amet consectetur adipisicing elit.
-        </p>
+        <p class="banner__description">Playstyle description</p>
         <button class="select" @click="selectCharacter($event, 'ranger')">
           Select
         </button>
       </div>
       <div class="banner">
-        <img src="@/assets/icons/class-icons/sorcerer.jpg" class="banner__image" />
+        <img
+          src="@/assets/icons/class-icons/sorcerer.jpg"
+          class="banner__image"
+        />
         <p class="banner__class-name">Sorcerer</p>
         <p class="banner__flavor-text">Master of arcane energy and elements</p>
         <div class="banner__skill-icons">
@@ -148,20 +148,17 @@ const createCharacter = () => {
           <div class="banner__skill-icon">
             <!-- <img src="" alt=""> -->
           </div>
-          <div class="banner__skill-icon">
-            <!-- <img src="" alt=""> -->
-          </div>
         </div>
-        <p class="banner__description">
-          Actual short description about the playstyle Lorem ipsum dolor sit
-          amet consectetur adipisicing elit.
-        </p>
+        <p class="banner__description">Playstyle description</p>
         <button class="select" @click="selectCharacter($event, 'sorcerer')">
           Select
         </button>
       </div>
       <div class="banner">
-        <img src="@/assets/icons/class-icons/assassin.jpg" class="banner__image" />
+        <img
+          src="@/assets/icons/class-icons/assassin.jpg"
+          class="banner__image"
+        />
         <p class="banner__class-name">Assassin</p>
         <p class="banner__flavor-text">Lorem ipsum</p>
         <div class="banner__skill-icons">
@@ -177,14 +174,8 @@ const createCharacter = () => {
           <div class="banner__skill-icon">
             <!-- <img src="" alt=""> -->
           </div>
-          <div class="banner__skill-icon">
-            <!-- <img src="" alt=""> -->
-          </div>
         </div>
-        <p class="banner__description">
-          Actual short description about the playstyle Lorem ipsum dolor sit
-          amet consectetur adipisicing elit.
-        </p>
+        <p class="banner__description">Playstyle description</p>
         <button class="select" @click="selectCharacter($event, 'assassin')">
           Select
         </button>
@@ -212,7 +203,9 @@ const createCharacter = () => {
       min="4"
       required
     />
-    <button id="create" class="margin-vertical" @click="createCharacter">Create Character</button>
+    <button id="create" class="margin-vertical" @click="createCharacter">
+      Create Character
+    </button>
   </div>
 </template>
 
@@ -307,9 +300,9 @@ const createCharacter = () => {
 
 .banner__skill-icon {
   box-sizing: content-box;
-  width: 32px;
-  height: 32px;
-  border: 2px solid rgb(161, 99, 63);
+  width: 48px;
+  height: 48px;
+  border: 2px solid rgb(211, 211, 211);
   background-color: transparent;
 }
 
@@ -328,12 +321,11 @@ const createCharacter = () => {
   font-size: 16px;
   text-align: center;
   width: 170px;
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 .banner__skill-icon {
   box-sizing: border-box;
   background-image: none;
 }
-
 </style>
