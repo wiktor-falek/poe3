@@ -1,16 +1,36 @@
-import {
-  SWORDSMAN_STARTING_ITEMS,
-  RANGER_STARTING_ITEMS,
-  SORCERER_STARTING_ITEMS,
-  ASSASSIN_STARTING_ITEMS,
-} from "items";
-
 export const startingGear = {
   swordsman: {
-    hand: SWORDSMAN_STARTING_ITEMS.hand,
+    hand: {
+      name: "Broken Sword",
+      ilvl: 1,
+      rarity: "normal",
+      requirements: { level: 1 },
+      baseMods: [
+        {
+          modId: "physical_damage",
+          description: "Physical Damage: # to #",
+          values: [2, 3],
+        },
+        {
+          modId: "critical_strike_chance",
+          description: "Critical Strike Chance: #%",
+          values: [4],
+        },
+      ],
+      implicits: [],
+      slot: "hand",
+    },
     offhand: null,
     helmet: null,
-    chest: SWORDSMAN_STARTING_ITEMS.chest,
+    chest: {
+      name: "Rusted Plate Armor",
+      ilvl: 1,
+      rarity: "normal",
+      requirements: { level: 1 },
+      baseMods: [{ modId: "armor", description: "Armor: #", values: [6] }],
+      implicits: [],
+      slot: "chest",
+    },
     gloves: null,
     boots: null,
     ring_1: null,
@@ -18,12 +38,38 @@ export const startingGear = {
     amulet: null,
     belt: null,
   },
-
   ranger: {
-    hand: RANGER_STARTING_ITEMS.hand,
+    hand: {
+      name: "Short Bow",
+      ilvl: 1,
+      rarity: "normal",
+      requirements: { level: 1 },
+      baseMods: [
+        {
+          modId: "physical_damage",
+          description: "Physical Damage: # to #",
+          values: [2, 4],
+        },
+        {
+          modId: "critical_strike_chance",
+          description: "Critical Strike Chance: #%",
+          values: [5],
+        },
+      ],
+      implicits: [],
+      slot: "hand",
+    },
     offhand: null,
     helmet: null,
-    chest: RANGER_STARTING_ITEMS.chest,
+    chest: {
+      name: "Torn Leather Tunic",
+      ilvl: 1,
+      rarity: "normal",
+      requirements: { level: 1 },
+      baseMods: [{ modId: "evasion", description: "Evasion: #", values: [6] }],
+      implicits: [],
+      slot: "chest",
+    },
     gloves: null,
     boots: null,
     ring_1: null,
@@ -31,12 +77,44 @@ export const startingGear = {
     amulet: null,
     belt: null,
   },
-
   sorcerer: {
-    hand: SORCERER_STARTING_ITEMS.hand,
+    hand: {
+      name: "Branch",
+      ilvl: 1,
+      rarity: "normal",
+      requirements: { level: 1 },
+      baseMods: [
+        {
+          modId: "physical_damage",
+          description: "Physical Damage: # to #",
+          values: [1, 3],
+        },
+        {
+          modId: "critical_strike_chance",
+          description: "Critical Strike Chance: #%",
+          values: [4],
+        },
+      ],
+      implicits: [
+        {
+          modId: "cold_damage_to_spells",
+          description: "Adds # to # Cold Damage to Spells",
+          values: [1, 2],
+        },
+      ],
+      slot: "hand",
+    },
     offhand: null,
     helmet: null,
-    chest: SORCERER_STARTING_ITEMS.chest,
+    chest: {
+      name: "Ragged Cloth",
+      ilvl: 1,
+      rarity: "normal",
+      requirements: { level: 1 },
+      baseMods: [{ modId: "evasion", description: "Evasion: #", values: [3] }],
+      implicits: [],
+      slot: "chest",
+    },
     gloves: null,
     boots: null,
     ring_1: null,
@@ -44,12 +122,41 @@ export const startingGear = {
     amulet: null,
     belt: null,
   },
-
   assassin: {
-    hand: ASSASSIN_STARTING_ITEMS.hand,
+    hand: {
+      name: "Rusty Dagger",
+      ilvl: 1,
+      rarity: "normal",
+      requirements: { level: 1 },
+      baseMods: [
+        {
+          modId: "physical_damage",
+          description: "Physical Damage: # to #",
+          values: [2, 4],
+        },
+        {
+          modId: "critical_strike_chance",
+          description: "Critical Strike Chance: #%",
+          values: [7],
+        },
+      ],
+      implicits: [],
+      slot: "hand",
+    },
     offhand: null,
     helmet: null,
-    chest: ASSASSIN_STARTING_ITEMS.chest,
+    chest: {
+      name: "Leather Harness",
+      ilvl: 1,
+      rarity: "normal",
+      requirements: { level: 1 },
+      baseMods: [
+        { modId: "evasion", description: "Evasion: #", values: [4] },
+        { modId: "armor", description: "Armor: #", values: [2] },
+      ],
+      implicits: [],
+      slot: "chest",
+    },
     gloves: null,
     boots: null,
     ring_1: null,

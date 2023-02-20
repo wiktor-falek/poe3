@@ -1,4 +1,5 @@
-import { choice, randint } from "pyrand";
+// @ts-ignore w chuju to mam
+import * as pyrand from "../../../../items/build/index.js";
 
 class GearBase {
   PREFIX_MODIFIER_POOL: null | Array<ModifierWithWeight> = null;
@@ -54,14 +55,14 @@ class GearBase {
       return this;
     }
 
-    const amountOfMods = randint(1, 4); // TODO: add weights when pyrand.sample is finished
+    const amountOfMods = pyrand.randint(1, 4); // TODO: add weights when pyrand.sample is finished
     {
-      const randomPrefix = choice(this.PREFIX_MODIFIER_POOL);
+      const randomPrefix = pyrand.choice(this.PREFIX_MODIFIER_POOL);
       const { weight, ...modifier } = randomPrefix;
       this.affixes.prefixes.push(modifier);
     }
     {
-      const randomSuffix = choice(this.SUFFIX_MODIFIER_POOL);
+      const randomSuffix = pyrand.choice(this.SUFFIX_MODIFIER_POOL);
       const { weight, ...modifier } = randomSuffix;
       this.affixes.suffixes.push(modifier);
     }
