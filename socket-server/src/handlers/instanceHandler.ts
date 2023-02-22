@@ -1,8 +1,6 @@
 import type Client from "../helpers/Client";
 import type { Socket } from "socket.io";
 import logger from "../logger";
-import Entity from "../logic/combat/Entity";
-import { Character } from "../../*";
 import Player from "../logic/combat/Player";
 
 function registerInstanceHandler(

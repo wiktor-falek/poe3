@@ -55,7 +55,7 @@ socket.once("instance:already-exists", (data) => {
   console.log("already-exists", data);
   if (instanceAlreadyExists) {
     joinZone(zoneId);
-    joinRoom(roomId);
+    // joinRoom(roomId);
   }
 });
 

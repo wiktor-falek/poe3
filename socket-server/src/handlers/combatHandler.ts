@@ -3,6 +3,7 @@ import type { Socket } from "socket.io";
 import type { CombatRoom } from "../logic/Rooms";
 import logger from "../logger";
 import capitalize from "../utils/capitalize";
+import Enemy from "../logic/combat/Enemy";
 
 function getCurrentCombatRoom(
   socket: Socket,
@@ -34,7 +35,7 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
     });
   };
 
-  const nextStep = () => {
+  const nextStep = async () => {
     const room = getCurrentCombatRoom(socket, client);
     if (room == null) return socket.emit("error", "Room does not exist");
     const { combat } = room;
@@ -80,6 +81,10 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
         }
       }
     }
+
+    const { xp } = room.claimReward(combat.enemyParty);
+    const result = await client.characterModelProxy.awardXp(xp);
+    socket.emit("reward:xp", result.value);
 
     combat.addLog({ type: "combat-end", message: "Combat has ended" });
     combat.addLog({

@@ -1,11 +1,5 @@
-import { randint } from "pyrand";
 
 type RoomType = "reward" | "combat";
-
-interface Reward {
-  silver?: number;
-  items?: Array<any>;
-}
 
 class Room {
   id: number;
@@ -19,20 +13,6 @@ class Room {
     this.zoneLvl = zoneLvl;
     this.completed = false;
     this.rewardClaimed = false;
-  }
-
-  /**
-   * If reward was already claimed returns null.
-   * Otherwise sets rewardClaimed to true and returns Reward.
-   */
-  claimReward(): Reward | null {
-    // TODO: implement separate claimReward() method for CombatRoom and RewardRoom
-    if (this.rewardClaimed) return null;
-
-    const silver = randint(25, 30);
-    const reward: Reward = { silver };
-    this.rewardClaimed = true;
-    return reward;
   }
 }
 

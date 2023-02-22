@@ -4,6 +4,7 @@ import Entity from "../combat/Entity";
 import Combat from "../combat/Combat";
 import Enemy from "../combat/Enemy";
 import { Level } from "../../../*";
+import { randint } from "pyrand";
 
 interface RoomOptions {}
 
@@ -17,13 +18,7 @@ class CombatRoom extends Room {
   }
 
   startCombat(allyParty: Array<Entity>) {
-    function randint(min: number, max: number) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
-    }
-
-    const amountOfEnemies = randint(2, 4);
+    const amountOfEnemies = randint(1, 3);
 
     const enemyParty = [];
     for (let i = 0; i < amountOfEnemies; i++) {
@@ -35,7 +30,7 @@ class CombatRoom extends Room {
         dexterity: 1,
         intelligence: 1,
         vitality: 1,
-        speed: randint(0, 3),
+        speed: 1,
       };
       const actionPoints = { ap: 3, maxAp: 3 };
       enemyParty.push(
@@ -52,6 +47,11 @@ class CombatRoom extends Room {
 
     this.combat = new Combat(allyParty, enemyParty);
     return this.combat;
+  }
+
+  claimReward(enemyParty: Array<Enemy>) {
+    const xp = enemyParty.map((enemy) => enemy.xpAward).reduce((a, b) => a + b);
+    return { xp };
   }
 }
 

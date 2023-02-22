@@ -37,12 +37,7 @@ socket.on("reward:silver", (data) => {
 socket.off("reward:xp");
 socket.on("reward:xp", (data) => {
   const { level, xpGained } = data;
-
-  if (xpGained) {
-    messageStore.pushClientSideSystemMessage(`You gained ${xpGained}XP`);
-  }
-
-  playerStore.setLevel(level);
+  playerStore.setLevel(level, xpGained);
 });
 
 function leaveRoomHandle() {

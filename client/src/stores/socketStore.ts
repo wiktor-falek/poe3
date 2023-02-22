@@ -19,7 +19,6 @@ export const useSocketStore = defineStore("socket", () => {
   const isConnected = ref(true);
   const ping = ref(0);
   const playerCount = ref(0);
-  const chatRoom = ref(0);
 
   socket.value.on("connect", () => {
     isConnected.value = true;

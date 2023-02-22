@@ -64,10 +64,16 @@ socket.on("combat:take-next-step", (data) => {
   socket.emit("combat:next-step");
 });
 
-socket.off("combat:end")
+socket.off("combat:end");
 socket.on("combat:end", (data) => {
   const { logs, whoWon } = data;
   console.log(logs);
+});
+
+socket.off("reward:xp");
+socket.on("reward:xp", (data) => {
+  const { level, xpGained } = data;
+  playerStore.setLevel(level, xpGained);
 });
 
 const selectedTarget: Ref<number | null> = ref(null);

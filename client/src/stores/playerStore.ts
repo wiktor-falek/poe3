@@ -20,7 +20,7 @@ export const usePlayerStore = defineStore("player", () => {
   }
 
   // TODO: Level interface
-  function setLevel(level: any) {
+  function setLevel(level: any, xpGained: number | null) {
     // check if level satisfies Level interface
     if (
       level == null &&
@@ -32,6 +32,10 @@ export const usePlayerStore = defineStore("player", () => {
     }
 
     const characterLevelObject = characterData.value.level;
+
+    if (xpGained) {
+      messageStore.pushClientSideSystemMessage(`You gained ${xpGained} xp`);
+    }
 
     if (characterLevelObject.value < level.value) {
       messageStore.pushClientSideSystemMessage(

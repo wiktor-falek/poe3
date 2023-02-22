@@ -1,32 +1,29 @@
 import type Client from "../helpers/Client";
 import type { Socket } from "socket.io";
+import { CombatRoom, RewardRoom } from "../logic/Rooms";
 
 function registerRewardHandler(io: any, socket: Socket, client: Client): void {
   const claimRoomReward = async () => {
     const room = client.instance?.zone?.currentRoom;
-    if (!room || room.type !== "reward") return socket.emit("error");
-
-    const reward = room.claimReward();
-    if (reward === null) {
-      return socket.emit("error");
+    if (!(room instanceof RewardRoom)) {
+      return socket.emit("error", "Not a reward room");
     }
 
-    // TODO: this should be inside claimReward() method
-    room.completed = true;
+    const reward = room.claimReward();
+    if (reward == null) {
+      return socket.emit("error", "Reward has already been claimed");
+    }
+
+    room.completed = true; // TODO: idk where this belongs
 
     const { silver, items } = reward;
     if (silver) {
       const result = await client.characterModelProxy.awardSilver(silver);
-      console.log(result);
       if (!result.ok) {
         return socket.emit("error");
       }
     }
 
-    // const result = await client.characterModelProxy.awardXp(9);
-    // if (result.ok) {
-    //   socket.emit("reward:xp", result.value);
-    // }
     const xpGained = 9;
     const result = await client.characterModelProxy.awardXp(xpGained);
 

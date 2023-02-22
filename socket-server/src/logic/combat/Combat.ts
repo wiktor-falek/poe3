@@ -5,13 +5,13 @@ import Player from "./Player";
 class Combat {
   turn: number;
   allyParty: Array<Entity | Player>;
-  enemyParty: Array<Entity>;
+  enemyParty: Array<Enemy>;
   turnOrder: Array<number>;
   waitingForPlayerAction: boolean;
   gen: Generator<boolean | null> | null;
   logs: Array<any>;
   recentLogs: Array<any>;
-  constructor(allyParty: Array<Entity>, enemyParty: Array<Entity>) {
+  constructor(allyParty: Array<Entity>, enemyParty: Array<Enemy>) {
     this.turn = 0;
     this.allyParty = allyParty;
     this.enemyParty = enemyParty;

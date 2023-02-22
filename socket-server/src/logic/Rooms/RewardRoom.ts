@@ -1,4 +1,11 @@
+import { randint } from "pyrand";
 import { Room, RoomType } from "./Room";
+
+
+interface Reward {
+  silver?: number;
+  items?: Array<any>;
+}
 
 class RewardRoom extends Room {
   type: RoomType;
@@ -6,6 +13,16 @@ class RewardRoom extends Room {
     super(id, name, zoneLvl);
     this.type = "reward";
   }
+
+  claimReward(): Reward | null {
+    // TODO: implement separate claimReward() method for CombatRoom and RewardRoom
+    if (this.rewardClaimed) return null;
+
+    const silver = randint(25, 30);
+    const reward: Reward = { silver };
+    return reward;
+  }
+
 }
 
 export default RewardRoom;
