@@ -4,19 +4,19 @@ import { useMessageStore } from "./messageStore";
 const messageStore = useMessageStore();
 
 export const usePlayerStore = defineStore("player", () => {
-  const character: Ref<any> = ref(null);
+  const characterData: Ref<any> = ref(null);
 
-  function loadcharacter(_character: object) {
-    if (character.value == null) {
-      character.value = _character;
+  function loadCharacterData(_characterData: object) {
+    if (characterData.value == null) {
+      characterData.value = _characterData;
     } else {
-      Object.assign(character.value, _character);
+      Object.assign(characterData.value, _characterData);
     }
-    console.log(character.value);
+    console.log(characterData.value);
   }
 
   function setSilver(amount: number) {
-    character.value.silver = amount;
+    characterData.value.silver = amount;
   }
 
   // TODO: Level interface
@@ -31,7 +31,7 @@ export const usePlayerStore = defineStore("player", () => {
       return null;
     }
 
-    const characterLevelObject = character.value.level;
+    const characterLevelObject = characterData.value.level;
 
     if (xpGained) {
       messageStore.pushClientSideSystemMessage(`You gained ${xpGained} xp`);
@@ -43,12 +43,12 @@ export const usePlayerStore = defineStore("player", () => {
       );
     }
 
-    character.value.level = level;
+    characterData.value.level = level;
   }
 
   return {
-    character,
-    loadcharacter,
+    characterData,
+    loadCharacterData,
     setSilver,
     setLevel,
   };

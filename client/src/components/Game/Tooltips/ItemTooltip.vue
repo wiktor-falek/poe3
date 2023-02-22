@@ -4,7 +4,7 @@ import { usePlayerStore } from "../../../stores/playerStore";
 const props = defineProps(["item"]);
 
 const playerStore = usePlayerStore();
-const characterLvl = playerStore.character.level.value;
+const characterLvl = playerStore.characterData.level.value;
 
 interface Mod {
   description: string;

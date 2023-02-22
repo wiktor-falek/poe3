@@ -7,9 +7,9 @@ const socketStore = useSocketStore();
 const socket = socketStore.socket;
 const playerStore = usePlayerStore();
 
-socket.on("character:data", (character) => {
-  if (character != null) {
-    playerStore.loadcharacter(character);
+socket.on("character:data", (characterData) => {
+  if (characterData != null) {
+    playerStore.loadCharacterData(characterData);
   } else {
     console.log("Failed to load character data emitted by the server");
   }
@@ -21,7 +21,7 @@ socket.on("character:data", (character) => {
 
 <template>
   <main>
-    <Game v-if="socketStore.isConnected && playerStore.character != null" />
+    <Game v-if="socketStore.isConnected && playerStore.characterData != null" />
     <p v-else>*Maintenance View*</p>
   </main>
 </template>

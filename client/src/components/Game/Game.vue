@@ -11,7 +11,7 @@ import ChatBox from "../Chat/ChatBox.vue";
 import Settings from "../Game/Settings.vue";
 
 const playerStore = usePlayerStore();
-const character = playerStore.character;
+const characterData = playerStore.characterData;
 
 const selectedTab = ref("inventory");
 

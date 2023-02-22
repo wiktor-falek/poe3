@@ -5,7 +5,7 @@ import { usePlayerStore } from "../../../stores/playerStore";
 const playerStore = usePlayerStore();
 
 const money = computed(() => {
-  const silver = playerStore.character.silver;
+  const silver = playerStore.characterData.silver;
 
   const gold = Math.floor(silver / 100);
   const silverRemainder = silver - gold * 100;

@@ -96,7 +96,7 @@ function sendMessage() {
               class="message__sender__name"
               :class="{
                 'this-sender':
-                  message.sender === playerStore.character.name,
+                  message.sender === playerStore.characterData.name,
               }"
               >{{ message.sender }}</span
             >

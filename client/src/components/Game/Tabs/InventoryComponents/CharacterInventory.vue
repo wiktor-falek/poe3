@@ -8,7 +8,7 @@ const socketStore = useSocketStore();
 const socket = socketStore.socket;
 
 const playerStore = usePlayerStore();
-const inventory = playerStore.character.inventory;
+const inventory = playerStore.characterData.inventory;
 
 function onDrop(event: any, index: number) {
   const dragIndex = event.dataTransfer.getData("index");

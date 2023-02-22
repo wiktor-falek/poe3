@@ -6,7 +6,7 @@ import { usePlayerStore } from "../../../../stores/playerStore";
 const props = defineProps(["equipment"]);
 
 const playerStore = usePlayerStore();
-const equipment = playerStore.character.equipment;
+const equipment = playerStore.characterData.equipment;
 
 type EquipmentSlot =
   | "hand"

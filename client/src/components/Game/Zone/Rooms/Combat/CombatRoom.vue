@@ -24,7 +24,7 @@ onMounted(() => {
 
 const playerEntity = computed(() => {
   const player = props.room.combat.allyParty.find(
-    (entity: any) => entity.name === playerStore.character.name
+    (entity: any) => entity.name === playerStore.characterData.name
   );
   return player;
 });

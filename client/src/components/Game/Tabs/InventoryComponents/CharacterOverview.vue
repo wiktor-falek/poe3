@@ -3,7 +3,7 @@ import { usePlayerStore } from '../../../../stores/playerStore';
 import ResourceBars from '../../Zone/Rooms/Combat/ResourceBars.vue';
 
 const playerStore = usePlayerStore();
-const character = playerStore.character;
+const character = playerStore.characterData;
 
 </script>
 

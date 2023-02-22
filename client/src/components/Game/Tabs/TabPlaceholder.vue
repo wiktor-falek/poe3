@@ -2,7 +2,7 @@
 import { usePlayerStore } from "../../../stores/playerStore";
 
 const playerStore = usePlayerStore();
-const character = playerStore.character;
+const characterData = playerStore.characterData;
 </script>
 
 <template>

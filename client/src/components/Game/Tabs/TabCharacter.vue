@@ -4,16 +4,16 @@ import Resistances from "./CharacterComponents/Resistances.vue";
 import { usePlayerStore } from "../../../stores/playerStore";
 
 const playerStore = usePlayerStore();
-const character = playerStore.character;
+const characterData = playerStore.characterData;
 </script>
 
 <template>
   <div class="tab">
-    <Attributes :attributes="character.attributes" />
-    <Resistances :resistances="character.resistances" />
+    <Attributes :attributes="characterData.attributes" />
+    <Resistances :resistances="characterData.resistances" />
     <div class="stats">
-      <p class="evasion" v-if="character">Evasion: 0</p>
-      <p class="armor" v-if="character">Armor: 0</p>
+      <p class="evasion" v-if="characterData">Evasion: 0</p>
+      <p class="armor" v-if="characterData">Armor: 0</p>
     </div>
   </div>
 </template>
