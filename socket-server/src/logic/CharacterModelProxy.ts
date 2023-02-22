@@ -47,6 +47,8 @@ class CharacterModelProxy {
     while (level.xp >= XP_REQUIREMENT_TABLE[level.value]) {
       level.xp -= level.requiredXp;
       level.value++;
+      // TODO: recalculate character properties like resources
+      // set hp to maxHp and mp to maxMp, and emit
       level.requiredXp = XP_REQUIREMENT_TABLE[level.value];
     }
 
