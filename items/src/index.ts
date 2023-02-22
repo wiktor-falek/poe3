@@ -27,7 +27,10 @@ export function Branch() {
     "Branch",
     20,
     { level: 1 },
-    [{ ...BASE_MODIFIERS.physical_damage, values: [3, 4] }],
+    [
+      { ...BASE_MODIFIERS.physical_damage, values: [1, 3] },
+      { ...BASE_MODIFIERS.critical_strike_chance, values: [4] },
+    ],
     [{ ...IMPLICIT_MODIFIERS.cold_damage_to_spells, values: [1, 2] }]
   );
 }
