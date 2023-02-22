@@ -6,8 +6,8 @@ const socketStore = useSocketStore();
 const socket = socketStore.socket;
 
 const playerStore = usePlayerStore();
-const inventory = playerStore.characterData.inventory;
-const equipment = playerStore.characterData.equipment;
+const inventory = playerStore.character.inventory;
+const equipment = playerStore.character.equipment;
 
 const props = defineProps(["idx"]);
 const emit = defineEmits(["closeContextMenu"]);
