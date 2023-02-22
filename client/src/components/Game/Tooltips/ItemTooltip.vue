@@ -56,7 +56,7 @@ function renderTemplateModDescription(mod: Mod) {
       </p>
 
       <p class="item-tooltip__top__name" v-if="item.name">
-        {{ item.name }}
+        {{ item.name }} 
       </p>
     </div>
 
@@ -95,6 +95,7 @@ function renderTemplateModDescription(mod: Mod) {
             {{ item.requirements.attributes.intelligence }} ING
           </span>
         </span>
+        <p>Item Level {{ item.ilvl }}</p>
       </p>
     </div>
 
