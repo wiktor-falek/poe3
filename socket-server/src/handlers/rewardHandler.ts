@@ -11,6 +11,9 @@ function registerRewardHandler(io: any, socket: Socket, client: Client): void {
       return socket.emit("error");
     }
 
+    // TODO: this should be inside claimReward() method
+    room.completed = true;
+
     const { silver, items } = reward;
     if (silver) {
       const result = await client.characterModelProxy.awardSilver(silver);
@@ -27,7 +30,7 @@ function registerRewardHandler(io: any, socket: Socket, client: Client): void {
     const xpGained = 9;
     const result = await client.characterModelProxy.awardXp(xpGained);
 
-    socket.emit("reward:xp", result.value)
+    socket.emit("reward:xp", result.value);
 
     socket.emit("reward:silver", {
       silver,

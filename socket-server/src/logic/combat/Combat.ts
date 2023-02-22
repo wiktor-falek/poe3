@@ -33,6 +33,18 @@ class Combat {
     return ended;
   }
 
+  public get whoWon(): "ally" | "enemy" | null {
+    const aliveAllies = this.allyParty.filter((entity) => entity.isAlive);
+    const aliveEnemies = this.enemyParty.filter((entity) => entity.isAlive);
+    if (aliveAllies.length === 0) {
+      return "enemy";
+    }
+    if (aliveEnemies.length === 0) {
+      return "ally";
+    }
+    return null;
+  }
+
   getEntityById(id: number) {
     for (const entity of [...this.allyParty, ...this.enemyParty]) {
       if (entity.id === id) {

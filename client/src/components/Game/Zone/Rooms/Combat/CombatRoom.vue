@@ -31,12 +31,13 @@ const playerEntity = computed(() => {
 
 const isPlayerTurn = ref(false);
 
+socket.off("combat:data");
 socket.on("combat:data", (data) => {
   console.log("combat:data", data);
   props.room.combat = data.combat;
 });
 
-socket.off("combat:recent-logs")
+socket.off("combat:recent-logs");
 socket.on("combat:recent-logs", (logs) => {
   for (const log of logs) {
     // console.log("combat:log", log.message);
@@ -44,7 +45,7 @@ socket.on("combat:recent-logs", (logs) => {
   }
 });
 
-socket.off("combat:player-turn")
+socket.off("combat:player-turn");
 socket.on("combat:player-turn", (data) => {
   const { logs, allyParty, enemyParty } = data;
   console.log(
@@ -56,17 +57,16 @@ socket.on("combat:player-turn", (data) => {
   isPlayerTurn.value = true;
 });
 
+socket.off("combat:take-next-step");
 socket.on("combat:take-next-step", (data) => {
   console.log(data.logs);
 
   socket.emit("combat:next-step");
 });
 
+socket.off("combat:end")
 socket.on("combat:end", (data) => {
-  const { logs, allyParty, enemyParty } = data;
-  props.room.combat.allyParty = allyParty;
-  props.room.combat.enemyParty = enemyParty;
-  // messageStore.pushClientSideSystemMessage(log.message);
+  const { logs, whoWon } = data;
   console.log(logs);
 });
 

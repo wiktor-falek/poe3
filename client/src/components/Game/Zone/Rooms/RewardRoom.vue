@@ -45,9 +45,8 @@ socket.on("reward:xp", (data) => {
   playerStore.setLevel(level);
 });
 
-// TODO: PROCEED
 function leaveRoomHandle() {
-  if (!rewardIsClaimed) return;
+  console.log("proceed");
   socket.emit("instance:leave-room");
 }
 

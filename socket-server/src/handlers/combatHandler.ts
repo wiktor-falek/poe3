@@ -1,6 +1,8 @@
 import type Client from "../helpers/Client";
 import type { Socket } from "socket.io";
 import type { CombatRoom } from "../logic/Rooms";
+import logger from "../logger";
+import capitalize from "../utils/capitalize";
 
 function getCurrentCombatRoom(
   socket: Socket,
@@ -80,11 +82,17 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
     }
 
     combat.addLog({ type: "combat-end", message: "Combat has ended" });
+    combat.addLog({
+      type: "combat-end",
+      message: capitalize(`${combat.whoWon} party won`),
+    });
+
     socket.emit("combat:recent-logs", combat.getRecentLogsAndClear());
+
     return socket.emit("combat:end", {
       logs: combat.logs,
-      allyParty: combat.allyParty,
-      enemyParty: combat.enemyParty,
+      whoWon: combat.whoWon,
+      reward: null, // TODO: emit reward, and have user select/discard rewards
     });
   };
 
