@@ -6,22 +6,22 @@ import CharacterEquipment from "./InventoryComponents/CharacterEquipment.vue";
 import { usePlayerStore } from "../../../stores/playerStore";
 
 const playerStore = usePlayerStore();
-const characterData = playerStore.characterData;
+const character = playerStore.character;
 </script>
 
 <template>
-  <div class="tab" v-if="characterData">
+  <div class="tab" v-if="character">
     <CharacterOverview
-      :name="characterData.name"
-      :playerClass="characterData.class"
-      :level="characterData.level.value"
-      :hp="characterData.resources.hp"
-      :maxHp="characterData.resources.maxHp"
-      :mp="characterData.resources.mp"
-      :maxMp="characterData.resources.maxMp"
+      :name="character.name"
+      :playerClass="character.class"
+      :level="character.level.value"
+      :hp="character.resources.hp"
+      :maxHp="character.resources.maxHp"
+      :mp="character.resources.mp"
+      :maxMp="character.resources.maxMp"
     />
 
-    <CharacterEquipment :equipment="characterData.equipment" />
+    <CharacterEquipment :equipment="character.equipment" />
     <Money />
     <CharacterInventory />
   </div>

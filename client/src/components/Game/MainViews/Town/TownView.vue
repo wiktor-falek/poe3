@@ -6,7 +6,7 @@ const socketStore = useSocketStore();
 const socket = socketStore.socket;
 
 const playerStore = usePlayerStore();
-const inventory = playerStore.characterData.inventory;
+const inventory = playerStore.character.inventory;
 
 function addItemTest() {
   socket.emit("inventory:add-test-item");

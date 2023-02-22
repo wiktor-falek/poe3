@@ -11,7 +11,7 @@ const socket = socketStore.socket;
 const playerStore = usePlayerStore();
 
 const highestZoneId = computed(
-  () => playerStore.characterData.progression.mainStory.highestZoneId
+  () => playerStore.character.progression.mainStory.highestZoneId
 );
 
 const selectedId = ref();
