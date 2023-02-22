@@ -66,7 +66,9 @@ socket.on("combat:take-next-step", (data) => {
 
 socket.off("combat:end");
 socket.on("combat:end", (data) => {
-  const { logs, whoWon } = data;
+  const { logs, whoWon, reward, allyParty, enemyParty } = data;
+  props.room.combat.allyParty = allyParty;
+  props.room.combat.enemyParty = enemyParty;
   console.log(logs);
 });
 

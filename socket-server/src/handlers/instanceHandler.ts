@@ -30,11 +30,6 @@ function registerInstanceHandler(
       });
     }
 
-    // restore hp and mp before joining new instance
-    const resources = client.characterModelProxy.character.resources;
-    resources.hp = resources.maxHp;
-    resources.mp = resources.maxMp;
-
     socket.emit("instance:data", instance.data);
   };
 

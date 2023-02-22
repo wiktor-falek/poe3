@@ -48,6 +48,12 @@ class Client {
       zoneId,
       this.characterModelProxy.character.name
     );
+
+    // Restore hp and mp if joining the instance for the first time
+    const character = this.characterModelProxy.character;
+    character.resources.hp = character.resources.maxHp;
+    character.resources.mp = character.resources.maxMp;
+
     if (this.instance === null) {
       logger.error(
         `failed to create instance for ${this.username} (zoneId=${zoneId})`

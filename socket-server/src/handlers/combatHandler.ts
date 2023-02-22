@@ -44,6 +44,10 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
       return socket.emit("error", "Combat is not initialized");
     }
 
+    if (combat.hasEnded) {
+      return socket.emit("error", "Combat has already ended");
+    }
+
     if (combat.waitingForPlayerAction) {
       return socket.emit("combat:player-turn", {
         logs: combat.logs,
@@ -82,9 +86,11 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
       }
     }
 
-    const { xp } = room.claimReward(combat.enemyParty);
-    const result = await client.characterModelProxy.awardXp(xp);
-    socket.emit("reward:xp", result.value);
+    if (combat.whoWon === "ally") {
+      const { xp } = room.claimReward(combat.enemyParty);
+      const result = await client.characterModelProxy.awardXp(xp);
+      socket.emit("reward:xp", result.value);
+    }
 
     combat.addLog({ type: "combat-end", message: "Combat has ended" });
     combat.addLog({
@@ -96,6 +102,8 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
 
     return socket.emit("combat:end", {
       logs: combat.logs,
+      allyParty: combat.allyParty,
+      enemyParty: combat.enemyParty,
       whoWon: combat.whoWon,
       reward: null, // TODO: emit reward, and have user select/discard rewards
     });
@@ -108,6 +116,10 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
 
     if (combat == null) {
       return socket.emit("error", "Combat is not initialized");
+    }
+
+    if (combat.hasEnded) {
+      return socket.emit("error", "Combat has already ended");
     }
 
     if (!combat.waitingForPlayerAction) {
@@ -167,6 +179,10 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
 
     if (!combat.waitingForPlayerAction) {
       return socket.emit("error", "Not player turn");
+    }
+
+    if (combat.hasEnded) {
+      return socket.emit("error", "Combat has already ended");
     }
 
     combat.waitingForPlayerAction = false;
