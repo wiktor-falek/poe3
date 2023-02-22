@@ -61,7 +61,7 @@ function renderTemplateModDescription(mod: Mod) {
     </div>
 
     <!-- Base Mods -->
-    <hr v-if="item.baseMods" />
+    <hr v-if="item.baseMods && item.baseMods.length" />
     <div class="item-tooltip__base-mods">
       <div class="item-tooltip__base-mod" v-for="mod in item.baseMods">
         {{ renderTemplateModDescription(mod) }}
