@@ -72,7 +72,6 @@ function joinRoom(roomId: number) {
 }
 
 function leaveRoom() {
-  console.log("leaving room");
   stateService.send("LEAVE_ROOM");
 }
 </script>

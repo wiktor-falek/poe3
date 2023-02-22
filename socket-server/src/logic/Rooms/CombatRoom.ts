@@ -3,6 +3,7 @@ import type { RoomType } from "./Room";
 import Entity from "../combat/Entity";
 import Combat from "../combat/Combat";
 import Enemy from "../combat/Enemy";
+import { Level } from "../../../*";
 
 interface RoomOptions {}
 
@@ -26,7 +27,8 @@ class CombatRoom extends Room {
 
     const enemyParty = [];
     for (let i = 0; i < amountOfEnemies; i++) {
-      const level = { value: 1 };
+      // TODO: find a cleaner way than using Level interface that requires xp and requiredXp
+      const level: Level = { value: 1, xp: 0, requiredXp: 0 };
       const resources = { hp: 5, maxHp: 5 };
       const attributes = {
         strength: 1,
@@ -44,7 +46,7 @@ class CombatRoom extends Room {
     // assign incremental id to each entity
     let id = -1;
     for (const entity of [...allyParty, ...enemyParty]) {
-      id++; 
+      id++;
       entity.id = id;
     }
 

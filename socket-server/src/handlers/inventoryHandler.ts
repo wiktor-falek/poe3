@@ -2,7 +2,7 @@ import type Client from "../helpers/Client";
 import type { Socket } from "socket.io";
 import { choice } from "pyrand";
 import { EquipmentSlot } from "../../*";
-import isEquipmentSlot from "../utils/isEquipmentSlot";
+import isEquipmentSlot from "../helpers/isEquipmentSlot";
 import { Branch, GoldRing, SapphireRing } from "items";
 
 function registerInventoryHandler(
@@ -11,7 +11,8 @@ function registerInventoryHandler(
   client: Client
 ): void {
   const addTestItem = () => {
-    const items = [
+    console.log(GoldRing().magic());
+    const itemPool = [
       Branch(),
       Branch().magic(),
       GoldRing(),
@@ -26,7 +27,7 @@ function registerInventoryHandler(
         description:
           "One ring to rule them all, one ring to find them, One ring to bring them all, and in the darkness bind them; In the Land of Mordor where the shadows lie.",
         requirements: {
-          level: 1,
+          level: 2,
         },
         implicits: [
           {
@@ -53,7 +54,7 @@ function registerInventoryHandler(
       },
     ];
 
-    const item = choice(items);
+    const item = choice(itemPool);
 
     client.characterModelProxy.addItem(item).then((result) => {
       if (!result.ok) {

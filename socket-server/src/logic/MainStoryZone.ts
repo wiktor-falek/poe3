@@ -14,7 +14,7 @@ class MainStoryZone {
     this.currentLocation = 0;
     this.rooms = [
       // new RewardRoom(0, "Old Cellar (floor 2)", zoneLvl),
-      new CombatRoom(0, "Old Cellar (floor 1)", zoneLvl),
+      new RewardRoom(0, "Old Cellar (floor 1)", zoneLvl),
       new CombatRoom(1, "Old Cellar (floor 0)", zoneLvl),
     ];
   }

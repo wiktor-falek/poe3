@@ -7,8 +7,8 @@ export function SapphireRing() {
     "Sapphire Ring",
     1,
     { level: 1 },
-    [{ ...IMPLICIT_MODIFIERS.to_mana, values: [5] }],
-    []
+    [],
+    [{ ...IMPLICIT_MODIFIERS.to_mana, values: [5] }]
   );
 }
 
@@ -17,8 +17,8 @@ export function GoldRing() {
     "Gold Ring",
     1,
     { level: 1 },
-    [{ ...IMPLICIT_MODIFIERS.to_life, values: [5] }],
-    []
+    [],
+    [{ ...IMPLICIT_MODIFIERS.to_life, values: [5] }]
   );
 }
 
@@ -32,5 +32,5 @@ export function Branch() {
   );
 }
 
-const item = Branch().magic();
+// const item = GoldRing().magic();
 // console.log(inspect(item));

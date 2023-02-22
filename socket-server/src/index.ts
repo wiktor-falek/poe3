@@ -12,7 +12,6 @@ import registerCombatHandler from "./handlers/combatHandler.js";
 import registerChatHandler from "./handlers/chatHandler.js";
 import registerInventoryHandler from "./handlers/inventoryHandler.js";
 import cron from "node-cron";
-import prettyBytes from "./utils/prettyBytes.js";
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -58,13 +57,6 @@ const onConnection = (socket: Socket) => {
 io.on("connection", onConnection);
 
 httpServer.listen(4000);
-
-// cron.schedule("*/5 * * * * *", () => {
-//   const memory = process.memoryUsage();
-//   const heapUsed = prettyBytes(memory.heapUsed);
-//   const heapTotal = prettyBytes(memory.heapTotal);
-//   console.log(`HEAP USAGE: ${heapUsed} / ${heapTotal}`);
-// });
 
 cron.schedule("*/5 * * * * *", () => {
   // every 5 seconds remove inactive clients from ClientStorage

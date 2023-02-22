@@ -34,10 +34,9 @@ function registerChatHandler(io: any, socket: Socket, client: Client): void {
 
     const roomName = `global:${validatedRoomNumber}`;
 
-    // leave all global rooms, player can only be in one global room at once
+    // leave other global rooms since player is allowed to be in one global chat room at once
     for (const room of [...socket.rooms]) {
       if (room.startsWith("global")) {
-        console.log(`leaving room ${room}`);
         socket.leave(room);
       }
     }

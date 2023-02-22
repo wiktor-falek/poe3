@@ -2,8 +2,8 @@ import type { ObjectId } from "mongodb";
 
 interface Level {
   value: number;
-  xp?: number;
-  requiredXp?: number;
+  xp: number;
+  requiredXp: number;
 }
 
 interface Resistances {

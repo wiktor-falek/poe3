@@ -1,3 +1,5 @@
+import { randint } from "pyrand";
+
 type RoomType = "reward" | "combat";
 
 interface Reward {
@@ -24,9 +26,9 @@ class Room {
    * Otherwise sets rewardClaimed to true and returns Reward.
    */
   claimReward(): Reward | null {
-    const silver = Math.floor(Math.random() * (12 - 6) + 6); // TODO: finish random library
     if (this.rewardClaimed) return null;
 
+    const silver = randint(25, 30);
     const reward: Reward = { silver };
     this.rewardClaimed = true;
     return reward;

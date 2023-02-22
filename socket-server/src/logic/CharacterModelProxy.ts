@@ -1,10 +1,14 @@
-import type { Character, EquipmentSlot, InventorySlot } from "../../*";
+import type { Character, EquipmentSlot, Level } from "../../*";
+import {
+  LEVEL_CAP,
+  XP_REQUIREMENT_TABLE,
+} from "../constants/xpRequirementTable";
 import CharacterModel from "../db/models/CharacterModel";
-
 // TODO: use Result from CharacterModel and add Promise<Result> as return type of each method
 interface Result {
   ok: boolean;
   value?: any;
+  reason?: string;
 }
 
 /**
@@ -21,14 +25,44 @@ class CharacterModelProxy {
     this.#characterModel = characterModel;
   }
 
-  async addSilver(amount: number): Promise<Result> {
-    const result = await this.#characterModel.addSilver(amount);
-    if (result) {
+  async awardSilver(amount: number): Promise<Result> {
+    const success = await this.#characterModel.awardSilver(amount);
+    if (success) {
       // mutate
       this.character.silver += amount;
       return { ok: true, value: this.character.silver };
     }
     return { ok: false };
+  }
+
+  async awardXp(amount: number): Promise<Result> {
+    if (this.character.level.value == LEVEL_CAP) {
+      return { ok: true };
+    }
+
+    const level: Level = Object.assign(this.character.level);
+
+    level.xp += amount;
+
+    while (level.xp >= XP_REQUIREMENT_TABLE[level.value]) {
+      level.xp -= level.requiredXp;
+      level.value++;
+      level.requiredXp = XP_REQUIREMENT_TABLE[level.value];
+    }
+
+    if (level.value == LEVEL_CAP) {
+      level.xp = 0;
+      level.requiredXp = 0;
+    }
+
+    const success = await this.#characterModel.awardXp(level);
+    if (success) {
+      // mutate
+      this.character.level = level;
+
+      return { ok: true, value: { level, xpGained: amount } };
+    }
+    return { ok: false, reason: "Failed to award xp" };
   }
 
   async addItem(item: any) {
@@ -107,6 +141,15 @@ class CharacterModelProxy {
       return { ok: false, reason: "Target item not found" };
     }
 
+    console.log(inventoryItem.requirements);
+    if (inventoryItem.requirements.level) {
+      if (inventoryItem.requirements.level > this.character.level.value) {
+        return { ok: false, reason: "Level requirement not met" };
+      }
+    } else {
+      // property does not exist, meaning there is no level requirement, continue
+    }
+
     let equipmentSlot: EquipmentSlot = inventoryItem.slot;
 
     let equippedItem;
@@ -154,7 +197,7 @@ class CharacterModelProxy {
     if (firstEmptyInventorySlotIdx === -1) {
       return { ok: false, reason: "Inventory is full" };
     }
-    
+
     const inventoryItem = inventory[firstEmptyInventorySlotIdx];
 
     const result = await this.#characterModel.unequipItem(

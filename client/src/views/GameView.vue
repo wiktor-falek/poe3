@@ -14,11 +14,14 @@ socket.on("character:data", (characterData) => {
     console.log("Failed to load character data emitted by the server");
   }
 });
+
+// TODO: Display loading animation while trying to establish connection for n seconds
+// If failed render <Maintenance /> View
 </script>
 
 <template>
   <main>
     <Game v-if="socketStore.isConnected && playerStore.characterData != null" />
-    <p v-else>Something went wrong</p>
+    <p v-else>*Maintenance View*</p>
   </main>
 </template>

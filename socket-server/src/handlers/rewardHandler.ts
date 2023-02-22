@@ -13,22 +13,29 @@ function registerRewardHandler(io: any, socket: Socket, client: Client): void {
 
     const { silver, items } = reward;
     if (silver) {
-      const result = await client.characterModelProxy.addSilver(silver);
+      const result = await client.characterModelProxy.awardSilver(silver);
+      console.log(result);
       if (!result.ok) {
         return socket.emit("error");
       }
     }
 
-    room.completed = true;
+    // const result = await client.characterModelProxy.awardXp(9);
+    // if (result.ok) {
+    //   socket.emit("reward:xp", result.value);
+    // }
+    const xpGained = 9;
+    const result = await client.characterModelProxy.awardXp(xpGained);
 
-    return socket.emit("reward:silver-test", {
+    socket.emit("reward:xp", result.value)
+
+    socket.emit("reward:silver", {
       silver,
-      items,
       totalSilver: client.characterModelProxy.character.silver,
     });
   };
 
-  socket.on("reward:get-silver-test", claimRoomReward);
+  socket.on("reward:claim-room-reward", claimRoomReward);
 }
 
 export default registerRewardHandler;

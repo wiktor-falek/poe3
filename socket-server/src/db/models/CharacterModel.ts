@@ -1,5 +1,5 @@
 import { Collection, ObjectId } from "mongodb";
-import { Character, EquipmentSlot } from "../../../*";
+import { Character, EquipmentSlot, Level } from "../../../*";
 import Mongo from "../Mongo";
 
 interface Result {
@@ -47,10 +47,21 @@ class CharacterModel {
     return result.characters[0];
   }
 
-  async addSilver(silverAmount: number): Promise<boolean> {
+  async awardSilver(silverAmount: number): Promise<boolean> {
     const result = await this.collection.updateOne(
       { ...this.filter },
       { $inc: { "characters.$.silver": silverAmount } }
+    );
+    if (result.acknowledged && result.modifiedCount === 1) {
+      return true;
+    }
+    return false;
+  }
+
+  async awardXp(level: Level): Promise<boolean> {
+    const result = await this.collection.updateOne(
+      { ...this.filter },
+      { $set: { "characters.$.level": level } }
     );
     if (result.acknowledged && result.modifiedCount === 1) {
       return true;
