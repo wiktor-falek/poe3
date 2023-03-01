@@ -2,8 +2,6 @@ import { Socket } from "socket.io";
 import ClientStorage from "../helpers/ClientStorage";
 import CharacterModel from "../db/models/CharacterModel";
 import logger from "../logger";
-import { startingAttributes } from "../constants/attributes";
-import { CharacterClass } from "../../*";
 import calculateCharacterProperties from "../helpers/calculateCharacterProperties";
 
 // fetches the character from the database and creates a
