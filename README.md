@@ -44,19 +44,23 @@ randomised environment generation of roguelikes, with turn based strategy genre.
 
 ## Projects
 
-### **api** - `Handles authentication and authorization, CRUD operations for player characters.`
+### **`api`**
+#### Handles authentication and authorization, CRUD operations for player characters.
 
 <br>
 
-### **socket-server** - `Authoritative game server which handles all of the logic.`
+### **`socket-server`**
+#### Authoritative game server which handles all of the logic.
 
 <br>
 
-### **client** - `Serves HTML and renders data emitted by socket-server, and provides an interface for player actions.`
+### **`client`**
+#### Serves HTML and renders data emitted by socket-server, and provides an interface for player actions.
 
 <br>
 
-### **items** - `Module for generating items randomly and storing data of item modifiers.`
+### **`items`**
+#### Module for generating items randomly and storing data of item modifiers.
 
 <br>
 <br>
