@@ -4,7 +4,7 @@ import { ref } from "vue";
 const props = defineProps(["id", "name", "class", "level"]);
 
 const deleteCharacter = async (characterId) => {
-  const url = `http://localhost:3000/api/v1/character/${characterId}`;
+  const url = `http://localhost:3000/api/v1/characters/${characterId}`;
   const options = {
     method: "DELETE",
     credentials: "include",

@@ -12,7 +12,7 @@ import {
 
 const router = Router();
 
-// responds with basic data of all characters
+// basic data of all characters
 router.get("/characters", async (req, res) => {
   const { user } = res.locals;
 
@@ -29,9 +29,9 @@ router.get("/characters", async (req, res) => {
   }
 });
 
-// responds with full data of character at id
+// full data of a character matching id
 router.get(
-  "/character/:id",
+  "/characters/:id",
   param("id").isString().isLength({ min: 24, max: 24 }),
   async (req, res) => {
     const errors = validationResult(req);
@@ -73,9 +73,9 @@ router.get(
   }
 );
 
-// creates a character
+// create a new character
 router.post(
-  "/character",
+  "/characters",
   body("name").isString().trim().isLength({ min: 3, max: 24 }),
   body("class").isString().trim().isLength({ min: 3, max: 16 }),
   async (req, res) => {
@@ -123,9 +123,9 @@ router.post(
   }
 );
 
-// responds with full data of character at id
+// delete a character
 router.delete(
-  "/character/:id",
+  "/characters/:id",
   param("id").isString().isLength({ min: 24, max: 24 }),
   async (req, res) => {
     const errors = validationResult(req);

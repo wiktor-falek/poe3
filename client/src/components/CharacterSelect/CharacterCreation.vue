@@ -41,7 +41,7 @@ const createCharacter = () => {
 
   // fetch POST
   const postCharacter = async () => {
-    const url = "http://localhost:3000/api/v1/character";
+    const url = "http://localhost:3000/api/v1/characters";
     const options = {
       method: "POST",
       credentials: "include",
