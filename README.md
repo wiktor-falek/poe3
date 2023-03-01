@@ -22,12 +22,20 @@
 
 - Character inventory and equipment management (drag & drop API, popovers), with state synchronised between database, backend and frontend in real time.
 
+- Global chat with client side and server side commands. Supports multiple separate rooms, use `/global` command to join a room.
+
+- Granting silver and xp rewards.
+
+- Basic combat prototype, very messy and doesn't support multiple clients in one dungeon instance.
+
 <br>
 
 ### What is the genre of the game?
 
 Multiplayer browser game that combines ARPG item and loot system similar to Diablo II and Path of Exile,
 randomised environment generation of roguelikes, with turn based strategy genre.
+
+<br>
 
 ### What are the selling points of the game?
 
@@ -45,21 +53,25 @@ randomised environment generation of roguelikes, with turn based strategy genre.
 ## Projects
 
 ### **`api`**
+
 #### Handles authentication and authorization, CRUD operations for player characters.
 
 <br>
 
 ### **`socket-server`**
+
 #### Authoritative game server which handles all of the logic.
 
 <br>
 
 ### **`client`**
+
 #### Serves HTML and renders data emitted by socket-server, and provides an interface for player actions.
 
 <br>
 
 ### **`items`**
+
 #### Module for generating items randomly and storing data of item modifiers.
 
 <br>
