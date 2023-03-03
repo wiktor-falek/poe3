@@ -26,6 +26,9 @@ const userSchema = Joi.object({
       .max(36)
       .default(12)
   }),
+  social: Joi.object({
+    friends: Joi.array().default([])
+  }),
   shared_stash: Joi.array()
   .default(new Array(20).fill(null)),
 });

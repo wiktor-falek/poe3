@@ -81,6 +81,11 @@ randomised environment generation of roguelikes, with turn based strategy genre.
 
 Make sure you have MongoDB installed, verify by running `mongod` command
 
+create indexes
+```
+db.users.createIndex({ "characters.name": 1 }, { unique: true } )
+```
+
 Install dependencies of all projects by running `npm i` in root directory
 
 TODO: Setup a script to start all processes

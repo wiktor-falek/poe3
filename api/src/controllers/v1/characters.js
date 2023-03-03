@@ -6,9 +6,7 @@ import logger from "../../../logger.js";
 import characterSchema from "../../db/schemas/characterSchema.js";
 import User from "../../db/models/User.js";
 
-import {
-  startingGear,
-} from "../../globals/playerClasses.js";
+import { startingGear } from "../../globals/playerClasses.js";
 
 const router = Router();
 
@@ -107,18 +105,32 @@ router.post(
       if (user.characters.length >= user.account.characterLimit) {
         return res.status(400).json({ error: "reached character limit" });
       }
+
+      const existingCharacter = user.characters.find(
+        (character) => character.name === req.body.name
+      );
+      if (existingCharacter) {
+        return res.status(400).json({ error: "name is already in use" });
+      }
     } catch {}
 
     // otherwise update
     const newCharacterId = new ObjectId();
-    const result = await User.collection.updateOne(
-      { _id: ObjectId(userId) },
-      { $push: { characters: { _id: newCharacterId, ...character } } }
-    );
 
-    if (result.acknowledged) {
-      return res.status(200).json({ _id: newCharacterId, ...character });
+    try {
+      const result = await User.collection.updateOne(
+        { _id: ObjectId(userId) },
+        { $push: { characters: { _id: newCharacterId, ...character } } }
+      );
+
+      if (result.acknowledged) {
+        return res.status(200).json({ _id: newCharacterId, ...character });
+      }
+    } catch {
+      // there is an unique index, another account already created a character with that name
+      return res.status(400).json({ error: "name is already in use" });
     }
+
     res.status(400).json({ error: "character creation failed" });
   }
 );

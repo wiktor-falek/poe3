@@ -1,8 +1,8 @@
 import Mongo from "../Mongo.js";
 
 import userSchema from "../schemas/userSchema.js";
-import { logger } from "express-winston";
 import bcrypt from "bcrypt";
+import logger from "../../../logger.js";
 
 class User {
   constructor(db) {
@@ -80,6 +80,7 @@ class User {
     try {
       const newUser = await this.collection.insertOne(userData);
     } catch (e) {
+      
       logger.error(`failed to save new user, ${e}`);
       return null;
     }
