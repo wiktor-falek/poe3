@@ -42,10 +42,6 @@ function registerCombatHandler(io: any, socket: Socket, client: Client): void {
       return socket.emit("error", "Combat is not initialized");
     }
 
-    if (combat.hasEnded) {
-      return socket.emit("error", "Combat has already ended");
-    }
-
     if (combat.waitingForPlayerAction) {
       return socket.emit("combat:player-turn", {
         logs: combat.logs,
