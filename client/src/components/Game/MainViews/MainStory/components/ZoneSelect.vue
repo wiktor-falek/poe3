@@ -47,6 +47,7 @@ onBeforeMount(() => {
 });
 </script>
 
+
 <template>
   <div class="zone-select" v-if="zones">
     <div
@@ -55,7 +56,7 @@ onBeforeMount(() => {
       @click="selectZoneHandle(id)"
       v-for="[id, zone] in zones.entries()"
     >
-      {{ zone.name }} (zone lvl {{ zone.ilvl }})
+      {{ zone.name }} (zone lvl {{ zone.zoneLvl }})
     </div>
   </div>
   <button @click="selectZone">Select</button>
