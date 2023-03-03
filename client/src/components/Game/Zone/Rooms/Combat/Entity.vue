@@ -20,11 +20,15 @@ const props = defineProps(["entity", "selected"]);
         >
           {{ entity.name }}
         </span>
-        <span>&nbsp;(id={{ entity.id }})</span>
       </p>
+      <p>(id={{ entity.id }})</p>
       <p>Lv {{ entity.level.value }}</p>
     </div>
-    <div src="" class="entity__sprite" :class="{ selected: props.selected === true }">
+    <div
+      src=""
+      class="entity__sprite"
+      :class="{ selected: props.selected === true }"
+    >
       <!-- TODO: unhardcore sprite -->
       <img
         src="../../../../../assets/icons/dbx7dgp-62d50af9-12c9-4a2f-b56d-0fff6149f505.gif"

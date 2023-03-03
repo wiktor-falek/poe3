@@ -14,7 +14,8 @@ function registerRewardHandler(io: any, socket: Socket, client: Client): void {
       return socket.emit("error", "Reward has already been claimed");
     }
 
-    room.completed = true; // TODO: idk where this belongs
+    // TODO: set completed in the room logic, for example when the combat ends
+    room.completed = true;
 
     const { silver, items } = reward;
     if (silver) {
@@ -23,6 +24,8 @@ function registerRewardHandler(io: any, socket: Socket, client: Client): void {
         return socket.emit("error");
       }
     }
+
+    room.rewardClaimed = true;
 
     const xpGained = 9;
     const result = await client.characterModelProxy.awardXp(xpGained);

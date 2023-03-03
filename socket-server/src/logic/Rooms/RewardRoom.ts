@@ -15,7 +15,6 @@ class RewardRoom extends Room {
   }
 
   claimReward(): Reward | null {
-    // TODO: implement separate claimReward() method for CombatRoom and RewardRoom
     if (this.rewardClaimed) return null;
 
     const silver = randint(25, 30);

@@ -50,6 +50,8 @@ class CombatRoom extends Room {
   }
 
   claimReward(enemyParty: Array<Enemy>) {
+    if (this.rewardClaimed) return null;
+    
     const xp = enemyParty.map((enemy) => enemy.xpAward).reduce((a, b) => a + b);
     return { xp };
   }
