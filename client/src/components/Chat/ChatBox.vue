@@ -95,8 +95,7 @@ function sendMessage() {
             <span
               class="message__sender__name"
               :class="{
-                'this-sender':
-                  message.sender === playerStore.character.name,
+                'this-sender': message.sender === playerStore.character.name,
               }"
               >{{ message.sender }}</span
             >
@@ -112,7 +111,7 @@ function sendMessage() {
       </div>
       <div class="input-area">
         <input type="text" v-model="inputMessage" @keyup.enter="sendMessage" />
-        <button @click="sendMessage">Send</button>
+        <button class="button" @click="sendMessage">Send</button>
       </div>
     </div>
 
@@ -146,15 +145,15 @@ function sendMessage() {
 
 .chat-box {
   display: flex;
-  border: 2px solid rgb(217, 212, 212);
   width: 100%;
   height: 100%;
-  padding: 5px;
+  padding: 3px;
   gap: 5px;
   font-size: 20px;
 }
 .messages {
-  max-height: 167px;
+  padding-left: 3px;
+  max-height: 172px;
   overflow-y: auto;
   overflow-x: hidden;
   display: flex;
@@ -197,7 +196,7 @@ function sendMessage() {
   min-width: 150px;
   width: 150px;
   padding: 5px;
-  border: 2px solid rgb(217, 212, 212);
+  border: 1px solid rgb(217, 212, 212);
   display: flex;
   justify-content: space-between;
 }
@@ -214,7 +213,7 @@ function sendMessage() {
 }
 
 .circle {
-  border: 2px solid white;
+  border: 1px solid white;
   box-sizing: border-box;
   width: 20px;
   height: 20px;

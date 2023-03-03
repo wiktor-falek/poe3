@@ -133,9 +133,11 @@ function endTurn() {
     </div>
     <div class="">
       <p>turn order = {{ room.combat.turnOrder }}</p>
-      <button @click="emit('abandonRun')">Abandon Run</button>
-      <button @click="playerAction">Player Action</button>
-      <button @click="endTurn">End turn</button>
+      <div class="buttons">
+        <button class="button" @click="emit('abandonRun')">Abandon Run</button>
+        <button class="button" @click="playerAction">Player Action</button>
+        <button class="button" @click="endTurn">End turn</button>
+      </div>
       <HUD
         :actionPoints="playerEntity.actionPoints"
         @select-skill="(skillId: number) => selectSkill(skillId)"
@@ -146,16 +148,16 @@ function endTurn() {
 
 <style scoped>
 .selected {
-  border: 2px solid orange;
+  border: 1px solid orange;
 }
 
 .combat {
+  height: 100%;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: repeat(3, 1fr);
   grid-column-gap: px;
   grid-row-gap: 0px;
-  height: 100%;
 }
 
 .party--enemy {
@@ -172,5 +174,9 @@ function endTurn() {
   gap: 10px;
   border-bottom: 2px solid gray;
   box-sizing: content-box;
+}
+
+.buttons {
+  display: flex;
 }
 </style>

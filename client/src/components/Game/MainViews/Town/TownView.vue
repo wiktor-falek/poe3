@@ -19,5 +19,5 @@ socket.on("inventory:add-item", (data) => {
 
 <template>
   <h1>Town</h1>
-  <button @click="addItemTest">Add Item Test</button>
+  <button class="button" @click="addItemTest">Add Item Test</button>
 </template>

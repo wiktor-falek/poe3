@@ -24,18 +24,15 @@ const switchButtonShouldRender = () => {
 
 <template>
   <header>
-    <div class="logo">
+    <a class="logo" href="/">
       <p>Path of Exile 3</p>
-    </div>
+    </a>
     <div class="options" v-if="authStore.isAuthenticated">
       <!-- <img src="../src/assets/icons/cogwheel.svg" alt="settings" style="height: 32px; width: auto; background-color: white;"> -->
-      <button
-        v-if="switchButtonShouldRender()"
-        @click="iKnowThisShouldBeAnchor"
+      <a href="/" class="button" v-if="switchButtonShouldRender()"
+        >Switch Character</a
       >
-        Switch Character
-      </button>
-      <button @click="deleteCookies">LOGOUT</button>
+      <button class="button" @click="deleteCookies">LOGOUT</button>
     </div>
   </header>
 
@@ -51,6 +48,7 @@ const switchButtonShouldRender = () => {
   font-size: 24px;
   text-decoration: none;
   color: white;
+  user-select: none;
 }
 
 .options {

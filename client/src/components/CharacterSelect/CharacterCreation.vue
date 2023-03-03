@@ -55,10 +55,12 @@ const createCharacter = () => {
       }),
     };
     fetch(url, options).then(async (response) => {
-      // if (response.status === 200) {
-      // }
-      const data = await response.json();
-      window.location.href = "/";
+      if (response.status === 200) {
+        const data = await response.json();
+        window.location.href = "/";
+      } else {
+        // TODO: toast
+      }
     });
   };
 
@@ -98,7 +100,10 @@ const createCharacter = () => {
           </div>
         </div>
         <p class="banner__description">Playstyle description</p>
-        <button class="select" @click="selectCharacter($event, 'swordsman')">
+        <button
+          class="button select"
+          @click="selectCharacter($event, 'swordsman')"
+        >
           Select
         </button>
       </div>
@@ -124,7 +129,10 @@ const createCharacter = () => {
           </div>
         </div>
         <p class="banner__description">Playstyle description</p>
-        <button class="select" @click="selectCharacter($event, 'ranger')">
+        <button
+          class="button select"
+          @click="selectCharacter($event, 'ranger')"
+        >
           Select
         </button>
       </div>
@@ -150,7 +158,10 @@ const createCharacter = () => {
           </div>
         </div>
         <p class="banner__description">Playstyle description</p>
-        <button class="select" @click="selectCharacter($event, 'sorcerer')">
+        <button
+          class="button select"
+          @click="selectCharacter($event, 'sorcerer')"
+        >
           Select
         </button>
       </div>
@@ -176,7 +187,10 @@ const createCharacter = () => {
           </div>
         </div>
         <p class="banner__description">Playstyle description</p>
-        <button class="select" @click="selectCharacter($event, 'assassin')">
+        <button
+          class="button select"
+          @click="selectCharacter($event, 'assassin')"
+        >
           Select
         </button>
       </div>
@@ -203,7 +217,7 @@ const createCharacter = () => {
       min="4"
       required
     />
-    <button id="create" class="margin-vertical" @click="createCharacter">
+    <button id="create" class="button" @click="createCharacter">
       Create Character
     </button>
   </div>
@@ -216,7 +230,7 @@ const createCharacter = () => {
   position: absolute;
   left: calc(100% - var(--width));
   width: 350px;
-  border: 2px solid #3c454b;
+  border: 1px solid #3c454b;
   z-index: 100;
   background-color: rgb(30, 30, 30);
 }
@@ -262,7 +276,7 @@ const createCharacter = () => {
 .banner {
   text-align: center;
   box-sizing: border-box;
-  border: 2px solid #3c454b;
+  border: 1px solid #3c454b;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -275,7 +289,7 @@ const createCharacter = () => {
   margin-top: 30px;
   width: 128px;
   height: 128px;
-  border: 2px solid #3c454b;
+  border: 1px solid #3c454b;
   border-radius: 50%;
 }
 
@@ -302,7 +316,7 @@ const createCharacter = () => {
   box-sizing: content-box;
   width: 48px;
   height: 48px;
-  border: 2px solid rgb(211, 211, 211);
+  border: 1px solid rgb(211, 211, 211);
   background-color: transparent;
 }
 
@@ -313,15 +327,16 @@ const createCharacter = () => {
 .select {
   bottom: 20px;
   position: absolute;
-  border: 2px solid lightblue;
+  border: 1px solid lightblue;
 }
 
 .nickname {
   height: 30px;
   font-size: 16px;
   text-align: center;
-  width: 170px;
+  width: 160px;
   margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 .banner__skill-icon {

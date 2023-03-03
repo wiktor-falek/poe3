@@ -17,7 +17,7 @@ const props = defineProps({
   width: 150px;
   height: 150px;
   /* default color for unavailable room */
-  border: 2px solid gray;
+  border: 1px solid gray;
   opacity: 0.5;
 }
 </style>

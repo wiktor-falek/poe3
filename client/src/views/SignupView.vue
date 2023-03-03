@@ -1,8 +1,5 @@
 <script setup>
 import { ref } from "vue";
-import { useRouter } from "vue-router";
-
-const router = useRouter;
 
 const username = ref("");
 const password = ref("");
@@ -55,7 +52,7 @@ const submit = () => {
           v-model="password"
         />
 
-        <button @click="submit">Register</button>
+        <button class="button" @click="submit">Register</button>
       </form>
       <p>Already have an account? <a href="/signin">Sign in here</a></p>
     </div>

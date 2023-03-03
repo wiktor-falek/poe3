@@ -59,7 +59,7 @@ onBeforeMount(() => {
       {{ zone.name }} (zone lvl {{ zone.zoneLvl }})
     </div>
   </div>
-  <button @click="selectZone">Select</button>
+  <button class="button" @click="selectZone">Select</button>
 </template>
 
 <style scoped>
@@ -80,7 +80,7 @@ onBeforeMount(() => {
   max-height: 554px;
   overflow: scroll;
   padding: 10px;
-  border: 2px solid gray;
+  border: 1px solid gray;
   border-radius: 20px;
 }
 
@@ -89,6 +89,6 @@ onBeforeMount(() => {
 }
 
 .selected {
-  border: 2px solid orange;
+  border: 1px solid orange;
 }
 </style>

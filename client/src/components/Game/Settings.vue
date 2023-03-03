@@ -1,13 +1,14 @@
 <template>
   <div class="settings">
-    Settings
+    *Settings*
   </div>
 </template>
 
 <style scoped>
 .settings {
-  border: 2px solid rgb(217, 212, 212);
-  width: 100%;
-  height: 100%;
+  border: 1px solid rgb(217, 212, 212);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

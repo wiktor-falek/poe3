@@ -23,7 +23,7 @@ const imgSrc = ref(
   flex-direction: column;
   width: 48px;
   height: 48px;
-  border: 2px solid rgb(241, 241, 241);
+  border: 1px solid rgb(241, 241, 241);
   box-sizing: content-box;
   justify-content: space-between;
   background-repeat: no-repeat;

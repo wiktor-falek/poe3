@@ -54,22 +54,27 @@ socket.on("instance:has-left-room", (leftSuccessfully) => {
 </script>
 
 <template>
-  <button @click="emit('abandonRun')">Abandon Run</button>
-  <div class="reward-room">
-    <div class="chest" v-if="!rewardIsClaimed" @click="handleClick">
-      *Reward Chest*
+  <div class="wrapper">
+    <div class="ui">
+      <button class="button" @click="emit('abandonRun')">Abandon Run</button>
     </div>
-    <div class="chest" v-else>You received {{ silverGained }} silver</div>
-    <button @click="leaveRoomHandle" v-if="leaveButtonIsVisible">
-      Proceed
-    </button>
+    <div class="reward-room">
+      <div class="chest" v-if="!rewardIsClaimed" @click="handleClick">
+        *Reward Chest*
+      </div>
+      <div class="chest" v-else>You received {{ silverGained }} silver</div>
+      <button class="button" @click="leaveRoomHandle" v-if="leaveButtonIsVisible">
+        Proceed
+      </button>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.reward-room {
-  width: 100%;
+.wrapper {
   height: 100%;
+}
+.reward-room {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -80,6 +85,6 @@ socket.on("instance:has-left-room", (leftSuccessfully) => {
   justify-content: center;
   height: 150px;
   width: 250px;
-  border: 2px solid white;
+  border: 1px solid white;
 }
 </style>

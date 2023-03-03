@@ -68,7 +68,7 @@ function percent(value: number, maxValue: number) {
   color: black;
   display: flex;
   align-items: center;
-  border: 2px solid white;
+  border: 1px solid white;
 }
 
 .resource-bar__data {

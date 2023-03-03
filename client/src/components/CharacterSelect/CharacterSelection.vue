@@ -52,7 +52,7 @@ const redirectToGame = () => {
 <template>
   <div class="content" v-show="!showCharacterCreation">
     <button
-      class="character-select margin-vertical"
+      class="button character-select margin-vertical"
       @click="showCharacterCreation = !showCharacterCreation"
     >
       Create New
@@ -73,7 +73,7 @@ const redirectToGame = () => {
       </div>
     </div>
     <button
-      class="character-select margin-vertical"
+      class="button character-select margin-vertical"
       @click="redirectToGame"
       :disabled="!selectedCharacter"
     >
@@ -82,7 +82,7 @@ const redirectToGame = () => {
   </div>
   <div class="content" v-show="showCharacterCreation">
     <button
-      class="margin-vertical"
+      class="button margin-vertical"
       @click="showCharacterCreation = !showCharacterCreation"
     >
       Go back
@@ -101,5 +101,13 @@ const redirectToGame = () => {
   width: 300px;
   padding: 10px;
   box-sizing: content-box;
+}
+
+.content {
+  width: 100%;
+}
+
+.focus {
+  border-color: var(--focus) !important;
 }
 </style>

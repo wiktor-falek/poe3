@@ -69,6 +69,7 @@ const isDeleted = ref(false);
   min-width: fit-content;
   display: flex;
   gap: 10px;
+  user-select: none;
 }
 
 .button-close {
@@ -84,7 +85,8 @@ const isDeleted = ref(false);
 }
 
 .character:hover {
-  border: 2px solid orange;
+  border: 1px solid rgb(179, 179, 179);
+  background-color: #242424;
 }
 
 .character__class::first-letter {
@@ -102,7 +104,7 @@ const isDeleted = ref(false);
   background-color: rgb(43, 43, 43);
   width: var(--width);
   height: var(--height);
-  z-index: 100000;
+  z-index: 100;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -21,7 +21,7 @@ const props = defineProps(["entity", "selected"]);
           {{ entity.name }}
         </span>
       </p>
-      <p>(id={{ entity.id }})</p>
+      <!-- <p>(id={{ entity.id }})</p> -->
       <p>Lv {{ entity.level.value }}</p>
     </div>
     <div
@@ -40,7 +40,7 @@ const props = defineProps(["entity", "selected"]);
 
 <style scoped>
 .selected {
-  border: 2px solid orange;
+  border: 1px solid var(--focus);
 }
 
 .player-name-highlight {

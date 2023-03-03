@@ -49,7 +49,7 @@ function joinRoomHandle(roomId: number) {
       </p>
     </div>
     <div class="top__wrapper-right">
-      <button @click="abandonRunHandle">Abandon Run</button>
+      <button class="button" @click="abandonRunHandle">Abandon Run</button>
     </div>
   </div>
   <div class="rooms">

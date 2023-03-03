@@ -41,8 +41,8 @@ function closeContextMenu() {
 
 <template>
   <div class="context-menu" v-click-outside-element="closeContextMenu">
-    <button @click="equipItem">Equip Item</button>
-    <button @click="destroyItem">Destroy Item</button>
+    <button class="button" @click="equipItem">Equip Item</button>
+    <button class="button" @click="destroyItem">Destroy Item</button>
   </div>
 </template>
 
@@ -50,10 +50,9 @@ function closeContextMenu() {
 .context-menu {
   position: absolute;
   width: 160px;
-  border: 2px solid orange;
   background-color: black;
   bottom: calc(60px + 10px);
-  z-index: 1000;
+  z-index: 100;
 
   display: flex;
   flex-direction: column;

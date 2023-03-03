@@ -150,7 +150,7 @@ function renderTemplateModDescription(mod: Mod) {
   background-color: rgb(15, 15, 15);
   border: 1px solid;
   /* opacity: 0.95; */
-  z-index: 10000;
+  z-index: 100;
   padding: 15px 20px;
   text-align: center;
   display: flex;
@@ -166,6 +166,9 @@ function renderTemplateModDescription(mod: Mod) {
 }
 
 hr {
+  border: none;
+  background-color: gray;
+  height: 1px;
   width: 100%;
   margin: 10px 0;
 }

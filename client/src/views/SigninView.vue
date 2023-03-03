@@ -39,7 +39,7 @@ const submit = () => {
   <main>
     <div class="center">
       <div class="panel">
-        <h2>Welcome back</h2>
+        <p class="header">Welcome Back</p>
         <form @submit.prevent="">
           <label for="username">Username</label>
           <input
@@ -57,7 +57,7 @@ const submit = () => {
             v-model="password"
           />
 
-          <button @click="submit">Login</button>
+          <button class="button" @click="submit">Login</button>
         </form>
         <p>Not registered? <a href="/signup">Sign up here</a></p>
       </div>
@@ -70,15 +70,14 @@ form {
   display: flex;
   flex-direction: column;
   text-align: left;
-  font-size: 20px;
-    /* gap: 15px; */
+  font-size: 24px;
 }
 
 input {
   height: 30px;
-  min-width: 250px;
+  max-width: 280px;
   margin-bottom: 25px;
-  font-size: 20px;
+  font-size: 24px;
 }
 
 button {
@@ -107,5 +106,11 @@ button {
   backdrop-filter: blur(3px);
   padding: 15px;
   border-radius: 18px;
+}
+
+.header {
+  text-align: center;
+  font-size: 40px;
+  font-weight: bold;
 }
 </style>

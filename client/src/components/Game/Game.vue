@@ -2,7 +2,6 @@
 import { defineAsyncComponent, ref } from "vue";
 import { usePlayerStore } from "../../stores/playerStore";
 
-
 import TabInventory from "./Tabs/TabInventory.vue";
 import TabCharacter from "./Tabs/TabCharacter.vue";
 import TabStats from "./Tabs/TabPlaceholder.vue";
@@ -38,59 +37,65 @@ function changeView(viewName) {
   <main @contextmenu.prevent="">
     <div class="game">
       <div class="div1">
-        <MainView />
-      </div>
+        <button class="button" @click="changeView('town')">Town</button>
+        <button class="button button-disabled">Blacksmith</button>
+        <button class="button button-disabled">Alchemist</button>
+        <button class="button button-disabled">Something</button>
+        <button class="button button-disabled">Stash</button>
 
-      <div class="div2">
-        <ChatBox />
-      </div>
+        <hr />
 
-      <div class="div3">
-        <TabInventory
-          v-if="selectedTab === 'inventory'"
-        />
-        <TabCharacter
-          v-if="selectedTab === 'character'"
-        />
-        <TabStats
-          v-if="selectedTab === 'placeholder'"
-        />
-        <div class="tab-buttons">
-          <button @click="selectedTab = 'inventory'">Inventory</button>
-          <button @click="selectedTab = 'character'">Character</button>
-          <button @click="selectedTab = 'placeholder'">Placeholder</button>
+        <button class="button button-disabled">Arena</button>
+        <button class="button button-disabled">Guild</button>
+        <button class="button button-disabled">Hall of Fame</button>
+        <button class="button button-disabled">Something</button>
+
+        <hr />
+
+        <button class="button" @click="changeView('mainStory')">
+          Main Story
+        </button>
+        <button class="button button-disabled">Dungeons</button>
+        <button class="button button-disabled">Endgame</button>
+        <button class="button button-disabled">More Endgame</button>
+
+        <div class="settings">
+          <Settings />
         </div>
       </div>
 
-      <div class="div4">
-        <button @click="changeView('town')">Town</button>
-        <button class="button-disabled">Blacksmith</button>
-        <button class="button-disabled">Alchemist</button>
-        <button class="button-disabled">Something</button>
-        <button class="button-disabled">Stash</button>
-
-        <!-- br go brrr -->
-        <br />
-        <hr />
-        <br />
-
-        <button class="button-disabled">Arena</button>
-        <button class="button-disabled">Guild</button>
-        <button class="button-disabled">Hall of Fame</button>
-
-        <!-- br go brrr -->
-        <br />
-        <hr />
-        <br />
-
-        <button @click="changeView('mainStory')">Main Story</button>
-        <button class="button-disabled">Dungeons</button>
-        <button class="button-disabled">Endgame</button>
-        <button class="button-disabled">More Endgame</button>
+      <div class="div2">
+        <MainView />
       </div>
 
-      <div class="div5">
-        <Settings />
+      <div class="div3">
+        <ChatBox />
+      </div>
+
+      <div class="div4">
+        <TabInventory v-if="selectedTab === 'inventory'" />
+        <TabCharacter v-if="selectedTab === 'character'" />
+        <TabStats v-if="selectedTab === 'placeholder'" />
+        <div class="tab-buttons">
+          <button
+            class="button button--no-min-width"
+            @click="selectedTab = 'inventory'"
+          >
+            Inventory
+          </button>
+          <button
+            class="button button--no-min-width"
+            @click="selectedTab = 'character'"
+          >
+            Character
+          </button>
+          <button
+            class="button button--no-min-width"
+            @click="selectedTab = 'placeholder'"
+          >
+            Placeholder
+          </button>
+        </div>
       </div>
     </div>
   </main>
@@ -101,46 +106,68 @@ main {
   user-select: none;
 }
 
+/* GRID */
 .game {
   display: grid;
-  grid-template-columns: 2fr 9fr 3fr;
+  grid-template-columns: 1.2fr 6fr 2fr;
   grid-template-rows: 3fr 1fr;
   grid-column-gap: 0px;
   grid-row-gap: 0px;
-  gap: 5px;
-
-  height: 100%;
 }
+
 .div1 {
+  grid-area: 1 / 1 / 3 / 2;
+}
+.div2 {
   grid-area: 1 / 2 / 2 / 3;
-  border: 2px solid rgb(217, 212, 212);
-  overflow: hidden;
+}
+.div3 {
+  grid-area: 2 / 2 / 3 / 3;
+}
+.div4 {
+  grid-area: 1 / 3 / 3 / 4;
+}
+/* END GRID */
+
+.game {
+  gap: 3px;
+  height: calc(100vh - 50px);
+}
+
+.game > * {
+  border: 1px solid rgb(217, 212, 212);
+  overflow: auto;
+}
+
+.div1 {
+  display: flex;
+
+  padding: 7px 15px;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .div2 {
-  grid-area: 2 / 2 / 3 / 3;
 }
 
 .div3 {
-  grid-area: 1 / 3 / 2 / 4;
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 2px solid rgb(217, 212, 212);
 }
 
 .div4 {
-  grid-area: 1 / 1 / 3 / 2;
   display: flex;
+  align-items: center;
   flex-direction: column;
-  gap: 10px;
-  padding: 15px;
-
-  border: 2px solid rgb(217, 212, 212);
 }
 
-.div5 {
-  grid-area: 2 / 3 / 3 / 4;
+hr {
+  border: none;
+  height: 1px;
+  margin: 0px px;
+  background-color: gray;
 }
 
 .tab {
@@ -154,10 +181,17 @@ main {
 .tab-buttons {
   display: flex;
   justify-content: space-between;
-  width: 354px;
+  width: 100%;
 }
 .tab-buttons button {
+  height: 40px;
   flex: 1;
   border-radius: 0;
+}
+
+.settings {
+  height: 85px;
+  border-radius: 5px;
+  margin-top: auto;
 }
 </style>
