@@ -3,7 +3,6 @@ import { Server, Socket } from "socket.io";
 import ClientStorage from "./helpers/ClientStorage.js";
 import logger from "./logger.js";
 import initClient from "./middlewares/initClient.js";
-import type Client from "./helpers/Client.js";
 import registerInstanceHandler from "./handlers/instanceHandler.js";
 import registerUtilsHandler from "./handlers/utilsHandler.js";
 import registerZoneHandler from "./handlers/zoneHandler.js";
@@ -12,6 +11,7 @@ import registerCombatHandler from "./handlers/combatHandler.js";
 import registerChatHandler from "./handlers/chatHandler.js";
 import registerInventoryHandler from "./handlers/inventoryHandler.js";
 import cron from "node-cron";
+import registerPartyHandler from "./handlers/partyHandler.js";
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -43,6 +43,7 @@ const onConnection = (socket: Socket) => {
   registerRewardHandler(io, socket, client);
   registerCombatHandler(io, socket, client);
   registerInventoryHandler(io, socket, client);
+  registerPartyHandler(io, socket, client);
 
   socket.on("disconnect", (reason) => {
     client.disconnect();

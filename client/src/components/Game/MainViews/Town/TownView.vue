@@ -15,6 +15,7 @@ socket.on("inventory:add-item", (data) => {
   const { index, item } = data;
   inventory[index] = item;
 });
+
 </script>
 
 <template>

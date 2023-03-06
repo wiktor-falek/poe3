@@ -7,22 +7,31 @@ import CharacterModel from "../db/models/CharacterModel";
 class Client {
   isConnected: boolean;
   disconnectTimestamp: number | null;
+  socketId: string | null;
   username: string;
   characterModelProxy: CharacterModelProxy;
+  partyRoomId: string | null;
   instance: Instance | null;
   constructor(
+    socketId: string,
     username: string,
     character: Character,
     characterModel: CharacterModel
   ) {
     this.isConnected = false;
     this.disconnectTimestamp = null;
+    this.socketId = socketId;
     this.username = username;
     this.characterModelProxy = new CharacterModelProxy(
       character,
       characterModel
     );
+    this.partyRoomId = null;
     this.instance = null;
+  }
+
+  get character() {
+    return this.characterModelProxy.character;
   }
 
   connect() {

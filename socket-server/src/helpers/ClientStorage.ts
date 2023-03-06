@@ -21,29 +21,37 @@ class ClientStorage {
     return count;
   }
 
-  getClient(username: string): Client | undefined {
-    return this.clients.get(username);
+  getClientByUsername(username: string): Client | null {
+    return this.clients.get(username) ?? null;
   }
 
+  getClientByCharacterName(characterName: string): Client | null {
+    for (const [username, client] of this.clients) {
+      if (client.character.name === characterName) return client;
+    }
+    return null;
+  }
 
   /**
    * Returns existing client, or creates a new one and returns it
    */
   addClient(
+    socketId: string,
     username: string,
     character: Character,
     characterModel: CharacterModel
   ) {
-    const existingClient = this.getClient(username);
+    const existingClient = this.getClientByUsername(username);
 
     const existingId =
       existingClient?.characterModelProxy.character._id.toString();
     const currentId = character._id.toString();
 
-    if (existingClient && existingId && currentId && existingId === currentId) {
+    if (existingClient && currentId && existingId && existingId === currentId) {
+      existingClient.socketId = socketId; // make sure that socketId is updated after reconnect
       return existingClient;
     }
-    const client = new Client(username, character, characterModel);
+    const client = new Client(socketId, username, character, characterModel);
     this.clients.set(username, client);
     return client;
   }

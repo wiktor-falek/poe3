@@ -50,7 +50,6 @@ function sendMessage() {
         messageStore.pushClientSideSystemMessage(
           "List of all commands:\n/help - display this message\n/clear - clear the chat\n/global n - join a chat room number n (1-999)"
         );
-
         return;
 
       case "/clear":
@@ -69,11 +68,21 @@ function sendMessage() {
         socket.emit("chat:join", roomNumber);
         break;
 
+      case "/party":
+        const targetCharacterName = args[0];
+        if (targetCharacterName == null || targetCharacterName.length < 3)
+          return messageStore.pushClientSideSystemMessage(
+            "Character does not exist"
+          );
+        socket.emit("party:invite-character", targetCharacterName);
+        break;
+
       default:
         messageStore.pushClientSideSystemMessage(
           `Invalid command '${message}'`
         );
     }
+    // success
     return;
   }
   socket.emit("chat:message", message);
