@@ -11,7 +11,7 @@ interface Mod {
   values: Array<number>;
 }
 /**
- * Replaces every '#' in the *mod* string
+ * Replaces every '#' in the mod string
  */
 function renderTemplateModDescription(mod: Mod) {
   const { description, values } = mod;
