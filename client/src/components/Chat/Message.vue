@@ -14,16 +14,16 @@ function unixToReadable(timestamp: number): string {
 <template>
   <p class="message">
     <span
-    class="message__timestamp"
-    v-if="message.timestamp && message.sender !== 'SYSTEM'"
+      class="message__timestamp"
+      v-if="message.timestamp && message.sender !== 'SYSTEM'"
     >
-    [ {{ unixToReadable(message.timestamp) }} ]
-  </span>
-  <span v-if="message.sender !== 'SYSTEM'" class="message__sender">
-    <!-- TODO: fix color -->
-    <span
-    class="message__sender__name"
-    :class="{
+      [ {{ unixToReadable(message.timestamp) }} ]
+    </span>
+    <span v-if="message.sender !== 'SYSTEM'" class="message__sender">
+      <!-- TODO: fix color -->
+      <span
+        class="message__sender__name"
+        :class="{
           'this-sender': message.sender === playerStore.character.name,
         }"
         >{{ message.sender }}</span
@@ -43,7 +43,6 @@ function unixToReadable(timestamp: number): string {
 .message {
   user-select: text; /* set explicitly, because everywhere else disabled by default */
   white-space: pre-line;
-  font-size: 17px;
   max-width: 100ch;
   word-wrap: break-word;
 }
@@ -61,5 +60,9 @@ function unixToReadable(timestamp: number): string {
 
 .message__content--system {
   color: orange;
+}
+
+.this-sender {
+  color: rgb(141, 141, 232);
 }
 </style>

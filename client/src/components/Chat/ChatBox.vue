@@ -1,17 +1,13 @@
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useMessageStore } from "../../stores/messageStore";
-import { usePlayerStore } from "../../stores/playerStore";
 import useSocketStore from "../../stores/socketStore";
 import Message from "./Message.vue";
 
 const socketStore = useSocketStore();
 const socket = socketStore.socket;
 
-const playerStore = usePlayerStore();
-
 const messageStore = useMessageStore();
-
 const messages = messageStore.messages;
 
 socket.emit("chat:join");
@@ -23,6 +19,19 @@ socket.on("chat:message", (message) => {
 socket.on("error", (message) => {
   console.log(message);
   messageStore.push({ content: message, sender: "ERROR" });
+});
+
+// Persist checked groups
+const checkedGroups = ref(
+  JSON.parse(localStorage.getItem("checkedGroups")) ?? [
+    "global",
+    "whisper",
+    "party",
+    "guild",
+  ]
+);
+watch(checkedGroups, () => {
+  localStorage.setItem("checkedGroups", JSON.stringify(checkedGroups.value));
 });
 
 const inputMessage = ref("");
@@ -94,7 +103,11 @@ function sendMessage() {
   <div class="chat-box">
     <div class="left">
       <div class="messages">
-        <Message v-for="message in messages" :message="message" class="message" />
+        <Message
+          v-for="message in messages"
+          :message="message"
+          class="message"
+        />
       </div>
       <div class="input-area">
         <input type="text" v-model="inputMessage" @keyup.enter="sendMessage" />
@@ -103,43 +116,95 @@ function sendMessage() {
     </div>
 
     <div class="status">
-      <div class="status__left">
-        <div
-          class="circle"
-          :class="{
-            green: socketStore.isConnected,
-            red: !socketStore.isConnected,
-          }"
-        ></div>
-        <p class="ping bold" v-if="socketStore.isConnected">
-          {{ socketStore.ping }}
+      <div class="status__top">
+        <p v-if="socketStore.isConnected">Latency: {{ socketStore.ping }}</p>
+
+        <p v-if="socketStore.isConnected">
+          Online: {{ socketStore.playerCount }}
         </p>
       </div>
-      <div class="status__right">
-        <!-- TODO: users icon -->
-        <p class="player-count bold" v-if="socketStore.isConnected">
-          {{ socketStore.playerCount }}
-        </p>
+
+      <div class="status__bottom">
+        <!-- these were meant to be components but shit didn't work so idgaf -->
+        <div
+          class="checkbox-button"
+          :class="{ unchecked: !checkedGroups.includes('global') }"
+        >
+          <label for="global">Global</label>
+          <input
+            id="global"
+            type="checkbox"
+            value="global"
+            v-model="checkedGroups"
+            hidden
+          />
+        </div>
+        <div
+          class="checkbox-button"
+          :class="{ unchecked: !checkedGroups.includes('whisper') }"
+        >
+          <label for="whisper">Whisper</label>
+          <input
+            id="whisper"
+            type="checkbox"
+            value="whisper"
+            v-model="checkedGroups"
+            hidden
+          />
+        </div>
+        <div
+          class="checkbox-button"
+          :class="{ unchecked: !checkedGroups.includes('party') }"
+        >
+          <label for="party">Party</label>
+          <input
+            id="party"
+            type="checkbox"
+            value="party"
+            v-model="checkedGroups"
+            hidden
+          />
+        </div>
+        <div
+          class="checkbox-button"
+          :class="{ unchecked: !checkedGroups.includes('guild') }"
+        >
+          <label for="guild">Guild</label>
+          <input
+            id="guild"
+            type="checkbox"
+            value="guild"
+            v-model="checkedGroups"
+            hidden
+          />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.bold {
-  font-weight: bold;
+.checkbox-button label {
+  background-color: rgb(60, 60, 60);
+  border: 1px solid rgb(188, 188, 188);
+  display: block;
+  text-align: center;
 }
+
+.unchecked {
+  opacity: 0.5;
+}
+
 .chat-box {
   display: flex;
   width: 100%;
   height: 100%;
   padding: 3px;
   gap: 5px;
-  font-size: 20px;
+  font-size: 18px;
 }
 .messages {
   padding-left: 3px;
-  max-height: 172px;
   overflow-y: auto;
   overflow-x: hidden;
   display: flex;
@@ -156,43 +221,27 @@ function sendMessage() {
 }
 
 .status {
-  min-width: 150px;
-  width: 150px;
+  width: 120px;
   padding: 5px;
   border: 1px solid rgb(217, 212, 212);
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
+  align-items: flex-start;
 }
 
-.status__left,
-.status__right {
+.status__top > p {
+  font-weight: bold;
+}
+
+.status__bottom {
   display: flex;
+  flex-direction: column;
   gap: 5px;
-  align-items: center;
-  flex-direction: row;
-  height: fit-content;
-  font-size: 20px;
-  height: 20px;
-}
-
-.circle {
-  border: 1px solid white;
-  box-sizing: border-box;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-}
-
-.green {
-  background-color: green;
-}
-
-.red {
-  background-color: red;
+  width: 100%;
 }
 
 .input-area {
-  font-size: 20px;
   display: flex;
   gap: 5px;
   flex-direction: row;
@@ -201,14 +250,13 @@ function sendMessage() {
 .input-area > input {
   padding: 0;
   flex-grow: 1;
+  font-size: 18px;
+  height: 28px;
+  padding: 0 4px;
 }
 
 .input-area > button {
   height: 100%;
   width: 140px;
-}
-
-.this-sender {
-  color: rgb(123, 123, 223);
 }
 </style>
