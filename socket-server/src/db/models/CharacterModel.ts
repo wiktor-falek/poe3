@@ -2,6 +2,8 @@ import { Collection, ObjectId } from "mongodb";
 import { Character, EquipmentSlot, Level } from "../../../*";
 import Mongo from "../Mongo";
 
+// TODO: make ResultSuccess and ResultError maybe? perhaps? idk
+
 interface Result {
   ok: boolean;
   reason?: string; // if not ok

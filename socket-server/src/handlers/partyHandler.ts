@@ -1,12 +1,12 @@
-import { nanoid } from "nanoid";
 import type { Socket } from "socket.io";
 import { PARTY_SIZE_LIMIT } from "../constants/party";
 import type Client from "../helpers/Client";
 import ClientStorage from "../helpers/ClientStorage";
-import SystemMessage from "../utils/SystemMessage";
 import socketRoomSize from "../utils/socketRoomSize";
+import Party from "../helpers/Party";
+import { GlobalMessage, SystemMessage } from "../helpers/message";
 
-function validateCharacterName(characterName: any): string | null {
+function validateString(characterName: any): string | null {
   if (typeof characterName === "string") {
     return characterName;
   }
@@ -22,37 +22,43 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
       );
     }
 
-    const characterName = validateCharacterName(unvalidatedCharacterName);
+    const characterName = validateString(unvalidatedCharacterName);
     if (characterName == null) {
-      return socket.emit("error", "Character does not exist");
+      return socket.emit("error", "Invalid character name");
     }
 
-    const targetClient = ClientStorage.getClientByUsername(characterName);
+    const targetClient = ClientStorage.getClientByCharacterName(characterName);
     if (targetClient == null) {
-      return socket.emit("error", "Character does not exist");
+      // NOTE: there is a possibility that character doesn't exist
+      return socket.emit("error", "This character is not in game");
+    }
+
+    if (!targetClient.isConnected) {
+      // This will be reached only if targetClient disconnected recently,
+      // before the client was removed from ClientStorage
+      return socket.emit("error", "This player is offline");
     }
 
     // create a new room if doesn't already exist
-    if (client.partyRoomId == null) {
-      client.partyRoomId = "party:" + nanoid();
+    if (client.party == null) {
+      // create a Party instance
+      client.party = new Party();
     }
 
-    const roomId = client.partyRoomId;
+    const party = client.party;
+    const roomId = client.party.socketRoomId;
 
     // make sure that size of the room doesnt exceed PARTY_SIZE_LIMIT
-    const roomSize = await socketRoomSize(io, roomId)
+    const roomSize = await socketRoomSize(io, roomId);
     console.log({ roomSize });
     if (roomSize >= PARTY_SIZE_LIMIT) {
       return socket.emit("error", "The party is full");
     }
 
-    socket.join(roomId);
-    socket
-      .to(roomId)
-      .emit(
-        "party:new-player-join",
-        `${client.character.name} has joined the party`
-      );
+    const result = party.invite(targetClient);
+    if (!result.ok) return socket.emit("error", result.message);
+
+    const inviteId = result.data?.inviteId;
 
     // send party invite to target
     io.to(targetClient.socketId).emit("party:invite", {
@@ -60,15 +66,13 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
         name: client.character.name,
         level: client.character.level.value,
       },
-      // TODO: emit some kind of reference like roomId
-      // but only if no other client than the one being
-      // invited can join the party rooom
+      inviteId: result.data?.inviteId,
     });
 
     io.to(targetClient.socketId).emit(
       "chat:message",
       new SystemMessage(
-        `You have been invited to ${client.character.name}'s party`
+        `You have been invited to ${client.character.name}'s party\n /partyjoin ${client.character.name} ${inviteId}`
       )
     );
 
@@ -78,7 +82,45 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
     );
   };
 
+  const acceptInvite = (_senderCharacterName: string, _id: string) => {
+    const senderCharacterName = validateString(_senderCharacterName);
+    const id = validateString(_id);
+    if (senderCharacterName == null || id == null) {
+      return socket.emit("error", "Invalid input(s)");
+    }
+
+    const senderClient =
+      ClientStorage.getClientByCharacterName(senderCharacterName);
+    if (senderClient == null || senderClient.party == null) {
+      return socket.emit("error", "Party does not exist");
+    }
+
+    const result = senderClient.party.acceptInvite(client, id);
+    if (!result.ok) return socket.emit("error", result.message);
+
+    const { roomId } = result.data!;
+
+    socket.join(roomId);
+    socket
+      .to(roomId)
+      .emit(
+        "party:new-player-join",
+        `${client.character.name} has joined the party`
+      );
+
+    socket.emit(
+      "chat:message",
+      new SystemMessage(`Joined ${senderCharacterName}'s party`)
+    );
+
+    console.log({
+      party: senderClient.party,
+      roomSize: socketRoomSize(io, roomId),
+    });
+  };
+
   socket.on("party:invite-character", partyInvite);
+  socket.on("party:accept-invite", acceptInvite);
 }
 
 export default registerPartyHandler;

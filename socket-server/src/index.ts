@@ -10,8 +10,8 @@ import registerRewardHandler from "./handlers/rewardHandler.js";
 import registerCombatHandler from "./handlers/combatHandler.js";
 import registerChatHandler from "./handlers/chatHandler.js";
 import registerInventoryHandler from "./handlers/inventoryHandler.js";
-import cron from "node-cron";
 import registerPartyHandler from "./handlers/partyHandler.js";
+import cron from "node-cron";
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -31,7 +31,7 @@ const onConnection = (socket: Socket) => {
   io.emit("player-count", ClientStorage.clientCount);
 
   logger.info(
-    `client ${client.username} connected as character ${client.characterModelProxy.character.name}`
+    `client ${client.username} connected as character ${client.character.name}`
   );
   console.log("New Connection", ClientStorage.clients);
 

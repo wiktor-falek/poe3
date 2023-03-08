@@ -20,10 +20,10 @@ function registerInventoryHandler(
       SapphireRing(),
       SapphireRing().magic(),
       {
-        base: "Gold Ring",
+        name: "Gold Ring",
         slot: "ring",
         rarity: "unique",
-        name: "The One Ring",
+        uniqueName: "The One Ring",
         ilvl: 1,
         description:
           "One ring to rule them all, one ring to find them, One ring to bring them all, and in the darkness bind them; In the Land of Mordor where the shadows lie.",

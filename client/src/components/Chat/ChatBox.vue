@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { useMessageStore } from "../../stores/messageStore";
 import { usePlayerStore } from "../../stores/playerStore";
 import useSocketStore from "../../stores/socketStore";
-import ClientSideSystemMessage from "../../utils/ClientSideSystemMessage";
+import Message from "./Message.vue";
 
 const socketStore = useSocketStore();
 const socket = socketStore.socket;
@@ -24,11 +24,6 @@ socket.on("error", (message) => {
   console.log(message);
   messageStore.push({ content: message, sender: "ERROR" });
 });
-
-function unixToReadable(timestamp: number): string {
-  const date = new Date(timestamp);
-  return date.toTimeString().slice(0, 5);
-}
 
 const inputMessage = ref("");
 
@@ -77,6 +72,12 @@ function sendMessage() {
         socket.emit("party:invite-character", targetCharacterName);
         break;
 
+      case "/partyjoin": {
+        const [targetCharacterName, inviteId] = args;
+        socket.emit("party:accept-invite", targetCharacterName, inviteId);
+        break;
+      }
+
       default:
         messageStore.pushClientSideSystemMessage(
           `Invalid command '${message}'`
@@ -93,30 +94,7 @@ function sendMessage() {
   <div class="chat-box">
     <div class="left">
       <div class="messages">
-        <p class="message" v-for="message in messages">
-          <span
-            class="message__timestamp"
-            v-if="message.timestamp && message.sender !== 'SYSTEM'"
-          >
-            [ {{ unixToReadable(message.timestamp) }} ]
-          </span>
-          <span v-if="message.sender !== 'SYSTEM'" class="message__sender">
-            <span
-              class="message__sender__name"
-              :class="{
-                'this-sender': message.sender === playerStore.character.name,
-              }"
-              >{{ message.sender }}</span
-            >
-            <span class="message__sender__separator">:&nbsp;</span>
-          </span>
-          <span
-            class="message__content"
-            :class="{ 'message__content--system': message.sender === 'SYSTEM' }"
-          >
-            {{ message.content }}
-          </span>
-        </p>
+        <Message v-for="message in messages" :message="message" class="message" />
       </div>
       <div class="input-area">
         <input type="text" v-model="inputMessage" @keyup.enter="sendMessage" />
@@ -151,7 +129,6 @@ function sendMessage() {
 .bold {
   font-weight: bold;
 }
-
 .chat-box {
   display: flex;
   width: 100%;
@@ -170,29 +147,6 @@ function sendMessage() {
   flex-direction: column;
   min-width: 0;
   padding-right: 10%;
-}
-
-.message {
-  user-select: text; /* set explicitly, because everywhere else disabled by default */
-  white-space: pre-line;
-  font-size: 17px;
-  max-width: 100ch;
-  word-wrap: break-word;
-}
-
-.message__sender {
-}
-
-.message__sender__name {
-  color: white;
-  font-weight: bold;
-}
-
-.message__content {
-}
-
-.message__content--system {
-  color: orange;
 }
 
 .left {

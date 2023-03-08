@@ -1,6 +1,5 @@
 import Zones from "./Zones";
 import MainStoryZone from "./MainStoryZone";
-import { CombatRoom, RewardRoom } from "./Rooms";
 
 interface InstanceData {
   rooms: Array<Object>;
@@ -35,7 +34,7 @@ class Instance {
     };
   }
 
-  public get currentRoom(): CombatRoom | RewardRoom | null {
+  public get currentRoom() {
     if (this.zone === null) return null;
     const currentRoom = this.zone.currentRoom;
     return currentRoom;

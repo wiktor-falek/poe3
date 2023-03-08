@@ -44,7 +44,7 @@ class ClientStorage {
     const existingClient = this.getClientByUsername(username);
 
     const existingId =
-      existingClient?.characterModelProxy.character._id.toString();
+      existingClient?.character._id.toString();
     const currentId = character._id.toString();
 
     if (existingClient && currentId && existingId && existingId === currentId) {

@@ -1,6 +1,6 @@
 import type { Socket } from "socket.io";
 import type Client from "../helpers/Client";
-import SystemMessage from "../utils/SystemMessage";
+import { GlobalMessage, SystemMessage } from "../helpers/message";
 
 function validateRoomNumber(roomNumber: any): number | null {
   const MAX_ROOM = 999;
@@ -57,9 +57,10 @@ function registerChatHandler(io: any, socket: Socket, client: Client): void {
       }
     }
 
-    const content = message;
-    const sender = client.characterModelProxy.character.name;
-    io.to(roomName).emit("chat:message", { content, sender });
+    io.to(roomName).emit(
+      "chat:message",
+      new GlobalMessage(message, client.character.name)
+    );
   };
 
   socket.on("chat:join", joinRoom);

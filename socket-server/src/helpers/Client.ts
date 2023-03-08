@@ -3,6 +3,7 @@ import Instance from "../logic/Instance";
 import CharacterModelProxy from "../logic/CharacterModelProxy";
 import logger from "../logger";
 import CharacterModel from "../db/models/CharacterModel";
+import Party from "./Party";
 
 class Client {
   isConnected: boolean;
@@ -10,7 +11,7 @@ class Client {
   socketId: string | null;
   username: string;
   characterModelProxy: CharacterModelProxy;
-  partyRoomId: string | null;
+  party: Party | null;
   instance: Instance | null;
   constructor(
     socketId: string,
@@ -26,7 +27,7 @@ class Client {
       character,
       characterModel
     );
-    this.partyRoomId = null;
+    this.party = null;
     this.instance = null;
   }
 
