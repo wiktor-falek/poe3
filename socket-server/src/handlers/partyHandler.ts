@@ -4,7 +4,7 @@ import type Client from "../helpers/Client";
 import ClientStorage from "../helpers/ClientStorage";
 import socketRoomSize from "../utils/socketRoomSize";
 import Party from "../helpers/Party";
-import { GlobalMessage, SystemMessage } from "../helpers/message";
+import { SystemMessage } from "../helpers/message";
 
 function validateString(characterName: any): string | null {
   if (typeof characterName === "string") {
