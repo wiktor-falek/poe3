@@ -11,7 +11,6 @@ function registerInventoryHandler(
   client: Client
 ): void {
   const addTestItem = () => {
-    console.log(GoldRing().magic());
     const itemPool = [
       Branch(),
       Branch().magic(),

@@ -143,7 +143,6 @@ class CharacterModelProxy {
       return { ok: false, reason: "Target item not found" };
     }
 
-    console.log(inventoryItem.requirements);
     if (inventoryItem.requirements.level) {
       if (inventoryItem.requirements.level > this.character.level.value) {
         return { ok: false, reason: "Level requirement not met" };

@@ -40,6 +40,7 @@ socket.on("party:data", (data) => {
           <span class="capitalize"> {{ client.character.class }}</span>
         </p>
       </div>
+      <button v-if="client.character.name === characterName && partyData.clients.length !== 1">Leave</button>
     </div>
   </div>
 </template>

@@ -35,8 +35,8 @@ io.on("connection", (socket: Socket) => {
   );
 
   // emit to party members
-  const socketRoomId = client.party.socketRoomId;
-  io.to(socketRoomId).emit("party:data", client.party.publicData);
+  const partyRoom = client.party.socketRoomId;
+  io.to(partyRoom).emit("party:data", client.party.publicData);
 
   // HANDLERS
   registerUtilsHandler(io, socket);
@@ -54,8 +54,8 @@ io.on("connection", (socket: Socket) => {
     io.emit("player-count", ClientStorage.clientCount);
 
     // emit to party members
-    const socketRoomId = client.party.socketRoomId;
-    io.to(socketRoomId).emit("party:data", client.party.publicData);
+    const partyRoom = client.party.socketRoomId;
+    io.to(partyRoom).emit("party:data", client.party.publicData);
 
     logger.info(`client ${client.username} disconnected (${reason})`);
   });
