@@ -3,8 +3,7 @@ import { PARTY_SIZE_LIMIT } from "../constants/party";
 import type Client from "../helpers/Client";
 import ClientStorage from "../helpers/ClientStorage";
 import socketRoomSize from "../utils/socketRoomSize";
-import Party from "../helpers/Party";
-import { SystemMessage } from "../helpers/message";
+import { PartyMessage, SystemMessage } from "../helpers/message";
 
 function validateString(characterName: any): string | null {
   if (typeof characterName === "string") {
@@ -37,12 +36,6 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
       // This will be reached only if targetClient disconnected recently,
       // before the client was removed from ClientStorage
       return socket.emit("error", "This player is offline");
-    }
-
-    // create a new room if doesn't already exist
-    if (client.party == null) {
-      // create a Party instance
-      client.party = new Party();
     }
 
     const party = client.party;
@@ -78,7 +71,7 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
 
     socket.emit(
       "chat:message",
-      new SystemMessage(`Invited ${characterName} to the party`)
+      new PartyMessage(`Invited ${characterName} to the party`, "SYSTEM")
     );
   };
 
@@ -110,7 +103,7 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
 
     socket.emit(
       "chat:message",
-      new SystemMessage(`Joined ${senderCharacterName}'s party`)
+      new PartyMessage(`Joined ${senderCharacterName}'s party`, "SYSTEM")
     );
 
     console.log({

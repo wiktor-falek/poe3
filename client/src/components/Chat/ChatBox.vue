@@ -24,13 +24,14 @@ socket.on("error", (message) => {
 // Persist checked groups
 const checkedGroups = ref(
   JSON.parse(localStorage.getItem("checkedGroups")) ?? [
-    "global",
-    "whisper",
-    "party",
-    "guild",
+    "GLOBAL",
+    "WHISPER",
+    "PARTY",
+    "GUILD",
   ]
 );
 watch(checkedGroups, () => {
+  // TODO: scroll to bottom on change
   localStorage.setItem("checkedGroups", JSON.stringify(checkedGroups.value));
 });
 
@@ -106,6 +107,7 @@ function sendMessage() {
         <Message
           v-for="message in messages"
           :message="message"
+          v-show="checkedGroups.includes(message.group) || message.group == 'SYSTEM'"
           class="message"
         />
       </div>
@@ -128,52 +130,52 @@ function sendMessage() {
         <!-- these were meant to be components but shit didn't work so idgaf -->
         <div
           class="checkbox-button"
-          :class="{ unchecked: !checkedGroups.includes('global') }"
+          :class="{ unchecked: !checkedGroups.includes('GLOBAL') }"
         >
           <label for="global">Global</label>
           <input
             id="global"
             type="checkbox"
-            value="global"
+            value="GLOBAL"
             v-model="checkedGroups"
             hidden
           />
         </div>
         <div
           class="checkbox-button"
-          :class="{ unchecked: !checkedGroups.includes('whisper') }"
+          :class="{ unchecked: !checkedGroups.includes('WHISPER') }"
         >
           <label for="whisper">Whisper</label>
           <input
             id="whisper"
             type="checkbox"
-            value="whisper"
+            value="WHISPER"
             v-model="checkedGroups"
             hidden
           />
         </div>
         <div
           class="checkbox-button"
-          :class="{ unchecked: !checkedGroups.includes('party') }"
+          :class="{ unchecked: !checkedGroups.includes('PARTY') }"
         >
           <label for="party">Party</label>
           <input
             id="party"
             type="checkbox"
-            value="party"
+            value="PARTY"
             v-model="checkedGroups"
             hidden
           />
         </div>
         <div
           class="checkbox-button"
-          :class="{ unchecked: !checkedGroups.includes('guild') }"
+          :class="{ unchecked: !checkedGroups.includes('GUILD') }"
         >
           <label for="guild">Guild</label>
           <input
             id="guild"
             type="checkbox"
-            value="guild"
+            value="GUILD"
             v-model="checkedGroups"
             hidden
           />
@@ -232,6 +234,7 @@ function sendMessage() {
 
 .status__top > p {
   font-weight: bold;
+  line-height: 1.4em;
 }
 
 .status__bottom {

@@ -13,20 +13,19 @@ interface ActionError {
 
 class Party {
   socketRoomId: string;
-  partyLeader: string | null;
+  partyLeader: string;
   invites: { [characterName: string]: string };
-  clients: { [characterName: string]: Client };
+  clients: { [characterId: string]: Client };
 
-  constructor() {
+  constructor(partyLeaderCharacterId: string) {
     this.socketRoomId = "party:" + nanoid();
-    this.partyLeader = null;
+    this.partyLeader = partyLeaderCharacterId;
     this.invites = {};
     this.clients = {};
   }
 
   invite(targetClient: Client) {
     const characterName = targetClient.character.name;
-    const socketId = targetClient.socketId;
 
     if (!targetClient.isConnected) {
       return { ok: false, message: "This player is offline" };
@@ -54,6 +53,11 @@ class Party {
 
     this.clients[client.socketId] = client;
     return { ok: true, data: { roomId: this.socketRoomId } };
+  }
+
+  leaveParty() {
+    // if the client that leaves the party is a party leader, party leader is assigned to another client
+    // when the client leaves the party, client.party is set to new Party();
   }
 }
 

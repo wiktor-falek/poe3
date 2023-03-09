@@ -1,11 +1,14 @@
-type Group = "SYSTEM" | "GLOBAL" | "PARTY";
+type Group = "SYSTEM" | "GLOBAL" | "PARTY" | "GUILD";
 
 class Message {
   content: string;
   sender: string;
+  group: Group;
   constructor(content: string, sender: string, group: Group) {
     this.content = content;
     this.sender = sender;
+    this.group = group;
+    console.log(this);
   }
 }
 
@@ -24,5 +27,11 @@ export class GlobalMessage extends Message {
 export class PartyMessage extends Message {
   constructor(content: string, sender: string) {
     super(content, sender, "PARTY");
+  }
+}
+
+export class GuildMessage extends Message {
+  constructor(content: string, sender: string) {
+    super(content, sender, "GUILD");
   }
 }

@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, Ref } from "vue";
 import ClientSideSystemMessage from "../utils/ClientSideSystemMessage";
 
-export type Group = "SYSTEM" | "GLOBAL" | "PARTY";
+export type Group = "SYSTEM" | "GLOBAL" | "PARTY" | "GUILD";
 
 interface Message {
   sender: string;
@@ -11,15 +11,17 @@ interface Message {
   group?: Group;
 }
 
-export const useMessageStore = defineStore("message", () => {
-  const messages = ref([]);
+const MESSAGE_DISPLAY_LIMIT = 1000; // TODO: limit amount of messages to this value
 
-  function push(message: Message, group?: Group) {
+export const useMessageStore = defineStore("message", () => {
+  const messages: Ref<Array<Message>> = ref([]);
+
+  function push(message: Message) {
     messages.value.push({
       sender: message.sender,
       content: message.content,
+      group: message.group,
       timestamp: Date.now(),
-      group,
     });
   }
 

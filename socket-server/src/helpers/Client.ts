@@ -11,7 +11,7 @@ class Client {
   socketId: string | null;
   username: string;
   characterModelProxy: CharacterModelProxy;
-  party: Party | null;
+  party: Party;
   instance: Instance | null;
   constructor(
     socketId: string,
@@ -27,7 +27,7 @@ class Client {
       character,
       characterModel
     );
-    this.party = null;
+    this.party = new Party(this.character._id.toString());
     this.instance = null;
   }
 
