@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from "vue";
+import ClassIcon from "../ClassIcon.vue";
 
 const props = defineProps(["id", "name", "class", "level"]);
 
@@ -31,26 +32,7 @@ const isDeleted = ref(false);
   <div v-if="!isDeleted" class="character border--light">
     
     <!-- not dry but this is the easiest way to do this -->
-    <img
-      v-if="props.class === 'swordsman'"
-      class="character__icon"
-      src="@/assets/icons/class-icons/swordsman.jpg"
-    />
-    <img
-      v-if="props.class === 'ranger'"
-      class="character__icon"
-      src="@/assets/icons/class-icons/ranger.jpg"
-    />
-    <img
-      v-if="props.class === 'sorcerer'"
-      class="character__icon"
-      src="@/assets/icons/class-icons/sorcerer.jpg"
-    />
-    <img
-      v-if="props.class === 'assassin'"
-      class="character__icon"
-      src="@/assets/icons/class-icons/assassin.jpg"
-    />
+    <ClassIcon :playerClass="props.class" />
 
     <div class="character__wrapper">
       <p class="character__name">{{ props.name }}</p>
@@ -114,10 +96,5 @@ const isDeleted = ref(false);
 
 .wrapper {
   margin: auto;
-}
-
-.character__icon {
-  width: 96px;
-  height: 96px;
 }
 </style>

@@ -34,6 +34,10 @@ io.on("connection", (socket: Socket) => {
     `client ${client.username} connected as character ${client.character.name}`
   );
 
+  // emit to party members
+  const socketRoomId = client.party.socketRoomId;
+  io.to(socketRoomId).emit("party:data", client.party.publicData);
+
   // HANDLERS
   registerUtilsHandler(io, socket);
   registerChatHandler(io, socket, client);
@@ -48,6 +52,10 @@ io.on("connection", (socket: Socket) => {
     client.disconnect();
 
     io.emit("player-count", ClientStorage.clientCount);
+
+    // emit to party members
+    const socketRoomId = client.party.socketRoomId;
+    io.to(socketRoomId).emit("party:data", client.party.publicData);
 
     logger.info(`client ${client.username} disconnected (${reason})`);
   });

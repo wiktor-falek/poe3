@@ -18,6 +18,10 @@
   color: rgba(203, 25, 25, 0.875);
 }
 
+.color--this-player {
+  color: rgb(141, 141, 232) !important;
+}
+
 .border--dark {
   border: 1px solid #3c454b;
 }

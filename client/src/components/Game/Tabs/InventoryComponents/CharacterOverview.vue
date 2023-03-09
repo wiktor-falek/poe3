@@ -9,7 +9,7 @@ const character = playerStore.character;
 
 <template>
   <div class="character-overview">
-    <p class="name">{{ character.name }}</p>
+    <p class="name color--this-player">{{ character.name }}</p>
     <p>
       <span class="player-class">{{ character.class }} &nbsp;</span>
       <span>Lv {{ character.level.value }}</span>

@@ -24,7 +24,7 @@ function unixToReadable(timestamp: number): string {
       <span
         class="message__sender__name"
         :class="{
-          'this-sender': message.sender === playerStore.character.name,
+          'color--this-player': message.sender === playerStore.character.name,
         }"
         >{{ message.sender }}</span
       >
@@ -60,9 +60,5 @@ function unixToReadable(timestamp: number): string {
 
 .message__content--system {
   color: orange;
-}
-
-.this-sender {
-  color: rgb(141, 141, 232);
 }
 </style>

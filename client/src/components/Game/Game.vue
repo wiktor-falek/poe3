@@ -8,6 +8,7 @@ import TabStats from "./Tabs/TabPlaceholder.vue";
 import { computed } from "@vue/reactivity";
 import ChatBox from "../Chat/ChatBox.vue";
 import Settings from "../Game/Settings.vue";
+import Party from "../Party.vue";
 
 const playerStore = usePlayerStore();
 const character = playerStore.character;
@@ -96,6 +97,7 @@ function changeView(viewName) {
             Placeholder
           </button>
         </div>
+        <Party class="party" />
       </div>
     </div>
   </main>
@@ -104,6 +106,10 @@ function changeView(viewName) {
 <style scoped>
 main {
   user-select: none;
+}
+
+.party {
+  width: 100%;
 }
 
 /* GRID */

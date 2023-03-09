@@ -27,7 +27,7 @@ class Client {
       character,
       characterModel
     );
-    this.party = new Party(this.character._id.toString());
+    this.party = new Party(this);
     this.instance = null;
   }
 

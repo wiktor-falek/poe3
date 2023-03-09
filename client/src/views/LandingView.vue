@@ -1,24 +1,19 @@
 <template>
   <main>
     <div class="content">
-      <h1>This is a landing page</h1>
-      <p>And this is the decription</p>
-
+      <h1>Path of Exile 3</h1>
 
       <a href="/signup">Create account for free</a>
-      <br>
+      <br />
       <a href="/signin">Already registered?</a>
     </div>
-
   </main>
 </template>
 
-
 <style>
-  main {
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
-  }
-
+main {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
 </style>

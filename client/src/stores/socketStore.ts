@@ -9,6 +9,9 @@ import getCharacterId from "../utils/getCharacterId";
   import { useSocketStore } from "@/stores/socketStore";
   const socketStore = useSocketStore();
   const socket = socketStore.socket;
+
+  OR (if only the socket object is needed)
+  const socket = useSocketStore().socket;
 */
 export const useSocketStore = defineStore("socket", () => {
   const socket = ref(

@@ -38,6 +38,9 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
       return socket.emit("error", "This player is offline");
     }
 
+    // subscribe the sender to party room, since this is the first occurence where it's needed
+    socket.join(client.party.socketRoomId);
+
     const party = client.party;
     const roomId = client.party.socketRoomId;
 
@@ -91,29 +94,39 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
     const result = senderClient.party.acceptInvite(client, id);
     if (!result.ok) return socket.emit("error", result.message);
 
-    const { roomId } = result.data!;
+    client.party = senderClient.party;
+    const roomId = client.party.socketRoomId;
+
+    io.to(roomId).emit(
+      "party:new-player-join",
+      `${client.character.name} has joined the party`
+    );
 
     socket.join(roomId);
-    socket
-      .to(roomId)
-      .emit(
-        "party:new-player-join",
-        `${client.character.name} has joined the party`
-      );
+
+    io.to(roomId).emit("party:data", client.party.publicData);
 
     socket.emit(
       "chat:message",
-      new PartyMessage(`Joined ${senderCharacterName}'s party`, "SYSTEM")
+      new SystemMessage(`Joined ${senderCharacterName}'s party`)
     );
+  };
 
-    console.log({
-      party: senderClient.party,
-      roomSize: socketRoomSize(io, roomId),
-    });
+  const leaveParty = () => {
+    // 1. if client is party leader, assign party leader status to another client at random
+    // 2. unsubscribe from the party.socketRoomId
+    // 3. emit to the party.socketRoomId that character has left the party
+    // 4. set client.party to new Party(client.character._id.toString())
+  };
+
+  const getData = () => {
+    return socket.emit("party:data", client.party.publicData);
   };
 
   socket.on("party:invite-character", partyInvite);
   socket.on("party:accept-invite", acceptInvite);
+  socket.on("party:leave-party", leaveParty);
+  socket.on("party:get-data", getData);
 }
 
 export default registerPartyHandler;

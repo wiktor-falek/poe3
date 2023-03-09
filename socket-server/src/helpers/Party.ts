@@ -17,11 +17,31 @@ class Party {
   invites: { [characterName: string]: string };
   clients: { [characterId: string]: Client };
 
-  constructor(partyLeaderCharacterId: string) {
+  constructor(client: Client) {
+    const characterId = client.character._id.toString();
     this.socketRoomId = "party:" + nanoid();
-    this.partyLeader = partyLeaderCharacterId;
+    this.partyLeader = characterId;
     this.invites = {};
-    this.clients = {};
+    this.clients = {
+      characterId: client,
+    };
+  }
+
+  get publicData() {
+    return {
+      clients: Object.values(this.clients).map((client) => {
+        const { character, isConnected } = client;
+        return {
+          isConnected,
+          character: {
+            name: character.name,
+            level: character.level.value,
+            class: character.class,
+          },
+          isPartyLeader: this.partyLeader === character._id.toString(),
+        };
+      }),
+    };
   }
 
   invite(targetClient: Client) {
@@ -51,8 +71,8 @@ class Party {
       return { ok: false, message: "Client not found" };
     }
 
-    this.clients[client.socketId] = client;
-    return { ok: true, data: { roomId: this.socketRoomId } };
+    this.clients[client.character._id.toString()] = client;
+    return { ok: true };
   }
 
   leaveParty() {
