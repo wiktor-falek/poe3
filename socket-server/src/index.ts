@@ -1,8 +1,9 @@
 import { createServer } from "http";
 import { Server, Socket } from "socket.io";
-import ClientStorage from "./helpers/ClientStorage.js";
+import cron from "node-cron";
 import logger from "./logger.js";
 import initClient from "./middlewares/initClient.js";
+import ClientStorage from "./helpers/ClientStorage.js";
 import registerInstanceHandler from "./handlers/instanceHandler.js";
 import registerUtilsHandler from "./handlers/utilsHandler.js";
 import registerZoneHandler from "./handlers/zoneHandler.js";
@@ -11,7 +12,6 @@ import registerCombatHandler from "./handlers/combatHandler.js";
 import registerChatHandler from "./handlers/chatHandler.js";
 import registerInventoryHandler from "./handlers/inventoryHandler.js";
 import registerPartyHandler from "./handlers/partyHandler.js";
-import cron from "node-cron";
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -24,7 +24,7 @@ const io = new Server(httpServer, {
 // MIDDLEWARES
 io.use(initClient);
 
-const onConnection = (socket: Socket) => {
+io.on("connection", (socket: Socket) => {
   const { client } = socket.data;
   client.connect();
 
@@ -33,7 +33,6 @@ const onConnection = (socket: Socket) => {
   logger.info(
     `client ${client.username} connected as character ${client.character.name}`
   );
-  console.log("New Connection", ClientStorage.clients);
 
   // HANDLERS
   registerUtilsHandler(io, socket);
@@ -51,11 +50,8 @@ const onConnection = (socket: Socket) => {
     io.emit("player-count", ClientStorage.clientCount);
 
     logger.info(`client ${client.username} disconnected (${reason})`);
-    console.log("Disconnect", ClientStorage.clients);
   });
-};
-
-io.on("connection", onConnection);
+});
 
 httpServer.listen(4000);
 
