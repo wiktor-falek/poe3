@@ -2,8 +2,7 @@ import type { Socket } from "socket.io";
 import { PARTY_SIZE_LIMIT } from "../constants/party";
 import type Client from "../helpers/Client";
 import ClientStorage from "../helpers/ClientStorage";
-import socketRoomSize from "../utils/socketRoomSize";
-import { PartyMessage, SystemMessage } from "../helpers/message";
+import { PartyMessage } from "../helpers/message";
 import Party from "../helpers/Party";
 
 function validateString(characterName: any): string | null {
@@ -46,9 +45,7 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
     const roomId = client.party.socketRoomId;
 
     // make sure that size of the room doesnt exceed PARTY_SIZE_LIMIT
-    const roomSize = await socketRoomSize(io, roomId);
-    console.log({ roomSize });
-    if (roomSize >= PARTY_SIZE_LIMIT) {
+    if (party.size >= PARTY_SIZE_LIMIT) {
       return socket.emit("error", "The party is full");
     }
 
@@ -61,6 +58,7 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
     io.to(targetClient.socketId).emit("party:invite", {
       from: {
         name: client.character.name,
+        class: client.character.class,
         level: client.character.level.value,
       },
       inviteId: result.data?.inviteId,
@@ -68,14 +66,14 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
 
     io.to(targetClient.socketId).emit(
       "chat:message",
-      new SystemMessage(
-        `You have been invited to ${client.character.name}'s party\n /partyjoin ${client.character.name} ${inviteId}`
+      new PartyMessage(
+        `You have been invited to ${client.character.name}'s party`
       )
     );
 
-    socket.emit(
+    io.to(party.socketRoomId).emit(
       "chat:message",
-      new PartyMessage(`Invited ${characterName} to the party`, "SYSTEM")
+      new PartyMessage(`Invited ${characterName} to the party`)
     );
   };
 
@@ -99,8 +97,11 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
     const roomId = client.party.socketRoomId;
 
     io.to(roomId).emit(
-      "party:new-player-join",
-      `${client.character.name} has joined the party`
+      "chat:message",
+      new PartyMessage(
+        `${client.character.name} has joined the party`,
+        "SYSTEM"
+      )
     );
 
     socket.join(roomId);
@@ -109,7 +110,7 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
 
     socket.emit(
       "chat:message",
-      new SystemMessage(`Joined ${senderCharacterName}'s party`)
+      new PartyMessage(`Joined ${senderCharacterName}'s party`)
     );
   };
 
@@ -119,7 +120,7 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
 
     const result = client.party.leaveParty(client);
     if (!result.ok) {
-      socket.emit("chat:message", new SystemMessage("Failed to leave party"));
+      socket.emit("chat:message", new PartyMessage("Failed to leave party"));
     }
 
     socket.leave(roomId);
@@ -136,9 +137,6 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
     socket.leave(roomId);
     client.party = new Party(client);
     socket.emit("party:data", client.party.publicData);
-
-    console.log("BEFORE", previousParty);
-    console.log("AFTER", client.party);
 
     io.to(previousParty.socketRoomId).emit(
       "party:data",
