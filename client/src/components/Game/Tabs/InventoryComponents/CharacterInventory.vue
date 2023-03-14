@@ -21,7 +21,6 @@ function onDrop(event: any, index: number) {
   if (firstIndex === secondIndex) {
     return null;
   }
-  console.log(`Dragging ${firstIndex} to ${secondIndex}`);
   socket.emit("inventory:swap-inventory-indices", firstIndex, secondIndex);
 }
 

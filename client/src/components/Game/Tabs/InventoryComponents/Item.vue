@@ -16,7 +16,6 @@ const emit = defineEmits(["closeContextMenu"]);
 const hover = ref(false);
 
 function startDrag(event: any, index: number) {
-  console.log("startDrag", index);
   event.dataTransfer.dropEffect = "move";
   event.dataTransfer.effectAllowed = "move";
   event.dataTransfer.setData("index", index);

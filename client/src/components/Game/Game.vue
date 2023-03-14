@@ -1,6 +1,5 @@
 <script setup>
 import { defineAsyncComponent, ref } from "vue";
-import { usePlayerStore } from "../../stores/playerStore";
 
 import TabInventory from "./Tabs/TabInventory.vue";
 import TabCharacter from "./Tabs/TabCharacter.vue";
@@ -8,10 +7,7 @@ import TabStats from "./Tabs/TabPlaceholder.vue";
 import { computed } from "@vue/reactivity";
 import ChatBox from "../Chat/ChatBox.vue";
 import Settings from "../Game/Settings.vue";
-import Party from "../Party.vue";
-
-const playerStore = usePlayerStore();
-const character = playerStore.character;
+import TabParty from "./Tabs/TabParty.vue";
 
 const selectedTab = ref("inventory");
 
@@ -43,26 +39,18 @@ function changeView(viewName) {
         <button class="button button-disabled">Alchemist</button>
         <button class="button button-disabled">Something</button>
         <button class="button button-disabled">Stash</button>
-
         <hr />
-
         <button class="button button-disabled">Arena</button>
         <button class="button button-disabled">Guild</button>
         <button class="button button-disabled">Hall of Fame</button>
         <button class="button button-disabled">Something</button>
-
         <hr />
-
         <button class="button" @click="changeView('mainStory')">
           Main Story
         </button>
         <button class="button button-disabled">Dungeons</button>
         <button class="button button-disabled">Endgame</button>
         <button class="button button-disabled">More Endgame</button>
-
-        <div class="settings">
-          <Settings />
-        </div>
       </div>
 
       <div class="div2">
@@ -77,27 +65,47 @@ function changeView(viewName) {
         <TabInventory v-if="selectedTab === 'inventory'" />
         <TabCharacter v-if="selectedTab === 'character'" />
         <TabStats v-if="selectedTab === 'placeholder'" />
+        
+        <!-- since there are emit listeners this components needs to be rendered  -->
+        <TabParty v-show="selectedTab === 'party'" />
         <div class="tab-buttons">
           <button
-            class="button button--no-min-width"
             @click="selectedTab = 'inventory'"
+            class="button button--no-min-width"
           >
             Inventory
           </button>
           <button
-            class="button button--no-min-width"
             @click="selectedTab = 'character'"
+            class="button button--no-min-width"
           >
             Character
           </button>
           <button
-            class="button button--no-min-width"
             @click="selectedTab = 'placeholder'"
+            class="button button--no-min-width"
           >
             Placeholder
           </button>
+          <button
+            @click="selectedTab = 'party'"
+            class="button button--no-min-width"
+          >
+            Party
+          </button>
+          <button
+            @click="selectedTab = 'friends'"
+            class="button button--no-min-width"
+          >
+            Friends
+          </button>
+          <button
+            @click="selectedTab = 'guild'"
+            class="button button--no-min-width"
+          >
+            Guild
+          </button>
         </div>
-        <Party class="party" />
       </div>
     </div>
   </main>
@@ -147,9 +155,8 @@ main {
 
 .div1 {
   display: flex;
-
-  padding: 7px 15px;
-  justify-content: center;
+  padding: 10px 10px;
+  /* justify-content: center; */
   flex-direction: column;
   gap: 10px;
 }
@@ -185,19 +192,16 @@ hr {
 }
 
 .tab-buttons {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   width: 100%;
+  padding: 2px;
+  margin-top: auto;
 }
 .tab-buttons button {
   height: 40px;
   flex: 1;
   border-radius: 0;
-}
-
-.settings {
-  height: 85px;
-  border-radius: 5px;
-  margin-top: auto;
 }
 </style>

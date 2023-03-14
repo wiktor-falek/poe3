@@ -4,8 +4,7 @@ interface Session {
 }
 
 export default function getSession(): Session {
-  // there is a better way to share session with socket server with htppOnly cookies
-  // TODO (Critical): safely share session with socket server 
+  // TODO: share session with socket server with httpOnly cookies
   const session = {
     sessionId: document.cookie
       .split("; ")

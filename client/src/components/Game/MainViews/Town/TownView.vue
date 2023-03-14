@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { usePlayerStore } from "../../../../stores/playerStore";
 import useSocketStore from "../../../../stores/socketStore";
-import Party from "../../../Party.vue";
 
 const socketStore = useSocketStore();
 const socket = socketStore.socket;

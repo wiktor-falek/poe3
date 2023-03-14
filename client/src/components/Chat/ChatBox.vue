@@ -73,21 +73,6 @@ function sendMessage() {
         socket.emit("chat:join", roomNumber);
         break;
 
-      case "/party":
-        const targetCharacterName = args[0];
-        if (targetCharacterName == null || targetCharacterName.length < 3)
-          return messageStore.pushClientSideSystemMessage(
-            "Character does not exist"
-          );
-        socket.emit("party:invite-character", targetCharacterName);
-        break;
-
-      case "/partyjoin": {
-        const [targetCharacterName, inviteId] = args;
-        socket.emit("party:accept-invite", targetCharacterName, inviteId);
-        break;
-      }
-
       default:
         messageStore.pushClientSideSystemMessage(
           `Invalid command '${message}'`
@@ -107,7 +92,9 @@ function sendMessage() {
         <Message
           v-for="message in messages"
           :message="message"
-          v-show="checkedGroups.includes(message.group) || message.group == 'SYSTEM'"
+          v-show="
+            checkedGroups.includes(message.group) || message.group == 'SYSTEM'
+          "
           class="message"
         />
       </div>
