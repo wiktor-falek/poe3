@@ -4,6 +4,7 @@ import type Client from "../helpers/Client";
 import ClientStorage from "../helpers/ClientStorage";
 import socketRoomSize from "../utils/socketRoomSize";
 import { PartyMessage, SystemMessage } from "../helpers/message";
+import Party from "../helpers/Party";
 
 function validateString(characterName: any): string | null {
   if (typeof characterName === "string") {
@@ -113,10 +114,41 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
   };
 
   const leaveParty = () => {
+    const previousParty = client.party;
+    const roomId = client.party.socketRoomId;
+
+    const result = client.party.leaveParty(client);
+    if (!result.ok) {
+      socket.emit("chat:message", new SystemMessage("Failed to leave party"));
+    }
+
+    socket.leave(roomId);
+
+    io.to(roomId).emit("party:data", client.party.publicData);
+    io.to(roomId).emit(
+      "chat:message",
+      new PartyMessage(
+        `Character ${client.character.name} has left the party`,
+        "SYSTEM"
+      )
+    );
+
+    socket.leave(roomId);
+    client.party = new Party(client);
+    socket.emit("party:data", client.party.publicData);
+
+    console.log("BEFORE", previousParty);
+    console.log("AFTER", client.party);
+
+    io.to(previousParty.socketRoomId).emit(
+      "party:data",
+      previousParty.publicData
+    );
+
     // 1. if client is party leader, assign party leader status to another client at random
     // 2. unsubscribe from the party.socketRoomId
     // 3. emit to the party.socketRoomId that character has left the party
-    // 4. set client.party to new Party(client.character._id.toString())
+    // 4. set client.party to new Party(client.character.id)
   };
 
   const getData = () => {

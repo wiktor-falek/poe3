@@ -1,4 +1,5 @@
 import { nanoid } from "nanoid";
+import pyrand from "pyrand";
 import Client from "./Client";
 
 interface ActionSuccess {
@@ -18,12 +19,12 @@ class Party {
   clients: { [characterId: string]: Client };
 
   constructor(client: Client) {
-    const characterId = client.character._id.toString();
+    const characterId = client.character.id;
     this.socketRoomId = "party:" + nanoid();
     this.partyLeader = characterId;
     this.invites = {};
     this.clients = {
-      characterId: client,
+      [`${characterId}`]: client,
     };
   }
 
@@ -38,10 +39,14 @@ class Party {
             level: character.level.value,
             class: character.class,
           },
-          isPartyLeader: this.partyLeader === character._id.toString(),
+          isPartyLeader: this.partyLeader === character.id,
         };
       }),
     };
+  }
+
+  get size() {
+    return Object.keys(this.clients).length;
   }
 
   invite(targetClient: Client) {
@@ -70,14 +75,22 @@ class Party {
     if (client.socketId == null) {
       return { ok: false, message: "Client not found" };
     }
-
-    this.clients[client.character._id.toString()] = client;
+    delete this.invites[client.character.id];
+    this.clients[client.character.id] = client;
     return { ok: true };
   }
 
-  leaveParty() {
-    // if the client that leaves the party is a party leader, party leader is assigned to another client
-    // when the client leaves the party, client.party is set to new Party();
+  leaveParty(client: Client) {
+    if (client.character.id === this.partyLeader) {
+      if (this.size === 1) return { ok: false, reason: "Cannot leave own party of size 1" };
+      const otherClients = Object.keys(this.clients).filter(
+        (id) => id !== client.character.id
+      );
+      const newPartyLeader = pyrand.choice(otherClients);
+      if (newPartyLeader) this.partyLeader = newPartyLeader;
+    }
+    delete this.clients[client.character.id];
+    return { ok: true };
   }
 }
 
