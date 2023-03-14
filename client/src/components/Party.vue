@@ -16,6 +16,10 @@ socket.on("party:data", (data) => {
   partyData.value = data;
   console.log("here", data);
 });
+
+function leaveParty() {
+  socket.emit("party:leave-party");
+}
 </script>
 
 <template>
@@ -40,7 +44,16 @@ socket.on("party:data", (data) => {
           <span class="capitalize"> {{ client.character.class }}</span>
         </p>
       </div>
-      <button v-if="client.character.name === characterName && partyData.clients.length !== 1">Leave</button>
+      <button
+        class="leave"
+        @click="leaveParty"
+        v-if="
+          client.character.name === characterName &&
+          partyData.clients.length !== 1
+        "
+      >
+        Leave
+      </button>
     </div>
   </div>
 </template>
@@ -59,5 +72,8 @@ socket.on("party:data", (data) => {
   background-color: rgb(40, 40, 40);
   border: 1px solid white;
   gap: 10px;
+}
+
+.leave {
 }
 </style>
