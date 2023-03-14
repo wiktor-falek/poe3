@@ -19,19 +19,19 @@ export class SystemMessage extends Message {
 }
 
 export class GlobalMessage extends Message {
-  constructor(content: string, sender: string) {
-    super(content, sender, "GLOBAL");
+  constructor(content: string, sender?: string) {
+    super(content, sender ?? "SYSTEM", "GLOBAL");
   }
 }
 
 export class PartyMessage extends Message {
-  constructor(content: string, sender: string) {
-    super(content, sender, "PARTY");
+  constructor(content: string, sender?: string) {
+    super(content, sender ?? "SYSTEM", "PARTY");
   }
 }
 
 export class GuildMessage extends Message {
-  constructor(content: string, sender: string) {
-    super(content, sender, "GUILD");
+  constructor(content: string, sender?: string) {
+    super(content, sender ?? "SYSTEM", "GUILD");
   }
 }
