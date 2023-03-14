@@ -34,10 +34,6 @@ io.on("connection", (socket: Socket) => {
     `client ${client.username} connected as character ${client.character.name}`
   );
 
-  // emit to party members
-  const partyRoom = client.party.socketRoomId;
-  io.to(partyRoom).emit("party:data", client.party.publicData);
-
   // HANDLERS
   registerUtilsHandler(io, socket);
   registerChatHandler(io, socket, client);
@@ -53,7 +49,8 @@ io.on("connection", (socket: Socket) => {
 
     io.emit("player-count", ClientStorage.clientCount);
 
-    // emit to party members
+    // leave party and emit to party members
+    client.party.leaveParty(client);
     const partyRoom = client.party.socketRoomId;
     io.to(partyRoom).emit("party:data", client.party.publicData);
 
@@ -64,7 +61,7 @@ io.on("connection", (socket: Socket) => {
 httpServer.listen(4000);
 
 cron.schedule("*/5 * * * * *", () => {
-  // every 5 seconds remove inactive clients from ClientStorage
+  // every 5 seconds look for inactive clients and delete them to free memory
   const removedClients = ClientStorage.deleteInactiveClients();
   if (removedClients.length) {
     console.log("Removed inactive clients", removedClients);

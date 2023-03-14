@@ -43,8 +43,7 @@ class ClientStorage {
   ) {
     const existingClient = this.getClientByUsername(username);
 
-    const existingId =
-      existingClient?.character.id;
+    const existingId = existingClient?.character.id;
     const currentId = character.id;
 
     if (existingClient && currentId && existingId && existingId === currentId) {
@@ -60,9 +59,9 @@ class ClientStorage {
    * Meant to run in a cron-job to remove Client objects that haven't
    * been connected to for specified amout of time (defaults to 5 min)
    */
-  deleteInactiveClients(timeMs = 1000 * 60 * 5): Array<string> {
+  deleteInactiveClients(timeMs = 1000 * 60 * 5): Array<Client> {
     const now = Date.now();
-    const deletedClients: Array<string> = [];
+    const deletedClients: Array<Client> = [];
     this.clients.forEach((client, key) => {
       if (
         !client.isConnected &&
@@ -71,7 +70,7 @@ class ClientStorage {
       ) {
         const deleted = this.clients.delete(key);
         if (deleted) {
-          deletedClients.push(key);
+          deletedClients.push(client);
         }
       }
     });
