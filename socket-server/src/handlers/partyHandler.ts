@@ -27,17 +27,9 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
     }
 
     const targetClient = ClientStorage.getClientByCharacterName(characterName);
-    if (targetClient == null) {
-      // NOTE: there is a possibility that character doesn't exist
-      return socket.emit("error", "This character is not in game");
+    if (targetClient == null || !targetClient.isConnected) {
+      return socket.emit("error", "This character is offline");
     }
-
-    if (!targetClient.isConnected) {
-      // This will be reached only if targetClient disconnected recently,
-      // before the client was removed from ClientStorage
-      return socket.emit("error", "This player is offline");
-    }
-
     // subscribe the sender to party room, since this is the first occurence where it's needed
     socket.join(client.party.socketRoomId);
 
