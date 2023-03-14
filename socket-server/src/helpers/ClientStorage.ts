@@ -44,8 +44,8 @@ class ClientStorage {
     const existingClient = this.getClientByUsername(username);
 
     const existingId =
-      existingClient?.character._id.toString();
-    const currentId = character._id.toString();
+      existingClient?.character.id;
+    const currentId = character.id;
 
     if (existingClient && currentId && existingId && existingId === currentId) {
       existingClient.socketId = socketId; // make sure that socketId is updated after reconnect
