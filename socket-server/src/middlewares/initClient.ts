@@ -27,7 +27,12 @@ const initClient = async (socket: Socket, next: Function) => {
   // TODO: make getting a client take characterId as a parameter
   // which would allow to NOT allow connection if another character was used
   // (right now multiple characters can connect at once, and access instance, but they disappear if reloaded )
-  const client = ClientStorage.addClient(socket.id, username, character, characterModel);
+  const client = ClientStorage.addClient(
+    socket.id,
+    username,
+    character,
+    characterModel
+  );
 
   // calculate properties that don't get persisted like maxHp, maxMmp, attributes, resistances
   calculateCharacterProperties(character);
