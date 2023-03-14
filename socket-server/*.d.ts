@@ -94,6 +94,7 @@ type EquipmentSlot =
 
 interface Character {
   _id: ObjectId;
+  id: string;
   name: string;
   class: CharacterClass;
   level: Level;

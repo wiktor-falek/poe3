@@ -22,6 +22,7 @@ class CharacterModelProxy {
 
   constructor(character: Character, characterModel: CharacterModel) {
     this.character = character;
+    this.character.id = character._id.toString();
     this.#characterModel = characterModel;
   }
 
