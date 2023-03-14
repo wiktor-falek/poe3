@@ -29,12 +29,13 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
     const targetClient = ClientStorage.getClientByCharacterName(characterName);
     if (targetClient == null || !targetClient.isConnected) {
       return socket.emit("error", "This character is offline");
+
     }
-    // subscribe the sender to party room, since this is the first occurence where it's needed
-    socket.join(client.party.socketRoomId);
 
     const party = client.party;
-    const roomId = client.party.socketRoomId;
+
+    // subscribe the sender to party room, since this is the first occurence where it's needed
+    socket.join(party.socketRoomId);
 
     // make sure that size of the room doesnt exceed PARTY_SIZE_LIMIT
     if (party.size >= PARTY_SIZE_LIMIT) {
@@ -44,16 +45,16 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
     const result = party.invite(targetClient);
     if (!result.ok) return socket.emit("error", result.message);
 
-    const inviteId = result.data?.inviteId;
+    const inviteId = result.data!.inviteId;
+    if (inviteId == null) return socket.emit("error", "Invalid invite");
 
-    // send party invite to target
     io.to(targetClient.socketId).emit("party:invite", {
       from: {
         name: client.character.name,
         class: client.character.class,
         level: client.character.level.value,
       },
-      inviteId: result.data?.inviteId,
+      inviteId,
     });
 
     io.to(targetClient.socketId).emit(
