@@ -25,6 +25,13 @@ const io = new Server(httpServer, {
 io.use(initClient);
 
 io.on("connection", (socket: Socket) => {
+  socket.on("error", (err: Error) => {
+    if (err) {
+      socket.emit("connection-error", err.message);
+      socket.disconnect();
+    }
+  });
+
   const { client } = socket.data;
   client.connect();
   console.log(ClientStorage);
@@ -32,7 +39,7 @@ io.on("connection", (socket: Socket) => {
   io.emit("player-count", ClientStorage.clientCount);
 
   logger.info(
-    `client ${client.username} connected as character ${client.character.name}`
+    `user ${client.username} connected as character ${client.character.name}`
   );
 
   // HANDLERS
@@ -56,7 +63,7 @@ io.on("connection", (socket: Socket) => {
     const partyRoom = client.party.socketRoomId;
     io.to(partyRoom).emit("party:data", client.party.publicData);
 
-    logger.info(`client ${client.username} disconnected (${reason})`);
+    logger.info(`user ${client.username} disconnected (${reason})`);
   });
 });
 

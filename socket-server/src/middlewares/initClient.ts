@@ -11,9 +11,9 @@ import calculateCharacterProperties from "../helpers/calculateCharacterPropertie
 const initClient = async (socket: Socket, next: Function) => {
   const { username, sessionId, characterId } = socket.handshake.auth;
 
-  // basic validation
+  // TODO: use Joi for validation
   if (!username || !sessionId || !characterId || characterId.length !== 24) {
-    return socket.disconnect();
+    return next(new Error("invalid credentials"))
   }
 
   const characterModel = new CharacterModel(username, sessionId, characterId);
@@ -21,14 +21,14 @@ const initClient = async (socket: Socket, next: Function) => {
   const character = await characterModel.getCharacterData();
 
   if (character === null) {
-    // character not found which means credentials were incorrect
-    logger.info(`failed to load character data for user ${username}`);
-    return socket.disconnect();
+    return next(new Error("failed to get character data"));
   }
 
-  // TODO: make getting a client take characterId as a parameter
-  // which would allow to NOT allow connection if another character was used
-  // (right now multiple characters can connect at once, and access instance, but they disappear if reloaded )
+  const existingClient = ClientStorage.getClientByUsername(username);
+  if (existingClient?.isConnected) {
+    return next(new Error("user is already in game"));
+  }
+
   const client = ClientStorage.addClient(
     socket.id,
     username,
@@ -49,7 +49,7 @@ const initClient = async (socket: Socket, next: Function) => {
   socket.emit("character:data", client.character);
 
   socket.data.client = client;
-  return next();
+  next();
 };
 
 export default initClient;
