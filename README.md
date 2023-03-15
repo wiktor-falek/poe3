@@ -10,8 +10,8 @@
 - TypeScript everywhere else
 - Express
 - MongoDB Native Driver + Joi for schema validation
-- Vue.js, vue-router, Pinia, xstate
 - Socket.io
+- Vue.js, vue-router, Pinia, xstate
 - [Redis (socket.io adapter)]
 - [Jest]
 - [Puppeteer]
@@ -20,13 +20,15 @@
 
 ### Features
 
-- Character inventory and equipment management (drag & drop API, popovers), with state synchronised between database, backend and frontend in real time.
+- Character inventory and equipment management (drag & drop API, popovers), with state synchronised between database, socket server and frontend in real time.
 
-- Global chat with client side and server side commands. Supports multiple separate rooms, use `/global` command to join a room.
+- Global chat with client side and server side commands. Messages have different groups such as: System, Global, Whisper, Party, Guild whose visibility can be toggled on/off. Supports 1000 separate global rooms, use `/global n` command to join a room `n`.
 
-- Granting silver and xp rewards.
+- Granting persistent rewards to a character such as silver and xp.
 
-- Basic combat prototype, very messy and doesn't support multiple clients in one dungeon instance.
+- Party system supporting up to four players.
+
+- Basic turn based combat prototype. Enemy and ally party which hold up to 8 entities. Player is able to target an enemy and use Basic Attack to deal random amount of damage based on strength attribute. As of now doesn't support multiple clients in one dungeon instance.
 
 <br>
 
