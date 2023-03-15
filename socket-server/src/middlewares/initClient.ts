@@ -39,14 +39,13 @@ const initClient = async (socket: Socket, next: Function) => {
   // calculate properties that don't get persisted like maxHp, maxMp, attributes, resistances
   calculateCharacterProperties(character);
 
-  // restore hp and mp to full if client is not in an instance
+  // restore hp and mp to full if client is not in an instance, which would otherwise equal to 0
   if (client.instance == null) {
     const { resources } = client.character;
     resources.hp = resources.maxHp;
     resources.mp = resources.maxMp;
   }
 
-  // emit the character data
   socket.emit("character:data", client.character);
 
   socket.data.client = client;

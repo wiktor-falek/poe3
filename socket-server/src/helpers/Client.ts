@@ -16,7 +16,7 @@ class Client {
   constructor(
     socketId: string,
     username: string,
-    character: Character,
+    characterData: Character,
     characterModel: CharacterModel
   ) {
     this.isConnected = false;
@@ -24,7 +24,7 @@ class Client {
     this.socketId = socketId;
     this.username = username;
     this.characterModelProxy = new CharacterModelProxy(
-      character,
+      characterData,
       characterModel
     );
     this.party = new Party(this);
