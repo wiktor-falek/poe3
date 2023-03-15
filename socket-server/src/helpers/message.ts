@@ -8,7 +8,7 @@ class Message {
     this.content = content;
     this.sender = sender;
     this.group = group;
-    console.log(this);
+    // console.log(this);
   }
 }
 
