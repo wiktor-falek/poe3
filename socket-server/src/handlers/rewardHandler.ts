@@ -34,7 +34,7 @@ function registerRewardHandler(io: any, socket: Socket, client: Client): void {
 
     socket.emit("reward:silver", {
       silver,
-      totalSilver: client.characterModelProxy.character.silver,
+      totalSilver: client.character.silver,
     });
   };
 

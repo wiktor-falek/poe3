@@ -39,7 +39,7 @@ class CharacterModel {
   }
 
   // queries the database and returns the whole character object
-  async data(): Promise<Character | null> {
+  async getCharacterData(): Promise<Character | null> {
     const result = await this.collection.findOne(
       { ...this.filter },
       this.projection
