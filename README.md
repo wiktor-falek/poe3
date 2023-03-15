@@ -24,7 +24,7 @@
 
 - Global chat with client side and server side commands. Messages have different groups such as: System, Global, Whisper, Party, Guild whose visibility can be toggled on/off. Supports 1000 separate global rooms, use `/global n` command to join a room `n`.
 
-- Granting persistent rewards to a character such as silver and xp.
+- Granting persistent rewards to a character such as silver, experience points, and adding items to character's inventory.
 
 - Party system supporting up to four players.
 
