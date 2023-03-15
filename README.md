@@ -28,7 +28,7 @@
 
 - Party system supporting up to four players.
 
-- Basic turn based combat prototype. Enemy and ally party which hold up to 8 entities. Player is able to target an enemy and use Basic Attack to deal random amount of damage based on strength attribute. As of now doesn't support multiple clients in one dungeon instance.
+- Basic turn based combat prototype. Enemy and Ally party hold up to 8 entities each. Player is able to target an enemy and use Basic Attack to deal random amount of damage based on strength attribute. As of now doesn't support multiple clients in one dungeon instance.
 
 <br>
 
