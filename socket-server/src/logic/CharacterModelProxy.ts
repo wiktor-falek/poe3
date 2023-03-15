@@ -4,7 +4,7 @@ import {
   XP_REQUIREMENT_TABLE,
 } from "../constants/xpRequirementTable";
 import CharacterModel from "../db/models/CharacterModel";
-// TODO: use Result from CharacterModel and add Promise<Result> as return type of each method
+
 interface Result {
   ok: boolean;
   value?: any;

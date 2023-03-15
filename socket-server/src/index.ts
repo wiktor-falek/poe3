@@ -27,6 +27,7 @@ io.use(initClient);
 io.on("connection", (socket: Socket) => {
   const { client } = socket.data;
   client.connect();
+  console.log(ClientStorage);
 
   io.emit("player-count", ClientStorage.clientCount);
 
@@ -46,6 +47,7 @@ io.on("connection", (socket: Socket) => {
 
   socket.on("disconnect", (reason) => {
     client.disconnect();
+    console.log(ClientStorage);
 
     io.emit("player-count", ClientStorage.clientCount);
 
@@ -64,6 +66,7 @@ cron.schedule("*/5 * * * * *", () => {
   // every 5 seconds look for inactive clients and delete them to free memory
   const removedClients = ClientStorage.deleteInactiveClients();
   if (removedClients.length) {
-    console.log("Removed inactive clients", removedClients);
+    // console.log("Removed inactive clients", removedClients);
+    console.log(ClientStorage);
   }
 });
