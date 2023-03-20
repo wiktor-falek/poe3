@@ -9,9 +9,10 @@
 - JavaScript for the REST api
 - TypeScript everywhere else
 - Express
-- MongoDB Native Driver + Joi for schema validation
+- MongoDB Native Driver
 - Socket.io
 - Vue.js, vue-router, Pinia, xstate
+- Joi for MongoDB schema validation & socket event argument validation
 - [Redis (socket.io adapter)]
 - [Jest]
 - [Puppeteer]

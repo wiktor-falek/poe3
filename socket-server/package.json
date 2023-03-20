@@ -13,6 +13,7 @@
     "dotenv": "^16.0.3",
     "items": "file:../items",
     "jest": "^29.1.2",
+    "joi": "^17.8.4",
     "mongodb": "^4.10.0",
     "nanoid": "^3.3.4",
     "node-cron": "^3.0.2",
