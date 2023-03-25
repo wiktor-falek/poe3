@@ -1,13 +1,17 @@
 import { Socket } from "socket.io";
 import ClientStorage from "../helpers/ClientStorage";
 import CharacterModel from "../db/models/CharacterModel";
-import logger from "../logger";
 import calculateCharacterProperties from "../helpers/calculateCharacterProperties";
 
-// Fetches the character from the database and instantiates a Client
-// object (if not already existing with the same player character).
-// The client can be then accessed through socket.data in index.ts,
-// or through an argument passed to socket handler functions.
+/**
+ * Fetches the character from the database and instantiates a Client
+ * object (if not already existing and the same character is used).
+ * 
+ * The client object is passed through socket.data to the entry point,
+ * and then may be passed to event handler functions, for example:
+ *   const { client } = socket.data;
+ *   registerChatHandler(io, socket, client);
+ */
 const initClient = async (socket: Socket, next: Function) => {
   const { username, sessionId, characterId } = socket.handshake.auth;
 
@@ -45,8 +49,6 @@ const initClient = async (socket: Socket, next: Function) => {
     resources.hp = resources.maxHp;
     resources.mp = resources.maxMp;
   }
-
-  socket.emit("character:data", client.character);
 
   socket.data.client = client;
   next();

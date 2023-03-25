@@ -8,9 +8,35 @@ function registerInstanceHandler(
   socket: Socket,
   client: Client
 ): void {
+  const createInstance = (zoneId: number) => {
+    const { party } = client;
+
+    if (!party.isPartyLeader(client)) {
+      return socket.emit("error", {
+        message: "Only party leader can create an instance",
+      });
+    }
+
+    // check if ALL clients can access this zone
+    const clientPermissions: { [characterName: string]: boolean } = {};
+    for (const client of Object.values(party.clients)) {
+      const { highestZoneId } = client.character.progression.mainStory;
+      clientPermissions[client.character.name] = highestZoneId >= zoneId;
+    }
+
+    // emit if one or more character haven't unlocked access to zoneId
+    if (Object.keys(clientPermissions).length < party.size) {
+      return io
+        .to(party.socketRoomId)
+        .emit("instance:unsatisfied-progression", clientPermissions);
+    }
+
+    // instantiate the instance
+    // have each client join the instance
+  };
+
   const joinMainStoryInstance = (zoneId: number) => {
-    const highestZoneId =
-      client.character.progression.mainStory.highestZoneId;
+    const highestZoneId = client.character.progression.mainStory.highestZoneId;
     if (highestZoneId === undefined || highestZoneId === null) {
       logger.error(`could not read progression data`);
       return socket.emit("error", {
@@ -34,16 +60,13 @@ function registerInstanceHandler(
   };
 
   const doesInstanceAlreadyExist = (): void => {
-    const instance = client.instance;
-    const instanceAlreadyExists: boolean = instance !== null;
-    const emitData: any = { instanceAlreadyExists };
-    if (instance !== null) {
-      emitData.zoneId = instance.zoneId;
-    }
-    if (instance?.currentRoom) {
-      emitData.roomId = instance.currentRoom.id;
-    }
-    socket.emit("instance:already-exists", emitData);
+    const { instance } = client;
+
+    socket.emit("instance:already-exists", {
+      instanceAlreadyExists: instance !== null,
+      zoneId: instance?.zone?.id,
+      roomId: instance?.currentRoom?.id,
+    });
   };
 
   const abandonInstance = () => {
@@ -64,8 +87,7 @@ function registerInstanceHandler(
 
     // initialize combat instance if doesn't already exist in the room
     if ("combat" in room && !room.combat) {
-      const { name, resources, attributes, level } =
-        client.character;
+      const { name, resources, attributes, level } = client.character;
 
       const actionPoints = { ap: 2, maxAp: 2 };
       const player = new Player(

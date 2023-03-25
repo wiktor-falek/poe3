@@ -1,5 +1,6 @@
 import Zones from "./Zones";
 import MainStoryZone from "./MainStoryZone";
+import type Client from "../helpers/Client";
 
 interface InstanceData {
   rooms: Array<Object>;
@@ -9,13 +10,24 @@ interface InstanceData {
 }
 
 class Instance {
-  characterName: string;
+  clients: { [characterId: string]: Client };
+  partyLeader: string;
   zone: MainStoryZone | null;
   zoneId: number;
-  constructor(zoneId: number, characterName: string) {
-    this.characterName = characterName;
+  constructor(zoneId: number, client: Client, partyLeaderCharacterId: string) {
+    this.clients = {};
+    this.partyLeader = partyLeaderCharacterId;
     this.zoneId = zoneId;
+    this.join(client);
     this.zone = Zones.createZone(zoneId);
+  }
+
+  join(client: Client) {
+    this.clients[client.character.id] = client;
+  }
+
+  leave(client: Client) {
+    delete this.clients[client.character.id];
   }
 
   public get data(): InstanceData | null {

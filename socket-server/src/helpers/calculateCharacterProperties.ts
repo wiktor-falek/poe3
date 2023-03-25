@@ -1,6 +1,7 @@
 import { Character } from "../../*";
 import { startingAttributes } from "../constants/attributes";
 import * as formulas from "../constants/formulas";
+
 export default function calculateCharacterProperties(
   character: Character
 ): void {

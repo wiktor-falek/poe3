@@ -49,6 +49,10 @@ class Party {
     return Object.keys(this.clients).length;
   }
 
+  isPartyLeader(client: Client) {
+    return client.character.id === this.partyLeader;
+  }
+
   invite(targetClient: Client) {
     const characterName = targetClient.character.name;
 

@@ -19,14 +19,14 @@ class Client {
     characterData: Character,
     characterModel: CharacterModel
   ) {
-    this.isConnected = false;
-    this.disconnectTimestamp = null;
     this.socketId = socketId;
     this.username = username;
     this.characterModelProxy = new CharacterModelProxy(
       characterData,
       characterModel
     );
+    this.isConnected = false;
+    this.disconnectTimestamp = null;
     this.party = new Party(this);
     this.instance = null;
   }
@@ -54,11 +54,8 @@ class Client {
       return this.instance;
     }
 
-    // CHANGE: 
-    this.instance = new Instance(
-      zoneId,
-      this.character.name
-    );
+    // CHANGE:
+    this.instance = new Instance(zoneId);
 
     // Restore hp and mp since this is the first time joining
     const character = this.character;
@@ -72,10 +69,12 @@ class Client {
   }
 
   abandonInstance() {
-    logger.info(
-      `${this.username} abandoned instance (zoneId=${this.instance?.zoneId})`
-    );
-    this.instance = null;
+    if (this.instance !== null && this.instance.zone !== null) {
+      logger.info(
+        `${this.username} abandoned instance (zoneId=${this.instance.zone.id})`
+      );
+      this.instance = null;
+    }
   }
 }
 

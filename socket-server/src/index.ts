@@ -34,13 +34,14 @@ io.on("connection", (socket: Socket) => {
 
   const { client } = socket.data;
   client.connect();
-  console.log(ClientStorage);
-
+  
+  socket.emit("character:data", client.character);
+  
   io.emit("player-count", ClientStorage.clientCount);
-
+  
   logger.info(
     `user ${client.username} connected as character ${client.character.name}`
-  );
+    );
 
   // HANDLERS
   registerUtilsHandler(io, socket);
@@ -70,10 +71,8 @@ io.on("connection", (socket: Socket) => {
 httpServer.listen(4000);
 
 cron.schedule("*/5 * * * * *", () => {
-  // every 5 seconds look for inactive clients and delete them to free memory
   const removedClients = ClientStorage.deleteInactiveClients();
   if (removedClients.length) {
-    // console.log("Removed inactive clients", removedClients);
-    console.log(ClientStorage);
+    console.log("Removed inactive clients", removedClients.map(client => client.username));
   }
 });

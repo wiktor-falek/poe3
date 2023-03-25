@@ -98,7 +98,7 @@ interface Character {
   name: string;
   class: CharacterClass;
   level: Level;
-  progression: Progression;
+  progression: CharacterProgression;
   silver: number;
   inventory: CharacterInventory;
   equipment: CharacterEquipment;
