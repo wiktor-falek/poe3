@@ -9,9 +9,6 @@ class ClientStorage {
   }
 
   public get clientCount(): number {
-    // TODO: optimize this to be O(1)
-    // by having count as a property, which is updated
-    // whenever a property isConnected of a Client mutates
     let count = 0;
     for (const client of this.clients.values()) {
       if (client.isConnected) {
@@ -33,7 +30,8 @@ class ClientStorage {
   }
 
   /**
-   * Adds existing or newly instantiated Client to this.clients and returns it
+   * Returns existing Client instance if user connected with the same character.
+   * If Client doesn't exist instantiates it and adds to this.clients Map
    */
   addClient(
     socketId: string,
@@ -48,7 +46,7 @@ class ClientStorage {
 
     // use existing client instance if using the same character
     if (existingClient && currentId && existingId && existingId === currentId) {
-      existingClient.socketId = socketId; // make sure that socketId is updated after reconnect
+      existingClient.socketId = socketId; // update socketId which changed after reconnect
       return existingClient;
     }
     const client = new Client(socketId, username, character, characterModel);
