@@ -13,7 +13,7 @@ const initClient = async (socket: Socket, next: Function) => {
 
   // TODO: use Joi for validation
   if (!username || !sessionId || !characterId || characterId.length !== 24) {
-    return next(new Error("invalid credentials"))
+    return next(new Error("Invalid credentials"))
   }
 
   const characterModel = new CharacterModel(username, sessionId, characterId);
@@ -21,12 +21,12 @@ const initClient = async (socket: Socket, next: Function) => {
   const character = await characterModel.getCharacterData();
 
   if (character === null) {
-    return next(new Error("failed to get character data"));
+    return next(new Error("Failed to load character data"));
   }
 
   const existingClient = ClientStorage.getClientByUsername(username);
   if (existingClient?.isConnected) {
-    return next(new Error("user is already in game"));
+    return next(new Error("This character is already in game"));
   }
 
   const client = ClientStorage.addClient(
