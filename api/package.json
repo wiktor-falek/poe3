@@ -7,7 +7,6 @@
   "scripts": {
     "start": "NODE_ENV=production nodemon .",
     "dev": "nodemon index.js",
-    "db": "mongod",
     "items": "npm r items && npm i \"../modules/items\""
   },
   "keywords": [],

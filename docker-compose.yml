@@ -1,0 +1,16 @@
+services:
+  api:
+    build: .
+    ports:
+      - 1001:3000
+    entrypoint: ["npm", "run", "dev"]
+  socket-server:
+    build: .
+    ports:
+      - 1002:4000
+    entrypoint: ["npm", "run", "dev"]
+  client:
+    build: .
+    ports:
+      - 1002:4000
+    entrypoint: ["npm", "run", "dev"]

@@ -54,6 +54,7 @@ class Client {
       return this.instance;
     }
 
+    // CHANGE: 
     this.instance = new Instance(
       zoneId,
       this.character.name
