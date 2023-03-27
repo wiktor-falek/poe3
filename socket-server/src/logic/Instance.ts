@@ -1,13 +1,24 @@
 import Zones from "./Zones";
 import MainStoryZone from "./MainStoryZone";
-import Party from "../helpers/Party";
+import { nanoid } from "nanoid";
+import Client from "../helpers/Client";
 
 class Instance {
-  party: Party;
+  socketRoomId: string;
   zone: MainStoryZone | null;
-  constructor(zoneId: number, party: Party) {
-    this.party = party;
+  clients: { [characterId: string]: Client };
+  constructor(zoneId: number) {
+    this.socketRoomId = "instance:" + nanoid();
     this.zone = Zones.createZone(zoneId);
+    this.clients = {};
+  }
+
+  join(client: Client) {
+    this.clients[client.character.id] = client;
+  }
+
+  leave(client: Client) {
+    delete this.clients[client.character.id];
   }
 
   // leave(client: Client) {
@@ -26,7 +37,6 @@ class Instance {
       zoneLvl: this.zone.zoneLvl,
       currentLocation: this.zone.currentLocation,
       validRoomChoices: this.validRoomChoices,
-      party: this.party.publicData,
     };
   }
 

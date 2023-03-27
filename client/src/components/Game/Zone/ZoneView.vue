@@ -16,7 +16,7 @@ const location: Ref<number> = ref(0);
 const rooms: Ref<Array<any>> = ref([]);
 const validRoomChoices: Ref<Array<number>> = ref();
 
-socket.emit("instance:create-instance", props.zoneId);
+// socket.emit("instance:create-instance", props.zoneId);
 
 socket.on("instance:data", (instanceData) => {
   console.log({instanceData});

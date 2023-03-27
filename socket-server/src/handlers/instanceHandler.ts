@@ -17,31 +17,33 @@ function registerInstanceHandler(
     const { party } = client;
 
     if (!party.isPartyLeader(client)) {
-      return socket.emit("error", {
-        message: "Only party leader can create an instance",
-      });
+      return socket.emit("error", "Only party leader can create an instance");
     }
 
-    // check if ALL clients can access this zone
-    const clientPermissions: { [characterName: string]: boolean } = {};
+    // check if all clients can access this zone
+    const charactersProgression: { [characterName: string]: boolean } = {};
     for (const client of Object.values(party.clients)) {
       const { highestZoneId } = client.character.progression.mainStory;
-      clientPermissions[client.character.name] = highestZoneId >= zoneId;
+      charactersProgression[client.character.name] = highestZoneId >= zoneId;
     }
 
-    // emit if one or more character haven't unlocked access to zoneId
-    if (Object.keys(clientPermissions).length < party.size) {
+    // emit to all clients if one or more character haven't progressed to zoneId
+    if (Object.keys(charactersProgression).length < party.size) {
       return io
         .to(party.socketRoomId)
-        .emit("instance:unsatisfied-progression", clientPermissions);
+        .emit("instance:unsatisfied-progression", charactersProgression);
     }
 
-    const instance = new Instance(zoneId, client.party);
-    client.instance = instance;
+    const instance = new Instance(zoneId);
+
+    for (const client of Object.values(party.clients)) {
+      instance.join(client);
+      client.instance = instance;
+    }
 
     // emit instance data to ALL clients
-    // io.to(instance.socketRoomId).emit("instance:data", instance.data)
-    socket.emit("instance:data", instance.data);
+    io.to(instance.socketRoomId).emit("instance:data", instance.data)
+    // socket.emit("instance:data", instance.data);
   };
 
   const doesInstanceAlreadyExist = (): void => {
@@ -55,23 +57,28 @@ function registerInstanceHandler(
   };
 
   const leaveInstance = () => {
-    const instance = client.instance;
-    instance?.party.leaveParty(client);
+    client.instance = null;
+    client.party.leave(client);
   };
 
   const joinRoom = (roomNumber: number) => {
-    const instance = client.instance;
-    if (instance === null)
-      return logger.warn(
-        `${client.username} tried to join while not in an instance`
-      );
-    const room = instance.zone?.currentRoom;
-    if (room === undefined || room === null) {
-      logger.error("room is null");
-      return null;
+    if (roomNumber == null || typeof roomNumber !== "number") {
+      return socket.emit("error", "Invalid input");
+    }
+
+    if (client.instance === null) {
+      return socket.emit("error", "Instance does not exist");
+    }
+
+    const room = client.instance.zone?.currentRoom;
+
+    if (room == null) {
+      return socket.emit("error", "Invalid room");
     }
 
     // initialize combat instance if doesn't already exist in the room
+    // TODO: refactor to support multiple clients
+    // TODO: move this logic to Room/CombatRoom
     if ("combat" in room && !room.combat) {
       const { name, resources, attributes, level } = client.character;
 

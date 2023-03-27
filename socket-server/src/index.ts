@@ -66,6 +66,7 @@ cron.schedule("*/5 * * * * *", () => {
   const removedClients = ClientStorage.deleteInactiveClients();
   for (const client of removedClients) {
     console.log(`Removed inactive client ${client.username}`);
-    client.party.leaveParty(client);
+    client.instance?.leave(client);
+    client.party.leave(client);
   }
 });

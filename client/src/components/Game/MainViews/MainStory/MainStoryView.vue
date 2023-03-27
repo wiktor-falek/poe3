@@ -51,11 +51,11 @@ function joinZone(id: number) {
 
 socket.emit("instance:already-exists?");
 socket.once("instance:already-exists", (data) => {
-  const { instanceAlreadyExists, zoneId, roomId } = data;
   console.log("already-exists", data);
+  const { instanceAlreadyExists, zoneId, roomId } = data;
   if (instanceAlreadyExists) {
     joinZone(zoneId);
-    // joinRoom(roomId);
+    roomId ?? joinRoom(roomId);
   }
 });
 

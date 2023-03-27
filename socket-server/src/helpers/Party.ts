@@ -2,9 +2,10 @@ import { nanoid } from "nanoid";
 import pyrand from "pyrand";
 import Client from "./Client";
 
-interface ActionSuccess {
+// TODO: add these as return types
+interface ActionSuccess<T> {
   ok: true;
-  data?: any;
+  data: T;
 }
 
 interface ActionError {
@@ -17,7 +18,6 @@ class Party {
   partyLeader: string;
   invites: { [characterName: string]: string };
   clients: { [characterId: string]: Client };
-
   constructor(client: Client) {
     const characterId = client.character.id;
     this.socketRoomId = "party:" + nanoid();
@@ -55,16 +55,20 @@ class Party {
 
   invite(targetClient: Client) {
     const characterName = targetClient.character.name;
+    const characterId = targetClient.character.id;
+
+    if (this.clients[characterId]) {
+      return { ok: false, message: "Character is already in the party" };
+    }
 
     if (!targetClient.isConnected) {
       return { ok: false, message: "This player is offline" };
     }
 
-    if (this.invites[characterName]) {
-      return { ok: false, message: "This character was already invited" };
-    }
-    const inviteId = nanoid(8);
+    // reuse existing inviteId if invited multiple times
+    let inviteId = this.invites[characterName] ?? nanoid(8);
     this.invites[characterName] = inviteId;
+
     return { ok: true, data: { inviteId } };
   }
 
@@ -84,9 +88,10 @@ class Party {
     return { ok: true };
   }
 
-  leaveParty(client: Client) {
+  leave(client: Client) {
     if (client.character.id === this.partyLeader) {
-      if (this.size === 1) return { ok: false, reason: "Cannot leave own party of size 1" };
+      if (this.size === 1)
+        return { ok: false, reason: "Cannot leave own party of size 1" };
       const otherClients = Object.keys(this.clients).filter(
         (id) => id !== client.character.id
       );

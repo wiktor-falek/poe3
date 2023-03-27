@@ -81,7 +81,7 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
     const targetClient = ClientStorage.getClientByCharacterName(characterName);
 
     if (targetClient) {
-      client.party.leaveParty(targetClient);
+      client.party.leave(targetClient);
       const roomId = client.party.socketRoomId;
       io.to(roomId).emit("party:data", client.party.publicData);
       targetClient.party = new Party(targetClient);
@@ -97,6 +97,10 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
     const id = validateString(_id);
     if (senderCharacterName == null || id == null) {
       return socket.emit("error", "Invalid input(s)");
+    }
+
+    if (client.instance != null) {
+      return socket.emit("error", "Cannot join a party while in an instance");
     }
 
     const senderClient =
@@ -133,7 +137,7 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
     const previousParty = client.party;
     const roomId = client.party.socketRoomId;
 
-    const result = client.party.leaveParty(client);
+    const result = client.party.leave(client);
     if (!result.ok) {
       return socket.emit("error", "Failed to leave party");
     }

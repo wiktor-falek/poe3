@@ -14,6 +14,8 @@ const highestZoneId = computed(
   () => playerStore.character.progression.mainStory.highestZoneId
 );
 
+const progressionData: Ref<{ [characterName: string]: number }> = ref({});
+
 const selectedId = ref();
 
 function selectZoneHandle(id: number) {
@@ -22,31 +24,55 @@ function selectZoneHandle(id: number) {
   }
 }
 
-function selectZone() {
-  if (
-    selectedId.value === null ||
-    selectedId.value === undefined ||
-    highestZoneId.value > selectedId.value
-  )
-    return;
-  emit("zoneSelect", selectedId.value);
+function createInstance() {
+  socket.emit("instance:create-instance", selectedId.value);
 }
+
+socket.on("instance:data", (data) => {
+  // change view? but each client would have to be in ZoneSelect view
+})
+
+// function selectZone() {
+//   if (
+//     selectedId.value === null ||
+//     selectedId.value === undefined ||
+//     highestZoneId.value > selectedId.value
+//   )
+//     return;
+//   emit("zoneSelect", selectedId.value);
+// }
 
 const zones: Ref<Map<number, any>> = ref();
 onBeforeMount(() => {
   socket.emit("zones:get-main-story");
-  socket.on("zones:main-story", (zonesData: Array<any>) => {
-    const map = new Map(
-      zonesData.map((zone) => {
-        const { id, ...rest } = zone;
-        return [id, rest];
-      })
-    );
-    zones.value = map;
-  });
+  socket.on(
+    "zones:main-story",
+    (zonesData: Array<any>, charactersProgression: any) => {
+      progressionData.value = charactersProgression;
+      const map = new Map(
+        zonesData.map((zone) => {
+          const { id, ...rest } = zone;
+          return [id, rest];
+        })
+      );
+      zones.value = map;
+    }
+  );
 });
-</script>
 
+function charactersWithoutProgression(id: number) {
+  progressionData.value;
+  const characters = [];
+  for (const [character, progression] of Object.entries(
+    progressionData.value
+  )) {
+    if (progression < id) {
+      characters.push(character);
+    }
+  }
+  return characters;
+}
+</script>
 
 <template>
   <div class="zone-select" v-if="zones">
@@ -56,10 +82,21 @@ onBeforeMount(() => {
       @click="selectZoneHandle(id)"
       v-for="[id, zone] in zones.entries()"
     >
-      {{ zone.name }} (zone lvl {{ zone.zoneLvl }})
+      <div>{{ zone.name }} (zone lvl {{ zone.zoneLvl }})</div>
+
+      <div style="color: red" v-if="id <= highestZoneId">
+        <p v-if="charactersWithoutProgression(id).length">
+          Progression requirements not met:
+        </p>
+        <p>
+          <span v-for="character in charactersWithoutProgression(id)">
+            {{ character }}
+          </span>
+        </p>
+      </div>
     </div>
   </div>
-  <button class="button" @click="selectZone">Select</button>
+  <button class="button" @click="createInstance">Create Instance</button>
 </template>
 
 <style scoped>
@@ -71,6 +108,9 @@ onBeforeMount(() => {
   flex-shrink: 0;
   padding: 5px;
   font-size: 1.4rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .zone-select {

@@ -17,8 +17,7 @@ socket.on("chat:message", (message) => {
 });
 
 socket.on("error", (message) => {
-  console.log(message);
-  messageStore.push({ content: message, sender: "ERROR" });
+  messageStore.pushClientSideSystemMessage(message)
 });
 
 // Persist checked groups

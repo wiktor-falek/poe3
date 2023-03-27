@@ -14,7 +14,7 @@ const isPartyLeader = computed(() => {
   const client = partyData.value.clients.find(
     (client: any) => client.character.name === characterName
   );
-  return client.isPartyLeader;
+  return client?.isPartyLeader ?? false;
 });
 
 socket.emit("party:get-data");

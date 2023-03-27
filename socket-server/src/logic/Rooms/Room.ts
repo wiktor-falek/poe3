@@ -1,3 +1,4 @@
+import Client from "../../helpers/Client";
 
 type RoomType = "reward" | "combat";
 
