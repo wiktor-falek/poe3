@@ -12,6 +12,7 @@ class RewardRoom extends Room {
   constructor(id: number, name: string, zoneLvl: number) {
     super(id, name, zoneLvl);
     this.type = "reward";
+    this.completed = true;
   }
 
   claimReward(): Reward | null {

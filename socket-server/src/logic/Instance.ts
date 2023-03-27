@@ -1,48 +1,32 @@
 import Zones from "./Zones";
 import MainStoryZone from "./MainStoryZone";
-import type Client from "../helpers/Client";
-
-interface InstanceData {
-  rooms: Array<Object>;
-  currentLocation: number;
-  zoneLvl: number;
-  validRoomChoices: Array<number> | null;
-}
+import Party from "../helpers/Party";
 
 class Instance {
-  clients: { [characterId: string]: Client };
-  partyLeader: string;
+  party: Party;
   zone: MainStoryZone | null;
-  zoneId: number;
-  constructor(zoneId: number, client: Client, partyLeaderCharacterId: string) {
-    this.clients = {};
-    this.partyLeader = partyLeaderCharacterId;
-    this.zoneId = zoneId;
-    this.join(client);
+  constructor(zoneId: number, party: Party) {
+    this.party = party;
     this.zone = Zones.createZone(zoneId);
   }
 
-  join(client: Client) {
-    this.clients[client.character.id] = client;
-  }
+  // leave(client: Client) {
+  //   delete this.party.clients[client.character.id];
+  // }
 
-  leave(client: Client) {
-    delete this.clients[client.character.id];
-  }
-
-  public get data(): InstanceData | null {
+  public get data() {
     if (this.zone === null) return null;
-    const zoneLvl = this.zone.zoneLvl;
-    const currentLocation = this.zone.currentLocation;
+
     const rooms = this.zone.rooms.map((room: any) => {
       return { name: room.name, type: room.type, id: room.id };
     });
 
     return {
-      zoneLvl,
-      currentLocation,
       rooms,
+      zoneLvl: this.zone.zoneLvl,
+      currentLocation: this.zone.currentLocation,
       validRoomChoices: this.validRoomChoices,
+      party: this.party.publicData,
     };
   }
 

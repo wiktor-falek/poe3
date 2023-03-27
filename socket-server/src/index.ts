@@ -34,14 +34,14 @@ io.on("connection", (socket: Socket) => {
 
   const { client } = socket.data;
   client.connect();
-  
+
   socket.emit("character:data", client.character);
-  
+
   io.emit("player-count", ClientStorage.clientCount);
-  
+
   logger.info(
     `user ${client.username} connected as character ${client.character.name}`
-    );
+  );
 
   // HANDLERS
   registerUtilsHandler(io, socket);
@@ -55,15 +55,7 @@ io.on("connection", (socket: Socket) => {
 
   socket.on("disconnect", (reason) => {
     client.disconnect();
-    console.log(ClientStorage);
-
     io.emit("player-count", ClientStorage.clientCount);
-
-    // leave party and emit to party members
-    client.party.leaveParty(client);
-    const partyRoom = client.party.socketRoomId;
-    io.to(partyRoom).emit("party:data", client.party.publicData);
-
     logger.info(`user ${client.username} disconnected (${reason})`);
   });
 });
@@ -72,7 +64,8 @@ httpServer.listen(4000);
 
 cron.schedule("*/5 * * * * *", () => {
   const removedClients = ClientStorage.deleteInactiveClients();
-  if (removedClients.length) {
-    console.log("Removed inactive clients", removedClients.map(client => client.username));
+  for (const client of removedClients) {
+    console.log(`Removed inactive client ${client.username}`);
+    client.party.leaveParty(client);
   }
 });

@@ -40,14 +40,6 @@ class MainStoryZone {
     this.currentLocation++;
     return this.currentRoom;
   }
-
-  leaveRoom(): boolean {
-    if (!this.currentRoom.completed) {
-      return false;
-    }
-    this.currentLocation++;
-    return true;
-  }
 }
 
 export default MainStoryZone;

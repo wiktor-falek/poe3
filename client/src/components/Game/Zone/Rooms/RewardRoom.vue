@@ -41,13 +41,13 @@ socket.on("reward:xp", (data) => {
 });
 
 function leaveRoomHandle() {
-  console.log("proceed");
   socket.emit("instance:leave-room");
 }
 
 socket.on("instance:has-left-room", (leftSuccessfully) => {
   if (!leftSuccessfully) {
-    return console.log("u cant");
+    messageStore.pushClientSideSystemMessage("Room is not completed")
+    return;
   }
   emit("leaveRoom");
 });

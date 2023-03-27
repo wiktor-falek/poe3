@@ -2,6 +2,7 @@ import type Client from "../helpers/Client";
 import type { Socket } from "socket.io";
 import logger from "../logger";
 import Player from "../logic/combat/Player";
+import Instance from "../logic/Instance";
 
 function registerInstanceHandler(
   io: any,
@@ -9,6 +10,10 @@ function registerInstanceHandler(
   client: Client
 ): void {
   const createInstance = (zoneId: number) => {
+    if (zoneId == null || typeof zoneId !== "number") {
+      return socket.emit("error", "Invalid input");
+    }
+
     const { party } = client;
 
     if (!party.isPartyLeader(client)) {
@@ -31,31 +36,11 @@ function registerInstanceHandler(
         .emit("instance:unsatisfied-progression", clientPermissions);
     }
 
-    // instantiate the instance
-    // have each client join the instance
-  };
+    const instance = new Instance(zoneId, client.party);
+    client.instance = instance;
 
-  const joinMainStoryInstance = (zoneId: number) => {
-    const highestZoneId = client.character.progression.mainStory.highestZoneId;
-    if (highestZoneId === undefined || highestZoneId === null) {
-      logger.error(`could not read progression data`);
-      return socket.emit("error", {
-        message: "Failed to read character progression data",
-      });
-    }
-    if (highestZoneId < zoneId) {
-      return socket.emit("error", {
-        message: "You are not permitted to access this zone",
-      });
-    }
-
-    const instance = client.joinInstance(zoneId);
-    if (instance === null) {
-      return socket.emit("error", {
-        message: "Failed to join instance",
-      });
-    }
-
+    // emit instance data to ALL clients
+    // io.to(instance.socketRoomId).emit("instance:data", instance.data)
     socket.emit("instance:data", instance.data);
   };
 
@@ -69,8 +54,9 @@ function registerInstanceHandler(
     });
   };
 
-  const abandonInstance = () => {
-    client.abandonInstance();
+  const leaveInstance = () => {
+    const instance = client.instance;
+    instance?.party.leaveParty(client);
   };
 
   const joinRoom = (roomNumber: number) => {
@@ -115,16 +101,20 @@ function registerInstanceHandler(
     // TODO: PROCEED
     // check if room is actually completed
     // if (client.instance?.currentRoom?.completed) {}
-    const hasLeft = client.instance?.zone?.leaveRoom() ?? false;
+    const room = client.instance?.zone?.currentRoom;
+    if (!room) return socket.emit("error", "Room does not exist");
+
+    const hasLeft = room.completed;
     socket.emit("instance:has-left-room", hasLeft);
     if (hasLeft && client.instance) {
       socket.emit("instance:data", client.instance.data);
     }
   };
 
-  socket.on("instance:join:main-story", joinMainStoryInstance);
+  socket.on("instance:create-instance", createInstance);
+  socket.on("instance:leave-instance", leaveInstance);
+
   socket.on("instance:already-exists?", doesInstanceAlreadyExist);
-  socket.on("instance:abandon-run", abandonInstance);
   socket.on("instance:join-room", joinRoom);
   socket.on("instance:leave-room", leaveRoom);
 }

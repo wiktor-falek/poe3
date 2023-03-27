@@ -61,7 +61,7 @@ socket.once("instance:already-exists", (data) => {
 
 function abandonRun() {
   // TODO: check with the server whether it was successfull and then change state
-  socket.emit("instance:abandon-run");
+  socket.emit("instance:leave-instance");
   stateService.send("ABANDON");
 }
 

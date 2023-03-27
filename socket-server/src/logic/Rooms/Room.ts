@@ -12,6 +12,7 @@ class Room {
     this.name = name;
     this.zoneLvl = zoneLvl;
     this.completed = false;
+    // TODO: rewrite this to keep track which character has claimed reward
     this.rewardClaimed = false;
   }
 }

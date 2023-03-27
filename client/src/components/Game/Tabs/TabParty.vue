@@ -27,10 +27,13 @@ function leaveParty() {
   socket.emit("party:leave-party");
 }
 
+function kickCharacter(characterName: string) {
+  socket.emit("party:kick-character", characterName);
+}
+
 const targetCharacterName = ref();
 function sendInvite() {
   const characterName = targetCharacterName.value;
-  console.log(characterName);
   socket.emit("party:invite-character", characterName);
   targetCharacterName.value = "";
 }
@@ -90,7 +93,11 @@ function acceptInvite(invite) {
         >
           Leave
         </button>
-        <button class="square-button" v-if="isPartyLeader && client.character.name != characterName">
+        <button
+          class="square-button"
+          v-if="isPartyLeader && client.character.name != characterName"
+          @click="kickCharacter(client.character.name)"
+        >
           Kick
         </button>
       </div>
@@ -103,7 +110,9 @@ function acceptInvite(invite) {
             <p>New Party Invite</p>
             <p>{{ invite.from.name }} Lv {{ invite.from.level }}</p>
           </div>
-          <button class="square-button" @click="acceptInvite(invite)">Join</button>
+          <button class="square-button" @click="acceptInvite(invite)">
+            Join
+          </button>
         </div>
       </div>
       <div class="invite">

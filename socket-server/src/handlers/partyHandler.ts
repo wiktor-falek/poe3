@@ -2,7 +2,7 @@ import type { Socket } from "socket.io";
 import { PARTY_SIZE_LIMIT } from "../constants/party";
 import type Client from "../helpers/Client";
 import ClientStorage from "../helpers/ClientStorage";
-import { PartyMessage } from "../helpers/message";
+import { PartyMessage, SystemMessage } from "../helpers/message";
 import Party from "../helpers/Party";
 
 function validateString(characterName: any): string | null {
@@ -13,7 +13,7 @@ function validateString(characterName: any): string | null {
 }
 
 function registerPartyHandler(io: any, socket: Socket, client: Client): void {
-  const partyInvite = async (unvalidatedCharacterName: any) => {
+  const partyInvite = async (characterName: string) => {
     if (client.instance != null) {
       return socket.emit(
         "error",
@@ -21,15 +21,13 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
       );
     }
 
-    const characterName = validateString(unvalidatedCharacterName);
-    if (characterName == null) {
-      return socket.emit("error", "Invalid character name");
+    if (validateString(characterName) == null) {
+      return socket.emit("error", "Invalid argument");
     }
 
     const targetClient = ClientStorage.getClientByCharacterName(characterName);
     if (targetClient == null || !targetClient.isConnected) {
-      return socket.emit("error", "This character is offline");
-
+      return new SystemMessage("This character is offline");
     }
 
     const party = client.party;
@@ -68,6 +66,30 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
       "chat:message",
       new PartyMessage(`Invited ${characterName} to the party`)
     );
+  };
+
+  const partyKick = async (characterName: string) => {
+    if (validateString(characterName) == null) {
+      return socket.emit("error", "Invalid argument");
+    }
+
+    const party = client.party;
+    if (!party.isPartyLeader(client)) {
+      return socket.emit("error", "You are not the party leader");
+    }
+
+    const targetClient = ClientStorage.getClientByCharacterName(characterName);
+
+    if (targetClient) {
+      client.party.leaveParty(targetClient);
+      const roomId = client.party.socketRoomId;
+      io.to(roomId).emit("party:data", client.party.publicData);
+      targetClient.party = new Party(targetClient);
+      io.to(targetClient.socketId).emit(
+        "party:data",
+        targetClient.party.publicData
+      );
+    }
   };
 
   const acceptInvite = (_senderCharacterName: string, _id: string) => {
@@ -113,7 +135,7 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
 
     const result = client.party.leaveParty(client);
     if (!result.ok) {
-      socket.emit("chat:message", new PartyMessage("Failed to leave party"));
+      return socket.emit("error", "Failed to leave party");
     }
 
     socket.leave(roomId);
@@ -147,6 +169,7 @@ function registerPartyHandler(io: any, socket: Socket, client: Client): void {
   };
 
   socket.on("party:invite-character", partyInvite);
+  socket.on("party:kick-character", partyKick);
   socket.on("party:accept-invite", acceptInvite);
   socket.on("party:leave-party", leaveParty);
   socket.on("party:get-data", getData);
