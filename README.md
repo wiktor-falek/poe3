@@ -82,10 +82,9 @@ randomised environment generation of roguelikes, with turn based strategy genre.
 
 ## Getting started with development
 
-Make sure you have MongoDB installed, verify by running `mongod` command
+TODO: Dockerize
 
-create indexes
-
+create mongodb indexes
 ```
 db.users.createIndex(
   { "characters.name": 1 },
@@ -97,7 +96,3 @@ db.users.createIndex(
   }
 )
 ```
-
-Install dependencies of all projects by running `npm i` in root directory
-
-TODO: Setup a script to start all processes
