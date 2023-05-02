@@ -12,7 +12,7 @@
 - MongoDB Native Driver
 - Socket.io
 - Vue.js, vue-router, Pinia, xstate
-- Joi for MongoDB schema validation & socket event argument validation
+- Joi for MongoDB schema validation & emit type validation
 - [Redis (socket.io adapter)]
 - [Jest]
 - [Puppeteer]
