@@ -75,7 +75,7 @@ randomised environment generation of roguelikes, with turn based strategy genre.
 
 ### **`items`**
 
-#### Module for generating items randomly and storing data of item modifiers.
+#### Module for generating items with random modifiers.
 
 <br>
 <br>
