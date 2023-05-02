@@ -57,7 +57,7 @@ randomised environment generation of roguelikes, with turn based strategy genre.
 
 ### **`api`**
 
-#### Handles authentication and authorization, CRUD operations for player characters.
+#### Handles auth and CRUD operations for player characters.
 
 <br>
 
