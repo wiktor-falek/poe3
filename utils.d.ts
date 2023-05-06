@@ -1,6 +1,5 @@
-interface ResultOk<T> {
+interface ResultOk {
   ok: true;
-  value?: T;
 }
 
 interface ResultError {
@@ -8,8 +7,6 @@ interface ResultError {
   error: string;
 }
 
-type Result<T = void> = ResultOk<T> | ResultError;
+type Result = ResultOk | ResultError;
 
-export {
-  Result
-}
+export { Result };
