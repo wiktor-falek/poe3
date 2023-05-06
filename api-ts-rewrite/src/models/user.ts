@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import Joi from "joi";
 import Mongo from "../Mongo.js";
 import type { Result } from "../../../utils.js";
+import { v4 as uuidv4 } from "uuid";
 
 const userSchema = Joi.object({
   account: Joi.object({
@@ -104,14 +105,36 @@ class User {
     return { ok: true };
   }
 
-  static async login(
-    username: string,
-    password: string,
-    email: string
-  ): Promise<Result> {
-    const userInput = {
-      account: { username, email },
-    };
+  static async login(username: string, password: string): Promise<Result> {
+    const user = await User.findByUsername(username);
+
+    if (user === null) {
+      return { ok: false, error: "Invalid username" };
+    }
+
+    const isAuthenticated = await bcrypt.compare(password, user.account.hash);
+
+    if (!isAuthenticated) {
+      return { ok: false, error: "Invalid password" };
+    }
+
+    const sessionId = uuidv4();
+
+    
+
+    //     const result = await User.collection.updateOne(
+    //       { "account.username": username },
+    //       { $set: {"account.sessionId": sessionId}}
+    //     );
+
+    //     if (result.acknowledged) {
+    //       res.cookie("username", username, { httpOnly: false, secure: true, sameSite: "strict" });
+    //       res.cookie("sessionId", sessionId, { httpOnly: false, secure: true,  sameSite: "strict" });
+    //       return res.json({username, sessionId});
+    //     }
+    //     res.status(400).json({ error: "Something went wrong" });
+    //   }
+    // );
 
     return { ok: false, error: "Not Implemented" };
   }
