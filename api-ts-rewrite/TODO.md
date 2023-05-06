@@ -1,7 +1,0 @@
-- [x] Create db connection for dev
-- [x] Clean up the business logic
-- [ ] Create .env with mongodb atlas credentials and connect to db
-- [ ] Create rate limiters and put them in /middlewares dir 
-- [ ] Write unit tests
-- [ ] Document the routes and the codebase
-- [ ] Dockerize
