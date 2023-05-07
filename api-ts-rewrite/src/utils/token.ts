@@ -5,6 +5,13 @@ dotenv.config();
 
 const secret = randomBytes(32).toString("hex");
 
+interface Payload {
+  username: string;
+  email: string;
+  iat?: number | undefined;
+  exp?: number | undefined;
+}
+
 export const encode = (username: string, email: string) => {
   const payload = { username, email };
   const token = jwt.sign(payload, secret, { expiresIn: 86400 });
@@ -12,6 +19,10 @@ export const encode = (username: string, email: string) => {
 };
 
 export const decode = (token: string) => {
-  const decodedToken = jwt.verify(token, secret);
-  return decodedToken;
+  try {
+    const decodedToken = jwt.verify(token, secret);
+    return decodedToken as Payload;
+  } catch {
+    return null;
+  }
 };

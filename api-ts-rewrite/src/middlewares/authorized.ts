@@ -6,27 +6,28 @@ import User from "../models/user";
  * If unsuccessfull returns status 401 message breaking the middleware chain.
  * If successfull passes { username, sessionId, userId,  } to succeeding middlewares.
  *
- * EXAMPLE AUTHORIZED ROUTE
- *   import authorize from "./middlewares/authorize.ts"
+ * **EXAMPLE AUTHORIZED ROUTE**
+ * 
+ *   import authorized from "./middlewares/authorized.ts"
  *   import apiRouter from "./routes/api"
  *   app.use("/api", authorize, apiRouter);
  *
- * ACCESSING PASSED DATA IN SUCCEEDING MIDDLEWARE
+ * **ACCESSING PASSED DATA IN SUCCEEDING MIDDLEWARE**
+ * 
  *   function someController() {
  *     const { username, sessionId, userId, user } = res.locals;
  *   }
  */
-const authorize = async (req: Request, res: Response, next: NextFunction) => {
-  const { username, sessionId } = req.cookies;
+const authorized = async (req: Request, res: Response, next: NextFunction) => {
+  const { sessionId } = req.cookies;
 
-  if (!username || !sessionId) {
+  if (!sessionId) {
     return res.status(401).json({
       message: "Not Authorized",
     });
   }
 
   const user = await User.collection.findOne({
-    "account.username": username,
     "account.sessionId": sessionId,
   });
 
@@ -37,11 +38,11 @@ const authorize = async (req: Request, res: Response, next: NextFunction) => {
   }
 
   // pass session data and userId to succeeding middlewares
-  res.locals.username = username;
-  res.locals.sessionId = sessionId;
+  res.locals.username = user.account.username;
+  res.locals.sessionId = user.account.sessionId;
   res.locals.userId = user._id.toString();
   res.locals.user = user;
   return next();
 };
 
-export default authorize;
+export default authorized;

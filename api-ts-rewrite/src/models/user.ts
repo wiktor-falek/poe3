@@ -3,6 +3,7 @@ import Joi from "joi";
 import Mongo from "../Mongo.js";
 import type { Result } from "../../../utils.js";
 import { v4 as uuidv4 } from "uuid";
+import { decode } from "../utils/token.js";
 
 const userSchema = Joi.object({
   account: Joi.object({
@@ -120,23 +121,50 @@ class User {
 
     const sessionId = uuidv4();
 
-    
+    const result = await this.collection.updateOne(
+      { "account.username": username },
+      { $set: { "account.sessionId": sessionId } }
+    );
 
-    //     const result = await User.collection.updateOne(
-    //       { "account.username": username },
-    //       { $set: {"account.sessionId": sessionId}}
-    //     );
+    if (result.modifiedCount !== 1) {
+      return { ok: false, error: "Database write failed" };
+    }
 
-    //     if (result.acknowledged) {
-    //       res.cookie("username", username, { httpOnly: false, secure: true, sameSite: "strict" });
-    //       res.cookie("sessionId", sessionId, { httpOnly: false, secure: true,  sameSite: "strict" });
-    //       return res.json({username, sessionId});
-    //     }
-    //     res.status(400).json({ error: "Something went wrong" });
-    //   }
-    // );
+    return { ok: true, data: sessionId };
+  }
 
-    return { ok: false, error: "Not Implemented" };
+  static async verify(token: string): Promise<Result> {
+    const payload = decode(token);
+
+    if (payload === null) {
+      return { ok: false, error: "Invalid token" };
+    }
+
+    const { username, email, iat, exp } = payload;
+
+    const emailIsTaken = await this.collection.countDocuments({
+      "account.email": email,
+      "account.hasConfirmedEmail": true,
+    });
+
+    if (emailIsTaken) {
+      return { ok: false, error: "Email is already in use" };
+    }
+
+    const result = await this.collection.updateOne(
+      {
+        "account.username": username,
+        "account.email": email,
+        "account.hasConfirmedEmail": false,
+      },
+      { $set: { "account.hasConfirmedEmail": true } }
+    );
+
+    if (!result.modifiedCount) {
+      return { ok: false, error: "Email has already been verified" };
+    }
+
+    return { ok: true, data: true };
   }
 }
 

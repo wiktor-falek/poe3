@@ -2,8 +2,9 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import Mongo from "./Mongo";
-import authRouter from "./routes/auth";
 import apiRouter from "./routes/api";
+import authRouter from "./routes/auth";
+import authorized from "./middlewares/authorized";
 
 Mongo.getClient().connect();
 
@@ -17,7 +18,7 @@ Mongo.getClient().connect();
 
 const app = express();
 
-// MIDDLEWARE
+// middlewares
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -29,23 +30,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
 
+// public endpoints
 app.use("/", authRouter);
-app.use("/", apiRouter);
 
-// RATE LIMITERS
-// app.use("/auth", authApiLimiter);
-
-// ROUTES
-// app.use("/auth", register, login, verify);
-// app.use("/api", authorize, v1);
-
-// app.use(
-//   "/auth/ping",
-//   /* authorize, */ (req, res) => {
-//     res
-//       .status(200)
-//       .json({ message: "Authorized", username: req.cookies.username });
-//   }
-// );
+// authorized endpoints
+app.use("/", authorized, apiRouter);
 
 export default app;
