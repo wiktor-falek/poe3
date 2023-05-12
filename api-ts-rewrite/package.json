@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "tsc-watch --onSuccess \"node .\" ",
     "start": "NODE_ENV=production  node . ",
-    "test": ""
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "keywords": [],
   "author": "",
@@ -19,8 +20,10 @@
     "@types/jsonwebtoken": "^9.0.2",
     "@types/nodemailer": "^6.4.7",
     "@types/uuid": "^9.0.1",
+    "@vitest/coverage-c8": "^0.31.0",
     "tsc-watch": "^6.0.4",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "vitest": "^0.31.0"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
@@ -35,6 +38,7 @@
     "nodemailer": "^6.9.1",
     "resultat": "^1.0.3",
     "uuid": "^9.0.0",
+    "vitest-mongodb": "^0.0.5",
     "winston": "^3.8.2"
   }
 }
