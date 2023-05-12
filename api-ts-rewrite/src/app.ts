@@ -8,14 +8,6 @@ import authorized from "./middlewares/authorized";
 
 Mongo.getClient().connect();
 
-// import { default as register } from "./src/controllers/auth/register.js";
-// import { default as login } from "./src/controllers/auth/login.js";
-// import { default as verify } from "./src/controllers/auth/verify.js";
-
-// import { authApiLimiter } from "./src/utils/rateLimit.js";
-// import { default as v1 } from "./src/controllers/v1/index.js";
-// import authorize from "./src/middlewares/authorize.js";
-
 const app = express();
 
 // middlewares
