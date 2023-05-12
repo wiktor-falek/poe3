@@ -1,9 +1,9 @@
 import bcrypt from "bcrypt";
 import Joi from "joi";
 import Mongo from "../Mongo.js";
-import type { Result } from "../../../utils.js";
 import { v4 as uuidv4 } from "uuid";
 import { decode } from "../utils/token.js";
+import { Ok, Err } from "result";
 
 const userSchema = Joi.object({
   account: Joi.object({
@@ -52,7 +52,7 @@ class User {
   private static async usernameAndEmailIsAvailable(
     username: string,
     email: string
-  ): Promise<Result> {
+  ) {
     const user = await this.collection.findOne({
       $or: [
         { "account.username": username },
@@ -61,21 +61,17 @@ class User {
     });
 
     if (user?.account.username === username) {
-      return { ok: false, error: "Username is already in use" };
+      return Err("Username is already in use");
     }
 
     if (user?.account.email === email) {
-      return { ok: false, error: "Email is already in use" };
+      return Err("Email is already in use");
     }
 
-    return { ok: true };
+    return Ok(1);
   }
 
-  static async register(
-    username: string,
-    password: string,
-    email: string
-  ): Promise<Result> {
+  static async register(username: string, password: string, email: string) {
     const userInput = {
       account: { username, email },
     };
@@ -83,12 +79,13 @@ class User {
     const newUserData = await userSchema.validateAsync(userInput);
     if (newUserData.error) {
       const error = newUserData.error.details[0].message;
-      return { ok: false, error };
+      return Err(error);
     }
 
     const available = await this.usernameAndEmailIsAvailable(username, email);
-    if (!available.ok) {
-      return { ok: false, error: available.error };
+    if (available.isErr()) {
+      const errMessage = available.val
+      return Err("Bruh");
     }
 
     const saltRounds = 10;
@@ -100,23 +97,23 @@ class User {
     const result = await this.collection.insertOne(newUserData);
 
     if (!result.acknowledged) {
-      return { ok: false, error: "Database write failed" };
+      return Err("Database write failed");
     }
 
-    return { ok: true };
+    return Ok(1);
   }
 
-  static async login(username: string, password: string): Promise<Result> {
+  static async login(username: string, password: string) {
     const user = await User.findByUsername(username);
 
     if (user === null) {
-      return { ok: false, error: "Invalid username" };
+      return Err("Invalid username");
     }
 
     const isAuthenticated = await bcrypt.compare(password, user.account.hash);
 
     if (!isAuthenticated) {
-      return { ok: false, error: "Invalid password" };
+      return Err("Invalid password");
     }
 
     const sessionId = uuidv4();
@@ -127,17 +124,16 @@ class User {
     );
 
     if (result.modifiedCount !== 1) {
-      return { ok: false, error: "Database write failed" };
+      return Err("Database write failed");
     }
-
-    return { ok: true, data: sessionId };
+    return Ok({ sessionId });
   }
 
-  static async verify(token: string): Promise<Result> {
+  static async verify(token: string): Promise<any> {
     const payload = decode(token);
 
     if (payload === null) {
-      return { ok: false, error: "Invalid token" };
+      return Err("Invalid token");
     }
 
     const { username, email, iat, exp } = payload;
@@ -148,7 +144,7 @@ class User {
     });
 
     if (emailIsTaken) {
-      return { ok: false, error: "Email is already in use" };
+      return Err("Email is already in use");
     }
 
     const result = await this.collection.updateOne(
@@ -161,10 +157,10 @@ class User {
     );
 
     if (!result.modifiedCount) {
-      return { ok: false, error: "Email has already been verified" };
+      return Err("Email has already been verified");
     }
 
-    return { ok: true, data: true };
+    return Ok(1);
   }
 }
 

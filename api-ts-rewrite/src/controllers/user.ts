@@ -20,8 +20,8 @@ async function register(req: Request, res: Response) {
   }
 
   const result = await User.register(username, password, email);
-  if (!result.ok) {
-    return res.status(400).json({ error: result.error });
+  if (result.isErr()) {
+    return res.status(400).json({ error: result.val });
   }
 
   const token = encode(username, email);
@@ -55,11 +55,11 @@ async function login(req: Request, res: Response) {
   }
 
   const result = await User.login(username, password);
-  if (!result.ok) {
-    return res.status(401).json(result.error);
+  if (result.err) {
+    return res.status(401).json({ error: result.val });
   }
 
-  const sessionId = result.data;
+  const { sessionId } = result.val;
 
   res.cookie("sessionId", sessionId, {
     httpOnly: false,
@@ -78,7 +78,7 @@ async function verify(req: Request, res: Response) {
   }
 
   const verified = result.data;
-  
+
   return res.status(200).json({ verified });
 }
 
