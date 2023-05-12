@@ -1,10 +1,10 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import Mongo from "./Mongo";
-import apiRouter from "./routes/api";
-import authRouter from "./routes/auth";
-import authorized from "./middlewares/authorized";
+import apiRouter from "./routes/api.js";
+import authRouter from "./routes/auth.js";
+import authorized from "./middlewares/authorized.js";
+import Mongo from "./mongo.js";
 
 Mongo.getClient().connect();
 

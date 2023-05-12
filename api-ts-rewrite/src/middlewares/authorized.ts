@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import User from "../models/user";
+import User from "../models/user.js";
 
 /**
  * Queries db for an user with username and sessionId from cookie.
@@ -8,8 +8,8 @@ import User from "../models/user";
  *
  * **EXAMPLE AUTHORIZED ROUTE**
  * 
- *   import authorized from "./middlewares/authorized.ts"
- *   import apiRouter from "./routes/api"
+ *   import authorized from "./middlewares/authorized.js"
+ *   import apiRouter from "./routes/api.js"
  *   app.use("/api", authorize, apiRouter);
  *
  * **ACCESSING PASSED DATA IN SUCCEEDING MIDDLEWARE**

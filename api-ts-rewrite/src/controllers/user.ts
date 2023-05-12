@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import User from "../models/user";
+import User from "../models/user.js";
 import Joi from "joi";
-import { sendConfirmationEmail } from "../components/email";
-import { encode } from "../utils/token";
+import { sendConfirmationEmail } from "../components/email.js";
+import { encode } from "../utils/token.js";
 
 async function register(req: Request, res: Response) {
   const { username, password, email } = req.body;
@@ -33,9 +33,7 @@ async function register(req: Request, res: Response) {
       `http://localhost:3000/auth/verify/${token}`
   );
 
-  console.log(token);
-
-  res.status(200).json({
+  return res.status(200).json({
     message: `Successfully created an account with username '${username}'`,
   });
 }

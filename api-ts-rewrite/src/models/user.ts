@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import Joi from "joi";
-import Mongo from "../Mongo.js";
+import Mongo from "../mongo.js";
 import { v4 as uuidv4 } from "uuid";
 import { decode } from "../utils/token.js";
 import { Ok, Err } from "resultat";
