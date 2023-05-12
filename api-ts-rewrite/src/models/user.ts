@@ -3,7 +3,7 @@ import Joi from "joi";
 import Mongo from "../Mongo.js";
 import { v4 as uuidv4 } from "uuid";
 import { decode } from "../utils/token.js";
-import { Ok, Err } from "result";
+import { Ok, Err } from "resultat";
 
 const userSchema = Joi.object({
   account: Joi.object({
@@ -83,9 +83,8 @@ class User {
     }
 
     const available = await this.usernameAndEmailIsAvailable(username, email);
-    if (available.isErr()) {
-      const errMessage = available.val
-      return Err("Bruh");
+    if (!available.ok) {
+      return Err(available.err);
     }
 
     const saltRounds = 10;
@@ -95,7 +94,6 @@ class User {
     newUserData.account.hash = hash;
 
     const result = await this.collection.insertOne(newUserData);
-
     if (!result.acknowledged) {
       return Err("Database write failed");
     }
@@ -111,7 +109,6 @@ class User {
     }
 
     const isAuthenticated = await bcrypt.compare(password, user.account.hash);
-
     if (!isAuthenticated) {
       return Err("Invalid password");
     }

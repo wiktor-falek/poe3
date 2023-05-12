@@ -20,8 +20,8 @@ async function register(req: Request, res: Response) {
   }
 
   const result = await User.register(username, password, email);
-  if (result.isErr()) {
-    return res.status(400).json({ error: result.val });
+  if (!result.ok) {
+    return res.status(400).json({ error: result.err });
   }
 
   const token = encode(username, email);
@@ -55,8 +55,8 @@ async function login(req: Request, res: Response) {
   }
 
   const result = await User.login(username, password);
-  if (result.err) {
-    return res.status(401).json({ error: result.val });
+  if (!result.ok) {
+    return res.status(401).json({ error: result.err });
   }
 
   const { sessionId } = result.val;
@@ -74,7 +74,7 @@ async function verify(req: Request, res: Response) {
   const { token } = req.params;
   const result = await User.verify(token);
   if (!result.ok) {
-    return res.status(422).json({ error: result.error });
+    return res.status(422).json({ error: result.err });
   }
 
   const verified = result.data;
