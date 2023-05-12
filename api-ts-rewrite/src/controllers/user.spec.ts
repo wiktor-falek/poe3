@@ -39,3 +39,38 @@ describe("register", async () => {
     expect(response.statusCode).toBe(400);
   });
 });
+
+describe("login", async () => {
+  test("status code 422 with missing body", async () => {
+    const response = await request(app).post("/auth/login").send();
+
+    expect(response.statusCode).toBe(422);
+  });
+
+  test("can not log in with invalid username", async () => {
+    const response = await request(app).post("/auth/login").send({
+      username: "wrongusername",
+      password: "password",
+    });
+
+    expect(response.statusCode).toBe(401);
+  });
+
+  test("can not log in with invalid password", async () => {
+    const response = await request(app).post("/auth/login").send({
+      username: "testuser",
+      password: "wrongpassword",
+    });
+
+    expect(response.statusCode).toBe(401);
+  });
+
+  test("can log in with correct credentials", async () => {
+    const response = await request(app).post("/auth/login").send({
+      username: "testuser",
+      password: "password",
+    });
+
+    expect(response.statusCode).toBe(200);
+  });
+});
