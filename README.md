@@ -17,15 +17,15 @@
 - Supertest
 - [Puppeteer]
 
-### My own modules/libraries that I used:
-- [pyrand](https://github.com/wiktor-falek/pyrand)
-- [resultat](https://github.com/wiktor-falek/resultat)
+### My own modulesthat I used:
+- [pyrand](https://github.com/wiktor-falek/pyrand) - Python random module ported to JavaScript
+- [resultat](https://github.com/wiktor-falek/resultat) - Tiny module for easy and type safe error handling
 
 <br>
 
 ### Features
 
-- Character inventory and equipment management (drag & drop API, popovers), with state synchronised between database, socket server and frontend in real time.
+- Character inventory and equipment management (drag & drop API, popovers), with state synchronised between database, socket server and client in real time.
 
 - Global chat with client side and server side commands. Messages have different groups such as: System, Global, Whisper, Party, Guild whose visibility can be toggled on/off. Supports 1000 separate global rooms, use `/global n` command to join a room `n`.
 
@@ -41,17 +41,6 @@
 
 Multiplayer browser game that combines ARPG item and loot system similar to Diablo II and Path of Exile,
 randomised environment generation of roguelikes, with turn based strategy genre.
-
-<br>
-
-### What are the selling points of the game?
-
-- Replayability
-- In depth character itemisation and progresion
-- Strategy
-- Theorycrafting
-- Community
-- New content added regularly
 
 <br>
 
