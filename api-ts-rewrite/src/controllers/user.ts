@@ -61,11 +61,11 @@ async function login(req: Request, res: Response) {
 
   res.cookie("sessionId", sessionId, {
     httpOnly: false,
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
   });
 
-  return res.json({ sessionId });
+  return res.status(200).json({ authenticated: true });
 }
 
 async function verify(req: Request, res: Response) {
