@@ -12,12 +12,6 @@ import type { ObjectId } from "mongodb";
  *   import authorized from "./middlewares/authorized.js"
  *   import apiRouter from "./routes/api.js"
  *   app.use("/api", authorize, apiRouter);
- *
- * **ACCESSING PASSED DATA IN SUCCEEDING MIDDLEWARE**
- *
- *   function someController() {
- *     const { username, sessionId, userId, user } = res.locals;
- *   }
  */
 const authorized = async (req: Request, res: Response, next: NextFunction) => {
   const { sessionId } = req.cookies;
