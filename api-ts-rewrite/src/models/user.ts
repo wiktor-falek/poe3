@@ -76,11 +76,17 @@ class User {
       account: { username, email },
     };
 
-    const newUserData = await userSchema.validateAsync(userInput);
-    if (newUserData.error) {
-      const error = newUserData.error.details[0].message;
-      return Err(error);
+    const validationResult = userSchema.validate(userInput);
+
+    if (validationResult.error) {
+      return Err("Data validation failed");
     }
+
+    interface NewUser {
+      account: { hash: string };
+    }
+
+    const newUser: NewUser = validationResult.value;
 
     const available = await this.usernameAndEmailIsAvailable(username, email);
     if (!available.ok) {
@@ -91,9 +97,9 @@ class User {
     const salt = await bcrypt.genSalt(saltRounds);
     const hash = await bcrypt.hash(password, salt);
 
-    newUserData.account.hash = hash;
+    newUser.account.hash = hash;
 
-    const result = await this.collection.insertOne(newUserData);
+    const result = await this.collection.insertOne(newUser);
     if (!result.acknowledged) {
       return Err("Database write failed");
     }
@@ -132,6 +138,7 @@ class User {
     if (payload === null) {
       return Err("Invalid token");
     }
+    1;
 
     const { username, email, iat, exp } = payload;
 
@@ -162,10 +169,24 @@ class User {
 }
 
 // Indexes
-await User.collection.createIndex({
-  "account.username": 1,
-  "account.sessionId": 1,
-});
+await User.collection.createIndexes([
+  {
+    key: {
+      "account.sessionId": 1,
+    },
+  },
+  {
+    key: {
+      "account.username": 1,
+    },
+  },
+  // {
+  //   key: {
+  //     "field": 1,
+  //   },
+  //   unique: true,
+  // },
+]);
 
 export default User;
 export { userSchema };

@@ -9,10 +9,10 @@ const characterSchema = Joi.object({
   name: Joi.string().min(3).max(24).required(),
   silver: Joi.number().integer().default(0),
   class: Joi.string().valid("swordsman", "ranger", "sorcerer", "assassin"),
-  level: Joi.object({
-    value: Joi.number().integer().min(1).max(100).default(1),
-    xp: Joi.number().integer().min(0).default(0),
-    requiredXp: Joi.number().integer().min(10).default(10),
+  level: Joi.object().default({
+    value: 1,
+    xp: 0,
+    requiredXp: 10,
   }),
   equipment: Joi.object().default({
     hand: null,
@@ -95,16 +95,53 @@ class Character {
     return Ok(`Successfully created character ${characterName}`);
   }
 
-  static async getCharactersOverview(username: string) {
-    const characters = this.collection.findOne(
-      { username },
-      { projection: { _id: 0, characters: 1 } }
+  static async getCharacter(username: string, characterName: string) {
+    const character = await this.collection.findOne(
+      {
+        username,
+        name: characterName,
+      },
+      { projection: { _id: 0, username: 0 } }
     );
+
+    if (character === null) {
+      return Err("Character not found");
+    }
+
+    return Ok(character);
+  }
+
+  // OPTIMIZE: move this to user collection, where the subset data of each character
+  // will be stored in the characters field for fast access
+  static async getAllCharactersOverview(username: string) {
+    try {
+      const cursor = this.collection.find(
+        {
+          username,
+        },
+        { projection: { _id: 0, username: 0 } }
+      );
+
+      const characters = await cursor.toArray();
+
+      const charactersOverview = characters.map((c) => {
+        return {
+          name: c.name,
+          class: c.class,
+          level: c.level.value,
+        };
+      });
+
+      return Ok(charactersOverview);
+    } catch {
+      return Err("Database read failed");
+    }
   }
 }
 
 // Indexes
 Character.collection.createIndexes([
+  { key: { username: 1 } },
   {
     key: { name: 1 },
     unique: true,
