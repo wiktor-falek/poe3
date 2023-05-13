@@ -11,19 +11,27 @@ async function createCharacter(req: Request, res: Response) {
     name: Joi.string().required().min(3).max(24),
   });
 
-  try {
-    await schema.validateAsync(req.body);
-  } catch {
+  const validationResult = schema.validate(req.body);
+  if (validationResult.error) {
     return res.status(422).json({ error: "Invalid data" });
   }
 
+
   const username = res.locals.user.account.username;
 
-  const result = Character.createCharacter(username, characterClass, name);
-  // router.post(
-  // "/characters",
-  // body("class").isString().trim().isLength({ min: 3, max: 16 }),
-  // body("name").isString().trim().isLength({ min: 3, max: 24 }),
+  const result = await Character.createCharacter(
+    username,
+    characterClass,
+    name
+  );
 
-  // Character.createCharacter()
+  if (!result.ok) {
+    return res.status(403).json({ error: result.err });
+  }
+
+  const character = result.val;
+
+  return res.status(200).json(character);
 }
+
+export { createCharacter };

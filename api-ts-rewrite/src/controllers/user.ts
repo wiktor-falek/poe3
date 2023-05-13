@@ -13,9 +13,8 @@ async function register(req: Request, res: Response) {
     email: Joi.string().email().min(6).max(254),
   });
 
-  try {
-    await schema.validateAsync(req.body);
-  } catch {
+  const validationResult = schema.validate(req.body);
+  if (validationResult.error) {
     return res.status(422).json({ error: "Invalid data" });
   }
 
@@ -46,9 +45,8 @@ async function login(req: Request, res: Response) {
     password: Joi.string().required().min(8).max(128),
   });
 
-  try {
-    await schema.validateAsync(req.body);
-  } catch {
+  const validationResult = schema.validate(req.body);
+  if (validationResult.error) {
     return res.status(422).json({ error: "Invalid data" });
   }
 
