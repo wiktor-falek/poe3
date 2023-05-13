@@ -6,16 +6,20 @@
 
 ### Tech Stack
 
-- JavaScript for the REST api
-- TypeScript everywhere else
-- Express
+- TypeScript everywhere
 - MongoDB Native Driver
+- Express
 - Socket.io
-- Vue.js, vue-router, Pinia, xstate
-- Joi for MongoDB schema validation & emit type validation
+- Vue.js, Pinia, xstate
+- Joi for database schemas & various validation
 - [Redis (socket.io adapter)]
-- [Jest]
+- Vitest
+- Supertest
 - [Puppeteer]
+
+My own modules/libraries:
+- [pyrand](https://github.com/wiktor-falek/pyrand)
+- [resultat](https://github.com/wiktor-falek/resultat)
 
 <br>
 
@@ -83,16 +87,3 @@ randomised environment generation of roguelikes, with turn based strategy genre.
 ## Getting started with development
 
 TODO: Dockerize
-
-create mongodb indexes
-```
-db.users.createIndex(
-  { "characters.name": 1 },
-  {
-    unique: true,
-    partialFilterExpression: {
-      "characters.name": { $type: "string" }
-    }
-  }
-)
-```
