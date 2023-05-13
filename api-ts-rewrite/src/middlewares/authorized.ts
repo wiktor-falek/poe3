@@ -3,15 +3,16 @@ import User from "../models/user.js";
 import { UserData } from "../*.js";
 
 /**
- * Queries db for an user with username and sessionId from cookie.
- * If unsuccessfull returns status 401 message breaking the middleware chain.
- * If successfull passes { username, sessionId, userId,  } to succeeding middlewares.
+ * Queries db for a user matching the cookie sessionId
+ * 
+ * *On fail:* return 401 response breaking the middleware chain
+ * 
+ * *On success:* pass user data to res.locals
  *
- * **EXAMPLE AUTHORIZED ROUTE**
- *
- *   import authorized from "./middlewares/authorized.js"
- *   import apiRouter from "./routes/api.js"
- *   app.use("/api", authorize, apiRouter);
+ * @example
+ * import authorized from "./middlewares/authorized.js"
+ * import apiRouter from "./routes/api.js"
+ * app.use("/api", authorize, apiRouter);
  */
 const authorized = async (req: Request, res: Response, next: NextFunction) => {
   const { sessionId } = req.cookies;
