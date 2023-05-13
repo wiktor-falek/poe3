@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import apiRouter from "./routes/api.js";
@@ -21,6 +21,17 @@ app.use(
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.on("finish", () => {
+    console.log(
+      req.method,
+      decodeURI(req.url),
+      res.statusCode,
+      res.statusMessage
+    );
+  });
+  next();
+});
 
 // public endpoints
 app.use("/", authRouter);
