@@ -14,9 +14,6 @@ const getUri = async () => {
 };
 
 const URI = await getUri();
-// process.env.NODE_ENV === "production"
-//   ? `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.4zrjv3n.mongodb.net/items?retryWrites=true&w=majority`
-//   : "mongodb://127.0.0.1:27017";
 
 class Mongo {
   private static client: MongoClient;
