@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import User from "../models/user.js";
 import Joi from "joi";
-import { sendConfirmationEmail } from "../components/email.js";
+import { sendConfirmationEmail } from "../utils/email.js";
 import { encode } from "../utils/token.js";
 
 async function register(req: Request, res: Response) {
