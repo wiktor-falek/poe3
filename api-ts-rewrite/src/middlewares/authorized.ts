@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../models/user.js";
-import type { ObjectId } from "mongodb";
+import { UserData } from "../*.js";
 
 /**
  * Queries db for an user with username and sessionId from cookie.
@@ -20,14 +20,6 @@ const authorized = async (req: Request, res: Response, next: NextFunction) => {
     return res.status(401).json({
       message: "Not Authorized",
     });
-  }
-
-  interface UserData {
-    _id: ObjectId;
-    account: {
-      username: string;
-      sessionId: string;
-    };
   }
 
   const user = await User.collection.findOne<UserData>(
