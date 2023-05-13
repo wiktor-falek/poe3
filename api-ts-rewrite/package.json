@@ -41,7 +41,6 @@
     "mongodb-memory-server": "^8.12.2",
     "nodemailer": "^6.9.1",
     "resultat": "^1.0.3",
-    "uuid": "^9.0.0",
-    "winston": "^3.8.2"
+    "uuid": "^9.0.0"
   }
 }
