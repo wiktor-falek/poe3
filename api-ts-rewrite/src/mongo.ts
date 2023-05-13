@@ -4,7 +4,7 @@ import { MongoMemoryServer } from "mongodb-memory-server";
 const getUri = async () => {
   switch (process.env.NODE_ENV) {
     case "production":
-      return "";
+      return `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.4zrjv3n.mongodb.net/items?retryWrites=true&w=majority`;
     case "testing":
       const mongoServer = await MongoMemoryServer.create();
       return mongoServer.getUri();
@@ -24,7 +24,6 @@ class Mongo {
 
   static getClient(): MongoClient {
     if (!this.isInitialized()) {
-      // Initialize the connection
       this.client = new MongoClient(URI, {
         serverApi: {
           version: ServerApiVersion.v1,
