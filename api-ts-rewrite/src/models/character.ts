@@ -78,11 +78,15 @@ class Character {
       class: characterClass,
       equipment: startingGear[characterClass],
     };
-
-    // TODO: make a transaction that checks if:
-    // "account.characterLimit" is not exceeded
-    // characterName is not in "characters"
     // https://www.mongodb.com/docs/manual/core/transactions/
+
+    // TODO: make a transaction:
+    
+    // check if "account.characters" length not >= "account.characterLimit"
+
+    // characterName is not in "characters.$" already
+
+    // TODO: figure out how to add index to disallow duplicate character names across different accounts
 
     const result = await this.collection.updateOne(
       { "account.username": username },

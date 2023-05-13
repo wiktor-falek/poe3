@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import Character from "../models/character.js";
 import Joi from "joi";
-import { UserData } from "../*.js";
 
 async function createCharacter(req: Request, res: Response) {
   const characterClass = req.body.class;

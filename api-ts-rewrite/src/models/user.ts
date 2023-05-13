@@ -161,5 +161,11 @@ class User {
   }
 }
 
+// Indexes
+await User.collection.createIndex({
+  "account.username": 1,
+  "account.sessionId": 1,
+});
+
 export default User;
 export { userSchema };
