@@ -1,11 +1,8 @@
 import express from "express";
+import { createCharacter } from "../controllers/character.js";
 
 const router = express.Router();
 
-// router.get("/api/characters", () => {});
-
-router.get("/api/test", (req, res) => {
-  res.status(200).json({ test: "test" });
-});
+router.post("/api/characters", createCharacter);
 
 export default router;
