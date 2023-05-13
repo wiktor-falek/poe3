@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../models/user.js";
+import type { ObjectId } from "mongodb";
 
 /**
  * Queries db for an user with username and sessionId from cookie.
@@ -7,13 +8,13 @@ import User from "../models/user.js";
  * If successfull passes { username, sessionId, userId,  } to succeeding middlewares.
  *
  * **EXAMPLE AUTHORIZED ROUTE**
- * 
+ *
  *   import authorized from "./middlewares/authorized.js"
  *   import apiRouter from "./routes/api.js"
  *   app.use("/api", authorize, apiRouter);
  *
  * **ACCESSING PASSED DATA IN SUCCEEDING MIDDLEWARE**
- * 
+ *
  *   function someController() {
  *     const { username, sessionId, userId, user } = res.locals;
  *   }
@@ -27,9 +28,20 @@ const authorized = async (req: Request, res: Response, next: NextFunction) => {
     });
   }
 
-  const user = await User.collection.findOne({
-    "account.sessionId": sessionId,
-  });
+  interface UserData {
+    _id: ObjectId;
+    account: {
+      username: string;
+      sessionId: string;
+    };
+  }
+
+  const user = await User.collection.findOne<UserData>(
+    {
+      "account.sessionId": sessionId,
+    },
+    { projection: { "account.username": 1, "account.sessionId": 1, _id: 1 } }
+  );
 
   if (user === null) {
     return res.status(401).json({
@@ -37,10 +49,6 @@ const authorized = async (req: Request, res: Response, next: NextFunction) => {
     });
   }
 
-  // pass session data and userId to succeeding middlewares
-  res.locals.username = user.account.username;
-  res.locals.sessionId = user.account.sessionId;
-  res.locals.userId = user._id.toString();
   res.locals.user = user;
   return next();
 };
