@@ -70,8 +70,31 @@ async function getAllCharactersOverview(req: Request, res: Response) {
   return res.status(200).json(characters);
 }
 
-async function y(req: Request, res: Response) {
-  return res.status(501).json({ error: "Not Implemented" });
+async function deleteCharacter(req: Request, res: Response) {
+  const username = res.locals.user.account.username;
+  const characterName = req.params.name;
+
+  console.log(req.params);
+  const schema = Joi.string().required().min(3).max(24);
+
+  const validationResult = schema.validate(characterName);
+
+  if (validationResult.error) {
+    return res.status(422).json({ error: "Invalid data" });
+  }
+
+  const result = await Character.deleteCharacter(username, characterName);
+  if (!result.ok) {
+    return res.status(500).json({ error: result.err });
+  }
+  return res
+    .status(200)
+    .json({ message: `Successfully deleted the character ${characterName}` });
 }
 
-export { createCharacter, getCharacter, getAllCharactersOverview };
+export {
+  createCharacter,
+  getCharacter,
+  getAllCharactersOverview,
+  deleteCharacter,
+};

@@ -116,9 +116,7 @@ class Character {
   static async getAllCharactersOverview(username: string) {
     try {
       const cursor = this.collection.find(
-        {
-          username,
-        },
+        { username },
         { projection: { _id: 0, username: 0 } }
       );
 
@@ -136,6 +134,38 @@ class Character {
     } catch {
       return Err("Database read failed");
     }
+  }
+
+  static async deleteCharacter(username: string, characterName: string) {
+    const character = await this.collection.findOne({
+      username,
+      name: characterName,
+    });
+
+    if (character === null) {
+      return Err("Character does not exist");
+    }
+
+    // insert the character to deletedCharacters collection
+    const inserted = await this.db
+      .collection("deletedCharacters")
+      .insertOne(character);
+
+    if (inserted.insertedId === null) {
+      return Err("Failed to insert the character");
+    }
+
+    // delete the character from characters collection after inserting
+    const deleted = await this.collection.deleteOne({
+      username,
+      name: characterName,
+    });
+
+    if (deleted.deletedCount !== 1) {
+      return Err("Failed to delete the character");
+    }
+
+    return Ok(1);
   }
 }
 
