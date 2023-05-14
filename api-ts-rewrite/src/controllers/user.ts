@@ -8,9 +8,9 @@ async function register(req: Request, res: Response) {
   const { username, password, email } = req.body;
 
   const schema = Joi.object().keys({
-    username: Joi.string().trim().required().min(6).max(30),
+    username: Joi.string().required().trim().min(6).max(30),
     password: Joi.string().required().min(8).max(128),
-    email: Joi.string().email().min(6).max(254),
+    email: Joi.string().required().email().min(6).max(254),
   });
 
   const validationResult = schema.validate(req.body);
@@ -41,7 +41,7 @@ async function login(req: Request, res: Response) {
   const { username, password } = req.body;
 
   const schema = Joi.object().keys({
-    username: Joi.string().trim().required().min(6).max(30),
+    username: Joi.string().required().trim().min(6).max(30),
     password: Joi.string().required().min(8).max(128),
   });
 

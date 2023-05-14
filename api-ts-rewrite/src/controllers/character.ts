@@ -74,7 +74,6 @@ async function deleteCharacter(req: Request, res: Response) {
   const username = res.locals.user.account.username;
   const characterName = req.params.name;
 
-  console.log(req.params);
   const schema = Joi.string().required().min(3).max(24);
 
   const validationResult = schema.validate(characterName);
