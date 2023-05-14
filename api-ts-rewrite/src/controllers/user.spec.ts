@@ -11,7 +11,7 @@ beforeAll(async () => {
 });
 
 describe("register", async () => {
-  test("status code 422 with missing body", async () => {
+  test.concurrent("status code 422 with missing body", async () => {
     const response = await request(app)
       .post("/auth/register")
       .send({ completed: true });
@@ -19,7 +19,7 @@ describe("register", async () => {
     expect(response.statusCode).toBe(422);
   });
 
-  test("status code 200 if registered the user", async () => {
+  test.concurrent("status code 200 if registered the user", async () => {
     const response = await request(app).post("/auth/register").send({
       username: "testuser",
       password: "password",
@@ -41,13 +41,13 @@ describe("register", async () => {
 });
 
 describe("login", async () => {
-  test("status code 422 with missing body", async () => {
+  test.concurrent("status code 422 with missing body", async () => {
     const response = await request(app).post("/auth/login").send();
 
     expect(response.statusCode).toBe(422);
   });
 
-  test("can not log in with invalid username", async () => {
+  test.concurrent("can not log in with invalid username", async () => {
     const response = await request(app).post("/auth/login").send({
       username: "wrongusername",
       password: "password",
@@ -56,7 +56,7 @@ describe("login", async () => {
     expect(response.statusCode).toBe(401);
   });
 
-  test("can not log in with invalid password", async () => {
+  test.concurrent("can not log in with invalid password", async () => {
     const response = await request(app).post("/auth/login").send({
       username: "testuser",
       password: "wrongpassword",
@@ -65,7 +65,7 @@ describe("login", async () => {
     expect(response.statusCode).toBe(401);
   });
 
-  test("can log in with correct credentials", async () => {
+  test.concurrent("can log in with correct credentials", async () => {
     const response = await request(app).post("/auth/login").send({
       username: "testuser",
       password: "password",
