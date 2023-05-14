@@ -16,7 +16,7 @@ Allows user to register an account, if username is not already taken, or the spe
 
 <br>
 
-## POST `/auth/login`
+<h2 id="login">POST `/auth/login`</h2>
 
 Allows user to authenticate, and get a sessionId cookie in response to get access to authorized content.
 
@@ -31,7 +31,7 @@ Allows user to authenticate, and get a sessionId cookie in response to get acces
 
 ## GET `/auth/verify/:token`
 
-Automatically sent to the specified email on registration. When requested, user email is confirmed.
+Automatically sent to the email specified on registration. When requested, user email is confirmed.
 
 `:token` - JWT token that encodes username and email of the user that has registered.
 
@@ -39,7 +39,7 @@ Automatically sent to the specified email on registration. When requested, user 
 
 # Api
 
-### _Requires authorization_
+### _Endpoints require authorization_ [/auth/login](#login)
 
 <br>
 
