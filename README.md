@@ -55,43 +55,29 @@ TODO
 
 ### **`api`**
 
-#### Handles authentication and authorization, CRUD operations for player characters.
+#### Handles auth and CRUD operations for player characters.
 
 <br>
 
 ### **`socket-server`**
 
-#### Authoritative game server which handles all of the logic.
+#### Authoritative game server which handles all of the game logic.
 
 <br>
 
 ### **`client`**
 
-#### Serves HTML and renders data emitted by socket-server, and provides an interface for player actions.
+#### Renders data emitted by socket-server, and provides an interface for player actions.
 
 <br>
 
 ### **`items`**
 
-#### Module for generating items randomly and storing data of item modifiers.
+#### Module that generates items randomly.
 
 <br>
 <br>
 
 ## Getting started with development
 
-Create MongoDb indexes
-
-```
-db.users.createIndex(
-  { "characters.name": 1 },
-  {
-    unique: true,
-    partialFilterExpression: {
-      "characters.name": { $type: "string" }
-    }
-  }
-)
-```
-
-TODO: Finish setting up docker
+TODO: run development with docker-compose
