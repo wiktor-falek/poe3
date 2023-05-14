@@ -21,7 +21,7 @@ export const sendConfirmationEmail = (
     mailOptions,
     (err: Error | null, info: SMTPTransport.SentMessageInfo) => {
       if (err) {
-        console.log(err);
+        console.log("Failed to send email");
         return;
       }
     }
