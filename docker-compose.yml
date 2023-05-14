@@ -1,16 +1,14 @@
+version: '3.8'
 services:
-  api:
-    build: .
+  mongodb_container:
+    image: mongo:latest
+    # environment:
+      # MONGO_INITDB_ROOT_USERNAME: root
+      # MONGO_INITDB_ROOT_PASSWORD: rootpassword
     ports:
-      - 1001:3000
-    entrypoint: ["npm", "run", "dev"]
-  socket-server:
-    build: .
-    ports:
-      - 1002:4000
-    entrypoint: ["npm", "run", "dev"]
-  client:
-    build: .
-    ports:
-      - 1002:4000
-    entrypoint: ["npm", "run", "dev"]
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+
+volumes:
+  mongodb_data_container:
