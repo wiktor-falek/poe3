@@ -1,11 +1,11 @@
 # Overview
 
-## My long term passion project - a multiplayer browser game
+## Multiplayer browser game that combines ARPG item and loot system similar to Diablo II and Path of Exile,randomised environment generation of roguelikes, with turn based strategy genre.
+
 
 <br>
 
 ### Tech Stack
-
 - TypeScript
 - MongoDB Native Driver
 - Express
@@ -15,17 +15,10 @@
 - [Redis (socket.io adapter)]
 - Vitest
 
-Here are some npm modules that I wrote:
+My own npm modules:
 
 - [pyrand](https://github.com/wiktor-falek/pyrand) - Python random module ported to JavaScript
 - [resultat](https://github.com/wiktor-falek/resultat) - Tiny module for easy and type safe error handling
-
-<br>
-
-### What is the genre of the game?
-
-Multiplayer browser game that combines ARPG item and loot system similar to Diablo II and Path of Exile,
-randomised environment generation of roguelikes, with turn based strategy genre.
 
 <br>
 
