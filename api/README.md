@@ -68,7 +68,7 @@ Returns overview data of all characters of the user.
 
 ## GET /api/characters/:name
 
-Returns full data of the specified character.
+Returns full data of the specified character of the user.
 
 ### Example response
 
@@ -162,7 +162,7 @@ Creates a new character if the name is available.
 
 ## DELETE /api/characters/:name
 
-Deletes the character of an user.
+Moves the character of the user from `characters` collection to `deletedCharacters` collection.
 
 
 
