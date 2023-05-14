@@ -1,5 +1,7 @@
 # Auth
 
+<br>
+
 ## POST `/auth/register`
 
 Allows user to register an account, if username is not already taken, or the specified email is not already confirmed.
@@ -12,6 +14,8 @@ Allows user to register an account, if username is not already taken, or the spe
 | password |   Yes    | string |   8    |  128   |
 |  email   |   Yes    | string |   6    |  254   |
 
+<br>
+
 ## POST `/auth/login`
 
 Allows user to authenticate, and get a sessionId cookie in response to get access to authorized content.
@@ -23,9 +27,11 @@ Allows user to authenticate, and get a sessionId cookie in response to get acces
 | username |   Yes    | string |   6    |   30   |
 | password |   Yes    | string |   8    |  128   |
 
+<br>
+
 ## GET `/auth/verify/:token`
 
-Send to the specified email on registration. When requested, user email is confirmed.
+Automatically sent to the specified email on registration. When requested, user email is confirmed.
 
 `:token` - JWT token that encodes username and email of the user that has registered.
 
@@ -33,7 +39,7 @@ Send to the specified email on registration. When requested, user email is confi
 
 # Api
 
-_Requires authorization_
+### _Requires authorization_
 
 <br>
 
@@ -58,11 +64,13 @@ Returns overview data of all characters of the user.
 ]
 ```
 
+<br>
+
 ## GET `/api/characters/:name`
 
 Returns full data of the specified character.
 
-Example response
+### Example response
 
 ```
 {
@@ -137,6 +145,8 @@ Example response
 }
 ```
 
+<br>
+
 ## POST `/api/characters`
 
 Creates a new character if the name is available.
@@ -147,6 +157,8 @@ Creates a new character if the name is available.
 | :---: | :------: | :-------------------------------------------------: | :----: | :----: |
 | name  |   Yes    |                       string                        |   3    |   24   |
 | class |   Yes    | "swordsman" \| "ranger" \| "sorcerer" \| "assassin" |   3    |   16   |
+
+<br>
 
 ## DELETE `/api/characters/:name`
 
