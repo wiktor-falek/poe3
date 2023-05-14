@@ -2,7 +2,7 @@
 
 <br>
 
-## POST `/auth/register`
+## POST /auth/register
 
 Allows user to register an account, if username is not already taken, or the specified email is not already confirmed.
 
@@ -16,7 +16,7 @@ Allows user to register an account, if username is not already taken, or the spe
 
 <br>
 
-<h2 id="login">POST `/auth/login`</h2>
+<h2 id="login">POST /auth/login</h2>
 
 Allows user to authenticate, and get a sessionId cookie in response to get access to authorized content.
 
@@ -29,7 +29,7 @@ Allows user to authenticate, and get a sessionId cookie in response to get acces
 
 <br>
 
-## GET `/auth/verify/:token`
+## GET /auth/verify/:token
 
 Automatically sent to the email specified on registration. When requested, user email is confirmed.
 
@@ -43,7 +43,7 @@ Automatically sent to the email specified on registration. When requested, user 
 
 <br>
 
-## GET `/api/characters`
+## GET /api/characters
 
 Returns overview data of all characters of the user.
 
@@ -66,7 +66,7 @@ Returns overview data of all characters of the user.
 
 <br>
 
-## GET `/api/characters/:name`
+## GET /api/characters/:name
 
 Returns full data of the specified character.
 
@@ -147,7 +147,7 @@ Returns full data of the specified character.
 
 <br>
 
-## POST `/api/characters`
+## POST /api/characters
 
 Creates a new character if the name is available.
 
@@ -160,7 +160,7 @@ Creates a new character if the name is available.
 
 <br>
 
-## DELETE `/api/characters/:name`
+## DELETE /api/characters/:name
 
 Deletes the character of an user.
 
