@@ -6,7 +6,7 @@ import authRouter from "./routes/auth.js";
 import authorized from "./middlewares/authorized.js";
 import Mongo from "./mongo.js";
 
-Mongo.getClient().connect();
+Mongo.connect();
 
 const app = express();
 

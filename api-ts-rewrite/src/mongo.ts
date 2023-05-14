@@ -34,6 +34,16 @@ class Mongo {
     }
     return this.client;
   }
+
+  static async connect() {
+    try {
+      const client = await this.getClient().connect();
+      return client;
+    } catch (err) {
+      console.log("Failed to connect to db");
+      throw err;
+    }
+  }
 }
 
 export default Mongo;
