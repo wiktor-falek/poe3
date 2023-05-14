@@ -1,35 +1,24 @@
 # Overview
 
-## My long term passion project (that is yet to be named, poe3 is just a placeholder) - a multiplayer browser game
+## My long term passion project - a multiplayer browser game
 
 <br>
 
 ### Tech Stack
 
-- JavaScript for the REST api
-- TypeScript everywhere else
-- Express
+- TypeScript
 - MongoDB Native Driver
+- Express
 - Socket.io
-- Vue.js, vue-router, Pinia, xstate
+- Vue.js, Pinia, xstate
 - Joi for MongoDB schema validation & socket event argument validation
 - [Redis (socket.io adapter)]
-- [Jest]
-- [Puppeteer]
+- Vitest
 
-<br>
+Here are some npm modules that I wrote:
 
-### Features
-
-- Character inventory and equipment management (drag & drop API, popovers), with state synchronised between database, socket server and frontend in real time.
-
-- Global chat with client side and server side commands. Messages have different groups such as: System, Global, Whisper, Party, Guild whose visibility can be toggled on/off. Supports 1000 separate global rooms, use `/global n` command to join a room `n`.
-
-- Granting persistent rewards to a character such as silver, experience points, and adding items to character's inventory.
-
-- Party system supporting up to four players.
-
-- Basic turn based combat prototype. Enemy and Ally party hold up to 8 entities each. Player is able to target an enemy and use Basic Attack to deal random amount of damage based on strength attribute. As of now doesn't support multiple clients in one dungeon instance.
+- [pyrand](https://github.com/wiktor-falek/pyrand) - Python random module ported to JavaScript
+- [resultat](https://github.com/wiktor-falek/resultat) - Tiny module for easy and type safe error handling
 
 <br>
 
@@ -40,14 +29,23 @@ randomised environment generation of roguelikes, with turn based strategy genre.
 
 <br>
 
-### What are the selling points of the game?
+### Features
 
-- Replayability
-- In depth character itemisation and progresion
-- Strategy
-- Theorycrafting
-- Community
-- New content added regularly
+- Character inventory and equipment management (drag & drop API, popovers), with state synchronised between database, socket server and frontend in real time.
+
+- Global chat with client side and server side commands. Messages have different groups such as: System, Global, Whisper, Party, Guild whose visibility can be toggled on/off. Supports 1000 separate global rooms. Use `/global n` command to join a room number `n`.
+
+- Persisting character changes such as silver, experience points, and moving items between inventory.
+
+- Party system supporting up to four players.
+
+- Basic turn based combat prototype. Enemy and Ally party hold up to 8 entities each. Player is able to target an enemy and use Basic Attack to deal random amount of damage based on strength attribute. As of now doesn't support multiple clients in one dungeon instance.
+
+<br>
+
+### Roadmap
+
+TODO
 
 <br>
 
