@@ -1,22 +1,33 @@
 import { createServer } from "http";
-import { Server, Socket } from "socket.io";
+import { Server } from "socket.io";
+import {
+  ServerToClientEvents,
+  ClientToServerEvents,
+  InterServerEvents,
+  SocketData,
+} from "../../events/index";
+import registerTestHandler from "./handlers/testHandler";
 
 const httpServer = createServer();
-const io = new Server(httpServer, {
+const io = new Server<
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  SocketData
+>(httpServer, {
   cors: {
     origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT"],
   },
 });
 
-io.on("connection", (socket: Socket) => {
+io.on("connection", (socket) => {
   // handle errors
 
   // init
 
   // register handlers
-
-  socket.on("disconnect", () => {
-    
-  })
-})
+  registerTestHandler(io, socket);
+  
+  socket.on("disconnect", () => {});
+});
