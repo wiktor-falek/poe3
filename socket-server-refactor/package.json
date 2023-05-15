@@ -1,0 +1,21 @@
+{
+  "name": "socket-server-refactor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsc-watch --onSuccess \"node .\" "
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "joi": "^17.9.2",
+    "mongodb": "^5.5.0",
+    "socket.io": "^4.6.1"
+  },
+  "devDependencies": {
+    "tsc-watch": "^6.0.4",
+    "typescript": "^5.0.4"
+  }
+}
