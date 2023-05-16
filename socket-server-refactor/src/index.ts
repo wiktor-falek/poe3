@@ -1,20 +1,11 @@
 import { createServer } from "http";
 import { Server } from "socket.io";
-import {
-  ServerToClientEvents,
-  ClientToServerEvents,
-  InterServerEvents,
-  SocketData,
-} from "../../events/index";
+import type { IoWithEventTypes } from "..";
+
 import registerTestHandler from "./handlers/testHandler";
 
 const httpServer = createServer();
-const io = new Server<
-  ClientToServerEvents,
-  ServerToClientEvents,
-  InterServerEvents,
-  SocketData
->(httpServer, {
+const io: IoWithEventTypes = new Server(httpServer, {
   cors: {
     origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT"],

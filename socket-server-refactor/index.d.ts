@@ -1,4 +1,4 @@
-import type { Server, Socket as _Socket } from "socket.io";
+import type { Server, Socket } from "socket.io";
 import {
   ClientToServerEvents,
   ServerToClientEvents,
@@ -6,18 +6,18 @@ import {
   SocketData,
 } from "../events";
 
-type Io = Server<
+type IoWithEventTypes = Server<
   ClientToServerEvents,
   ServerToClientEvents,
   InterServerEvents,
   SocketData
 >;
 
-type Socket = _Socket<
+type SocketWithEventTypes = Socket<
   ClientToServerEvents,
   ServerToClientEvents,
   InterServerEvents,
   SocketData
 >;
 
-export { Io, Socket };
+export { IoWithEventTypes, SocketWithEventTypes };
