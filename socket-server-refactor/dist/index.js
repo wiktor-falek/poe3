@@ -20,3 +20,6 @@ io.on("connection", (socket) => {
     (0, testHandler_1.default)(io, socket);
     socket.on("disconnect", () => { });
 });
+httpServer.listen(4000, () => {
+    console.log("listening on port 4000");
+});
