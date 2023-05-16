@@ -1,7 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+</script>
 
 <template>
-  <h1>PoE3</h1>
-</template> 
+  <RouterView />
+</template>
 
 <style scoped></style>
