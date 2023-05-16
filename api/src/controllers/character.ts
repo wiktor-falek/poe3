@@ -42,7 +42,7 @@ async function getCharacter(req: Request, res: Response) {
   const validationResult = schema.validate(name);
 
   if (validationResult.error) {
-    return res.status(422).json({ error: "Invalid Data" });
+    return res.status(422).json({ error: "Invalid data" });
   }
 
   const result = await Character.getCharacter(username, name);

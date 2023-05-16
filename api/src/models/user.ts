@@ -111,12 +111,12 @@ class User {
     const user = await User.findByUsername(username);
 
     if (user === null) {
-      return Err("Invalid username");
+      return Err("Incorrect username or password");
     }
 
     const isAuthenticated = await bcrypt.compare(password, user.account.hash);
     if (!isAuthenticated) {
-      return Err("Invalid password");
+      return Err("Incorrect username or password");
     }
 
     const sessionId = uuidv4();
@@ -138,7 +138,6 @@ class User {
     if (payload === null) {
       return Err("Invalid token");
     }
-    1;
 
     const { username, email, iat, exp } = payload;
 
