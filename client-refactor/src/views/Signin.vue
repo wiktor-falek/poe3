@@ -1,11 +1,10 @@
 <script lang="ts" setup>
-import { onMounted } from "vue";
 import { ref } from "vue";
+import type { Ref } from "vue";
 
-const signInForm = ref();
-const signUpForm = ref();
+type View = "signin" | "signup" | "recovery";
 
-const isSigninView = ref(true);
+const view: Ref<View> = ref("signin");
 
 const signInUsername = ref("");
 const signInPassword = ref("");
@@ -13,10 +12,14 @@ const signInPassword = ref("");
 const signUpUsername = ref("");
 const signUpEmail = ref("");
 const signUpPassword = ref("");
+const signUpConfirmPassword = ref("");
+
+const recoveryEmail = ref("");
+
+const errorMessage = ref("");
 
 async function signInSubmit(e: Event) {
   e.preventDefault();
-  console.log(signInUsername.value, signInPassword.value);
 
   const response = await fetch("http://localhost:3000/auth/login", {
     method: "POST",
@@ -28,29 +31,56 @@ async function signInSubmit(e: Event) {
 
   const result = await response.json();
 
-  if (!response.ok) {
-    // TODO: display this data in a modal
-    console.log(result.error);
+  if (response.ok) {
+    // redirect
+  } else {
+    errorMessage.value = result.error;
   }
 }
 
-function signUpSubmit(e: Event) {
+async function signUpSubmit(e: Event) {
   e.preventDefault();
-  console.log(signUpUsername.value, signUpEmail.value, signUpPassword.value);
+
+  if (signUpPassword.value !== signUpConfirmPassword.value) {
+    errorMessage.value = "Passwords do not match";
+    return;
+  }
+
+  const response = await fetch("http://localhost:3000/auth/register", {
+    method: "POST",
+    body: new URLSearchParams({
+      username: signUpUsername.value,
+      email: signUpEmail.value,
+      password: signUpPassword.value,
+    }),
+  });
+
+  const result = await response.json();
+
+  if (response.ok) {
+    setView("signin");
+  } else {
+    errorMessage.value = result.error;
+  }
 }
 
-onMounted(() => {
-  console.log(signInForm.value)
-  console.log(signUpForm.value)
-});
+function recoverySubmit(e: Event) {
+  e.preventDefault();
+}
+
+function setView(viewName: View) {
+  errorMessage.value = "";
+  view.value = viewName;
+}
 </script>
 
 <template>
   <main>
-    <form v-show="isSigninView" @submit="signInSubmit($event)" ref="signInForm">
-      <h1>Signin</h1>
+    <h1 v-show="view === 'signin'">Signin</h1>
+    <h1 v-show="view === 'signup'">Signup</h1>
+    <h1 v-show="view === 'recovery'">Forgot Password</h1>
+    <form v-show="view === 'signin'" @submit="signInSubmit($event)">
       <input
-        tabindex="0"
         type="text"
         placeholder="Username"
         required
@@ -59,7 +89,6 @@ onMounted(() => {
         v-model="signInUsername"
       />
       <input
-        tabindex="0"
         type="password"
         placeholder="Password"
         required
@@ -68,54 +97,110 @@ onMounted(() => {
         v-model="signInPassword"
       />
 
-      <button type="submit">Sign in</button>
+      <p
+        id="forgot-password"
+        tabindex="0"
+        @click="setView('recovery')"
+        @keyup.enter="setView('recovery')"
+        @keyup.space="setView('recovery')"
+        class="link"
+      >
+        Forgot Password?
+      </p>
+
+      <p class="error">{{ errorMessage }}</p>
+
+      <button type="submit">Sign In</button>
     </form>
 
-    <form v-show="!isSigninView" @submit="signUpSubmit($event)" ref="signUpForm">
-      <h1>Signup</h1>
+    <form v-show="view === 'signup'" @submit="signUpSubmit($event)">
       <input
-        tabindex="0"
         type="text"
-        placeholder="username"
+        placeholder="Username"
         required
         minlength="6"
         maxlength="30"
         v-model="signUpUsername"
       />
       <input
-        tabindex="0"
         type="email"
         required
         minlength="6"
         maxlength="254"
-        placeholder="email"
+        placeholder="Email"
         v-model="signUpEmail"
       />
       <input
-        tabindex="0"
         type="password"
         required
         minlength="8"
         maxlength="128"
-        placeholder="password"
+        placeholder="Password"
         v-model="signUpPassword"
       />
+      <input
+        type="password"
+        required
+        minlength="8"
+        maxlength="128"
+        placeholder="Confirm Password"
+        v-model="signUpPassword"
+      />
+
+      <p class="error">{{ errorMessage }}</p>
 
       <button type="submit">Register</button>
     </form>
 
+    <form v-show="view === 'recovery'" @submit="recoverySubmit($event)">
+      <input
+        type="email"
+        required
+        minlength="6"
+        maxlength="254"
+        placeholder="Email"
+        v-model="recoveryEmail"
+      />
+
+      <p class="error">{{ errorMessage }}</p>
+
+      <button id="recover" type="submit">Recover</button>
+    </form>
+
     <hr />
 
-    <p v-if="isSigninView">
+    <p v-if="view === 'signin'">
       New Player?
-      <span tabindex="0" @click="isSigninView = false" class="link"
+      <span
+        tabindex="0"
+        @click="setView('signup')"
+        @keyup.enter="setView('signup')"
+        @keyup.space="setView('signup')"
+        class="link"
         >Register now</span
       >
     </p>
 
-    <p v-else>
+    <p v-if="view === 'signup'">
       Already Registered?
-      <span tabindex="0" @click="isSigninView = true" class="link"
+      <span
+        tabindex="0"
+        @click="setView('signin')"
+        @keyup.enter="setView('signin')"
+        @keyup.space="setView('signin')"
+        class="link"
+        >Sign in</span
+      >
+    </p>
+
+    <p v-if="view === 'recovery'">
+      Remember you password?
+      <span
+        tabindex="0"
+        @click="setView('signin')"
+        @keyup.enter="setView('signin')"
+        @keyup.space="setView('signin')"
+        class="link"
         >Sign in</span
       >
     </p>
@@ -128,10 +213,11 @@ main {
   margin: 0px auto;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
 }
 
 hr {
+  width: 99%;
   margin-top: 20px;
 }
 
@@ -143,13 +229,13 @@ h1 {
 form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
 }
 
 form input {
   background-color: rgb(255, 255, 255, 0.85);
   font-size: 20px;
   box-sizing: border-box;
+  margin-top: 20px;
 }
 
 form input,
@@ -161,10 +247,24 @@ button {
 }
 
 form button {
-  margin-top: 20px;
 }
 
 p {
   margin: 0;
+}
+
+#forgot-password {
+  text-align: right;
+  margin-top: 5px;
+}
+
+#recover {
+  margin-top: 27px;
+}
+
+.error {
+  color: rgb(211, 74, 74);
+  margin-top: 15px;
+  margin-bottom: 5px;
 }
 </style>
