@@ -12,8 +12,8 @@ interface Payload {
   exp?: number | undefined;
 }
 
-export const encode = (username: string, email: string) => {
-  const payload = { username, email };
+export const encode = (...args: Array<string | object | Buffer>) => {
+  const payload = { ...args };
   const token = jwt.sign(payload, secret, { expiresIn: 86400 });
   return token;
 };

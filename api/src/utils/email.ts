@@ -11,12 +11,13 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendConfirmationEmail = (
+export const sendEmail = (
   to: string,
   subject: string,
-  text: string
+  text: string,
+  html?: string
 ) => {
-  let mailOptions = { to, subject, text };
+  let mailOptions = { to, subject, text, html };
   transporter.sendMail(
     mailOptions,
     (err: Error | null, info: SMTPTransport.SentMessageInfo) => {

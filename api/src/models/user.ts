@@ -2,8 +2,9 @@ import bcrypt from "bcrypt";
 import Joi from "joi";
 import Mongo from "../mongo.js";
 import { v4 as uuidv4 } from "uuid";
-import { decode } from "../utils/token.js";
+import { decode, encode } from "../utils/token.js";
 import { Ok, Err } from "resultat";
+import { sendEmail } from "../utils/email.js";
 
 const userSchema = Joi.object({
   account: Joi.object({
@@ -27,6 +28,15 @@ class User {
   static async findByUsername(username: string) {
     const user = await this.collection.findOne({
       "account.username": username,
+    });
+
+    return user;
+  }
+
+  static async findByEmail(email: string) {
+    const user = await this.collection.findOne({
+      "account.email": email,
+      "account.hasConfirmedEmail": true,
     });
 
     return user;
@@ -164,6 +174,27 @@ class User {
     }
 
     return Ok(1);
+  }
+
+  static async recover(email: string) {
+    const user = await User.findByEmail(email);
+
+    if (user === null) {
+      return; // silent return without error for security reasons
+    }
+
+    const username = user.account.username;
+
+    const token = encode(username, email);
+
+    const url = `http://localhost:3000/auth/recovery/${token}`;
+
+    sendEmail(
+      email,
+      "Account Recovery",
+      `Hi ${username}\nClick the link below to change your password.\n${url}\nIf you did not try to recover you account simply ignore this email.`,
+      `<h1>Hi ${username}</h1>\n<h2>Click the link below to change your password.</h2>\n<a href="${url}">Reset Password</a>\nIf you did not try to recover you account simply ignore this email.`
+    );
   }
 }
 
