@@ -3,6 +3,7 @@ import { Ok, Err } from "resultat";
 import Mongo from "../mongo.js";
 import startingGear from "../components/startingGear.js";
 import { MongoServerError } from "mongodb";
+import type { CharacterOverview } from "../../../common/api-types/index.js";
 
 const characterSchema = Joi.object({
   username: Joi.string().min(6).max(30).required(),
@@ -122,7 +123,7 @@ class Character {
 
       const characters = await cursor.toArray();
 
-      const charactersOverview = characters.map((c) => {
+      const charactersOverview: Array<CharacterOverview> = characters.map((c) => {
         return {
           name: c.name,
           class: c.class,

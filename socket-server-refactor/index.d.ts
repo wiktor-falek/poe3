@@ -4,7 +4,7 @@ import {
   ServerToClientEvents,
   InterServerEvents,
   SocketData,
-} from "../events";
+} from "../common/events";
 
 type IoWithEventTypes = Server<
   ClientToServerEvents,
