@@ -25,6 +25,15 @@ button {
   font-size: 1.2rem;
 }
 
+.button:disabled,
+button:disabled:hover,
+.button:disabled:hover,
+button:disabled {
+  background-color: rgb(255, 255, 255, 0.05);
+  color: rgb(150, 150, 150);
+  cursor: default;
+}
+
 .button:hover,
 button:hover {
   color: white;
