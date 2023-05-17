@@ -25,7 +25,7 @@ async function register(req: Request, res: Response) {
     return res.status(400).json({ error: result.err });
   }
 
-  const token = encode(username, email);
+  const token = encode({ username: username, email: email });
 
   sendEmail(
     email,

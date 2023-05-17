@@ -149,15 +149,23 @@ class User {
       return Err("Invalid token");
     }
 
-    const { username, email, iat, exp } = payload;
+    const { username, email, iat, exp } = payload as any;
 
-    const emailIsTaken = await this.collection.countDocuments({
-      "account.email": email,
-      "account.hasConfirmedEmail": true,
-    });
+    const userWithEmailTaken = await this.collection.findOne(
+      {
+        "account.email": email,
+        "account.hasConfirmedEmail": true,
+      },
+      { projection: { "account.username": 1, _id: 0 } }
+    );
 
-    if (emailIsTaken) {
-      return Err("Email is already in use");
+    if (userWithEmailTaken?.account.username === username) {
+      return Err("Your email is already verified");
+    }
+
+    if (userWithEmailTaken) {
+      return Err("Something went wrong");
+      // return Err("Email is already in use");
     }
 
     const result = await this.collection.updateOne(
@@ -169,8 +177,8 @@ class User {
       { $set: { "account.hasConfirmedEmail": true } }
     );
 
-    if (!result.modifiedCount) {
-      return Err("Email has already been verified");
+    if (result.modifiedCount) {
+      return Err("Something went wrong");
     }
 
     return Ok(1);
@@ -185,7 +193,7 @@ class User {
 
     const username = user.account.username;
 
-    const token = encode(username, email);
+    const token = encode({ username: username, email: email });
 
     const url = `http://localhost:3000/auth/recovery/${token}`;
 
