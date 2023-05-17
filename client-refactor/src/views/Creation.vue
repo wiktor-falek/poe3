@@ -17,6 +17,9 @@ const bannersData: Array<BannerData> = [
 
 const selectedClass: Ref<CharacterClass | null> = ref(null);
 
+// TODO: @click select button show details of the selected class
+// const selectedBannerDetail = ref(null);
+
 function createCharacter() {
   fetch("http://localhost:3000/api/characters", {
     method: "POST",
@@ -40,7 +43,9 @@ function createCharacter() {
       </div>
     </div>
 
-    <button id="select" :disabled="selectedClass === null">Select</button>
+    <button id="select" :disabled="selectedClass === null" @click="">
+      Select
+    </button>
   </main>
 </template>
 
