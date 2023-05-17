@@ -1,10 +1,21 @@
 <script lang="ts" setup>
-const bannersData = [
+import { Ref } from "vue";
+import type { CharacterClass } from "../../../common/types/index";
+import { ref } from "vue";
+
+interface BannerData {
+  name: CharacterClass;
+  icon: string;
+}
+
+const bannersData: Array<BannerData> = [
   { name: "swordsman", icon: "" },
   { name: "ranger", icon: "" },
   { name: "sorcerer", icon: "" },
   { name: "assassin", icon: "" },
 ];
+
+const selectedClass: Ref<CharacterClass | null> = ref(null);
 
 function createCharacter() {
   fetch("http://localhost:3000/api/characters", {
@@ -19,11 +30,17 @@ function createCharacter() {
   <main>
     <h1>Choose your class</h1>
     <div class="character-banners">
-      <div class="banner" v-for="banner in bannersData">
+      <div
+        class="banner"
+        v-for="banner in bannersData"
+        @click="selectedClass = banner.name"
+        :class="{ selected: selectedClass === banner.name }"
+      >
         <p class="banner__name">{{ banner.name }}</p>
       </div>
     </div>
-    <button id="select">Select</button>
+
+    <button id="select" :disabled="selectedClass === null">Select</button>
   </main>
 </template>
 
@@ -36,6 +53,12 @@ h1 {
   text-align: center;
   font-size: 2rem;
 }
+
+#select {
+  /* TODO: why doesn't this work without !important idk */
+  margin-top: 20px !important;
+}
+
 .character-banners {
   display: flex;
   gap: 2%;
@@ -49,8 +72,8 @@ h1 {
   align-items: flex-end;
   border: 2px solid white;
   min-width: 50px;
-  max-width: 250px;
-  aspect-ratio: 4 / 11;
+  max-width: 230px;
+  aspect-ratio: 3.5 / 10;
   border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 10px;
 }
@@ -61,26 +84,23 @@ h1 {
   font-size: 0.6rem;
 }
 
-
 @media only screen and (min-width: 500px) {
   .banner__name {
     font-size: 1rem;
   }
 }
 
-
 @media only screen and (min-width: 800px) {
   .banner__name {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
   }
 }
 
 @media only screen and (min-width: 1000px) {
   .banner__name {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
 }
-
 
 #select {
   width: 200px;
