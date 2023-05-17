@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import type { Ref } from "vue";
+import router from "../router";
 
 type View = "signin" | "signup" | "recovery";
 
@@ -23,6 +24,7 @@ async function signInSubmit(e: Event) {
 
   const response = await fetch("http://localhost:3000/auth/login", {
     method: "POST",
+    credentials: "include",
     body: new URLSearchParams({
       username: signInUsername.value,
       password: signInPassword.value,
@@ -32,6 +34,7 @@ async function signInSubmit(e: Event) {
   const result = await response.json();
 
   if (response.ok) {
+    router.push("/play");
     // redirect
   } else {
     errorMessage.value = result.error;
@@ -58,6 +61,7 @@ async function signUpSubmit(e: Event) {
   const result = await response.json();
 
   if (response.ok) {
+    // TODO: inform the user that account has been successfully created
     setView("signin");
   } else {
     errorMessage.value = result.error;
@@ -144,7 +148,7 @@ function setView(viewName: View) {
         minlength="8"
         maxlength="128"
         placeholder="Confirm Password"
-        v-model="signUpPassword"
+        v-model="signUpConfirmPassword"
       />
 
       <p class="error">{{ errorMessage }}</p>
