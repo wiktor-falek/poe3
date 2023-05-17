@@ -12,10 +12,25 @@ onBeforeMount(async () => {
     credentials: "include",
   });
 
-  console.log(response.status);
+  const result = await response.json();
+
+  allCharacters.value = result;
 });
+
+// allCharacters.value = [{ class: "ranger", name: "mock", level: 1 }];
 </script>
 
 <template>
   <h1>Play</h1>
+
+  <h2>Characters</h2>
+  <div class="characters">
+    <p v-if="allCharacters.length === 0">No characters</p>
+    <div class="character" v-for="character in allCharacters">
+      <p>
+        {{ character.name }} Lvl {{ character.level }} {{ character.class }}
+      </p>
+    </div>
+  </div>
+  <RouterLink to="creation" class="button">Create Character</RouterLink>
 </template>

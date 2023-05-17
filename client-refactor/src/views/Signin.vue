@@ -244,7 +244,7 @@ form input {
 
 form input,
 button {
-  height: 45px;
+  height: 50px;
   border-radius: 5px;
   border: none;
   padding: 10px 15px;

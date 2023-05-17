@@ -13,7 +13,11 @@ a:hover {
 
 .button,
 button {
-  padding: 15px 25px;
+  all: unset;
+  cursor: pointer;
+  text-align: center;
+  padding: 10px 20px;
+  box-sizing: border-box;
   background-color: rgb(255, 255, 255, 0.15);
   color: white;
   text-decoration: none;
