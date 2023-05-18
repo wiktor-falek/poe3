@@ -24,6 +24,7 @@ button {
   text-decoration: none;
   border-radius: 10px;
   font-size: 1.2rem;
+  border: none;
 }
 
 .button:disabled,
