@@ -13,7 +13,6 @@ a:hover {
 
 .button,
 button {
-  all: unset;
   cursor: pointer;
   text-align: center;
   padding: 10px 20px;
