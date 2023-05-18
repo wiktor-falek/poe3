@@ -1,21 +1,32 @@
 <template>
   <main>
-    <h1>*Game Logo*</h1>
+    <h1 class="logo">*Game Logo*</h1>
 
     <section>
-      <RouterLink to="/signin" class="button">Start Playing</RouterLink>
-      <!-- <p>Party up with up to 4 players</p>
+      <h2>
+        Welcome to PoE3, the spiritual successor to Path of Exile
+        <span class="smol">(without the vision)</span>
+      </h2>
+    </section>
 
-      <p>Item system</p>
+    <RouterLink to="/signin" class="button" id="start"
+      >Start Playing</RouterLink
+    >
 
-      <ul>
-        <li>Normal</li>
-        <li>Magic</li>
-        <li>Rare</li>
-        <li>Unique</li>
-      </ul>
+    <section>
+      <p>Explore dungeons with a party up to 4 players!</p>
+    </section>
 
-      <p>Combat explained</p> -->
+    <section>
+      <p>*Combat presentation*</p>
+    </section>
+
+    <section>
+      <p>*Item system with examples*</p>
+    </section>
+
+    <section>
+      <p>*Classes and ascendancies section*</p>
     </section>
   </main>
 </template>
@@ -27,9 +38,22 @@ main {
   align-items: center;
   max-width: 1280px;
   margin: 0 auto;
+  padding: 10px;
 }
 
 section {
   text-align: left;
+  margin-top: 50px;
+}
+
+.smol {
+  font-size: 0.5em;
+}
+
+#start {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 200px;
+  margin-top: 20px;
 }
 </style>
