@@ -72,13 +72,35 @@ async function verify(req: Request, res: Response) {
   const { token } = req.params;
 
   const result = await User.verify(token);
-  if (!result.ok) {
-    return res.status(422).json({ error: result.err });
+
+  let verified = false;
+  let username;
+  let error;
+
+  if (result.ok) {
+    verified = result.val.verified;
+    username = result.val.username;
+  } else {
+    error = result.err;
+  }
+  
+  // DEPLOY: update baseUrl
+  const baseUrl = new URL("http://localhost:5173/verified");
+  const params = new URLSearchParams(baseUrl.search);
+
+  params.append("verified", verified.toString());
+
+  if (username) {
+    params.append("username", username);
   }
 
-  const verified = result.data;
+  if (error) {
+    params.append("error", error);
+  }
 
-  return res.status(200).json({ verified });
+  const url = baseUrl.toString() + "?" + params.toString();
+
+  return res.status(301).redirect(url);
 }
 
 function recover(req: Request, res: Response) {

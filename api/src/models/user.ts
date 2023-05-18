@@ -142,14 +142,22 @@ class User {
     return Ok({ sessionId });
   }
 
-  static async verify(token: string): Promise<any> {
+  static async verify(token: string) {
     const payload = decode(token);
 
     if (payload === null) {
       return Err("Invalid token");
     }
 
-    const { username, email, iat, exp } = payload as any;
+    // TODO: find better place or better way to do this?
+    interface Payload {
+      username: string;
+      email: string;
+      iat: number;
+      exp: number;
+    }
+
+    const { username, email, iat, exp } = payload as Payload;
 
     const userWithEmailTaken = await this.collection.findOne(
       {
@@ -159,13 +167,14 @@ class User {
       { projection: { "account.username": 1, _id: 0 } }
     );
 
+    console.log({ userWithEmailTaken });
+
     if (userWithEmailTaken?.account.username === username) {
       return Err("Your email is already verified");
     }
 
-    if (userWithEmailTaken) {
+    if (userWithEmailTaken !== null) {
       return Err("Something went wrong");
-      // return Err("Email is already in use");
     }
 
     const result = await this.collection.updateOne(
@@ -177,11 +186,11 @@ class User {
       { $set: { "account.hasConfirmedEmail": true } }
     );
 
-    if (result.modifiedCount) {
+    if (result.modifiedCount === 0) {
       return Err("Something went wrong");
     }
 
-    return Ok(1);
+    return Ok({ username, verified: true });
   }
 
   static async recover(email: string) {
