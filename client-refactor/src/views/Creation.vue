@@ -32,36 +32,39 @@ function createCharacter() {
 <template>
   <main>
     <h1>Choose your class</h1>
-    <div class="character-banners">
-      <div
-        class="banner"
-        v-for="banner in bannersData"
-        @click="selectedClass = banner.name"
-        :class="{ selected: selectedClass === banner.name }"
-      >
-        <p class="banner__name">{{ banner.name }}</p>
+    <div class="wrapper">
+      <div class="character-banners">
+        <div
+          class="banner"
+          v-for="banner in bannersData"
+          @click="selectedClass = banner.name"
+          :class="{ selected: selectedClass === banner.name }"
+        >
+          <p class="banner__name">{{ banner.name }}</p>
+        </div>
+      </div>
+
+      <div class="menu">
+        <RouterLink to="/play" class="button">&lt;</RouterLink>
+        <button id="select" :disabled="selectedClass === null" @click="">
+          Select
+        </button>
+        <p></p>
       </div>
     </div>
-
-    <button id="select" :disabled="selectedClass === null" @click="">
-      Select
-    </button>
   </main>
 </template>
 
 <style scoped>
 main {
   padding: 5px;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 h1 {
   text-align: center;
   font-size: 2rem;
-}
-
-#select {
-  /* TODO: why doesn't this work without !important idk */
-  margin-top: 20px !important;
 }
 
 .character-banners {
@@ -81,6 +84,7 @@ h1 {
   aspect-ratio: 3.5 / 10;
   border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 10px;
+  cursor: pointer;
 }
 
 .banner__name {
@@ -107,9 +111,15 @@ h1 {
   }
 }
 
+.menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
 #select {
-  width: 200px;
-  display: block;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 200px;
 }
 </style>
