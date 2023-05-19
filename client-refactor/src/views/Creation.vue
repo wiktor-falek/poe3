@@ -2,7 +2,7 @@
 import { Ref } from "vue";
 import type { CharacterClass, Attributes } from "../../../common/types/index";
 import { ref } from "vue";
-import AttributesVue from "../components/Global/Attributes.vue";
+import AttributesVue from "../components/global/Attributes.vue";
 import router from "../router";
 
 interface BannerData {

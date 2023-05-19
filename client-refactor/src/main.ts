@@ -1,7 +1,17 @@
 import { createApp } from "vue";
-import "./style.css";
-import "./styles/components.css"
 import App from "./App.vue";
+import { createPinia } from "pinia";
+import "./style.css";
+import "./styles/components.css";
 import router from "./router";
+import VueCookies from "vue-cookies";
 
-createApp(App).use(router).mount("#app");
+const pinia = createPinia();
+
+const app = createApp(App);
+
+app.use(pinia);
+app.use(router);
+app.use(VueCookies);
+
+app.mount("#app");

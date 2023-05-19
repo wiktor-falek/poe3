@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import type { Ref } from "vue";
 import router from "../router";
+import { useUserStore } from "../stores/userStore";
 
 type View = "signin" | "signup" | "recovery";
 
@@ -34,6 +35,12 @@ async function signInSubmit(e: Event) {
   const result = await response.json();
 
   if (response.ok) {
+    interface Result {
+      authenticated: boolean;
+      username: string;
+    }
+    const userStore = useUserStore();
+    userStore.setSignedIn(result as Result);
     router.push("/play");
     // redirect
   } else {

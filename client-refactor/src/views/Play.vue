@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import { ref } from "vue";
+import type { Ref } from "vue";
 import { onBeforeMount } from "vue";
 import type { ResponseGetAllCharactersOverview } from "../../../common/api-types/index";
-import { Ref } from "vue";
+import Logout from "../components/global/Logout.vue";
 
 const allCharacters: Ref<ResponseGetAllCharactersOverview> = ref([]);
 
@@ -16,12 +17,12 @@ onBeforeMount(async () => {
 
   allCharacters.value = result;
 });
-
-// allCharacters.value = [{ class: "ranger", name: "mock", level: 1 }];
 </script>
 
 <template>
   <h1>Play</h1>
+
+  <Logout />
 
   <h2>Characters</h2>
   <div class="characters">
