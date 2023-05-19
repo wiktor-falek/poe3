@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import type { Ref } from "vue";
 import router from "../router";
+import { useUserStore } from "../stores/userStore";
 
 type View = "signin" | "signup" | "recovery";
 
@@ -34,6 +35,12 @@ async function signInSubmit(e: Event) {
   const result = await response.json();
 
   if (response.ok) {
+    interface Result {
+      authenticated: boolean;
+      username: string;
+    }
+    const userStore = useUserStore();
+    userStore.setSignedIn(result as Result);
     router.push("/play");
     // redirect
   } else {
@@ -80,8 +87,8 @@ function setView(viewName: View) {
 
 <template>
   <main>
-    <h1 v-show="view === 'signin'">Signin</h1>
-    <h1 v-show="view === 'signup'">Signup</h1>
+    <h1 v-show="view === 'signin'">Sign in</h1>
+    <h1 v-show="view === 'signup'">Register</h1>
     <h1 v-show="view === 'recovery'">Forgot Password</h1>
     <form v-show="view === 'signin'" @submit="signInSubmit($event)">
       <input
@@ -218,11 +225,13 @@ main {
   display: flex;
   flex-direction: column;
   gap: 5px;
+  padding: 10px;
 }
 
 hr {
   width: 99%;
   margin-top: 20px;
+  margin-bottom: 0;
 }
 
 h1 {
@@ -245,12 +254,13 @@ form input {
 form input,
 button {
   height: 50px;
-  border-radius: 5px;
+  border-radius: 10px;
   border: none;
   padding: 10px 15px;
 }
 
 form button {
+  background: linear-gradient(90deg, rgb(29, 150, 191), rgb(14, 128, 167));
 }
 
 p {

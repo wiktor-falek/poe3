@@ -65,7 +65,7 @@ async function login(req: Request, res: Response) {
     sameSite: "strict",
   });
 
-  return res.status(200).json({ authenticated: true });
+  return res.status(200).json({ username, authenticated: true });
 }
 
 async function verify(req: Request, res: Response) {

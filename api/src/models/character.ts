@@ -71,8 +71,8 @@ class Character {
 
     const characterCount = await this.getCharacterCount(username);
 
-    // TODO: unhardcore character count
-    if (characterCount >= 3) {
+    const CHARACTER_LIMIT = 12; // TODO: unhardcore character count
+    if (characterCount >= CHARACTER_LIMIT) {
       return Err("Reached character limit");
     }
 
@@ -123,13 +123,15 @@ class Character {
 
       const characters = await cursor.toArray();
 
-      const charactersOverview: Array<CharacterOverview> = characters.map((c) => {
-        return {
-          name: c.name,
-          class: c.class,
-          level: c.level.value,
-        };
-      });
+      const charactersOverview: Array<CharacterOverview> = characters.map(
+        (c) => {
+          return {
+            name: c.name,
+            class: c.class,
+            level: c.level.value,
+          };
+        }
+      );
 
       return Ok(charactersOverview);
     } catch {
