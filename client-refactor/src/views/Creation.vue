@@ -45,11 +45,18 @@ function createCharacter() {
       </div>
 
       <div class="menu">
-        <RouterLink to="/play" class="button">&lt;</RouterLink>
-        <button id="select" :disabled="selectedClass === null" @click="">
-          Select
-        </button>
-        <p></p>
+        <div class="menu__top">
+          <RouterLink to="/play" class="button">&lt;</RouterLink>
+          <input id="character-name" type="text" placeholder="Character Name" />
+          <!-- hidden element -->
+          <a class="button flex-hide"></a>
+        </div>
+
+        <div class="menu__bottom">
+          <button id="select" :disabled="selectedClass === null" @click="">
+            Create
+          </button>
+        </div>
       </div>
     </div>
   </main>
@@ -113,13 +120,46 @@ h1 {
 
 .menu {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  margin-top: 15px;
+  width: 100%;
+  gap: 15px;
+}
+
+.menu__top {
+  display: flex;
   justify-content: space-between;
-  margin-top: 20px;
+}
+
+.flex-hide {
+  display: inline-flex;
+  visibility: hidden;
+}
+
+.menu__bottom {
+  display: flex;
+  justify-content: center;
+}
+
+.menu__grid a {
+  width: 50px;
+  height: 50px;
 }
 
 #select {
   width: 100%;
   max-width: 200px;
+}
+
+#character-name {
+  height: 48px;
+  border-radius: 10px;
+  border: none;
+  padding: 10px 15px;
+  width: 100%;
+  max-width: 200px;
+  box-sizing: border-box;
+  font-size: 1.1rem;
+  text-align: center;
 }
 </style>
