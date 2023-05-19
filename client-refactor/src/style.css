@@ -1,5 +1,6 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Courier New', Courier, monospace;
+  /* font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif; */
   line-height: 1.5;
   font-weight: 400;
   font-size: 18px;
@@ -10,6 +11,17 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+
+  --item-rarity--normal: rgb(240, 234, 234);
+  --item-rarity--magic: rgb(67, 101, 212);
+  --item-rarity--rare: rgb(246, 213, 23);
+  --item-rarity--unique: rgb(221, 119, 3);
+
+  --attribute-strength: #f15e5e;
+  --attribute-dexterity: #5dab5d;
+  --attribute-intelligence: #4585cf;
+  --attribute-vitality: #ee6f2b;
+  --attribute-speed: #f1f164;
 }
 
 body {
