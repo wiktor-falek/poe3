@@ -111,7 +111,7 @@ async function createCharacter(e: Event) {
     return;
   }
 
-  router.push("/play")
+  router.push("/select")
 }
 </script>
 
@@ -158,7 +158,7 @@ async function createCharacter(e: Event) {
         @submit="createCharacter($event)"
       >
         <div class="menu__top">
-          <RouterLink to="/play" class="button">&lt;</RouterLink>
+          <RouterLink to="/select" class="button">&lt;</RouterLink>
           <input
             id="character-name"
             for="create-character"

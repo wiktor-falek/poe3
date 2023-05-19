@@ -2,7 +2,7 @@ import { useUserStore } from "./stores/userStore";
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "./views/Home.vue";
 import Signin from "./views/Signin.vue";
-import Play from "./views/Play.vue";
+import Select from "./views/Select.vue";
 import Creation from "./views/Creation.vue";
 import Verified from "./views/Verified.vue";
 
@@ -25,7 +25,7 @@ const router = createRouter({
         skipAuth: true,
       },
     },
-    { path: "/play", name: "play", component: Play },
+    { path: "/select", name: "select", component: Select },
     { path: "/creation", name: "creation", component: Creation },
   ],
 });

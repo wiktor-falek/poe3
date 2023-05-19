@@ -41,7 +41,7 @@ async function signInSubmit(e: Event) {
     }
     const userStore = useUserStore();
     userStore.setSignedIn(result as Result);
-    router.push("/play");
+    router.push("/select");
     // redirect
   } else {
     errorMessage.value = result.error;

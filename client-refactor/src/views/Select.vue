@@ -33,5 +33,5 @@ onBeforeMount(async () => {
       </p>
     </div>
   </div>
-  <RouterLink to="creation" class="button">Create Character</RouterLink>
+  <RouterLink to="/creation" class="button">Create Character</RouterLink>
 </template>
