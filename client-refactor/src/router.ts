@@ -5,6 +5,7 @@ import Signin from "./views/Signin.vue";
 import Select from "./views/Select.vue";
 import Creation from "./views/Creation.vue";
 import Verified from "./views/Verified.vue";
+import Recovery from "./views/Recovery.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -21,6 +22,22 @@ const router = createRouter({
       path: "/signin",
       name: "signin",
       component: Signin,
+      meta: {
+        skipAuth: true,
+      },
+    },
+    {
+      path: "/verified",
+      name: "verified",
+      component: Verified,
+      meta: {
+        skipAuth: true,
+      },
+    },
+    {
+      path: "/recovery",
+      name: "recovery",
+      component: Recovery,
       meta: {
         skipAuth: true,
       },

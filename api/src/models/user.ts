@@ -197,14 +197,14 @@ class User {
     const user = await User.findByEmail(email);
 
     if (user === null) {
-      return; // silent return without error for security reasons
+      return;
     }
 
     const username = user.account.username;
 
     const token = encode({ username: username, email: email });
 
-    const url = `http://localhost:3000/auth/recovery/${token}`;
+    const url = `http://localhost:5173/recovery/?token=${token}`;
 
     sendEmail(
       email,

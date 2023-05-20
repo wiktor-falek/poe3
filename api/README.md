@@ -31,9 +31,21 @@ Allows user to authenticate, and get a sessionId cookie in response to get acces
 
 ## GET /auth/verify/:token
 
-Automatically sent to the email specified on registration. When requested, user email is confirmed.
+This endpoint link is sent to the email specified on registration.
+Once requested, user email is confirmed.
 
-`:token` - JWT token that encodes username and email of the user that has registered.
+`:token` - JWT token that encodes username and email.
+
+## PUT /auth/password
+
+Updates the password of the user encoded in a token.
+
+### Body
+
+|  Field   | Required |  Type  | minLen | maxLen |
+| :------: | :------: | :----: | :----: | :----: |
+|  token   |   Yes    | string |  ???   |  ???   |
+| password |   Yes    | string |   6    |   30   |
 
 <br>
 
@@ -163,6 +175,3 @@ Creates a new character if the name is available.
 ## DELETE /api/characters/:name
 
 Moves the character of the user from `characters` collection to `deletedCharacters` collection.
-
-
-

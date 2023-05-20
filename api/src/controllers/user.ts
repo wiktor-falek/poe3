@@ -83,7 +83,7 @@ async function verify(req: Request, res: Response) {
   } else {
     error = result.err;
   }
-  
+
   // DEPLOY: update baseUrl
   const baseUrl = new URL("http://localhost:5173/verified");
   const params = new URLSearchParams(baseUrl.search);
@@ -103,14 +103,12 @@ async function verify(req: Request, res: Response) {
   return res.status(301).redirect(url);
 }
 
-function recover(req: Request, res: Response) {
-  const { email } = req.params;
+async function recover(req: Request, res: Response) {
+  const { email } = req.body;
 
-  // SECURITY: no async so there is no difference in response time on success/failure ???
-  // to prevent finding emails that are in use
-  User.recover(email);
+  res.status(200).json({ message: "Confirmation email sent" });
 
-  return res.status(200).json({ message: "Confirmation email sent" });
+  await User.recover(email);
 }
 
 export { register, login, verify, recover };

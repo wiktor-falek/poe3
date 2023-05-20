@@ -75,8 +75,26 @@ async function signUpSubmit(e: Event) {
   }
 }
 
-function recoverySubmit(e: Event) {
+async function recoverySubmit(e: Event) {
   e.preventDefault();
+
+  const response = await fetch("http://localhost:3000/auth/password", {
+    method: "PUT",
+    body: new URLSearchParams({
+      email: recoveryEmail.value,
+    }),
+  });
+
+  const result = await response.json();
+
+  if (!result.ok) {
+    // TODO: handle error
+    // display result.error
+    return;
+  }
+
+  // TODO: handle success
+  // display result.message
 }
 
 function setView(viewName: View) {
@@ -239,29 +257,6 @@ h1 {
   text-align: center;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-}
-
-form input {
-  background-color: rgb(255, 255, 255, 0.85);
-  font-size: 20px;
-  box-sizing: border-box;
-  margin-top: 20px;
-}
-
-form input,
-button {
-  height: 50px;
-  border-radius: 10px;
-  border: none;
-  padding: 10px 15px;
-}
-
-form button {
-  background: linear-gradient(90deg, rgb(29, 150, 191), rgb(14, 128, 167));
-}
 
 p {
   margin: 0;

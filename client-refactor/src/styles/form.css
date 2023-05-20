@@ -1,0 +1,23 @@
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+form input {
+  background-color: rgb(255, 255, 255, 0.85);
+  font-size: 20px;
+  box-sizing: border-box;
+  margin-top: 20px;
+}
+
+form input,
+button {
+  height: 50px;
+  border-radius: 10px;
+  border: none;
+  padding: 10px 15px;
+}
+
+form button {
+  background: linear-gradient(90deg, rgb(29, 150, 191), rgb(14, 128, 167));
+}
