@@ -25,7 +25,6 @@ export const useUserStore = defineStore("user", () => {
   }
 
   watch(authenticated, () => {
-    console.log("bruh");
     localStorage.setItem("authenticated", authenticated.value.toString());
   });
 

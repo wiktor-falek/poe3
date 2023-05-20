@@ -6,12 +6,6 @@ const urlParams = new URLSearchParams(window.location.search);
 const verified = ref(urlParams.get("verified") === "true");
 const username = ref(urlParams.get("username"));
 const error = ref(urlParams.get("error"));
-
-console.log({
-  verified: verified.value,
-  username: username.value,
-  error: error.value,
-});
 </script>
 
 <template>

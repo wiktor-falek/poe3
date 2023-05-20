@@ -20,8 +20,6 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <h1>Play</h1>
-
   <Logout />
 
   <h2>Characters</h2>

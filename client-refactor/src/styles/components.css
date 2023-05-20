@@ -13,10 +13,11 @@ a:hover {
 
 .button,
 button {
+  display: inline-block;
   cursor: pointer;
   text-align: center;
-  min-width: 48px;
-  min-height: 48px;
+  min-width: 50px;
+  min-height: 50px;
   padding: 8px 16px;
   box-sizing: border-box;
   background-color: rgb(255, 255, 255, 0.15);
@@ -42,7 +43,6 @@ button:hover {
   background-color: rgb(255, 255, 255, 0.23);
 }
 
-.selected {
-  cursor: default;
-  border-color: orange !important;
+.monospace {
+  font-family: "Courier New", Courier, monospace;
 }

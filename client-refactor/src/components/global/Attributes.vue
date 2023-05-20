@@ -1,20 +1,17 @@
 <script lang="ts" setup>
 import type { Attributes } from "../../../../common/types";
 const props = defineProps<{ attributes: Attributes }>();
-
-console.log(props.attributes);
 </script>
 
 <template>
-  <div class="attributes">
+  <div class="attributes monospace">
     <div class="attribute-bar">
       <p>STR</p>
       <div
         class="attribute"
         v-for="index in 8"
         :class="{ 'attribute--strength': attributes.strength >= index }"
-      >
-      </div>
+      ></div>
       <p>{{ attributes.strength }}/8</p>
     </div>
 
@@ -65,6 +62,7 @@ console.log(props.attributes);
   display: flex;
   flex-direction: column;
   gap: 8px;
+  font-weight: bold;
 }
 
 .attribute-bar {

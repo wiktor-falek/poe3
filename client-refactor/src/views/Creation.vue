@@ -117,7 +117,6 @@ async function createCharacter(e: Event) {
 
 <template>
   <main>
-    <h1>Choose your class</h1>
     <div class="wrapper">
       <div v-if="selectedClass === null" class="character-banners">
         <div
@@ -205,7 +204,7 @@ h1 {
 .character-detail {
   display: flex;
   flex-direction: column;
-  height: 500px;
+  height: 480px;
   box-sizing: border-box;
   min-height: 200px;
   border: 2px solid rgba(255, 255, 255, 0.2);
@@ -220,7 +219,7 @@ h1 {
   align-items: flex-end;
   border: 2px solid white;
   min-height: 200px;
-  max-height: 500px;
+  max-height: 480px;
   box-sizing: border-box;
   aspect-ratio: 1 / 3.5;
   border: 2px solid rgba(255, 255, 255, 0.2);
