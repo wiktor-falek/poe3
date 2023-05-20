@@ -19,10 +19,10 @@ io.on("connection", (socket) => {
 
   // register handlers
   registerTestHandler(io, socket);
-  
+
   socket.on("disconnect", () => {});
 });
 
 httpServer.listen(4000, () => {
-  console.log("listening on port 4000");
-})
+  console.log("http://localhost:4000/");
+});
