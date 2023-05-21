@@ -103,12 +103,22 @@ async function verify(req: Request, res: Response) {
   return res.status(301).redirect(url);
 }
 
-async function recover(req: Request, res: Response) {
+async function recoverPassword(req: Request, res: Response) {
   const { email } = req.body;
+
+  // TODO: validate email
 
   res.status(200).json({ message: "Confirmation email sent" });
 
-  await User.recover(email);
+  await User.recoverPassword(email);
 }
 
-export { register, login, verify, recover };
+async function changePassword(req: Request, res: Response) {
+  const { token, password } = req.body;
+
+  // TODO: validate token and password
+
+  await User.changePassword(token, password);
+}
+
+export { register, login, verify, recoverPassword, changePassword };

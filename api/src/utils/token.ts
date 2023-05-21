@@ -3,6 +3,13 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
+export interface Payload {
+  username: string;
+  email: string;
+  iat: number;
+  exp: number;
+}
+
 // load secret if possible to allow decoding tokens after server restart
 const secret = process.env.JWT_SECRET ?? randomBytes(32).toString("hex");
 
@@ -12,7 +19,7 @@ export const encode = (payload: Object) => {
   return token;
 };
 
-export const decode = (token: string) => {
+export const decode = (token: string): Payload => {
   const payload = jwt.verify(token, secret);
-  return payload;
+  return payload as Payload;
 };

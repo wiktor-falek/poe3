@@ -78,8 +78,8 @@ async function signUpSubmit(e: Event) {
 async function recoverySubmit(e: Event) {
   e.preventDefault();
 
-  const response = await fetch("http://localhost:3000/auth/password", {
-    method: "PUT",
+  const response = await fetch("http://localhost:3000/auth/password/recover", {
+    method: "POST",
     body: new URLSearchParams({
       email: recoveryEmail.value,
     }),
@@ -90,11 +90,13 @@ async function recoverySubmit(e: Event) {
   if (!result.ok) {
     // TODO: handle error
     // display result.error
+    console.log(result.message);
     return;
   }
 
   // TODO: handle success
   // display result.message
+  console.log(result.error);
 }
 
 function setView(viewName: View) {
@@ -256,7 +258,6 @@ h1 {
   font-size: 2.2rem;
   text-align: center;
 }
-
 
 p {
   margin: 0;

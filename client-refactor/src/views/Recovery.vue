@@ -7,13 +7,36 @@ const confirmPassword = ref();
 const urlParams = new URLSearchParams(window.location.search);
 const token = ref(urlParams.get("token"));
 
-function changePassword(e: Event) {
+async function changePassword(e: Event) {
   e.preventDefault();
 
   if (newPassword.value !== confirmPassword.value) {
     // TODO: display "Passwords do not match" error
     return;
   }
+
+  if (token.value === null) {
+    // TODO: display "Invalid token" or something
+    return;
+  }
+
+  const response = await fetch("http://localhost:3000/auth/password/change", {
+    method: "PUT",
+    body: new URLSearchParams({
+      password: newPassword.value,
+      token: token.value,
+    }),
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    // TODO: handle error
+    console.log(result.error);
+    return;
+  }
+
+  console.log(result.message);
 }
 </script>
 

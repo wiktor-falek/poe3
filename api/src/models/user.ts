@@ -149,15 +149,7 @@ class User {
       return Err("Invalid token");
     }
 
-    // TODO: find better place or better way to do this?
-    interface Payload {
-      username: string;
-      email: string;
-      iat: number;
-      exp: number;
-    }
-
-    const { username, email, iat, exp } = payload as Payload;
+    const { username, email, iat, exp } = payload;
 
     const userWithEmailTaken = await this.collection.findOne(
       {
@@ -193,7 +185,7 @@ class User {
     return Ok({ username, verified: true });
   }
 
-  static async recover(email: string) {
+  static async recoverPassword(email: string) {
     const user = await User.findByEmail(email);
 
     if (user === null) {
@@ -212,6 +204,31 @@ class User {
       `Hi ${username}\nClick the link below to change your password.\n${url}\nIf you did not try to recover you account simply ignore this email.`,
       `<h1>Hi ${username}</h1>\n<h2>Click the link below to change your password.</h2>\n<a href="${url}">Reset Password</a>\nIf you did not try to recover you account simply ignore this email.`
     );
+  }
+
+  static async changePassword(token: string, password: string) {
+    const payload = decode(token);
+    console.log({ password, payload });
+    const { username, email } = payload;
+
+    // TODO: hash the new password
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hash = await bcrypt.hash(password, salt);
+
+    // TODO: update the db record
+    const result = await this.collection.updateOne(
+      {
+        "account.username": username,
+      },
+      { $set: { "account.hash": hash } }
+    );
+
+    if (result.modifiedCount === 0) {
+      return Err("Failed to change the password");
+    }
+
+    return Ok(1);
   }
 }
 

@@ -36,7 +36,20 @@ Once requested, user email is confirmed.
 
 `:token` - JWT token that encodes username and email.
 
-## PUT /auth/password
+## POST /auth/password/recover
+
+Sends a password recovery link to the specified email,
+if there's an user that confirmed the email.
+
+### Body
+
+| Field | Required |  Type  | minLen | maxLen |
+| :---: | :------: | :----: | :----: | :----: |
+| email |   Yes    | string |   6    |  254   |
+
+<br>
+
+## PUT /auth/password/change
 
 Updates the password of the user encoded in a token.
 
