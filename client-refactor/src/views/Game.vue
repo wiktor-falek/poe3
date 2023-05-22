@@ -12,4 +12,6 @@ onUnmounted(() => {
 });
 </script>
 
-<template></template>
+<template>
+  <h1>Game</h1>
+</template>
