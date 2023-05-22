@@ -174,7 +174,8 @@ Returns full data of the specified character of the user.
 
 ## POST /api/characters
 
-Creates a new character if the name is available.
+Creates a new character if the name is available,
+and returns overview data of the character.
 
 ### Body
 
@@ -182,6 +183,16 @@ Creates a new character if the name is available.
 | :---: | :------: | :-------------------------------------------------: | :----: | :----: |
 | name  |   Yes    |                       string                        |   3    |   24   |
 | class |   Yes    | "swordsman" \| "ranger" \| "sorcerer" \| "assassin" |   3    |   16   |
+
+### Example response
+
+```
+{
+    "name": "example character",
+    "class": "ranger",
+    "level": 1
+},
+```
 
 <br>
 
