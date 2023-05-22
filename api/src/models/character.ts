@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { Ok, Err } from "resultat";
+import { Ok, Err, ResultOk, ResultErr } from "resultat";
 import Mongo from "../mongo.js";
 import startingGear from "../components/startingGear.js";
 import { MongoServerError } from "mongodb";
@@ -53,7 +53,7 @@ class Character {
     username: string,
     characterClass: CharacterClass,
     characterName: string
-  ) {
+  ): Promise<ResultOk<CharacterOverview> | ResultErr> {
     const initialCharacterData = {
       username,
       name: characterName,
@@ -93,7 +93,13 @@ class Character {
       return Err("Failed to create the character");
     }
 
-    return Ok(`Successfully created character ${characterName}`);
+    const characterOverview: CharacterOverview = {
+      name: character.name,
+      class: character.class,
+      level: character.level.value,
+    };
+
+    return Ok(characterOverview);
   }
 
   static async getCharacter(username: string, characterName: string) {
