@@ -159,8 +159,6 @@ class User {
       { projection: { "account.username": 1, _id: 0 } }
     );
 
-    console.log({ userWithEmailTaken });
-
     if (userWithEmailTaken?.account.username === username) {
       return Err("Your email is already verified");
     }
@@ -207,16 +205,12 @@ class User {
   }
 
   static async changePassword(token: string, password: string) {
-    const payload = decode(token);
-    console.log({ password, payload });
-    const { username, email } = payload;
+    const { username, email } = decode(token);
 
-    // TODO: hash the new password
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);
     const hash = await bcrypt.hash(password, salt);
 
-    // TODO: update the db record
     const result = await this.collection.updateOne(
       {
         "account.username": username,
@@ -244,12 +238,6 @@ await User.collection.createIndexes([
       "account.username": 1,
     },
   },
-  // {
-  //   key: {
-  //     "field": 1,
-  //   },
-  //   unique: true,
-  // },
 ]);
 
 export default User;
