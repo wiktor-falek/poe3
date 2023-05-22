@@ -111,7 +111,7 @@ async function createCharacter(e: Event) {
     return;
   }
 
-  router.push("/select")
+  router.push("/select");
 }
 </script>
 
@@ -184,7 +184,7 @@ async function createCharacter(e: Event) {
 
 <style scoped>
 main {
-  padding: 5px;
+  padding: 10px;
   max-width: 900px;
   margin: 0 auto;
 }
@@ -192,6 +192,10 @@ main {
 h1 {
   text-align: center;
   font-size: 2rem;
+}
+
+form input {
+  margin: 0;
 }
 
 .character-banners {
@@ -260,14 +264,20 @@ h1 {
 .menu {
   display: flex;
   flex-direction: column;
-  margin-top: 15px;
   width: 100%;
   gap: 15px;
+  margin-top: 15px;
 }
 
 .menu__top {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+.menu__top a {
+  width: 50px;
+  height: 50px;
 }
 
 .flex-hide {
@@ -278,11 +288,6 @@ h1 {
 .menu__bottom {
   display: flex;
   justify-content: center;
-}
-
-.menu__grid a {
-  width: 50px;
-  height: 50px;
 }
 
 #create {
