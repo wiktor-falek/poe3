@@ -4,6 +4,7 @@ import { onUnmounted, onMounted, onBeforeMount, ref, watch } from "vue";
 import { useUserStore } from "../stores/userStore";
 import * as chat from "../socket/chat";
 import * as game from "../socket/game";
+import Chat from "../components/Chat.vue";
 
 const userStore = useUserStore();
 const router = useRouter();
@@ -64,6 +65,7 @@ onUnmounted(() => {
   <main v-else :class="{ loaded: chat.state.connected }">
     <h1>Game</h1>
     <p>{{ userStore.characterName }}</p>
+    <Chat />
   </main>
 </template>
 
