@@ -10,6 +10,10 @@ import type {
   ChatServerToClientEvents,
   ChatInterServerEvents,
   ChatSocketData,
+  GameClientToServerEvents,
+  GameServerToClientEvents,
+  GameInterServerEvents,
+  GameSocketData,
 } from "../../common/events/gameServerEvents";
 import authenticate from "./middlewares/authenticate";
 import registerChatHandler from "./handlers/chatHandler";
@@ -32,6 +36,7 @@ io.on("new_namespace", (namespace) => {
   namespace.use(authenticate);
 });
 
+// namespaces
 const chat: Namespace<
   ChatClientToServerEvents,
   ChatServerToClientEvents,
@@ -39,26 +44,32 @@ const chat: Namespace<
   ChatSocketData
 > = io.of("/chat");
 
+const game: Namespace<
+  GameClientToServerEvents,
+  GameServerToClientEvents,
+  GameInterServerEvents,
+  GameSocketData
+> = io.of("/game");
+
+// connections
 chat.on("connection", (socket) => {
   console.log("user connected to chat");
   socket.on("error", (err) => {
     console.log(err);
     socket.disconnect();
-  })
+  });
   // socket.emit("message", new SystemMessage("Connected to chat"));
 
   registerChatHandler(chat, socket);
 });
-// io.on("connection", (socket) => {
-//   // handle errors
 
-//   // init
-
-//   // register handlers
-//   registerTestHandler(io, socket);
-
-//   socket.on("disconnect", () => {});
-// });
+game.on("connection", (socket) => {
+  console.log("user connected to game")
+  socket.on("error", (err) => {
+    console.log(err);
+    socket.disconnect();
+  })
+})
 
 httpServer.listen(4000, () => {
   console.log("http://localhost:4000/");
