@@ -52,7 +52,7 @@ TODO
 
 <br>
 
-### **`socket-server`**
+### **`game-server`**
 
 #### Authoritative game server which handles all of the game logic.
 
@@ -60,7 +60,7 @@ TODO
 
 ### **`client`**
 
-#### Renders data emitted by socket-server, and provides an interface for player actions.
+#### Renders data emitted by game-server, and provides an interface for player actions.
 
 <br>
 
