@@ -1,5 +1,14 @@
 import { reactive } from "vue";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
+import type {
+  ChatServerToClientEvents,
+  ChatClientToServerEvents,
+} from "../../../common/events/gameServerEvents";
+
+const sessionId = document.cookie
+  .split("; ")
+  .find((row) => row.startsWith("sessionId="))
+  ?.split("=")[1];
 
 export const state = reactive({
   connected: false,
@@ -7,12 +16,10 @@ export const state = reactive({
   barEvents: [],
 });
 
-const sessionId = document.cookie
-  .split("; ")
-  .find((row) => row.startsWith("sessionId="))
-  ?.split("=")[1];
-
-export const socket = io("http://localhost:4000/chat", {
+export const socket: Socket<
+  ChatServerToClientEvents,
+  ChatClientToServerEvents
+> = io("http://localhost:4000/chat", {
   autoConnect: false,
   auth: {
     sessionId,
