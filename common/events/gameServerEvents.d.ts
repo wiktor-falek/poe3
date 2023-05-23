@@ -13,8 +13,8 @@ export interface SocketData {}
 
 // "/chat" namespace types
 export interface ChatClientToServerEvents {
+  send: (content: string) => void;
   join: (room: number) => void;
-  message: (content: string) => void;
 }
 
 export interface ChatServerToClientEvents {
