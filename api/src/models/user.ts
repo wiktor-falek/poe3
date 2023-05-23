@@ -196,16 +196,24 @@ class User {
 
     const url = `http://localhost:5173/recovery/?token=${token}`;
 
-    sendEmail(
-      email,
-      "Account Recovery",
-      `Hi ${username}\nClick the link below to change your password.\n${url}\nIf you did not try to recover you account simply ignore this email.`,
-      `<h1>Hi ${username}</h1>\n<h2>Click the link below to change your password.</h2>\n<a href="${url}">Reset Password</a>\nIf you did not try to recover you account simply ignore this email.`
-    );
+    if (process.env.NODE_ENV === "production") {
+      sendEmail(
+        email,
+        "Account Recovery",
+        `Hi ${username}\nClick the link below to change your password.\n${url}\nIf you did not try to recover you account simply ignore this email.`,
+        `<h1>Hi ${username}</h1>\n<h2>Click the link below to change your password.</h2>\n<a href="${url}">Reset Password</a>\nIf you did not try to recover you account simply ignore this email.`
+      );
+    } else {
+      console.log(`Account recovery link:\n${url}`);
+    }
   }
 
   static async changePassword(token: string, password: string) {
-    const { username, email } = decode(token);
+    const payload = decode(token);
+    if (payload === null) {
+      return Err("Invalid token");
+    }
+    const { username, email } = payload;
 
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);

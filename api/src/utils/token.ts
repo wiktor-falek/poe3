@@ -19,7 +19,11 @@ export const encode = (payload: Object) => {
   return token;
 };
 
-export const decode = (token: string): Payload => {
-  const payload = jwt.verify(token, secret);
-  return payload as Payload;
+export const decode = (token: string): Payload | null => {
+  try {
+    const payload = jwt.verify(token, secret);
+    return payload as Payload;
+  } catch {
+    return null;
+  }
 };

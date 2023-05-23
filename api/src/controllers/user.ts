@@ -3,6 +3,8 @@ import User from "../models/user.js";
 import Joi from "joi";
 import { sendEmail } from "../utils/email.js";
 import { encode } from "../utils/token.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 async function register(req: Request, res: Response) {
   const schema = Joi.object().keys({
@@ -27,12 +29,18 @@ async function register(req: Request, res: Response) {
 
   const token = encode({ username: username, email: email });
 
-  sendEmail(
-    email,
-    "Please confirm your email address",
-    `Hi ${username}, Click here to confirm your email address and activate your account\n` +
-      `http://localhost:3000/auth/verify/${token}`
-  );
+  if (process.env.NODE_ENV === "production") {
+    sendEmail(
+      email,
+      "Please confirm your email address",
+      `Hi ${username}, Click here to confirm your email address and activate your account\n` +
+        `http://localhost:3000/auth/verify/${token}`
+    );
+  } else {
+    console.log(
+      `Confirm email address link:\nhttp://localhost:3000/auth/verify/${token}`
+    );
+  }
 
   return res.status(200).json({
     message: `Successfully created an account with username '${username}'`,
@@ -118,7 +126,13 @@ async function changePassword(req: Request, res: Response) {
 
   // TODO: validate token and password
 
-  await User.changePassword(token, password);
+  const result = await User.changePassword(token, password);
+
+  if (!result.ok) {
+    return res.status(402).json({ error: result.err });
+  }
+
+  return res.status(200).json({ message: "Password changed successfully" });
 }
 
 export { register, login, verify, recoverPassword, changePassword };
