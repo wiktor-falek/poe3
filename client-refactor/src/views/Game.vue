@@ -1,12 +1,10 @@
 <script lang="ts" setup>
-import { onUnmounted } from "vue";
-import { onMounted } from "vue";
-import { useUserStore } from "../stores/userStore";
 import { useRouter } from "vue-router";
-import { onBeforeMount } from "vue";
+import { onUnmounted, onMounted, onBeforeMount, ref, watch } from "vue";
+import { useUserStore } from "../stores/userStore";
 import * as chat from "../socket/chat";
-import { watch } from "vue";
-import { ref } from "vue";
+import * as game from "../socket/game";
+
 const userStore = useUserStore();
 const router = useRouter();
 
@@ -20,12 +18,13 @@ onBeforeMount(() => {
 const showLoading = ref(true);
 
 onMounted(() => {
-  // TODO: replace chat namespace with game namespace
   chat.socket.connect();
+  game.socket.connect();
+
   const start = Date.now();
 
-  const unwatch = watch(chat.state, () => {
-    if (chat.state.connected) {
+  const unwatch = watch(game.state, () => {
+    if (game.state.connected) {
       const end = Date.now();
       const timeSpentLoading = end - start;
 
@@ -43,6 +42,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+  game.socket.disconnect();
   chat.socket.disconnect();
 });
 </script>
