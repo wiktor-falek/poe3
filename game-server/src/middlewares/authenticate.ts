@@ -7,6 +7,7 @@ import {
 } from "../../../common/events/gameServerEvents";
 import { ExtendedError } from "socket.io/dist/namespace";
 import User from "../db/models/user";
+import Joi from "joi";
 
 async function authenticate(
   socket: Socket<
@@ -17,14 +18,30 @@ async function authenticate(
   >,
   next: (err?: ExtendedError | undefined) => void
 ) {
-  const { sessionId } = socket.handshake.auth;
+  const { auth } = socket.handshake;
+  // TODO: validate type and length
 
-  // TODO: validate types
+  const schema = Joi.string()
+    .regex(
+      /[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/
+    )
+    .required();
+
+  const result = schema.validate(auth.sessionId);
+  if (result.error) {
+    const err: ExtendedError = new Error("Invalid session");
+    // err.data = { content: "Additional details" };
+    return next(err);
+  }
+
+  const sessionId = result.value;
 
   const user = await User.findBySessionId(sessionId);
 
   if (user === null) {
-    return next(new Error("Invalid credentials"));
+    const err: ExtendedError = new Error("User not found");
+    // err.data = { content: "Additional details" };
+    return next(err);
   }
 
   next();

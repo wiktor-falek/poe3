@@ -27,7 +27,10 @@ const io = new Server<
   },
 });
 
-io.use(authenticate);
+// global middlewares
+io.on("new_namespace", (namespace) => {
+  namespace.use(authenticate);
+});
 
 const chat: Namespace<
   ChatClientToServerEvents,
@@ -37,7 +40,12 @@ const chat: Namespace<
 > = io.of("/chat");
 
 chat.on("connection", (socket) => {
-  socket.emit("message", new SystemMessage("Connected to chat"));
+  console.log("user connected to chat");
+  socket.on("error", (err) => {
+    console.log(err);
+    socket.disconnect();
+  })
+  // socket.emit("message", new SystemMessage("Connected to chat"));
 
   registerChatHandler(chat, socket);
 });
