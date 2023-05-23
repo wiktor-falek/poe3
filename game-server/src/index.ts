@@ -1,6 +1,5 @@
 import { createServer } from "http";
 import { Namespace, Server, Socket } from "socket.io";
-import { SystemMessage } from "./message";
 import type {
   ClientToServerEvents,
   ServerToClientEvents,
@@ -58,18 +57,17 @@ chat.on("connection", (socket) => {
     console.log(err);
     socket.disconnect();
   });
-  // socket.emit("message", new SystemMessage("Connected to chat"));
 
   registerChatHandler(chat, socket);
 });
 
 game.on("connection", (socket) => {
-  console.log("user connected to game")
+  console.log("user connected to game");
   socket.on("error", (err) => {
     console.log(err);
     socket.disconnect();
-  })
-})
+  });
+});
 
 httpServer.listen(4000, () => {
   console.log("http://localhost:4000/");
