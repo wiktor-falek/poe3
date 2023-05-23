@@ -6,13 +6,24 @@ async function createCharacter(req: Request, res: Response) {
   const characterClass = req.body.class;
   const name = req.body.name;
 
+  const BLACKLISTED_NAMES = ["SERVER"];
+
   const schema = Joi.object().keys({
     class: Joi.string().required().min(3).max(16),
-    name: Joi.string().required().min(3).max(24),
+    name: Joi.string()
+      .required()
+      .invalid(...BLACKLISTED_NAMES)
+      .min(3)
+      .max(24),
   });
 
   const validationResult = schema.validate(req.body);
   if (validationResult.error) {
+    if (BLACKLISTED_NAMES.includes(name)) {
+      return res
+        .status(422)
+        .json({ error: "This username is not allowed, try something else" });
+    }
     return res.status(422).json({ error: "Invalid data" });
   }
 
