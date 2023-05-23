@@ -1,5 +1,5 @@
 import { createServer } from "http";
-import { Namespace, Server, Socket } from "socket.io";
+import { Namespace, Server } from "socket.io";
 import { SystemMessage } from "./message";
 import type {
   ClientToServerEvents,
@@ -10,7 +10,8 @@ import type {
   ChatServerToClientEvents,
   ChatInterServerEvents,
   ChatSocketData,
-} from "../../common/events";
+} from "../../common/events/gameServerEvents";
+import authenticate from "./middlewares/authenticate";
 
 const httpServer = createServer();
 const io = new Server<
@@ -25,12 +26,15 @@ const io = new Server<
   },
 });
 
+io.use(authenticate);
+
 const chat: Namespace<
   ChatClientToServerEvents,
   ChatServerToClientEvents,
   ChatInterServerEvents,
   ChatSocketData
 > = io.of("/chat");
+
 
 chat.on("connection", (socket) => {
   socket.emit("message", new SystemMessage("Connected to chat"));
