@@ -1,27 +1,50 @@
 import { createServer } from "http";
-import { Server } from "socket.io";
-import type { IoWithEventTypes } from "..";
-
-import registerTestHandler from "./handlers/testHandler";
+import { Namespace, Server, Socket } from "socket.io";
+import { SystemMessage } from "./message";
+import type {
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  SocketData,
+  ChatClientToServerEvents,
+  ChatServerToClientEvents,
+  ChatInterServerEvents,
+  ChatSocketData,
+} from "../../common/events";
 
 const httpServer = createServer();
-const io: IoWithEventTypes = new Server(httpServer, {
+const io = new Server<
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  SocketData
+>(httpServer, {
   cors: {
     origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT"],
   },
 });
 
-io.on("connection", (socket) => {
-  // handle errors
+const chat: Namespace<
+  ChatClientToServerEvents,
+  ChatServerToClientEvents,
+  ChatInterServerEvents,
+  ChatSocketData
+> = io.of("/chat");
 
-  // init
-
-  // register handlers
-  registerTestHandler(io, socket);
-
-  socket.on("disconnect", () => {});
+chat.on("connection", (socket) => {
+  socket.emit("message", new SystemMessage("Connected to chat"));
 });
+// io.on("connection", (socket) => {
+//   // handle errors
+
+//   // init
+
+//   // register handlers
+//   registerTestHandler(io, socket);
+
+//   socket.on("disconnect", () => {});
+// });
 
 httpServer.listen(4000, () => {
   console.log("http://localhost:4000/");

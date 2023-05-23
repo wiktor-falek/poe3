@@ -12,6 +12,7 @@
   "dependencies": {
     "joi": "^17.9.2",
     "mongodb": "^5.5.0",
+    "pyrand": "^1.1.0",
     "socket.io": "^4.6.1"
   },
   "devDependencies": {
