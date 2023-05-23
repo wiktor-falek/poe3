@@ -4,16 +4,21 @@ import type {
   ChatServerToClientEvents,
   ChatClientToServerEvents,
 } from "../../../common/events/gameServerEvents";
+import { Message } from "../../../game-server/src/components/message";
 
 const sessionId = document.cookie
   .split("; ")
   .find((row) => row.startsWith("sessionId="))
   ?.split("=")[1];
 
-export const state = reactive({
+interface State {
+  connected: boolean;
+  messageEvents: Array<Message>;
+}
+
+export const state: State = reactive({
   connected: false,
-  fooEvents: [],
-  barEvents: [],
+  messageEvents: [],
 });
 
 export const socket: Socket<
@@ -28,8 +33,13 @@ export const socket: Socket<
 
 socket.on("connect", () => {
   state.connected = true;
+  socket.emit("join", 1);
 });
 
 socket.on("disconnect", () => {
   state.connected = false;
+});
+
+socket.on("message", (message) => {
+  state.messageEvents.push(message);
 });
