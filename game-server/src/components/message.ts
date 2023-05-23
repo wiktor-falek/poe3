@@ -1,6 +1,12 @@
 type Group = "SYSTEM" | "GLOBAL" | "PARTY" | "GUILD";
 
-export class Message {
+export interface Message {
+  content: string;
+  sender: string;
+  group: Group;
+}
+
+class BaseMessage implements Message {
   content: string;
   sender: string;
   group: Group;
@@ -12,26 +18,26 @@ export class Message {
   }
 }
 
-export class SystemMessage extends Message {
+export class ServerMessage extends BaseMessage {
   constructor(content: string) {
-    super(content, "SYSTEM", "SYSTEM");
+    super(content, "SERVER", "SYSTEM");
   }
 }
 
-export class GlobalMessage extends Message {
+export class GlobalMessage extends BaseMessage {
   constructor(content: string, sender?: string) {
-    super(content, sender ?? "SYSTEM", "GLOBAL");
+    super(content, sender ?? "SERVER", "GLOBAL");
   }
 }
 
-export class PartyMessage extends Message {
+export class PartyMessage extends BaseMessage {
   constructor(content: string, sender?: string) {
-    super(content, sender ?? "SYSTEM", "PARTY");
+    super(content, sender ?? "SERVER", "PARTY");
   }
 }
 
-export class GuildMessage extends Message {
+export class GuildMessage extends BaseMessage {
   constructor(content: string, sender?: string) {
-    super(content, sender ?? "SYSTEM", "GUILD");
+    super(content, sender ?? "SERVER", "GUILD");
   }
 }
