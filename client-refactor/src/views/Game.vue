@@ -27,9 +27,9 @@ onMounted(() => {
   const unwatch = watch(chat.state, () => {
     if (chat.state.connected) {
       const end = Date.now();
-
       const timeSpentLoading = end - start;
 
+      // if real load time was below MINIMUM_LOAD_TIME, timeout for the remaining duration
       const MINIMUM_LOAD_TIME = 800;
       const timeoutDuration = MINIMUM_LOAD_TIME - timeSpentLoading;
 
@@ -48,7 +48,6 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <!-- TODO: add loading animation -->
   <main class="loading" v-if="showLoading">
     <div class="lds-roller">
       <div></div>
@@ -70,7 +69,7 @@ onUnmounted(() => {
 
 <style scoped>
 .loaded {
-  animation: fadein 1s;
+  animation: fadein 0.2s;
 }
 
 @keyframes fadein {
@@ -90,6 +89,7 @@ onUnmounted(() => {
   justify-content: center;
 }
 
+/* https://loading.io/css/ */
 .lds-roller {
   display: inline-block;
   position: relative;
