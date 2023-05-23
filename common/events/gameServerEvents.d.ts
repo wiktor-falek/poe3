@@ -2,7 +2,6 @@ import { Message } from "../../game-server/src/components/message";
 
 // main namespace types
 export interface ClientToServerEvents {
-  hello: () => void;
 }
 
 export interface ServerToClientEvents {
@@ -17,6 +16,7 @@ export interface SocketData {}
 // "/chat" namespace types
 
 export interface ChatClientToServerEvents {
+  join: (room: number) => void;
   message: (content: string) => void;
 }
 
