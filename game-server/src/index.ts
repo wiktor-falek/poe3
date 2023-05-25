@@ -13,9 +13,11 @@ import type {
   GameServerToClientEvents,
   GameInterServerEvents,
   GameSocketData,
-} from "../../common/events/gameServerEvents";
+} from "../common/events/gameServerEvents";
 import authenticate from "./middlewares/authenticate";
 import registerChatHandler from "./handlers/chatHandler";
+import { createAdapter } from "@socket.io/redis-adapter";
+import { createClient } from "redis";
 
 const httpServer = createServer();
 const io = new Server<
@@ -24,14 +26,22 @@ const io = new Server<
   InterServerEvents,
   SocketData
 >(httpServer, {
+  transports: ["websocket", "polling"],
   cors: {
     origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT"],
+    credentials: true,
   },
 });
 
+// const pubClient = createClient({ url: "redis://localhost:6379" });
+// const subClient = pubClient.duplicate();
+
+// io.adapter(createAdapter(pubClient, subClient));
+
 // global middlewares
 io.on("new_namespace", (namespace) => {
+  // TEMP: disable auth because server does not connect to mongodb in docker
   namespace.use(authenticate);
 });
 

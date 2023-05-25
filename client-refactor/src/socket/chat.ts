@@ -26,6 +26,7 @@ export const socket: Socket<
   ChatClientToServerEvents
 > = io("http://localhost:4000/chat", {
   autoConnect: false,
+  withCredentials: true,
   auth: {
     sessionId,
   },

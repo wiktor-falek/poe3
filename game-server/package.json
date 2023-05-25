@@ -10,9 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@socket.io/redis-adapter": "^8.2.1",
     "joi": "^17.9.2",
     "mongodb": "^5.5.0",
     "pyrand": "^1.1.0",
+    "redis": "^4.6.6",
     "socket.io": "^4.6.1"
   },
   "devDependencies": {
