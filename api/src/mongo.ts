@@ -9,7 +9,8 @@ const getUri = async () => {
       const mongoServer = await MongoMemoryServer.create();
       return mongoServer.getUri();
     default:
-      return "mongodb://127.0.0.1:27017";
+      return "mongodb://172.17.0.1:27017"; // connect to the database from docker container
+    // return "mongodb://127.0.0.1:27017";
   }
 };
 
