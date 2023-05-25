@@ -10,6 +10,12 @@ services:
       - 27017:27017
     volumes:
       - mongodb_data_container:/data/db
+
+  api:
+    build: ./api
+    ports:
+      - "3000:3000"
+
   # haproxy:
   #   build: ./game-server/haproxy
   #   links:
@@ -20,19 +26,16 @@ services:
   #   ports:
   #     - "4000:80"
 
-  api:
-    build: ./api
-    ports:
-      - "3000:3000"
-
-  server-john:
-    build: ./game-server
-    # links:
-    #   - redis
-    ports:
-      - "4000:4000"
-    environment:
-      - NAME=John
+  # server-john:
+  #   build: ./game-server
+  #   links:
+  #     - redis
+  #   expose:
+  #     - "4000"
+  #   # ports:
+  #   #   - "4000:4000"
+  #   environment:
+  #     - NAME=John
 
   # server-paul:
   #   build: ./game-server

@@ -19,7 +19,7 @@ export const state = reactive({
 export const socket: Socket<
   GameServerToClientEvents,
   GameClientToServerEvents
-> = io("http://localhost:4000/game", {
+> = io("http://127.0.0.1:4000/game", {
   autoConnect: false,
   auth: {
     sessionId,

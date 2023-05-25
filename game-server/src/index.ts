@@ -29,19 +29,17 @@ const io = new Server<
   transports: ["websocket", "polling"],
   cors: {
     origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PUT"],
     credentials: true,
   },
 });
 
-// const pubClient = createClient({ url: "redis://localhost:6379" });
+// const pubClient = createClient({ url: "redis://172.17.0.1:6379" });
 // const subClient = pubClient.duplicate();
 
 // io.adapter(createAdapter(pubClient, subClient));
 
 // global middlewares
 io.on("new_namespace", (namespace) => {
-  // TEMP: disable auth because server does not connect to mongodb in docker
   namespace.use(authenticate);
 });
 
@@ -79,7 +77,7 @@ game.on("connection", (socket) => {
   });
 });
 
-httpServer.listen(4000, () => {
+httpServer.listen(4000, "0.0.0.0", () => {
   console.log("http://localhost:4000/");
 });
 
