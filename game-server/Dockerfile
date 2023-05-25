@@ -1,15 +1,12 @@
 FROM node:19-alpine
 
-# Create app directory
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+RUN mkdir -p /usr/src/game-server
+WORKDIR /usr/src/game-server
 
-# Install app dependencies
-COPY package.json /usr/src/app/
+COPY package.json /usr/src/game-server/
 RUN npm install
 
-# Bundle app source
-COPY . /usr/src/app
+COPY . /usr/src/game-server
 
 EXPOSE 4000
 CMD [ "npm", "run", "dev" ]
