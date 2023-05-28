@@ -1,5 +1,5 @@
 import Joi from "joi";
-import type { ChatNamespace, ChatSocket } from "..";
+import type { ChatNamespace, ChatSocket } from "../worker";
 import { ServerMessage } from "../components/message";
 
 function registerChatHandler(io: ChatNamespace, socket: ChatSocket) {

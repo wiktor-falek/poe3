@@ -2,19 +2,21 @@
   "name": "socket-server-refactor",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "dist/worker.js",
   "scripts": {
-    "dev": "tsc-watch --onSuccess \"node .\" "
+    "dev": "NODE_ENV=production pm2 start"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@socket.io/redis-adapter": "^8.2.1",
+    "@socket.io/cluster-adapter": "^0.2.2",
+    "@socket.io/sticky": "^1.0.3",
+    "dotenv": "^16.0.3",
     "joi": "^17.9.2",
     "mongodb": "^5.5.0",
     "pyrand": "^1.1.0",
-    "redis": "^4.6.6",
+    "resultat": "^1.0.3",
     "socket.io": "^4.6.1"
   },
   "devDependencies": {

@@ -29,9 +29,10 @@ const io = new Server<
   InterServerEvents,
   SocketData
 >(httpServer, {
-  transports: ["websocket"],
+  transports: ["websocket", "polling"],
   cors: {
-    origin: "http://localhost:5173",  
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
     credentials: true,
   },
 });
