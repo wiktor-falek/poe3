@@ -13,12 +13,12 @@ import type {
   GameServerToClientEvents,
   GameInterServerEvents,
   GameSocketData,
-} from "../../common/events/gameServerEvents";
-import authenticate from "./middlewares/authenticate";
-import registerChatHandler from "./handlers/chatHandler";
-import Mongo from "./db/mongo";
+} from "../../common/events/gameServerEvents.js";
+import authenticate from "./middlewares/authenticate.js";
+import registerChatHandler from "./handlers/chatHandler.js";
+import Mongo from "./db/mongo.js";
 
-Mongo.connect();
+await Mongo.connect();
 
 const httpServer = createServer();
 const io = new Server<

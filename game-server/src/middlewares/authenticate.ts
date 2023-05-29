@@ -4,10 +4,10 @@ import {
   InterServerEvents,
   ServerToClientEvents,
   SocketData,
-} from "../../../common/events/gameServerEvents";
-import { ExtendedError } from "socket.io/dist/namespace";
-import User from "../db/models/user";
+} from "../../../common/events/gameServerEvents.js";
+import User from "../db/models/user.js";
 import Joi from "joi";
+
 
 async function authenticate(
   socket: Socket<
@@ -19,7 +19,6 @@ async function authenticate(
   next: (err?: ExtendedError | undefined) => void
 ) {
   const { auth } = socket.handshake;
-  // TODO: validate type and length
 
   const schema = Joi.string()
     .regex(
