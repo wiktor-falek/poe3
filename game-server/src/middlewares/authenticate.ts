@@ -4,7 +4,7 @@ import {
   InterServerEvents,
   ServerToClientEvents,
   SocketData,
-} from "../../common/events/gameServerEvents";
+} from "../../../common/events/gameServerEvents";
 import { ExtendedError } from "socket.io/dist/namespace";
 import User from "../db/models/user";
 import Joi from "joi";

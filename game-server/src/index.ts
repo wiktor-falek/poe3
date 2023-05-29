@@ -17,8 +17,6 @@ import type {
 import authenticate from "./middlewares/authenticate";
 import registerChatHandler from "./handlers/chatHandler";
 import Mongo from "./db/mongo";
-import { createAdapter } from "@socket.io/cluster-adapter";
-import { setupWorker } from "@socket.io/sticky";
 
 Mongo.connect();
 
@@ -37,9 +35,6 @@ const io = new Server<
   },
 });
 
-// cluster
-io.adapter(createAdapter());
-setupWorker(io);
 
 // global middlewares
 io.on("new_namespace", (namespace) => {
@@ -79,6 +74,10 @@ game.on("connection", (socket) => {
     socket.disconnect();
   });
 });
+
+httpServer.listen(4000, () => {
+  console.log("http://localhost:4000");
+})
 
 export type Io = typeof io;
 export type ChatNamespace = typeof chat;
