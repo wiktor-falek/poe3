@@ -8,11 +8,9 @@ import type {
   ChatClientToServerEvents,
   ChatServerToClientEvents,
   ChatInterServerEvents,
-  ChatSocketData,
   GameClientToServerEvents,
   GameServerToClientEvents,
   GameInterServerEvents,
-  GameSocketData,
 } from "../../common/events/gameServerEvents.js";
 import authenticate from "./middlewares/authenticate.js";
 import registerChatHandler from "./handlers/chatHandler.js";
@@ -51,14 +49,14 @@ const chat: Namespace<
   ChatClientToServerEvents,
   ChatServerToClientEvents,
   ChatInterServerEvents,
-  ChatSocketData
+  SocketData
 > = io.of("/chat");
 
 const game: Namespace<
   GameClientToServerEvents,
   GameServerToClientEvents,
   GameInterServerEvents,
-  GameSocketData
+  SocketData
 > = io.of("/game");
 
 // connections
@@ -86,5 +84,5 @@ export type ChatSocket = Socket<
   ChatClientToServerEvents,
   ChatServerToClientEvents,
   ChatInterServerEvents,
-  ChatSocketData
+  SocketData
 >;

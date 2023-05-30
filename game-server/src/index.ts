@@ -8,15 +8,14 @@ import type {
   ChatClientToServerEvents,
   ChatServerToClientEvents,
   ChatInterServerEvents,
-  ChatSocketData,
   GameClientToServerEvents,
   GameServerToClientEvents,
   GameInterServerEvents,
-  GameSocketData,
 } from "../../common/events/gameServerEvents.js";
 import authenticate from "./middlewares/authenticate.js";
 import registerChatHandler from "./handlers/chatHandler.js";
 import Mongo from "./db/mongo.js";
+import isAuthenticated from "./middlewares/isAuthenticated.js";
 
 await Mongo.connect();
 
@@ -38,7 +37,7 @@ const io = new Server<
 // global middlewares
 io.use(authenticate);
 io.on("new_namespace", (namespace) => {
-  namespace.use(authenticate);
+  namespace.use(isAuthenticated);
 });
 
 // namespaces
@@ -46,23 +45,19 @@ const chat: Namespace<
   ChatClientToServerEvents,
   ChatServerToClientEvents,
   ChatInterServerEvents,
-  ChatSocketData
+  SocketData
 > = io.of("/chat");
 
 const game: Namespace<
   GameClientToServerEvents,
   GameServerToClientEvents,
   GameInterServerEvents,
-  GameSocketData
+  SocketData
 > = io.of("/game");
 
 // connections
 chat.on("connection", (socket) => {
   console.log("user connected to chat");
-  socket.on("error", (err) => {
-    console.log(err);
-    socket.disconnect();
-  });
 
   registerChatHandler(chat, socket);
 });
@@ -85,5 +80,5 @@ export type ChatSocket = Socket<
   ChatClientToServerEvents,
   ChatServerToClientEvents,
   ChatInterServerEvents,
-  ChatSocketData
+  SocketData
 >;

@@ -11,7 +11,9 @@ export interface InterServerEvents {
   ping: () => void;
 }
 
-export interface SocketData {}
+export interface SocketData {
+  isAuthenticated: boolean;
+}
 
 // "/chat" namespace types
 export interface ChatClientToServerEvents {
@@ -24,10 +26,6 @@ export interface ChatServerToClientEvents {
 }
 
 export interface ChatInterServerEvents {
-  // ...
-}
-
-export interface ChatSocketData {
   // ...
 }
 
@@ -44,6 +42,3 @@ export interface GameInterServerEvents {
   // ...
 }
 
-export interface GameSocketData {
-  // ...
-}

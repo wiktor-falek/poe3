@@ -26,7 +26,7 @@ export const socket: Socket<
   auth(cb) {
     cb({
       sessionId: getCookie("sessionId"),
-      username: localStorage.getItem("username"),
+      // username: localStorage.getItem("username"),
       characterName: localStorage.getItem("characterName"),
     });
   },

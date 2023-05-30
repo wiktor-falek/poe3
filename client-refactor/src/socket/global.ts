@@ -16,12 +16,12 @@ export const state: State = reactive({
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
   "http://localhost:4000/",
   {
-    autoConnect: true,
+    autoConnect: false,
     withCredentials: true,
     auth(cb) {
       cb({
         sessionId: getCookie("sessionId"),
-        username: localStorage.getItem("username"),
+        // username: localStorage.getItem("username"),
         characterName: localStorage.getItem("characterName"),
       });
     },

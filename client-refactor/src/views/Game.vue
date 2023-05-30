@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useRouter } from "vue-router";
 import { onUnmounted, onMounted, onBeforeMount, ref, watch } from "vue";
+import * as global from "../socket/global";
 import * as chat from "../socket/chat";
 import * as game from "../socket/game";
 import Chat from "../components/Chat.vue";
@@ -13,13 +14,20 @@ onBeforeMount(() => {
   if (characterName === null) {
     router.push("/select");
   }
+  global.socket.connect();
 });
 
 const showLoading = ref(true);
 
 onMounted(() => {
-  game.socket.connect();
-  chat.socket.connect();
+  {
+    // connect to namespaces once global connection passed authentication
+    const unwatch = watch(global.state, () => {
+      game.socket.connect();
+      chat.socket.connect();
+      unwatch()
+    });
+  }
 
   const start = Date.now();
 

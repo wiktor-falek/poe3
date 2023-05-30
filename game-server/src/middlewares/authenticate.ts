@@ -27,12 +27,13 @@ async function authenticate(
         /[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/
       )
       .required(),
-    username: Joi.string().required().min(6).max(30),
+    // username: Joi.string().required().min(6).max(30),
     characterName: Joi.string().required().min(3).max(24),
   });
 
   const result = schema.validate(auth);
   if (result.error) {
+    console.log(result.error);
     const err: ExtendedError = new Error("Invalid session");
     console.log(err.message);
     // err.data = { content: "Additional details" };
@@ -45,7 +46,7 @@ async function authenticate(
     characterName: string;
   }
 
-  const { sessionId, username, characterName } = result.value as Result;
+  const { sessionId, characterName } = result.value as Result;
 
   const fetchUserPromise = User.findBySessionId(sessionId);
   const fetchCharacterPromise = Character.findByName(characterName);
@@ -53,27 +54,34 @@ async function authenticate(
   const user = await fetchUserPromise;
   const character = await fetchCharacterPromise;
 
+  console.log({ user });
+  console.log({ character });
+
   if (user === null) {
     const err: ExtendedError = new Error("User not found");
-    console.log(err.message);
+    console.log("ERROR", err.message);
     // err.data = { content: "Additional details" };
     return next(err);
   }
-
+  
   if (character === null) {
     const err: ExtendedError = new Error("Character not found");
-    console.log(err.message);
+    console.log("ERROR", err.message);
     // err.data = { content: "Additional details" };
     return next(err);
   }
-
+  
   if (character.username !== user.account.username) {
     const err: ExtendedError = new Error("What are you trying to do? ._.");
+    console.log("ERROR", err.message);
     // err.data = { content: "Additional details" };
     return next(err);
   }
 
   socket.emit("character", character);
+
+  // @ts-ignore hack to share the data between all namespaces
+  socket.client.isAuthenticated = true;
 
   next();
 }

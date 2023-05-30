@@ -49,7 +49,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-
   if (to.meta.skipAuth === true) {
     return next();
   }
