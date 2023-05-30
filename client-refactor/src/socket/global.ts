@@ -21,7 +21,6 @@ export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
     auth(cb) {
       cb({
         sessionId: getCookie("sessionId"),
-        // username: localStorage.getItem("username"),
         characterName: localStorage.getItem("characterName"),
       });
     },

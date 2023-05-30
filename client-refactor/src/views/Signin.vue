@@ -35,7 +35,6 @@ async function signInSubmit(e: Event) {
 
   if (response.ok) {
     localStorage.setItem("authenticated", "true");
-    localStorage.setItem("username", result.username);
     router.push("/select");
   } else {
     errorMessage.value = result.error;
