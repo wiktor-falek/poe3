@@ -2,12 +2,10 @@
 import { ref } from "vue";
 import { onBeforeMount } from "vue";
 import { useRouter } from "vue-router";
-import { useUserStore } from "../stores/userStore";
 import type { Ref } from "vue";
 import type { ResponseGetAllCharactersOverview } from "../../../common/api-types/index";
 
 const router = useRouter();
-const userStore = useUserStore();
 
 const allCharacters: Ref<ResponseGetAllCharactersOverview> = ref([]);
 const selectedCharacterName: Ref<string | null> = ref(null);
@@ -17,13 +15,12 @@ function playHandler() {
     return;
   }
 
-  userStore.characterName = selectedCharacterName.value;
-  // TODO: store the selected character inside a store and persist it in localStorage
+  localStorage.setItem("characterName", selectedCharacterName.value);
+
   router.push("/game");
 }
 
 onBeforeMount(async () => {
-  // TODO: cache and refetch only if just logged in
   const response = await fetch("http://localhost:3000/api/characters", {
     method: "GET",
     credentials: "include",

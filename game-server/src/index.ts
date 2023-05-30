@@ -35,8 +35,8 @@ const io = new Server<
   },
 });
 
-
 // global middlewares
+io.use(authenticate);
 io.on("new_namespace", (namespace) => {
   namespace.use(authenticate);
 });
@@ -77,7 +77,7 @@ game.on("connection", (socket) => {
 
 httpServer.listen(4000, () => {
   console.log("http://localhost:4000");
-})
+});
 
 export type Io = typeof io;
 export type ChatNamespace = typeof chat;

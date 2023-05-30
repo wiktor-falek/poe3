@@ -1,4 +1,3 @@
-import { useUserStore } from "./stores/userStore";
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "./views/Home.vue";
 import Signin from "./views/Signin.vue";
@@ -50,13 +49,12 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const userStore = useUserStore();
 
   if (to.meta.skipAuth === true) {
     return next();
   }
 
-  if (userStore.authenticated) {
+  if (localStorage.getItem("authenticated") === "true") {
     return next();
   }
 

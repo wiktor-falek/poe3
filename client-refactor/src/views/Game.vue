@@ -1,17 +1,16 @@
 <script lang="ts" setup>
 import { useRouter } from "vue-router";
 import { onUnmounted, onMounted, onBeforeMount, ref, watch } from "vue";
-import { useUserStore } from "../stores/userStore";
 import * as chat from "../socket/chat";
 import * as game from "../socket/game";
 import Chat from "../components/Chat.vue";
 
-const userStore = useUserStore();
 const router = useRouter();
 
+const characterName = localStorage.getItem("characterName");
+
 onBeforeMount(() => {
-  // if no character is selected redirect to selection view
-  if (!userStore.characterName) {
+  if (characterName === null) {
     router.push("/select");
   }
 });
@@ -19,8 +18,8 @@ onBeforeMount(() => {
 const showLoading = ref(true);
 
 onMounted(() => {
-  chat.socket.connect();
   game.socket.connect();
+  chat.socket.connect();
 
   const start = Date.now();
 
@@ -64,7 +63,7 @@ onUnmounted(() => {
 
   <main v-else :class="{ loaded: chat.state.connected }">
     <h1>Game</h1>
-    <p>{{ userStore.characterName }}</p>
+    <p>{{ characterName }}</p>
     <Chat />
   </main>
 </template>

@@ -76,5 +76,4 @@ TODO
 ```bash
 # Installation
 git clone https://github.com/wiktor-falek/poe3 && cd poe3
-
 ```

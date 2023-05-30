@@ -5,11 +5,7 @@ import type {
   ChatClientToServerEvents,
 } from "../../../common/events/gameServerEvents";
 import { Message } from "../../../game-server/src/components/message";
-
-const sessionId = document.cookie
-  .split("; ")
-  .find((row) => row.startsWith("sessionId="))
-  ?.split("=")[1];
+import getCookie from "../utils/getCookie";
 
 interface State {
   connected: boolean;
@@ -24,11 +20,15 @@ export const state: State = reactive({
 export const socket: Socket<
   ChatServerToClientEvents,
   ChatClientToServerEvents
-> = io("http://localhost:8080/chat", {
+> = io("http://localhost:4000/chat", {
   autoConnect: false,
   withCredentials: true,
-  auth: {
-    sessionId,
+  auth(cb) {
+    cb({
+      sessionId: getCookie("sessionId"),
+      username: localStorage.getItem("username"),
+      characterName: localStorage.getItem("characterName"),
+    });
   },
 });
 
@@ -42,5 +42,6 @@ socket.on("disconnect", () => {
 });
 
 socket.on("message", (message) => {
+  console.log("message received");
   state.messageEvents.push(message);
 });

@@ -4,26 +4,30 @@ import type {
   GameServerToClientEvents,
   GameClientToServerEvents,
 } from "../../../common/events/gameServerEvents";
+import getCookie from "../utils/getCookie";
 
-const sessionId = document.cookie
-  .split("; ")
-  .find((row) => row.startsWith("sessionId="))
-  ?.split("=")[1];
+interface State {
+  connected: boolean;
+  fooEvents: Array<any>;
+}
 
-export const state = reactive({
+export const state: State = reactive({
   connected: false,
   fooEvents: [],
-  barEvents: [],
 });
 
 export const socket: Socket<
   GameServerToClientEvents,
   GameClientToServerEvents
-> = io("http://localhost:8080/game", {
+> = io("http://localhost:4000/game", {
   autoConnect: false,
   withCredentials: true,
-  auth: {
-    sessionId,
+  auth(cb) {
+    cb({
+      sessionId: getCookie("sessionId"),
+      username: localStorage.getItem("username"),
+      characterName: localStorage.getItem("characterName"),
+    });
   },
 });
 
@@ -34,3 +38,4 @@ socket.on("connect", () => {
 socket.on("disconnect", () => {
   state.connected = false;
 });
+

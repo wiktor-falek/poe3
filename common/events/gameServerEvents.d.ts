@@ -3,7 +3,9 @@ import { Message } from "../../game-server/src/components/message";
 // global namespace types
 export interface ClientToServerEvents {}
 
-export interface ServerToClientEvents {}
+export interface ServerToClientEvents {
+  character: (character) => void;
+}
 
 export interface InterServerEvents {
   ping: () => void;
