@@ -4,6 +4,10 @@ import Mongo from "../mongo.js";
 import startingGear from "../components/startingGear.js";
 import { MongoServerError } from "mongodb";
 import type { CharacterOverview } from "../../../common/api-types/index.js";
+import type {
+  CharacterClass,
+  StaticCharacter,
+} from "../../../common/types/index.js";
 
 const characterSchema = Joi.object({
   username: Joi.string().min(6).max(30).required(),
@@ -36,7 +40,6 @@ const characterSchema = Joi.object({
 });
 
 // TODO: share this between all repos
-type CharacterClass = "swordsman" | "ranger" | "sorcerer" | "assassin";
 
 class Character {
   private static db = Mongo.getClient().db("game");
@@ -115,7 +118,8 @@ class Character {
       return Err("Character not found");
     }
 
-    return Ok(character);
+    // TODO: ask a typescript wizard how to avoid this cringe
+    return Ok(character as unknown as StaticCharacter);
   }
 
   // OPTIMIZE: move this to user collection, where the subset data of each character
