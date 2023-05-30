@@ -16,16 +16,14 @@ interface Resistances {
   poison: number;
 }
 
-/*
-
-
 interface Resources {
   maxHp: number;
   hp: number;
-  maxMp?: number;
-  mp?: number;
+  maxMp: number;
+  mp: number;
 }
 
+/*
 interface ActionPoints {
   ap: number;
   maxAp: number;
@@ -103,5 +101,6 @@ interface StaticCharacter {
 interface DynamicCharacter extends StaticCharacter {
   resistances: Resistances;
   attributes: Attributes;
+  resources: Resources;
   // actionPoints
 }

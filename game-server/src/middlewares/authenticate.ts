@@ -54,9 +54,6 @@ async function authenticate(
   const user = await fetchUserPromise;
   const character = await fetchCharacterPromise;
 
-  console.log({ user });
-  console.log({ character });
-
   if (user === null) {
     const err: ExtendedError = new Error("User not found");
     console.log("ERROR", err.message);

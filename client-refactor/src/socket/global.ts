@@ -5,6 +5,8 @@ import type {
   ClientToServerEvents,
 } from "../../../common/events/gameServerEvents";
 import getCookie from "../utils/getCookie";
+import useCharacterStore from "../stores/characterStore";
+import { StaticCharacter } from "../../../common/types";
 
 interface State {
   connected: boolean;
@@ -36,6 +38,8 @@ socket.on("disconnect", () => {
 });
 
 // TODO: change any to Character interface
-socket.on("character", (character: any) => {
+socket.on("character", (character: StaticCharacter) => {
+  const characterStore = useCharacterStore();
+  characterStore.setStaticCharacter(character);
   console.log(character);
 });

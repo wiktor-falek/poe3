@@ -5,6 +5,7 @@ import * as global from "../socket/global";
 import * as chat from "../socket/chat";
 import * as game from "../socket/game";
 import Chat from "../components/Chat.vue";
+import CharacterOverview from "../components/CharacterOverview.vue";
 
 const router = useRouter();
 
@@ -70,8 +71,7 @@ onUnmounted(() => {
   </main>
 
   <main v-else :class="{ loaded: chat.state.connected }">
-    <h1>Game</h1>
-    <p>{{ characterName }}</p>
+    <CharacterOverview />
     <Chat />
   </main>
 </template>
