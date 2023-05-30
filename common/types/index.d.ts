@@ -8,15 +8,16 @@ export interface Attributes {
   speed: number;
 }
 
-/*
 interface Resistances {
   fire: number;
   cold: number;
   lightning: number;
   physical: number;
   poison: number;
-  necrotic: number;
 }
+
+/*
+
 
 interface Resources {
   maxHp: number;
@@ -100,7 +101,7 @@ interface StaticCharacter {
 // character data that gets extended with properties that are dynamically calculated
 // for example attributes need to be calculated by the base values of the class + all attributes on equipped gear etc
 interface DynamicCharacter extends StaticCharacter {
-  // resistances
+  resistances: Resistances;
+  attributes: Attributes;
   // actionPoints
-  // attributes: Attributes;
 }
