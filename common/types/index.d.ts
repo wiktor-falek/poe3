@@ -85,19 +85,22 @@ interface CharacterEquipment {
   belt: EquipmentBase;
 }
 
+// character data from the database
 interface StaticCharacter {
   username: string;
   name: string;
   class: CharacterClass;
   silver: number;
   level: Level;
-  attributes: Attributes;
   equipment: CharacterEquipment;
   inventory: Array<Item | null>;
   progression: CharacterProgression;
 }
 
+// character data that gets extended with properties that are dynamically calculated
+// for example attributes need to be calculated by the base values of the class + all attributes on equipped gear etc
 interface DynamicCharacter extends StaticCharacter {
   // resistances
   // actionPoints
+  // attributes: Attributes;
 }
