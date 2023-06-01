@@ -55,6 +55,8 @@ const game: Namespace<
   SocketData
 > = io.of("/game");
 
+
+
 // connections
 chat.on("connection", (socket) => {
   console.log("user connected to chat");
