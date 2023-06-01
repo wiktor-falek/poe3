@@ -41,5 +41,4 @@ socket.on("disconnect", () => {
 socket.on("character", (character: StaticCharacter) => {
   const characterStore = useCharacterStore();
   characterStore.setStaticCharacter(character);
-  console.log(character);
 });

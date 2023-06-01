@@ -41,6 +41,5 @@ socket.on("disconnect", () => {
 });
 
 socket.on("message", (message) => {
-  console.log("message received");
   state.messageEvents.push(message);
 });

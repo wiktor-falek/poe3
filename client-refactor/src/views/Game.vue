@@ -71,7 +71,7 @@ onUnmounted(() => {
   </main>
 
   <main v-else :class="{ loaded: chat.state.connected }">
-    <CharacterOverview />
+    <!-- <CharacterOverview /> -->
     <Chat />
   </main>
 </template>

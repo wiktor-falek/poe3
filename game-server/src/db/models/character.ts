@@ -5,10 +5,7 @@ class Character {
   static collection = this.db.collection("characters");
 
   static async findByName(name: string) {
-    const user = await this.collection.findOne(
-      { name: name },
-      { projection: { _id: 0 } }
-    );
+    const user = await this.collection.findOne({ name: name });
     return user;
   }
 }

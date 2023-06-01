@@ -11,6 +11,9 @@ import type {
   GameClientToServerEvents,
   GameServerToClientEvents,
   GameInterServerEvents,
+  InstanceServerToClientEvents,
+  InstanceClientToServerEvents,
+  InstanceInterServerEvents,
 } from "../../common/events/gameServerEvents.js";
 import authenticate from "./middlewares/authenticate.js";
 import registerChatHandler from "./handlers/chatHandler.js";
@@ -36,7 +39,7 @@ const io = new Server<
 
 // global middlewares
 io.use(authenticate);
-io.on("new_namespace", (namespace) => {
+io.on("new_namespace", async (namespace) => {
   namespace.use(isAuthenticated);
 });
 
@@ -55,7 +58,12 @@ const game: Namespace<
   SocketData
 > = io.of("/game");
 
-
+const instance: Namespace<
+  InstanceClientToServerEvents,
+  InstanceServerToClientEvents,
+  GameInterServerEvents,
+  SocketData
+> = io.of("/instance");
 
 // connections
 chat.on("connection", (socket) => {
@@ -72,6 +80,10 @@ game.on("connection", (socket) => {
   });
 });
 
+instance.on("connect", (socket) => {
+  console.log("user connected to instance");
+});
+
 httpServer.listen(4000, () => {
   console.log("http://localhost:4000");
 });
@@ -82,5 +94,21 @@ export type ChatSocket = Socket<
   ChatClientToServerEvents,
   ChatServerToClientEvents,
   ChatInterServerEvents,
+  SocketData
+>;
+
+export type GameNamespace = typeof game;
+export type GameSocket = Socket<
+  GameClientToServerEvents,
+  GameServerToClientEvents,
+  GameInterServerEvents,
+  SocketData
+>;
+
+export type InstanceNamespace = typeof instance;
+export type InstanceSocket = Socket<
+  InstanceClientToServerEvents,
+  InstanceServerToClientEvents,
+  InstanceInterServerEvents,
   SocketData
 >;

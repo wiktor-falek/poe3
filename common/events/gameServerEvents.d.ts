@@ -13,6 +13,7 @@ export interface InterServerEvents {
 
 export interface SocketData {
   isAuthenticated: boolean;
+  
 }
 
 // "/chat" namespace types
@@ -42,3 +43,16 @@ export interface GameInterServerEvents {
   // ...
 }
 
+// "/instance" namespace types
+export interface InstanceClientToServerEvents {
+  "lobby:getAll": () => void;
+}
+
+export interface InstanceServerToClientEvents {
+  // TODO: any -> Lobby
+  "lobby:all": (lobbies: Array<any>) => void;
+}
+
+export interface InstanceInterServerEvents {
+  // ...
+}

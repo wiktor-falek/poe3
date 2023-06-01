@@ -18,9 +18,10 @@
     "dotenv": "^16.0.3",
     "joi": "^17.9.2",
     "mongodb": "^5.5.0",
+    "nanoid": "^4.0.2",
     "pyrand": "^1.1.0",
     "resultat": "^1.0.3",
-    "socket.io": "^4.6.1"
+    "socket.io": "^4.6.2"
   },
   "devDependencies": {
     "tsc-watch": "^6.0.4",

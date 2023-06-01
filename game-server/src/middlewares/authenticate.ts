@@ -60,14 +60,14 @@ async function authenticate(
     // err.data = { content: "Additional details" };
     return next(err);
   }
-  
+
   if (character === null) {
     const err: ExtendedError = new Error("Character not found");
     console.log("ERROR", err.message);
     // err.data = { content: "Additional details" };
     return next(err);
   }
-  
+
   if (character.username !== user.account.username) {
     const err: ExtendedError = new Error("What are you trying to do? ._.");
     console.log("ERROR", err.message);
@@ -77,6 +77,7 @@ async function authenticate(
 
   socket.emit("character", character);
 
+  // TODO: extend the Client interface
   // @ts-ignore hack to share the data between all namespaces
   socket.client.isAuthenticated = true;
 
