@@ -1,0 +1,2 @@
+- [ ] Rename events to include the namespaces ex: send -> chat:send
+- [ ] Have characters reference _id of user owner

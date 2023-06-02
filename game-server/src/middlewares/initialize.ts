@@ -2,8 +2,9 @@ import User from "../db/models/user.js";
 import Joi from "joi";
 import Character from "../db/models/character.js";
 import { IoSocket } from "../index.js";
+import ClientManager from "../components/client/clientManager.js";
 
-async function authenticate(
+async function initialize(
   socket: IoSocket,
   next: (err?: ExtendedError | undefined) => void
 ) {
@@ -65,11 +66,25 @@ async function authenticate(
   }
   console.log({ authenticated: true });
 
-  socket.emit("character", character);
+  // OPTIMIZE
+  const { _id, ...characterData } = character;
+  socket.emit("character", characterData);
 
   socket.data.isAuthenticated = true;
+
+  const existingClient = ClientManager.getClientByUsername(user.username);
+
+  if (existingClient?.isConnected) {
+    return next(new Error("This account is already in game"))
+  }
+  
+  // reinstantiate Client if previous characterId is different than current
+  console.log(character._id);
+  // if (existingClient?.characterId !== character._id) {
+    // 
+  // }
 
   next();
 }
 
-export default authenticate;
+export default initialize;
