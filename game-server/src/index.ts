@@ -1,19 +1,21 @@
 import { createServer } from "http";
-import { Namespace, Server } from "socket.io";
+import { Server } from "socket.io";
+import initialize from "./middlewares/initialize.js";
+import registerChatHandler from "./handlers/chatHandler.js";
+import Mongo from "./db/mongo.js";
 import type { Socket } from "socket.io";
 import type {
   ClientToServerEvents,
   ServerToClientEvents,
   InterServerEvents,
 } from "../../common/events/gameServerEvents.js";
-import authenticate from "./middlewares/authenticate.js";
-import registerChatHandler from "./handlers/chatHandler.js";
-import Mongo from "./db/mongo.js";
+import type Client from "./components/client/client.js";
 
 await Mongo.connect();
 
 interface SocketData {
   isAuthenticated: boolean;
+  client: Client;
 }
 
 const httpServer = createServer();
@@ -32,7 +34,7 @@ const io = new Server<
 });
 
 // global middlewares
-io.use(authenticate);
+io.use(initialize);
 
 io.on("connection", (socket) => {
   socket.on("error", (err) => {
