@@ -54,7 +54,7 @@ io.on("connection", (socket) => {
   registerChatHandler(io, socket, client);
 
   socket.on("disconnect", (reason, description) => {
-    client?.setDisconnected();
+    client.setDisconnected();
   });
 });
 

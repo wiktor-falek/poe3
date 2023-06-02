@@ -84,7 +84,7 @@ async function initialize(
   // }
 
   const client =
-    existingClient ?? ClientManager.createClient(user.username, character.name);
+    existingClient ?? ClientManager.createClient(user.account.username, character.name);
 
   socket.data.client = client;
 
