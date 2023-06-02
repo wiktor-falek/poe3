@@ -60,11 +60,18 @@ onUnmounted(() => {
 
   <main v-else :class="{ loaded: gameServer.state.connected }">
     <!-- <CharacterOverview /> -->
-    <Chat />
+    <Chat class="chat" />
   </main>
 </template>
 
 <style scoped>
+.chat {
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
 .loaded {
   animation: fadein 0.2s;
 }
