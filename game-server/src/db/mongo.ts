@@ -1,6 +1,9 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 // import { MongoMemoryServer } from "mongodb-memory-server";
 
+import dotenv from "dotenv";
+dotenv.config();
+
 const getUri = /*async*/ () => {
   switch (process.env.NODE_ENV) {
     case "production":
@@ -9,7 +12,7 @@ const getUri = /*async*/ () => {
     // const mongoServer = await MongoMemoryServer.create();
     // return mongoServer.getUri();
     default:
-      return "mongodb://127.0.0.1:27017";
+      return `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.4zrjv3n.mongodb.net/?retryWrites=true&w=majority`;
   }
 };
 
@@ -38,6 +41,7 @@ class Mongo {
   static async connect() {
     try {
       const client = await this.getClient().connect();
+      console.log("Connected to db");
       return client;
     } catch (err) {
       console.log("Failed to connect to db");

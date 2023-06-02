@@ -1,47 +1,24 @@
 import { Message } from "../../game-server/src/components/message";
 
 // global namespace types
-export interface ClientToServerEvents {}
+export interface ClientToServerEvents {
+  // "/chat" namespace types
+  send: (content: string) => void;
+  join: (room: number) => void;
 
-export interface ServerToClientEvents {}
+  // "/game" namespace types
+  "lobby:getAll": () => void;
+}
+
+export interface ServerToClientEvents {
+  // "/chat" namespace types
+  message: (message: Message) => void;
+
+  // "/game"
+  character: (character: any) => void;
+  "lobby:all": (lobbies: Array<any>) => void;
+}
 
 export interface InterServerEvents {
   ping: () => void;
-}
-
-export interface SocketData {}
-
-// "/chat" namespace types
-export interface ChatClientToServerEvents {
-  send: (content: string) => void;
-  join: (room: number) => void;
-}
-
-export interface ChatServerToClientEvents {
-  message: (message: Message) => void;
-}
-
-export interface ChatInterServerEvents {
-  // ...
-}
-
-export interface ChatSocketData {
-  // ...
-}
-
-// "/game" namespace types
-export interface GameClientToServerEvents {
-  // ...
-}
-
-export interface GameServerToClientEvents {
-  // ...
-}
-
-export interface GameInterServerEvents {
-  // ...
-}
-
-export interface GameSocketData {
-  // ...
 }

@@ -1,4 +1,4 @@
-import Mongo from "../mongo";
+import Mongo from "../mongo.js";
 
 class User {
   private static db = Mongo.getClient().db("game");

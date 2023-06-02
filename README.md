@@ -76,8 +76,4 @@ TODO
 ```bash
 # Installation
 git clone https://github.com/wiktor-falek/poe3 && cd poe3
-
-# WORK IN PROGRESS!!!
-# Starting containers
-docker-compose up -d
 ```
