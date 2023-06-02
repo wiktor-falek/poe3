@@ -10,8 +10,8 @@ import type {
 } from "../../../common/types/index.js";
 
 const characterSchema = Joi.object({
-  // userId: ObjectId()
-  username: Joi.string().min(6).max(30).required(),
+  userId: Joi.string().length(24).required(),
+  // username: Joi.string().min(6).max(30).required(),
   name: Joi.string().min(3).max(24).required(),
   silver: Joi.number().integer().default(0),
   class: Joi.string().valid("swordsman", "ranger", "sorcerer", "assassin"),
@@ -44,20 +44,20 @@ class Character {
   private static db = Mongo.getClient().db("game");
   static collection = this.db.collection("characters");
 
-  static async getCharacterCount(username: string): Promise<number> {
+  static async getCharacterCount(userId: string): Promise<number> {
     const characterCount = await this.collection.countDocuments({
-      username: username,
+      userId,
     });
     return characterCount;
   }
 
   static async createCharacter(
-    username: string,
+    userId: string,
     characterClass: CharacterClass,
     characterName: string
   ): Promise<ResultOk<CharacterOverview> | ResultErr> {
     const initialCharacterData = {
-      username,
+      userId,
       name: characterName,
       class: characterClass,
       equipment: startingGear[characterClass],
@@ -71,7 +71,7 @@ class Character {
 
     const character = validationResult.value;
 
-    const characterCount = await this.getCharacterCount(username);
+    const characterCount = await this.getCharacterCount(userId);
 
     const CHARACTER_LIMIT = 12; // TODO: unhardcore character count
     if (characterCount >= CHARACTER_LIMIT) {
@@ -80,7 +80,7 @@ class Character {
 
     try {
       const result = await this.collection.insertOne({
-        username,
+        userId,
         ...character,
       });
 
@@ -104,13 +104,13 @@ class Character {
     return Ok(characterOverview);
   }
 
-  static async getCharacter(username: string, characterName: string) {
+  static async getCharacter(userId: string, characterName: string) {
     const character = await this.collection.findOne(
       {
-        username,
+        userId,
         name: characterName,
       },
-      { projection: { _id: 0, username: 0 } }
+      { projection: { _id: 0, userId: 0 } }
     );
 
     if (character === null) {
@@ -123,11 +123,11 @@ class Character {
 
   // OPTIMIZE: move this to user collection, where the subset data of each character
   // will be stored in the characters field for fast access
-  static async getAllCharactersOverview(username: string) {
+  static async getAllCharactersOverview(userId: string) {
     try {
       const cursor = this.collection.find(
-        { username },
-        { projection: { _id: 0, username: 0 } }
+        { userId },
+        { projection: { _id: 0, userId: 0 } }
       );
 
       const characters = await cursor.toArray();
@@ -148,9 +148,9 @@ class Character {
     }
   }
 
-  static async deleteCharacter(username: string, characterName: string) {
+  static async deleteCharacter(userId: string, characterName: string) {
     const character = await this.collection.findOne({
-      username,
+      userId,
       name: characterName,
     });
 
@@ -169,7 +169,7 @@ class Character {
 
     // delete the character from characters collection after inserting
     const deleted = await this.collection.deleteOne({
-      username,
+      userId,
       name: characterName,
     });
 
@@ -183,7 +183,7 @@ class Character {
 
 // Indexes
 Character.collection.createIndexes([
-  { key: { username: 1 } },
+  { key: { userId: 1 } },
   {
     key: { name: 1 },
     unique: true,

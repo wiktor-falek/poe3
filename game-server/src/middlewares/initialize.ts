@@ -58,7 +58,7 @@ async function initialize(
     return next(err);
   }
 
-  if (character.username !== user.account.username) {
+  if (character.userId !== user._id.toString()) {
     const err: ExtendedError = new Error("What are you trying to do? ._.");
     console.log("ERROR", err.message);
     // err.data = { content: "Additional details" };

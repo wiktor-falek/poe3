@@ -27,13 +27,9 @@ async function createCharacter(req: Request, res: Response) {
     return res.status(422).json({ error: "Invalid data" });
   }
 
-  const username = res.locals.user.account.username;
+  const userId = res.locals.user._id.toString();
 
-  const result = await Character.createCharacter(
-    username,
-    characterClass,
-    name
-  );
+  const result = await Character.createCharacter(userId, characterClass, name);
 
   if (!result.ok) {
     return res.status(403).json({ error: result.err });
@@ -45,7 +41,7 @@ async function createCharacter(req: Request, res: Response) {
 }
 
 async function getCharacter(req: Request, res: Response) {
-  const username = res.locals.user.account.username;
+  const userId = res.locals.user._id.toString();
   const { name } = req.params;
 
   const schema = Joi.string().required().min(3).max(24);
@@ -56,7 +52,7 @@ async function getCharacter(req: Request, res: Response) {
     return res.status(422).json({ error: "Invalid data" });
   }
 
-  const result = await Character.getCharacter(username, name);
+  const result = await Character.getCharacter(userId, name);
 
   if (!result.ok) {
     return res.status(204).json({});
@@ -68,9 +64,9 @@ async function getCharacter(req: Request, res: Response) {
 }
 
 async function getAllCharactersOverview(req: Request, res: Response) {
-  const username = res.locals.user.account.username;
+  const userId = res.locals.user._id.toString();
 
-  const result = await Character.getAllCharactersOverview(username);
+  const result = await Character.getAllCharactersOverview(userId);
 
   if (!result.ok) {
     return res.status(500).json({ error: result.err });
@@ -82,7 +78,7 @@ async function getAllCharactersOverview(req: Request, res: Response) {
 }
 
 async function deleteCharacter(req: Request, res: Response) {
-  const username = res.locals.user.account.username;
+  const userId = res.locals.user._id.toString();
   const characterName = req.params.name;
 
   const schema = Joi.string().required().min(3).max(24);
@@ -93,7 +89,7 @@ async function deleteCharacter(req: Request, res: Response) {
     return res.status(422).json({ error: "Invalid data" });
   }
 
-  const result = await Character.deleteCharacter(username, characterName);
+  const result = await Character.deleteCharacter(userId, characterName);
   if (!result.ok) {
     return res.status(500).json({ error: result.err });
   }
