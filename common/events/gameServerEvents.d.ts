@@ -22,7 +22,3 @@ export interface ServerToClientEvents {
 export interface InterServerEvents {
   ping: () => void;
 }
-
-export interface SocketData {
-  isAuthenticated: boolean;
-}
