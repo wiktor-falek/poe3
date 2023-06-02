@@ -5,14 +5,16 @@ import type {
   ClientToServerEvents,
   ServerToClientEvents,
   InterServerEvents,
-  SocketData,
 } from "../../common/events/gameServerEvents.js";
 import authenticate from "./middlewares/authenticate.js";
 import registerChatHandler from "./handlers/chatHandler.js";
 import Mongo from "./db/mongo.js";
-import isAuthenticated from "./middlewares/isAuthenticated.js";
 
 await Mongo.connect();
+
+interface SocketData {
+  isAuthenticated: boolean;
+}
 
 const httpServer = createServer();
 const io = new Server<
@@ -33,6 +35,9 @@ const io = new Server<
 io.use(authenticate);
 
 io.on("connection", (socket) => {
+  socket.on("error", (err) => {
+    // socket.emit("connectionError");
+  });
   console.log("connection");
   registerChatHandler(io, socket);
 });
