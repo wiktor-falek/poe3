@@ -1,9 +1,7 @@
 <script lang="ts" setup>
 import { useRouter } from "vue-router";
 import { onUnmounted, onMounted, onBeforeMount, ref, watch } from "vue";
-import * as global from "../socket/global";
-import * as chat from "../socket/chat";
-import * as game from "../socket/game";
+import * as gameServer from "../socket/gameServer";
 import Chat from "../components/Chat.vue";
 import CharacterOverview from "../components/CharacterOverview.vue";
 
@@ -15,25 +13,16 @@ onBeforeMount(() => {
   if (characterName === null) {
     router.push("/select");
   }
-  global.socket.connect();
+  gameServer.socket.connect();
 });
 
 const showLoading = ref(true);
 
 onMounted(() => {
-  {
-    // connect to namespaces once global connection passed authentication
-    const unwatch = watch(global.state, () => {
-      game.socket.connect();
-      chat.socket.connect();
-      unwatch()
-    });
-  }
-
   const start = Date.now();
 
-  const unwatch = watch(game.state, () => {
-    if (game.state.connected) {
+  const unwatch = watch(gameServer.state, () => {
+    if (gameServer.state.connected) {
       const end = Date.now();
       const timeSpentLoading = end - start;
 
@@ -51,8 +40,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  game.socket.disconnect();
-  chat.socket.disconnect();
+  gameServer.socket.disconnect();
 });
 </script>
 
@@ -70,7 +58,7 @@ onUnmounted(() => {
     </div>
   </main>
 
-  <main v-else :class="{ loaded: chat.state.connected }">
+  <main v-else :class="{ loaded: gameServer.state.connected }">
     <!-- <CharacterOverview /> -->
     <Chat />
   </main>

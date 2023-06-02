@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { ref, Ref } from "vue";
-import * as chat from "../socket/chat";
+import * as gameServer from "../socket/gameServer";
 
 const message: Ref<string> = ref("");
 
 function send() {
-  chat.socket.emit("send", message.value)
+  gameServer.socket.emit("send", message.value)
   message.value = "";
 }
 </script>
@@ -14,7 +14,7 @@ function send() {
   <div class="chat">
     <div class="top">
       <div class="messages">
-        <div class="message" v-for="message in chat.state.messageEvents">
+        <div class="message" v-for="message in gameServer.state.messageEvents">
           {{ message.sender }}: {{ message.content }}
         </div>
       </div>

@@ -1,8 +1,8 @@
 import Joi from "joi";
-import type { ChatNamespace, ChatSocket } from "../index.js";
+import type { Io, IoSocket } from "../index.js";
 import { GlobalMessage, ServerMessage } from "../components/message.js";
 
-function registerChatHandler(io: ChatNamespace, socket: ChatSocket) {
+function registerChatHandler(io: Io, socket: IoSocket) {
   const join = (_room: number) => {
     const schema = Joi.number().required().min(1).max(1000);
     const result = schema.validate(_room);
@@ -18,7 +18,6 @@ function registerChatHandler(io: ChatNamespace, socket: ChatSocket) {
     const roomName = `global:${room}`;
 
     socket.join(roomName);
-
     socket.emit("message", new ServerMessage(`You joined global room ${room}`));
   };
 

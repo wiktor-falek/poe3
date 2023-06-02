@@ -77,9 +77,7 @@ async function authenticate(
 
   socket.emit("character", character);
 
-  // TODO: extend the Client interface
-  // @ts-ignore hack to share the data between all namespaces
-  socket.client.isAuthenticated = true;
+  socket.data.isAuthenticated = true;
 
   next();
 }

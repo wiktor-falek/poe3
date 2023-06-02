@@ -1,10 +1,10 @@
 import Joi from "joi";
-import type { InstanceNamespace, InstanceSocket } from "../index.js";
+import type { Io, IoSocket } from "../index.js";
 import { Err } from "resultat";
 import type Lobby from "../game/lobby/lobby.js";
 import LobbyManager from "../game/lobby/lobbyManager.js";
 
-function registerLobbyHandler(io: InstanceNamespace, socket: InstanceSocket) {
+function registerLobbyHandler(io: Io, socket: IoSocket) {
   const getAll = () => {
     socket.emit("lobby:all", LobbyManager.allLobbies);
   };

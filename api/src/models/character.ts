@@ -10,6 +10,7 @@ import type {
 } from "../../../common/types/index.js";
 
 const characterSchema = Joi.object({
+  // userId: ObjectId()
   username: Joi.string().min(6).max(30).required(),
   name: Joi.string().min(3).max(24).required(),
   silver: Joi.number().integer().default(0),
@@ -38,8 +39,6 @@ const characterSchema = Joi.object({
     },
   }),
 });
-
-// TODO: share this between all repos
 
 class Character {
   private static db = Mongo.getClient().db("game");
