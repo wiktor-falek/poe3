@@ -8,10 +8,10 @@ class ClientManager {
     return client;
   }
 
-  // static createClient(username: string, characterName: string): Client {
-    // const client = new Client(username, characterName);
-    // return client;
-  // }
+  static createClient(username: string, characterName: string): Client {
+    const client = new Client(username, characterName);
+    return client;
+  }
 }
 
 export default ClientManager;

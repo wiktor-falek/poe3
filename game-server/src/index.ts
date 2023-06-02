@@ -10,6 +10,7 @@ import type {
   InterServerEvents,
 } from "../../common/events/gameServerEvents.js";
 import type Client from "./components/client/client.js";
+import assert from "./utils/assert.js";
 
 await Mongo.connect();
 
@@ -37,11 +38,24 @@ const io = new Server<
 io.use(initialize);
 
 io.on("connection", (socket) => {
+  // TypeScript doesn't know that this connection does not happen
+  // unless socket.data.client is defined in initialize middleware,
+  // since SocketData is wrapped in Partial<>
+  assert(socket.data.client);
+
+  const { client } = socket.data;
+  client.setConnected();
+
   socket.on("error", (err) => {
     // socket.emit("connectionError");
   });
   console.log("connection");
-  registerChatHandler(io, socket);
+
+  registerChatHandler(io, socket, client);
+
+  socket.on("disconnect", (reason, description) => {
+    client?.setDisconnected();
+  });
 });
 
 httpServer.listen(4000, () => {

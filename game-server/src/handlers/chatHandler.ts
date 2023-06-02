@@ -1,8 +1,9 @@
 import Joi from "joi";
 import type { Io, IoSocket } from "../index.js";
 import { GlobalMessage, ServerMessage } from "../components/message.js";
+import Client from "../components/client/client.js";
 
-function registerChatHandler(io: Io, socket: IoSocket) {
+function registerChatHandler(io: Io, socket: IoSocket, client: Client) {
   const join = (_room: number) => {
     const schema = Joi.number().required().min(1).max(1000);
     const result = schema.validate(_room);
@@ -42,7 +43,10 @@ function registerChatHandler(io: Io, socket: IoSocket) {
       }
     }
 
-    io.to(roomName).emit("message", new GlobalMessage(message));
+    io.to(roomName).emit(
+      "message",
+      new GlobalMessage(message, client.characterName)
+    );
   };
 
   socket.on("join", join);

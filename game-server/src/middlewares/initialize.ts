@@ -75,14 +75,18 @@ async function initialize(
   const existingClient = ClientManager.getClientByUsername(user.username);
 
   if (existingClient?.isConnected) {
-    return next(new Error("This account is already in game"))
+    return next(new Error("This account is already in game"));
   }
-  
-  // reinstantiate Client if previous characterId is different than current
-  console.log(character._id);
+
+  // existing character does not match currently selected character
   // if (existingClient?.characterId !== character._id) {
-    // 
+  //   existingClient = ClientManager.createClient(user.username, character.name);
   // }
+
+  const client =
+    existingClient ?? ClientManager.createClient(user.username, character.name);
+
+  socket.data.client = client;
 
   next();
 }
