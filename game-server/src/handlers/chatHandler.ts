@@ -22,10 +22,9 @@ function registerChatHandler(io: Io, socket: IoSocket) {
   };
 
   const send = (_message: string) => {
-    console.log(_message);
     const schema = Joi.string().required().min(1).max(128);
     const result = schema.validate(_message);
-    console.log(result);
+
     if (result.error) {
       return socket.emit(
         "message",

@@ -1,21 +1,10 @@
-import { Socket } from "socket.io";
-import {
-  ClientToServerEvents,
-  InterServerEvents,
-  ServerToClientEvents,
-  SocketData,
-} from "../../../common/events/gameServerEvents.js";
 import User from "../db/models/user.js";
 import Joi from "joi";
 import Character from "../db/models/character.js";
+import { IoSocket } from "../index.js";
 
 async function authenticate(
-  socket: Socket<
-    ClientToServerEvents,
-    ServerToClientEvents,
-    InterServerEvents,
-    SocketData
-  >,
+  socket: IoSocket,
   next: (err?: ExtendedError | undefined) => void
 ) {
   const { auth } = socket.handshake;
@@ -74,6 +63,7 @@ async function authenticate(
     // err.data = { content: "Additional details" };
     return next(err);
   }
+  console.log({ authenticated: true });
 
   socket.emit("character", character);
 
