@@ -41,10 +41,10 @@ async function initialize(
   const fetchUserPromise = User.findBySessionId(sessionId);
   const fetchCharacterPromise = Character.findByName(characterName);
 
-  const user = await fetchUserPromise;
+  const userWithId = await fetchUserPromise;
   const characterWithId = await fetchCharacterPromise;
 
-  if (user === null) {
+  if (userWithId === null) {
     const err: ExtendedError = new Error("User not found");
     console.log("ERROR", err.message);
     // err.data = { content: "Additional details" };
@@ -58,7 +58,7 @@ async function initialize(
     return next(err);
   }
 
-  if (characterWithId.userId !== user._id.toString()) {
+  if (characterWithId.userId !== userWithId._id.toString()) {
     const err: ExtendedError = new Error("What are you trying to do? ._.");
     console.log("ERROR", err.message);
     // err.data = { content: "Additional details" };
@@ -66,24 +66,21 @@ async function initialize(
   }
 
   const existingClient = ClientManager.getClientByUsername(
-    user.account.username
+    userWithId.account.username
   );
 
-  if (existingClient?.isConnected) {
-    return next(new Error("This account is already in game"));
+  if (existingClient && existingClient.character._id !== characterWithId._id) {
+    // if existing character does not match currently selected character
+    // reinstantiate the client
   }
 
-  // if existing character does not match currently selected character
-  // reinstantiate the client
-  // if (existingClient && existingClient?.characterId !== character._id) {}
-
-  // OPTIMIZE
   const { _id, ...character } = characterWithId;
   socket.emit("character", character);
 
   socket.data.isAuthenticated = true;
 
-  const client = existingClient ?? ClientManager.createClient(user, character);
+  const client =
+    existingClient ?? ClientManager.createClient(userWithId, characterWithId);
 
   socket.data.client = client;
 

@@ -51,7 +51,7 @@ io.on("connection", (socket) => {
     // socket.emit("connectionError");
   });
 
-  console.log(`${socket.data.client.characterName} connected`);
+  console.log(`${client.characterName} (${client.username}) connected`);
 
   socket.onAny((event, ...args) => {
     console.log(event, args);
@@ -62,6 +62,9 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", (reason, description) => {
     client.setDisconnected();
+    console.log(
+      `${client.characterName} (${client.username}) disconnected (${reason})`
+    );
   });
 });
 
