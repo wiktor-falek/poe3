@@ -65,22 +65,22 @@ async function initialize(
     return next(err);
   }
 
-  const existingClient = ClientManager.getClientByUsername(
-    userWithId.account.username
-  );
+  // use previously client created in recent session
+  let client = ClientManager.getClientByUsername(userWithId.account.username);
 
-  if (existingClient && existingClient.character._id !== characterWithId._id) {
-    // if existing character does not match currently selected character
-    // reinstantiate the client
+  if (client) {
+    client.socketId = socket.id; // update socketId which changed after reconnect
+  }
+  // if existing character does not match currently selected character
+  // reinstantiate the client
+  if (!client || client.character._id !== characterWithId._id) {
+    client = ClientManager.createClient(userWithId, characterWithId, socket);
   }
 
   const { _id, ...character } = characterWithId;
   socket.emit("character", character);
 
   socket.data.isAuthenticated = true;
-
-  const client =
-    existingClient ?? ClientManager.createClient(userWithId, characterWithId);
 
   socket.data.client = client;
 

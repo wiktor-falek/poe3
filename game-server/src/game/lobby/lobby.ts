@@ -1,12 +1,14 @@
 import { nanoid } from "nanoid";
-import { IoSocket } from "../../index.js";
 import Client from "../../components/client/client.js";
+import { ObjectId } from "mongodb";
 
 const LOBBY_MAX_SIZE = 4;
 
+type CharacterId = ObjectId;
+
 class Lobby {
   id: string;
-  members: Map<string, Client>; // characterId
+  members: Map<CharacterId, Client>;
   name: string;
   constructor(name: string) {
     this.id = nanoid();
@@ -14,12 +16,11 @@ class Lobby {
     this.name = name;
   }
 
-  join() {
+  join(client: Client) {
     if (this.size === LOBBY_MAX_SIZE) {
       return false;
     }
-    //
-    // this.members.set("")
+    this.members.set(client.character._id, client);
     return true;
   }
 

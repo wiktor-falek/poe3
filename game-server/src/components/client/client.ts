@@ -1,16 +1,23 @@
 import { WithId } from "mongodb";
 import { StaticCharacter, User } from "../../../../common/types/index.js";
+import { IoSocket } from "../../index.js";
 
 class Client {
   #user: WithId<User>;
   #character: WithId<StaticCharacter>;
   #isConnected: boolean;
   #disconnectTimestamp: number | null;
-  constructor(user: WithId<User>, character: WithId<StaticCharacter>) {
+  #socketId: string;
+  constructor(
+    user: WithId<User>,
+    character: WithId<StaticCharacter>,
+    socket: IoSocket
+  ) {
     this.#user = user;
     this.#character = character;
     this.#isConnected = false;
     this.#disconnectTimestamp = null;
+    this.#socketId = socket.id;
   }
 
   get character() {
@@ -31,6 +38,14 @@ class Client {
 
   get disconnectedTimestamp() {
     return this.#disconnectTimestamp;
+  }
+
+  get socketId() {
+    return this.#socketId;
+  }
+
+  set socketId(socketId: string) {
+    this.#socketId = socketId;
   }
 
   setConnected() {

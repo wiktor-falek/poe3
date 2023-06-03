@@ -1,7 +1,7 @@
 import { Err } from "resultat";
 import { CronJob } from "cron";
 import Lobby from "./lobby.js";
-import { IoSocket } from "../../index.js";
+import Client from "../../components/client/client.js";
 
 class LobbyManager {
   static readonly lobbies: Map<string, Lobby> = new Map();
@@ -12,12 +12,12 @@ class LobbyManager {
     return lobby;
   }
 
-  static joinLobby(lobbyId: string) {
+  static joinLobby(lobbyId: string, client: Client) {
     const targetLobby = this.lobbies.get(lobbyId);
     if (targetLobby === undefined) {
       return undefined;
     }
-    targetLobby.join();
+    targetLobby.join(client);
     return targetLobby;
   }
 
