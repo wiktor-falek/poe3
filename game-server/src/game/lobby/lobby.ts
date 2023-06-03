@@ -1,29 +1,45 @@
 import { nanoid } from "nanoid";
 import Client from "../../components/client/client.js";
-import { ObjectId } from "mongodb";
+import { Err, Ok } from "resultat";
 
 const LOBBY_MAX_SIZE = 4;
 
 class Lobby {
   id: string;
-  members: { [lobbyId: string]: Client };
+  #members: { [characterId: string]: Client | undefined };
   name: string;
+  size: number;
   constructor(name: string) {
     this.id = nanoid();
-    this.members = {};
+    this.#members = {};
     this.name = name;
+    this.size = 0;
   }
 
   join(client: Client) {
     if (this.size === LOBBY_MAX_SIZE) {
-      return false;
+      return Err("Lobby is full");
     }
-    this.members[client.character._id.toString()] = client;
-    return true;
+
+    if (this.#members[client.character._id.toString()] !== undefined) {
+      return Err("Already in the lobby");
+    }
+
+    this.#members[client.character._id.toString()] = client;
+    this.size++;
+    return Ok(1);
   }
 
-  get size(): number {
-    return Object.keys(this.members).length;
+  leave(client: Client) {
+    const isInLobby =
+      this.#members[client.character._id.toString()] !== undefined;
+
+    if (!isInLobby) {
+      return false;
+    }
+    delete this.#members[client.character._id.toString()];
+    this.size--;
+    return true;
   }
 }
 

@@ -33,7 +33,7 @@ onMounted(() => {
       <div class="lobby" v-for="lobby in gameServer.state.lobbies">
         <div class="">
           {{ lobby.name }}
-          {{ Object.keys(lobby.members).length }} / 4
+          {{ lobby.size }} / 4
         </div>
         <button @click="joinLobby(lobby.id)">Join</button>
       </div>

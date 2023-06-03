@@ -21,9 +21,9 @@ class LobbyManager {
 
     // TODO: check if client is already in the lobby and return Err
 
-    const ok = lobby.join(client);
-    if (!ok) {
-      return Err("Lobby is full");
+    const result = lobby.join(client);
+    if (!result.ok) {
+      return result;
     }
 
     return Ok(lobby);
