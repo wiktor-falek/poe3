@@ -11,6 +11,7 @@ import type {
 } from "../../common/events/gameServerEvents.js";
 import type Client from "./components/client/client.js";
 import assert from "./utils/assert.js";
+import registerLobbyHandler from "./handlers/lobbyHandler.js";
 
 await Mongo.connect();
 
@@ -49,9 +50,15 @@ io.on("connection", (socket) => {
   socket.on("error", (err) => {
     // socket.emit("connectionError");
   });
-  console.log("connection");
+
+  console.log(`${socket.data.client.characterName} connected`);
+
+  socket.onAny((event, ...args) => {
+    console.log(event, args);
+  });
 
   registerChatHandler(io, socket, client);
+  registerLobbyHandler(io, socket, client);
 
   socket.on("disconnect", (reason, description) => {
     client.setDisconnected();

@@ -86,7 +86,7 @@ interface CharacterEquipment {
 
 // character data from the database
 interface StaticCharacter {
-  username: string;
+  userId: string;
   name: string;
   class: CharacterClass;
   silver: number;
@@ -94,6 +94,20 @@ interface StaticCharacter {
   equipment: CharacterEquipment;
   inventory: Array<Item | null>;
   progression: CharacterProgression;
+}
+
+interface User {
+  account: {
+    username: string;
+    email: string;
+    confirmedEmail: boolean; // or somethign else idk
+    registrationTimestamp: number;
+    sessionId: string;
+    characterLimit: number;
+    hash: string;
+  };
+  sharedStash: Array<null>;
+  characters: Array<StaticCharacter>; // WithId<StaticCharacter> but whatever for now
 }
 
 // character data that gets extended with properties that are dynamically calculated

@@ -6,17 +6,19 @@ import { IoSocket } from "../../index.js";
 class LobbyManager {
   static readonly lobbies: Map<string, Lobby> = new Map();
 
-  static createLobby(): Lobby {
-    const lobby = new Lobby();
+  static createLobby(name: string): Lobby {
+    const lobby = new Lobby(name);
+    this.lobbies.set(lobby.id, lobby);
     return lobby;
   }
 
-  static joinLobby(socket: IoSocket, lobbyId: string) {
+  static joinLobby(lobbyId: string) {
     const targetLobby = this.lobbies.get(lobbyId);
     if (targetLobby === undefined) {
-      return Err("Lobby does not exist");
+      return undefined;
     }
-    targetLobby.join(socket);
+    targetLobby.join();
+    return targetLobby;
   }
 
   static get allLobbies(): Array<Lobby> {

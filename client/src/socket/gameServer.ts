@@ -8,14 +8,19 @@ import getCookie from "../utils/getCookie";
 import useCharacterStore from "../stores/characterStore";
 import { StaticCharacter } from "../../../common/types";
 import { Message } from "../../../game-server/src/components/message";
+import Lobby from "../../../game-server/src/game/lobby/lobby";
 
 interface State {
   connected: boolean;
   messageEvents: Array<Message>;
+  lobbies: Array<Lobby>;
+  lobby?: Lobby;
 }
+
 export const state: State = reactive({
   connected: false,
   messageEvents: [],
+  lobbies: [],
 });
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
@@ -32,9 +37,13 @@ export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
   }
 );
 
+socket.onAny((event, ...args) => {
+  console.log(event, JSON.stringify(args, null, 2));
+});
+
 socket.on("connect", () => {
   state.connected = true;
-  socket.emit("join", 1);
+  socket.emit("chat:join", 1);
 });
 
 socket.on("disconnect", () => {
@@ -46,6 +55,18 @@ socket.on("character", (character: StaticCharacter) => {
   characterStore.setStaticCharacter(character);
 });
 
-socket.on("message", (message) => {
+socket.on("chat:message", (message) => {
   state.messageEvents.push(message);
+});
+
+socket.on("lobby:all", (lobbies) => {
+  state.lobbies = lobbies;
+});
+
+socket.on("lobby:new", (lobby) => {
+  state.lobbies.push(lobby);
+});
+
+socket.on("lobby:data", (lobby) => {
+  state.lobby = lobby;
 });

@@ -9,7 +9,7 @@ function registerChatHandler(io: Io, socket: IoSocket, client: Client) {
     const result = schema.validate(_room);
     if (result.error) {
       return socket.emit(
-        "message",
+        "chat:message",
         new ServerMessage("Invalid argument 'room'")
       );
     }
@@ -19,7 +19,10 @@ function registerChatHandler(io: Io, socket: IoSocket, client: Client) {
     const roomName = `global:${room}`;
 
     socket.join(roomName);
-    socket.emit("message", new ServerMessage(`You joined global room ${room}`));
+    socket.emit(
+      "chat:message",
+      new ServerMessage(`You joined global room ${room}`)
+    );
   };
 
   const send = (_message: string) => {
@@ -28,7 +31,7 @@ function registerChatHandler(io: Io, socket: IoSocket, client: Client) {
 
     if (result.error) {
       return socket.emit(
-        "message",
+        "chat:message",
         new ServerMessage("Invalid argument 'message'")
       );
     }
@@ -44,13 +47,13 @@ function registerChatHandler(io: Io, socket: IoSocket, client: Client) {
     }
 
     io.to(roomName).emit(
-      "message",
+      "chat:message",
       new GlobalMessage(message, client.characterName)
     );
   };
 
-  socket.on("join", join);
-  socket.on("send", send);
+  socket.on("chat:join", join);
+  socket.on("chat:send", send);
 }
 
 export default registerChatHandler;

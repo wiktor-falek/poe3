@@ -3,13 +3,13 @@ import Joi from "joi";
 import Character from "../db/models/character.js";
 import { IoSocket } from "../index.js";
 import ClientManager from "../components/client/clientManager.js";
+import { StaticCharacter } from "../../../common/types/index.js";
 
 async function initialize(
   socket: IoSocket,
   next: (err?: ExtendedError | undefined) => void
 ) {
   const { auth } = socket.handshake;
-  console.log("authenticating", auth);
 
   const schema = Joi.object({
     sessionId: Joi.string()
@@ -42,7 +42,7 @@ async function initialize(
   const fetchCharacterPromise = Character.findByName(characterName);
 
   const user = await fetchUserPromise;
-  const character = await fetchCharacterPromise;
+  const characterWithId = await fetchCharacterPromise;
 
   if (user === null) {
     const err: ExtendedError = new Error("User not found");
@@ -51,40 +51,39 @@ async function initialize(
     return next(err);
   }
 
-  if (character === null) {
+  if (characterWithId === null) {
     const err: ExtendedError = new Error("Character not found");
     console.log("ERROR", err.message);
     // err.data = { content: "Additional details" };
     return next(err);
   }
 
-  if (character.userId !== user._id.toString()) {
+  if (characterWithId.userId !== user._id.toString()) {
     const err: ExtendedError = new Error("What are you trying to do? ._.");
     console.log("ERROR", err.message);
     // err.data = { content: "Additional details" };
     return next(err);
   }
-  console.log({ authenticated: true });
 
-  // OPTIMIZE
-  const { _id, ...characterData } = character;
-  socket.emit("character", characterData);
-
-  socket.data.isAuthenticated = true;
-
-  const existingClient = ClientManager.getClientByUsername(user.username);
+  const existingClient = ClientManager.getClientByUsername(
+    user.account.username
+  );
 
   if (existingClient?.isConnected) {
     return next(new Error("This account is already in game"));
   }
 
-  // existing character does not match currently selected character
-  // if (existingClient?.characterId !== character._id) {
-  //   existingClient = ClientManager.createClient(user.username, character.name);
-  // }
+  // if existing character does not match currently selected character
+  // reinstantiate the client
+  // if (existingClient && existingClient?.characterId !== character._id) {}
 
-  const client =
-    existingClient ?? ClientManager.createClient(user.account.username, character.name);
+  // OPTIMIZE
+  const { _id, ...character } = characterWithId;
+  socket.emit("character", character);
+
+  socket.data.isAuthenticated = true;
+
+  const client = existingClient ?? ClientManager.createClient(user, character);
 
   socket.data.client = client;
 

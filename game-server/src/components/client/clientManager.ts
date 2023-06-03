@@ -1,3 +1,4 @@
+import { StaticCharacter, User } from "../../../../common/types/index.js";
 import Client from "./client.js";
 
 class ClientManager {
@@ -8,8 +9,8 @@ class ClientManager {
     return client;
   }
 
-  static createClient(username: string, characterName: string): Client {
-    const client = new Client(username, characterName);
+  static createClient(user: User, character: StaticCharacter): Client {
+    const client = new Client(user, character);
     return client;
   }
 }

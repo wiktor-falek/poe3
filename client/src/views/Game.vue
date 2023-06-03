@@ -4,6 +4,7 @@ import { onUnmounted, onMounted, onBeforeMount, ref, watch } from "vue";
 import * as gameServer from "../socket/gameServer";
 import Chat from "../components/Chat.vue";
 import CharacterOverview from "../components/CharacterOverview.vue";
+import Lobby from "../components/Lobby.vue";
 
 const router = useRouter();
 
@@ -60,6 +61,7 @@ onUnmounted(() => {
 
   <main v-else :class="{ loaded: gameServer.state.connected }">
     <!-- <CharacterOverview /> -->
+    <Lobby />
     <Chat class="chat" />
   </main>
 </template>

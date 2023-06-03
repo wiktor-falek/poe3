@@ -10,7 +10,7 @@ function send() {
   if (!message.value) {
     return;
   }
-  gameServer.socket.emit("send", message.value);
+  gameServer.socket.emit("chat:send", message.value);
   message.value = "";
 }
 </script>

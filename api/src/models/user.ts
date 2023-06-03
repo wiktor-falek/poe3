@@ -18,7 +18,7 @@ const userSchema = Joi.object({
   social: Joi.object({
     friends: Joi.array().default([]),
   }),
-  shared_stash: Joi.array().default(new Array(20).fill(null)),
+  sharedStash: Joi.array().default(new Array(20).fill(null)),
 });
 
 class User {

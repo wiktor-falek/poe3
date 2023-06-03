@@ -1,22 +1,20 @@
 import { Message } from "../../game-server/src/components/message";
+import type Lobby from "../../game-server/src/game/lobby/lobby";
 
-// global namespace types
 export interface ClientToServerEvents {
-  // "/chat" namespace types
-  send: (content: string) => void;
-  join: (room: number) => void;
-
-  // "/game" namespace types
+  "chat:send": (content: string) => void;
+  "chat:join": (room: number) => void;
   "lobby:getAll": () => void;
+  "lobby:create": (lobbyName: string) => void;
+  "lobby:join": (lobbyId: string) => void;
 }
 
 export interface ServerToClientEvents {
-  // "/chat" namespace types
-  message: (message: Message) => void;
-
-  // "/game"
   character: (character: any) => void;
-  "lobby:all": (lobbies: Array<any>) => void;
+  "chat:message": (message: Message) => void;
+  "lobby:all": (lobbies: Array<Lobby>) => void;
+  "lobby:data": (lobby: Lobby) => void;
+  "lobby:new": (lobby: Lobby) => void;
 }
 
 export interface InterServerEvents {

@@ -1,32 +1,44 @@
+import { StaticCharacter, User } from "../../../../common/types/index.js";
+
 class Client {
   username: string;
-  // userId: string;
+  // #userId: string;
+  #character: StaticCharacter;
   characterName: string;
-  // characterId: string;
-  isConnected: boolean;
-  disconnectTimestamp: number | null;
+  // #characterId: string;
+  #isConnected: boolean;
+  #disconnectTimestamp: number | null;
   constructor(
-    username: string,
+    user: User,
     // userId: string,
-    characterName: string
-    // characterId: string,
+    character: StaticCharacter
   ) {
-    this.username = username;
-    // this.userId = userId;
-    this.characterName = characterName;
-    // this.characterId = characterId;
-    this.isConnected = false;
-    this.disconnectTimestamp = null;
+    // this.#userId = userId;
+    // this.#characterId = characterId;
+    this.#character = character;
+    this.#isConnected = false;
+    this.#disconnectTimestamp = null;
+    
+    this.username = user.account.username;
+    this.characterName = character.name;
+  }
+
+  // get characterName() {
+  // return this.character
+  // }
+
+  get isConnected() {
+    return this.#isConnected;
   }
 
   setConnected() {
-    this.disconnectTimestamp = null;
-    this.isConnected = true;
+    this.#disconnectTimestamp = null;
+    this.#isConnected = true;
   }
 
   setDisconnected() {
-    this.disconnectTimestamp = Date.now();
-    this.isConnected = false;
+    this.#disconnectTimestamp = Date.now();
+    this.#isConnected = false;
   }
 }
 
