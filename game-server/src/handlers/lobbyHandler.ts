@@ -11,12 +11,18 @@ function registerLobbyHandler(io: Io, socket: IoSocket, client: Client) {
   const join = (_lobbyId: string) => {
     // TODO: validate
     const lobbyId = _lobbyId; // schema.validate(_lobbyId);
-    const lobby = LobbyManager.joinLobby(lobbyId, client);
-    if (lobby === undefined) {
-      // socket.emit error
-      return; 
+    const result = LobbyManager.joinLobby(lobbyId, client);
+    if (!result.ok) {
+      // socket.emit error `${result.err}`
+      return;
     }
+
+    const lobby = result.val;
+
+    console.log(LobbyManager);
+    console.log(lobby);
     socket.emit("lobby:data", lobby);
+    socket.emit("lobby:set", lobby);
   };
 
   const create = (_lobbyName: string) => {
@@ -24,7 +30,7 @@ function registerLobbyHandler(io: Io, socket: IoSocket, client: Client) {
     const lobbyName = _lobbyName; // schema.validate(_name)
 
     const lobby = LobbyManager.createLobby(lobbyName);
-    io.emit("lobby:new", lobby);
+    io.emit("lobby:set", lobby);
     // put the user in the new lobby and emit it
   };
 

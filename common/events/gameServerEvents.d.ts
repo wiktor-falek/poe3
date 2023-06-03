@@ -12,9 +12,9 @@ export interface ClientToServerEvents {
 export interface ServerToClientEvents {
   character: (character: any) => void;
   "chat:message": (message: Message) => void;
-  "lobby:all": (lobbies: Array<Lobby>) => void;
+  "lobby:all": (lobbies: { [lobbyId: string]: Lobby }) => void;
   "lobby:data": (lobby: Lobby) => void;
-  "lobby:new": (lobby: Lobby) => void;
+  "lobby:set": (lobby: Lobby) => void;
 }
 
 export interface InterServerEvents {

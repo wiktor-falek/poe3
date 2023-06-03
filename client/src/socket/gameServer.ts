@@ -13,14 +13,14 @@ import Lobby from "../../../game-server/src/game/lobby/lobby";
 interface State {
   connected: boolean;
   messageEvents: Array<Message>;
-  lobbies: Array<Lobby>;
+  lobbies: { [lobbyId: string]: Lobby };
   lobby?: Lobby;
 }
 
 export const state: State = reactive({
   connected: false,
   messageEvents: [],
-  lobbies: [],
+  lobbies: {},
 });
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
@@ -63,8 +63,8 @@ socket.on("lobby:all", (lobbies) => {
   state.lobbies = lobbies;
 });
 
-socket.on("lobby:new", (lobby) => {
-  state.lobbies.push(lobby);
+socket.on("lobby:set", (lobby) => {
+  state.lobbies[lobby.id] = lobby;
 });
 
 socket.on("lobby:data", (lobby) => {
