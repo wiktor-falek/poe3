@@ -8,7 +8,9 @@ import getCookie from "../utils/getCookie";
 import useCharacterStore from "../stores/characterStore";
 import { StaticCharacter } from "../../../common/types";
 import { Message } from "../../../game-server/src/components/message";
-import Lobby, { MembersOnlyLobbyData } from "../../../game-server/src/game/lobby/lobby";
+import Lobby, {
+  MembersOnlyLobbyData,
+} from "../../../game-server/src/game/lobby/lobby";
 
 interface State {
   connected: boolean;
@@ -69,6 +71,5 @@ socket.on("lobby:set", (lobby) => {
 });
 
 socket.on("lobby:data", (lobby) => {
-  console.log({lobby});
-  state.lobby = lobby
+  state.lobby = lobby;
 });

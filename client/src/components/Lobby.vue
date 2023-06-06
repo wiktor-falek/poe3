@@ -26,6 +26,7 @@ function leaveLobby() {
 }
 
 onMounted(() => {
+  gameServer.socket.emit("lobby:getCurrent");
   refresh();
 });
 </script>

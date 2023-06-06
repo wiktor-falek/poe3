@@ -7,15 +7,17 @@ import { Err } from "resultat";
 function registerLobbyHandler(io: Io, socket: IoSocket, client: Client) {
   const getAll = () => {
     socket.emit("lobby:all", LobbyManager.lobbies);
+  };
 
-    // send members only lobby data if client is already in one
-    // TODO: this should be moved to a separate emit, to avoid running this on each refresh
+  const getCurrent = () => {
     const lobby = LobbyManager.currentLobby(client);
     if (lobby !== undefined) {
       socket.emit("lobby:data", {
         ...lobby,
         members: lobby.members,
       });
+    } else {
+      socket.emit("lobby:data", null);
     }
   };
 
@@ -72,13 +74,14 @@ function registerLobbyHandler(io: Io, socket: IoSocket, client: Client) {
     }
 
     const lobby = LobbyManager.createLobby(lobbyName);
-    
+
     join(lobby.id);
-    
+
     io.emit("lobby:set", lobby);
   };
 
   socket.on("lobby:getAll", getAll);
+  socket.on("lobby:getCurrent", getCurrent);
   socket.on("lobby:join", join);
   socket.on("lobby:leave", leave);
   socket.on("lobby:create", create);
