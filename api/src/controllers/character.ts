@@ -6,7 +6,7 @@ async function createCharacter(req: Request, res: Response) {
   const characterClass = req.body.class;
   const name = req.body.name;
 
-  const BLACKLISTED_NAMES = ["SERVER"];
+  const BLACKLISTED_NAMES = ["SERVER", "ERROR", "SYSTEM"];
 
   const schema = Joi.object().keys({
     class: Joi.string().required().min(3).max(16),
