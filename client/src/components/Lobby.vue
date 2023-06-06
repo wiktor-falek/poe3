@@ -21,6 +21,10 @@ function joinLobby(lobbyId: string) {
   gameServer.socket.emit("lobby:join", lobbyId);
 }
 
+function leaveLobby() {
+  gameServer.socket.emit("lobby:leave");
+}
+
 onMounted(() => {
   refresh();
 });
@@ -28,25 +32,44 @@ onMounted(() => {
 
 <template>
   <div class="container">
-    <div class="lobbies">
+    <div class="current-lobby" v-if="gameServer.state.lobby !== null">
+      Lobby id: {{ gameServer.state.lobby.id }}
+      <div class="current-lobby__members">
+        <div
+          class="current-lobby__members__member"
+          v-for="member in gameServer.state.lobby.members"
+        >
+          <p>
+            {{ member.name }}
+          </p>
+          <div class="member-data">
+            <p class="member-data__level">Level {{ member.level }}</p>
+            <p class="member-data__class">{{ member.class }}</p>
+          </div>
+        </div>
+      </div>
+      <button @click="leaveLobby">Leave</button>
+    </div>
+    <div class="lobbies" v-else>
       Lobbies
       <div class="lobby" v-for="lobby in gameServer.state.lobbies">
         <div class="">
           {{ lobby.name }}
           {{ lobby.size }} / 4
         </div>
-        <button @click="joinLobby(lobby.id)">Join</button>
+        <button
+          @click="joinLobby(lobby.id)"
+          :disabled="gameServer.state.lobby !== null"
+        >
+          Join
+        </button>
       </div>
+      <div class="create-lobby">
+        <input type="text" v-model="lobbyName" />
+        <button @click="createLobby">Create Lobby</button>
+      </div>
+      <button @click="refresh">Refresh</button>
     </div>
-    <div>
-      <input type="text" v-model="lobbyName" />
-      <button @click="createLobby">Create Lobby</button>
-    </div>
-    <button @click="refresh">Refresh</button>
-  </div>
-
-  <div v-if="gameServer.state.lobby">
-    Current lobby: {{ gameServer.state.lobby.id }}
   </div>
 </template>
 
@@ -77,5 +100,42 @@ onMounted(() => {
   border: 2px solid gray;
   border-radius: 10px;
   padding: 10px;
+}
+
+.create-lobby {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.current-lobby {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.current-lobby__members {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.current-lobby__members__member {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid gray;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.current-lobby__members * p {
+  margin: 0;
+}
+
+.member-data {
+  display: flex;
+}
+.member-data__class::first-letter {
+  text-transform: uppercase;
 }
 </style>

@@ -1,6 +1,8 @@
 <template>
   <main>
-    <h1 class="logo">*Game Logo*</h1>
+    <header>
+      <div class="logo">PoE3</div>
+    </header>
 
     <section>
       <h2>
@@ -39,6 +41,10 @@ main {
   max-width: 1280px;
   margin: 0 auto;
   padding: 10px;
+}
+
+.logo {
+  font-size: 2rem;
 }
 
 section {

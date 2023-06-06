@@ -6,9 +6,14 @@ import Client from "../../components/client/client.js";
 class LobbyManager {
   static readonly lobbies: { [lobbyId: string]: Lobby } = {};
 
+  static currentLobby(client: Client) {
+    return Object.values(this.lobbies).find((lobby) =>
+      lobby.clientIsInLobby(client)
+    );
+  }
+
   static createLobby(name: string): Lobby {
     const lobby = new Lobby(name);
-    console.log({ id: lobby.id, lobby });
     this.lobbies[lobby.id] = lobby;
     return lobby;
   }
@@ -19,7 +24,10 @@ class LobbyManager {
       return Err("Lobby does not exist");
     }
 
-    // TODO: check if client is already in the lobby and return Err
+    const existingLobby = this.currentLobby(client);
+    if (existingLobby !== undefined) {
+      return Err("Already in a lobby");
+    }
 
     const result = lobby.join(client);
     if (!result.ok) {
@@ -27,10 +35,6 @@ class LobbyManager {
     }
 
     return Ok(lobby);
-  }
-
-  static get allLobbies() {
-    return this.lobbies;
   }
 
   static deleteEmptyLobbies() {
