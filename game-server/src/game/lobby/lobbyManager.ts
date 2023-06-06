@@ -1,5 +1,4 @@
 import { Err, Ok } from "resultat";
-import { CronJob } from "cron";
 import Lobby from "./lobby.js";
 import Client from "../../components/client/client.js";
 
@@ -16,6 +15,10 @@ class LobbyManager {
     const lobby = new Lobby(name);
     this.lobbies[lobby.id] = lobby;
     return lobby;
+  }
+
+  static deleteLobby(lobbyId: string) {
+    delete this.lobbies[lobbyId];
   }
 
   static joinLobby(lobbyId: string, client: Client) {
@@ -36,14 +39,6 @@ class LobbyManager {
 
     return Ok(lobby);
   }
-
-  static deleteEmptyLobbies() {
-    // iterate over lobbies, delete if lobby.size === 0
-  }
 }
-
-const cronJob = new CronJob("*/5 * * * *", () => {
-  LobbyManager.deleteEmptyLobbies();
-}).start();
 
 export default LobbyManager;

@@ -52,13 +52,20 @@ function registerLobbyHandler(io: Io, socket: IoSocket, client: Client) {
 
     const success = lobby.leave(client);
 
-    if (success) {
-      socket.leave(`lobby:${lobby.id}`);
-      socket.emit("lobby:data", null);
-      // TODO: this could be a separate ServerToClient emit 'lobby:leave' => (name: string) => void;
-      // if the lobby data gets too big
-      const room = `lobby:${lobby.id}`;
-      socket.to(room).emit("lobby:data", { ...lobby, members: lobby.members });
+    if (!success) {
+      return;
+    }
+
+    socket.leave(`lobby:${lobby.id}`);
+    socket.emit("lobby:data", null);
+
+    // TODO: this could be a separate ServerToClient emit 'lobby:member-leave' => (name: string) => void;
+    const room = `lobby:${lobby.id}`;
+    socket.to(room).emit("lobby:data", { ...lobby, members: lobby.members });
+
+    if (lobby.size === 0) {
+      LobbyManager.deleteLobby(lobby.id);
+      io.emit("lobby:delete", lobby.id);
     }
   };
 

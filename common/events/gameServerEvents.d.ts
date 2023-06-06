@@ -16,8 +16,9 @@ export interface ServerToClientEvents {
   character: (character: any) => void;
   "chat:message": (message: Message) => void;
   "lobby:all": (lobbies: { [lobbyId: string]: Lobby }) => void;
-  "lobby:set": (lobby: Lobby) => void;
   "lobby:data": (lobby: MembersOnlyLobbyData | null) => void;
+  "lobby:set": (lobby: Lobby) => void;
+  "lobby:delete": (lobbyId: string) => void;
 }
 
 export interface InterServerEvents {

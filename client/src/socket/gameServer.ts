@@ -66,10 +66,14 @@ socket.on("lobby:all", (lobbies) => {
   state.lobbies = lobbies;
 });
 
+socket.on("lobby:data", (lobby) => {
+  state.lobby = lobby;
+});
+
 socket.on("lobby:set", (lobby) => {
   state.lobbies[lobby.id] = lobby;
 });
 
-socket.on("lobby:data", (lobby) => {
-  state.lobby = lobby;
+socket.on("lobby:delete", (lobbyId) => {
+  delete state.lobbies[lobbyId];
 });
