@@ -5,16 +5,65 @@ import useCharacterStore from "../stores/characterStore";
 
 const characterStore = useCharacterStore();
 
-const message: Ref<string> = ref("");
+const content: Ref<string> = ref("");
 
 const isCollapsed: Ref<boolean> = ref(false);
 
+type Commands = { [key: string]: Function | undefined };
+
+const clientSideCommands: Commands = {
+  help: () => {
+    gameServer.state.messages.push({
+      sender: "SYSTEM",
+      group: "SYSTEM",
+      content:
+        "/help - display this message\n" + "/clear - clear all the messages\n",
+    });
+  },
+  clear: () => {
+    gameServer.state.messages.splice(0); // same as set to [] but reactive
+  },
+};
+
+const serverSideCommands: Commands = {
+  global: (room: string) => {
+    try {
+      gameServer.socket.emit("chat:join", parseInt(room));
+    } catch (e) {
+      console.log("ERROR: expected integer input, got:", room, "instead");
+    }
+  },
+};
+
 function send() {
-  if (!message.value) {
+  const message = content.value.trim();
+
+  if (!message) {
     return;
   }
-  gameServer.socket.emit("chat:send", message.value);
-  message.value = "";
+
+  if (message.startsWith("/")) {
+    const command = message.slice(1).split(" ")[0];
+    const args = message.split(" ").slice(1);
+    console.log({ command, args });
+
+    const cb =
+      clientSideCommands[`${command}`] ?? serverSideCommands[`${command}`];
+
+    if (cb === undefined) {
+      gameServer.state.messages.push({
+        sender: "ERROR",
+        group: "SYSTEM",
+        content: `Invalid command '/${command}'\nUse /help to see the list of commands`,
+      });
+    } else {
+      cb(...args);
+    }
+  } else {
+    gameServer.socket.emit("chat:send", message);
+  }
+
+  content.value = "";
 }
 </script>
 
@@ -24,11 +73,13 @@ function send() {
     <div class="accordion" :class="{ collapsed: isCollapsed }">
       <div class="top">
         <div class="messages">
-          <p class="message" v-for="message in gameServer.state.messageEvents">
+          <p class="message" v-for="message in gameServer.state.messages">
             <span
               class="message__sender"
               :class="{
                 'message__sender--server': message.sender === 'SERVER',
+                'message__sender--system': message.sender === 'SYSTEM',
+                'message__sender--error': message.sender === 'ERROR',
                 'message__sender--current-character':
                   message.sender === characterStore.staticCharacter?.name,
               }"
@@ -43,7 +94,7 @@ function send() {
         type="text"
         maxlength="128"
         @keydown.enter="send"
-        v-model="message"
+        v-model="content"
       />
     </div>
   </div>
@@ -101,6 +152,7 @@ input {
 }
 
 .message {
+  white-space: pre;
   margin: 0;
 }
 
@@ -117,7 +169,15 @@ input {
 }
 
 .message__sender--server {
-  color: rgb(222, 98, 35);
+  color: rgb(233, 115, 56);
+}
+
+.message__sender--system {
+  color: rgb(48, 218, 102);
+}
+
+.message__sender--error {
+  color: rgb(223, 60, 60);
 }
 .message__sender--current-character {
   color: rgb(64, 135, 243);

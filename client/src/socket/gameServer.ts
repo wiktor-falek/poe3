@@ -14,14 +14,14 @@ import Lobby, {
 
 interface State {
   connected: boolean;
-  messageEvents: Array<Message>;
+  messages: Array<Message>;
   lobbies: { [lobbyId: string]: Lobby };
   lobby: MembersOnlyLobbyData | null;
 }
 
 export const state: State = reactive({
   connected: false,
-  messageEvents: [],
+  messages: [],
   lobbies: {},
   lobby: null,
 });
@@ -59,7 +59,7 @@ socket.on("character", (character: StaticCharacter) => {
 });
 
 socket.on("chat:message", (message) => {
-  state.messageEvents.push(message);
+  state.messages.push(message);
 });
 
 socket.on("lobby:all", (lobbies) => {
