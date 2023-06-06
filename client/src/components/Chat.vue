@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import { ref, Ref } from "vue";
 import * as gameServer from "../socket/gameServer";
+import useCharacterStore from "../stores/characterStore";
+
+const characterStore = useCharacterStore();
 
 const message: Ref<string> = ref("");
 
@@ -21,12 +24,19 @@ function send() {
     <div class="accordion" :class="{ collapsed: isCollapsed }">
       <div class="top">
         <div class="messages">
-          <div
-            class="message"
-            v-for="message in gameServer.state.messageEvents"
-          >
-            {{ message.sender }}: {{ message.content }}
-          </div>
+          <p class="message" v-for="message in gameServer.state.messageEvents">
+            <span
+              class="message__sender"
+              :class="{
+                'message__sender--server': message.sender === 'SERVER',
+                'message__sender--current-character':
+                  message.sender === characterStore.staticCharacter?.name,
+              }"
+              >{{ message.sender }}</span
+            >
+            <span class="message__separator">:&nbsp;</span>
+            <span class="message__content">{{ message.content }}</span>
+          </p>
         </div>
       </div>
       <input
@@ -62,7 +72,7 @@ function send() {
 .top {
   min-height: 200px;
   /* TODO: let user expand height by left click dragging */
-  max-height: 200px; 
+  max-height: 200px;
   border: 2px solid gray;
   background-color: rgb(45, 45, 45, 0.4);
   padding: 2px 4px;
@@ -86,8 +96,30 @@ input {
   overflow: hidden;
 }
 
-
 .collapsed {
   max-height: 0px !important;
+}
+
+.message {
+  margin: 0;
+}
+
+.message__sender {
+  color: rgb(221, 221, 221);
+  font-weight: bold;
+}
+
+.message__separator {
+}
+
+.message__content {
+  color: rgb(200, 200, 200);
+}
+
+.message__sender--server {
+  color: rgb(222, 98, 35);
+}
+.message__sender--current-character {
+  color: rgb(64, 135, 243);
 }
 </style>
