@@ -34,7 +34,8 @@ onMounted(() => {
 <template>
   <div class="container">
     <div class="current-lobby" v-if="gameServer.state.lobby !== null">
-      Lobby id: {{ gameServer.state.lobby.id }}
+      <p>Lobby name: {{ gameServer.state.lobby.name }}</p>
+      <p>Lobby id: {{ gameServer.state.lobby.id }}</p>
       <div class="current-lobby__members">
         <div
           class="current-lobby__members__member"
@@ -52,7 +53,7 @@ onMounted(() => {
       <button @click="leaveLobby">Leave</button>
     </div>
     <div class="lobbies" v-else>
-      Lobbies
+      <h4 class="title">Public Lobbies</h4>
       <div class="lobby" v-for="lobby in gameServer.state.lobbies">
         <div class="">
           {{ lobby.name }}
@@ -81,7 +82,7 @@ onMounted(() => {
   max-width: 1000px;
   justify-content: center;
   margin: auto;
-  padding: 20px;
+  padding: 10px;
   border: 2px solid gray;
   flex-direction: column;
   gap: 30px;
@@ -89,11 +90,21 @@ onMounted(() => {
 }
 
 .lobbies {
+  align-items: center;
   display: flex;
   flex-direction: column;
   gap: 5px;
   width: 100%;
 }
+
+button {
+  width: 200px;
+}
+
+.lobbies input {
+  height: 30px;
+}
+
 .lobby {
   display: flex;
   justify-content: space-between;
@@ -113,6 +124,10 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 25px;
+}
+
+.current-lobby > p {
+  margin: 0;
 }
 
 .current-lobby__members {
@@ -135,8 +150,13 @@ onMounted(() => {
 
 .member-data {
   display: flex;
+  gap: 5px;
 }
 .member-data__class::first-letter {
   text-transform: uppercase;
+}
+
+.title {
+  margin: 10px;
 }
 </style>
