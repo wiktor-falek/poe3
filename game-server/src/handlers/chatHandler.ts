@@ -18,7 +18,16 @@ function registerChatHandler(io: Io, socket: IoSocket, client: Client) {
 
     const roomName = `global:${room}`;
 
+    // leave other global rooms, because client is 
+    // allowed to only be in one global room at a time
+    for (const room of socket.rooms) {
+      if (room.startsWith("global:")) {
+        socket.leave(room);
+      }
+    }
+
     socket.join(roomName);
+
     socket.emit(
       "chat:message",
       new ServerMessage(`You joined global room ${room}`)
