@@ -44,10 +44,6 @@ class Client {
     return this.#socket;
   }
 
-  get socketId() {
-    return this.#socket.id;
-  }
-
   set socket(socket: IoSocket) {
     this.#socket = socket;
   }
