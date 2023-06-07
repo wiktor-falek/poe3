@@ -11,8 +11,8 @@ class LobbyManager {
     );
   }
 
-  static createLobby(name: string): Lobby {
-    const lobby = new Lobby(name);
+  static createLobby(client: Client, name: string): Lobby {
+    const lobby = new Lobby(name, client.character.name);
     this.lobbies[lobby.id] = lobby;
     return lobby;
   }
@@ -21,7 +21,7 @@ class LobbyManager {
     delete this.lobbies[lobbyId];
   }
 
-  static joinLobby(lobbyId: string, client: Client) {
+  static joinLobby(client: Client, lobbyId: string) {
     const lobby = this.lobbies[lobbyId];
     if (lobby === undefined) {
       return Err("Lobby does not exist");

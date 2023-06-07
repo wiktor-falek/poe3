@@ -24,7 +24,7 @@ function registerLobbyHandler(io: Io, socket: IoSocket, client: Client) {
   const join = (_lobbyId: string) => {
     // TODO: validate
     const lobbyId = _lobbyId; // schema.validate(_lobbyId);
-    const result = LobbyManager.joinLobby(lobbyId, client);
+    const result = LobbyManager.joinLobby(client, lobbyId);
     if (!result.ok) {
       // TODO: emit error
       return;
@@ -80,11 +80,41 @@ function registerLobbyHandler(io: Io, socket: IoSocket, client: Client) {
       // socket.emit("error", "")
     }
 
-    const lobby = LobbyManager.createLobby(lobbyName);
+    const lobby = LobbyManager.createLobby(client, lobbyName);
 
     join(lobby.id);
 
     io.emit("lobby:set", lobby);
+  };
+
+  const kick = (_characterName: string) => {
+    // TODO: validate
+    const characterName = _characterName; // schema.validate(_characterName);
+
+    const lobby = LobbyManager.currentLobby(client);
+
+    if (lobby === undefined) {
+      // TODO: emit error?
+      return;
+    }
+
+    const targetClient = lobby.kick(characterName);
+
+    if (targetClient === undefined) {
+      // TODO: emit error?
+      return;
+    }
+
+    const room = `lobby:${lobby.id}`;
+    targetClient.socket.leave(room);
+
+    targetClient.socket.emit("lobby:data", null);
+
+    console.log(lobby.members);
+    io.to(room).emit("lobby:data", {
+      ...lobby,
+      members: lobby.members,
+    });
   };
 
   socket.on("lobby:getAll", getAll);
@@ -92,6 +122,7 @@ function registerLobbyHandler(io: Io, socket: IoSocket, client: Client) {
   socket.on("lobby:join", join);
   socket.on("lobby:leave", leave);
   socket.on("lobby:create", create);
+  socket.on("lobby:kick", kick);
 }
 
 export default registerLobbyHandler;

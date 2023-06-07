@@ -2,6 +2,9 @@
 import { onMounted } from "vue";
 import * as gameServer from "../../src/socket/gameServer";
 import { ref } from "vue";
+import useCharacterStore from "../stores/characterStore";
+
+const characterStore = useCharacterStore();
 
 const lobbyName = ref("");
 
@@ -25,6 +28,10 @@ function leaveLobby() {
   gameServer.socket.emit("lobby:leave");
 }
 
+function kickLobbyMember(memberName: string) {
+  gameServer.socket.emit("lobby:kick", memberName);
+}
+
 onMounted(() => {
   gameServer.socket.emit("lobby:getCurrent");
   refresh();
@@ -43,11 +50,26 @@ onMounted(() => {
         >
           <p>
             {{ member.name }}
+            <span v-if="gameServer.state.lobby.ownerName === member.name"
+              >(Owner)</span
+            >
           </p>
           <div class="member-data">
             <p class="member-data__level">Level {{ member.level }}</p>
             <p class="member-data__class">{{ member.class }}</p>
           </div>
+
+          <!-- displayed if this character is the owner, on all characters but this one -->
+          <button
+            v-if="
+              characterStore.staticCharacter?.name ===
+                gameServer.state.lobby.ownerName &&
+              member.name !== characterStore.staticCharacter?.name
+            "
+            @click="kickLobbyMember(member.name)"
+          >
+            Kick
+          </button>
         </div>
       </div>
       <button @click="leaveLobby">Leave</button>

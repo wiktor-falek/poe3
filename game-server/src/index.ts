@@ -12,6 +12,7 @@ import type {
 import type Client from "./components/client/client.js";
 import assert from "./utils/assert.js";
 import registerLobbyHandler from "./handlers/lobbyHandler.js";
+import LobbyManager from "./game/lobby/lobbyManager.js";
 
 await Mongo.connect();
 
@@ -62,6 +63,12 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", (reason, description) => {
     client.setDisconnected();
+
+    // cleanup
+
+    // TODO: this works but doesn't get emitted like in the event handler function
+    // LobbyManager.currentLobby(client)?.leave(client);
+
     console.log(
       `${client.characterName} (${client.username}) disconnected (${reason})`
     );

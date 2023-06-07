@@ -5,6 +5,7 @@ import { CharacterClass } from "../../../../common/types/index.js";
 
 interface LobbyData {
   name: string;
+  ownerName: string;
   id: string;
   size: number;
 }
@@ -24,11 +25,13 @@ const LOBBY_MAX_SIZE = 4;
 class Lobby implements LobbyData {
   #clients: { [characterId: string]: Client };
   name: string;
+  ownerName: string;
   id: string;
   size: number;
-  constructor(name: string) {
+  constructor(name: string, ownerName: string) {
     this.#clients = {};
     this.name = name;
+    this.ownerName = ownerName;
     this.id = nanoid();
     this.size = 0;
   }
@@ -76,6 +79,19 @@ class Lobby implements LobbyData {
     delete this.#clients[client.character._id.toString()];
     this.size--;
     return true;
+  }
+
+  kick(characterName: string): Client | undefined {
+    const targetClient = Object.values(this.#clients).find(
+      (client) => client.characterName === characterName
+    );
+
+    if (targetClient !== undefined) {
+      delete this.#clients[targetClient.character._id.toString()];
+      this.size--;
+    }
+
+    return targetClient;
   }
 }
 

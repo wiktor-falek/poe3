@@ -69,7 +69,8 @@ async function initialize(
   let client = ClientManager.getClientByUsername(userWithId.account.username);
 
   if (client) {
-    client.socketId = socket.id; // update socketId which changed after reconnect
+    // update the socket reference of existing client
+    client.socket = socket;
   }
   // if existing character does not match currently selected character
   // reinstantiate the client
