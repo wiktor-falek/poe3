@@ -2,6 +2,7 @@ import { nanoid } from "nanoid";
 import Client from "../../components/client/client.js";
 import { Err, Ok } from "resultat";
 import { CharacterClass } from "../../../../common/types/index.js";
+import { choice } from "pyrand";
 
 interface LobbyData {
   name: string;
@@ -78,6 +79,13 @@ class Lobby implements LobbyData {
     }
     delete this.#clients[client.character._id.toString()];
     this.size--;
+
+    if (this.size > 0) {
+      // transfer ownership after leaving to a random client
+      const randomClient = choice(Object.values(this.#clients));
+      this.ownerName = randomClient.characterName;
+    }
+
     return true;
   }
 

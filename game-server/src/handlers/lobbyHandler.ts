@@ -110,7 +110,6 @@ function registerLobbyHandler(io: Io, socket: IoSocket, client: Client) {
 
     targetClient.socket.emit("lobby:data", null);
 
-    console.log(lobby.members);
     io.to(room).emit("lobby:data", {
       ...lobby,
       members: lobby.members,

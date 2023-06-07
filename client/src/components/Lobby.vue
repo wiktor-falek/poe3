@@ -43,6 +43,7 @@ onMounted(() => {
     <div class="current-lobby" v-if="gameServer.state.lobby !== null">
       <p>Lobby name: {{ gameServer.state.lobby.name }}</p>
       <p>Lobby id: {{ gameServer.state.lobby.id }}</p>
+      <p>{{ gameServer.state.lobby }}</p>
       <div class="current-lobby__members">
         <div
           class="current-lobby__members__member"
