@@ -9,7 +9,7 @@ const content: Ref<string> = ref("");
 
 const isCollapsed: Ref<boolean> = ref(false);
 
-type Commands = { [key: string]: Function | undefined };
+type Commands = { [name: string]: Function | undefined };
 
 const clientSideCommands: Commands = {
   help: () => {

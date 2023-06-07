@@ -1,11 +1,11 @@
-import { Err, Ok } from "resultat";
+import { Err, Ok, ResultErr, ResultOk } from "resultat";
 import Lobby from "./lobby.js";
 import Client from "../../components/client/client.js";
 
 class LobbyManager {
   static readonly lobbies: { [lobbyId: string]: Lobby } = {};
 
-  static currentLobby(client: Client) {
+  static currentLobby(client: Client): Lobby | undefined {
     return Object.values(this.lobbies).find((lobby) =>
       lobby.clientIsInLobby(client)
     );
@@ -21,7 +21,10 @@ class LobbyManager {
     delete this.lobbies[lobbyId];
   }
 
-  static joinLobby(client: Client, lobbyId: string) {
+  static joinLobby(
+    client: Client,
+    lobbyId: string
+  ): ResultOk<Lobby> | ResultErr {
     const lobby = this.lobbies[lobbyId];
     if (lobby === undefined) {
       return Err("Lobby does not exist");

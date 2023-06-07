@@ -13,6 +13,8 @@ export interface ClientToServerEvents {
   "lobby:join": (lobbyId: string) => void;
   "lobby:leave": () => void;
   "lobby:kick": (characterName: string) => void;
+  // instance
+  "instance:create": () => void;
 }
 
 export interface ServerToClientEvents {

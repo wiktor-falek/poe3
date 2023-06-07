@@ -23,7 +23,7 @@ interface ClassData {
   attributes: Attributes;
 }
 
-const classesData: { [key in CharacterClass]: ClassData } = {
+const classesData: { [characterClass in CharacterClass]: ClassData } = {
   swordsman: {
     quote: "Swordsman quote dolor sit amet.",
     description:

@@ -8,6 +8,7 @@ class Client {
   #isConnected: boolean;
   #disconnectTimestamp: number | null;
   #socket: IoSocket;
+  #instanceId: string | null;
   constructor(
     user: WithId<User>,
     character: WithId<StaticCharacter>,
@@ -18,6 +19,7 @@ class Client {
     this.#isConnected = false;
     this.#disconnectTimestamp = null;
     this.#socket = socket;
+    this.#instanceId = null;
   }
 
   get character() {
@@ -46,6 +48,14 @@ class Client {
 
   set socket(socket: IoSocket) {
     this.#socket = socket;
+  }
+
+  get instanceId() {
+    return this.#instanceId;
+  }
+
+  set instanceId(id: string | null) {
+    this.#instanceId = id;
   }
 
   setConnected() {
