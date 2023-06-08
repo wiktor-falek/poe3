@@ -13,6 +13,7 @@ import type Client from "./components/client/client.js";
 import assert from "./utils/assert.js";
 import registerLobbyHandler from "./handlers/lobbyHandler.js";
 import LobbyManager from "./game/lobby/lobbyManager.js";
+import registerInstanceHandler from "./handlers/instanceHandler.js";
 
 await Mongo.connect();
 
@@ -60,14 +61,26 @@ io.on("connection", (socket) => {
 
   registerChatHandler(io, socket, client);
   registerLobbyHandler(io, socket, client);
+  registerInstanceHandler(io, socket, client);
 
   socket.on("disconnect", (reason, description) => {
     client.setDisconnected();
 
-    // cleanup
+    // handle disconnect
 
-    // TODO: this works but doesn't get emitted like in the event handler function
-    // LobbyManager.currentLobby(client)?.leave(client);
+    // TODO: make this dry
+    const lobby = LobbyManager.currentLobby(client);
+    if (lobby !== undefined) {
+      lobby.leave(client);
+      io.to(`lobby:${lobby.id}`).emit("lobby:data", {
+        ...lobby,
+        members: lobby.members,
+      });
+      lobby.id;
+      if (lobby.size === 0) {
+        LobbyManager.deleteLobby(lobby.id);
+      }
+    }
 
     console.log(
       `${client.characterName} (${client.username}) disconnected (${reason})`
