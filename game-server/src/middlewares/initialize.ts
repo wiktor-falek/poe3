@@ -67,7 +67,7 @@ async function initialize(
     return next(err);
   }
 
-  // use previously client created in recent session
+  // get previously client created in recent session
   let client = ClientManager.getClientByUsername(userWithId.account.username);
 
   if (client !== undefined) {

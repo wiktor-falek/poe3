@@ -37,7 +37,10 @@ class Lobby implements LobbyData {
     this.size = 0;
   }
 
-  // subset of data of each clients character that will be visible for all lobby members
+  get membersOnlyData() {
+    return { ...this, members: this.members };
+  }
+
   get members(): Array<LobbyMember> {
     return Object.values(this.#clients).map((client) => {
       const character = client.character;

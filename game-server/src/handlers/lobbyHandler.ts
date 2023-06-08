@@ -12,10 +12,7 @@ function registerLobbyHandler(io: Io, socket: IoSocket, client: Client) {
   const getCurrent = () => {
     const lobby = LobbyManager.currentLobby(client);
     if (lobby !== undefined) {
-      socket.emit("lobby:data", {
-        ...lobby,
-        members: lobby.members,
-      });
+      socket.emit("lobby:data", lobby.membersOnlyData);
     } else {
       socket.emit("lobby:data", null);
     }
@@ -61,7 +58,7 @@ function registerLobbyHandler(io: Io, socket: IoSocket, client: Client) {
 
     // TODO: this could be a separate ServerToClient emit 'lobby:member-leave' => (name: string) => void;
     const room = `lobby:${lobby.id}`;
-    socket.to(room).emit("lobby:data", { ...lobby, members: lobby.members });
+    socket.to(room).emit("lobby:data", lobby.membersOnlyData);
 
     if (lobby.size === 0) {
       LobbyManager.deleteLobby(lobby.id);

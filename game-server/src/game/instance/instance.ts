@@ -28,6 +28,7 @@ class Instance implements InstanceData {
   }
 
   leave(client: Client) {
+    delete this.#clients[client.character._id.toString()];
     // client.instanceId = null;
   }
 }
