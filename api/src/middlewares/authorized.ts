@@ -4,9 +4,9 @@ import { UserData } from "../*.js";
 
 /**
  * Queries db for a user matching the cookie sessionId
- * 
+ *
  * *On fail:* return 401 response breaking the middleware chain
- * 
+ *
  * *On success:* pass user data to res.locals
  *
  * @example

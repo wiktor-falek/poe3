@@ -8,10 +8,7 @@ import getCookie from "../utils/getCookie";
 import useCharacterStore from "../stores/characterStore";
 import { StaticCharacter } from "../../../common/types";
 import { Message } from "../../../game-server/src/components/message";
-import {
-  LobbyData,
-  MembersOnlyLobbyData,
-} from "../../../game-server/src/game/lobby/lobby";
+import { LobbyData, MembersOnlyLobbyData } from "../../../game-server/src/game/lobby/lobby";
 import { InstanceData } from "../../../game-server/src/game/instance/instance";
 import router from "../router";
 
@@ -63,26 +60,26 @@ socket.on("character", (character: StaticCharacter) => {
   characterStore.setStaticCharacter(character);
 });
 
-socket.on("chat:message", (message) => {
+socket.on("chat:message", message => {
   state.messages.push(message);
 });
 
-socket.on("lobby:all", (lobbies) => {
+socket.on("lobby:all", lobbies => {
   state.lobbies = lobbies;
 });
 
-socket.on("lobby:data", (lobby) => {
+socket.on("lobby:data", lobby => {
   state.lobby = lobby;
 });
 
-socket.on("lobby:set", (lobby) => {
+socket.on("lobby:set", lobby => {
   state.lobbies[lobby.id] = lobby;
 });
 
-socket.on("lobby:delete", (lobbyId) => {
+socket.on("lobby:delete", lobbyId => {
   delete state.lobbies[lobbyId];
 });
 
-socket.on("instance:set", (instance) => {
+socket.on("instance:set", instance => {
   state.instance = instance;
 });

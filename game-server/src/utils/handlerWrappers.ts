@@ -20,10 +20,7 @@ function registerEventHandler(io: Io, socket: IoSocket, client: Client) {
 };
 */
 
-export const notInInstance = (
-  cb: (...args: any[]) => any,
-  client: undefined
-) => {
+export const notInInstance = (cb: (...args: any[]) => any, client: undefined) => {
   const isInInstance = false;
   if (isInInstance) {
     return () => {};

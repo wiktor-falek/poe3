@@ -24,24 +24,22 @@ interface SocketData {
 }
 
 const httpServer = createServer();
-const io = new Server<
-  ClientToServerEvents,
-  ServerToClientEvents,
-  InterServerEvents,
-  SocketData
->(httpServer, {
-  transports: ["websocket", "polling"],
-  cors: {
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
-});
+const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>(
+  httpServer,
+  {
+    transports: ["websocket", "polling"],
+    cors: {
+      origin: "http://localhost:5173",
+      methods: ["GET", "POST"],
+      credentials: true,
+    },
+  }
+);
 
 // global middlewares
 io.use(initialize);
 
-io.on("connection", (socket) => {
+io.on("connection", socket => {
   // TypeScript doesn't know that this connection does not happen
   // unless socket.data.client is defined in initialize middleware,
   // since SocketData is wrapped in Partial<>
@@ -50,7 +48,7 @@ io.on("connection", (socket) => {
   const { client } = socket.data;
   client.setConnected();
 
-  socket.on("error", (err) => {
+  socket.on("error", err => {
     // socket.emit("connectionError");
   });
 
@@ -80,9 +78,7 @@ io.on("connection", (socket) => {
       }
     }
 
-    console.log(
-      `${client.characterName} (${client.username}) disconnected (${reason})`
-    );
+    console.log(`${client.characterName} (${client.username}) disconnected (${reason})`);
   });
 });
 

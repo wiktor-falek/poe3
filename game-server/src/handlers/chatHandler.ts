@@ -8,10 +8,7 @@ function registerChatHandler(io: Io, socket: IoSocket, client: Client) {
     const schema = Joi.number().required().min(1).max(1000);
     const result = schema.validate(_room);
     if (result.error) {
-      return socket.emit(
-        "chat:message",
-        new ServerMessage("Invalid argument 'room'")
-      );
+      return socket.emit("chat:message", new ServerMessage("Invalid argument 'room'"));
     }
 
     const room = result.value;
@@ -28,10 +25,7 @@ function registerChatHandler(io: Io, socket: IoSocket, client: Client) {
 
     socket.join(roomName);
 
-    socket.emit(
-      "chat:message",
-      new ServerMessage(`You joined global room ${room}`)
-    );
+    socket.emit("chat:message", new ServerMessage(`You joined global room ${room}`));
   };
 
   const send = (_message: string) => {
@@ -39,10 +33,7 @@ function registerChatHandler(io: Io, socket: IoSocket, client: Client) {
     const result = schema.validate(_message);
 
     if (result.error) {
-      return socket.emit(
-        "chat:message",
-        new ServerMessage("Invalid argument 'message'")
-      );
+      return socket.emit("chat:message", new ServerMessage("Invalid argument 'message'"));
     }
     const message = result.value;
 
@@ -55,10 +46,7 @@ function registerChatHandler(io: Io, socket: IoSocket, client: Client) {
       }
     }
 
-    io.to(roomName).emit(
-      "chat:message",
-      new GlobalMessage(message, client.characterName)
-    );
+    io.to(roomName).emit("chat:message", new GlobalMessage(message, client.characterName));
   };
 
   socket.on("chat:join", join);

@@ -143,19 +143,12 @@ async function createCharacter(e: Event) {
 
         <div class="character-detail__attributes">
           <div class="character-detail__attributes--strength">
-            <AttributesVue
-              :attributes="classesData[selectedClass].attributes"
-            />
+            <AttributesVue :attributes="classesData[selectedClass].attributes" />
           </div>
         </div>
       </div>
 
-      <form
-        class="menu"
-        id="create-character"
-        action="POST"
-        @submit="createCharacter($event)"
-      >
+      <form class="menu" id="create-character" action="POST" @submit="createCharacter($event)">
         <div class="menu__top">
           <RouterLink to="/select" class="button">&lt;</RouterLink>
           <input
@@ -173,9 +166,7 @@ async function createCharacter(e: Event) {
         </div>
 
         <div class="menu__bottom">
-          <button type="submit" id="create" :disabled="selectedClass === null">
-            Create
-          </button>
+          <button type="submit" id="create" :disabled="selectedClass === null">Create</button>
         </div>
       </form>
     </div>

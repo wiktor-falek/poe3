@@ -11,9 +11,7 @@
       </h2>
     </section>
 
-    <RouterLink to="/signin" class="button" id="start"
-      >Start Playing</RouterLink
-    >
+    <RouterLink to="/signin" class="button" id="start">Start Playing</RouterLink>
 
     <section>
       <p>Explore dungeons with a party up to 4 players!</p>

@@ -9,11 +9,7 @@ class Client {
   #disconnectTimestamp: number | null;
   #socket: IoSocket;
   #instanceId: string | null;
-  constructor(
-    user: WithId<User>,
-    character: WithId<StaticCharacter>,
-    socket: IoSocket
-  ) {
+  constructor(user: WithId<User>, character: WithId<StaticCharacter>, socket: IoSocket) {
     this.#user = user;
     this.#character = character;
     this.#isConnected = false;

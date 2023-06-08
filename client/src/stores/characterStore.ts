@@ -20,8 +20,8 @@ const useCharacterStore = defineStore("character", () => {
   return {
     staticCharacter,
     dynamicCharacter,
-    setStaticCharacter
+    setStaticCharacter,
   };
 });
 
-export default useCharacterStore
+export default useCharacterStore;

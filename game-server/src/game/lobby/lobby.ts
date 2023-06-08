@@ -42,7 +42,7 @@ class Lobby implements LobbyData {
   }
 
   get members(): Array<LobbyMember> {
-    return Object.values(this.#clients).map((client) => {
+    return Object.values(this.#clients).map(client => {
       const character = client.character;
       return {
         name: character.name,
@@ -57,7 +57,7 @@ class Lobby implements LobbyData {
   }
 
   clientIsInLobby(client: Client): boolean {
-    const member = Object.values(this.#clients).find((member) =>
+    const member = Object.values(this.#clients).find(member =>
       member.character._id.equals(client.character._id)
     );
     return member !== undefined;
@@ -78,8 +78,7 @@ class Lobby implements LobbyData {
   }
 
   leave(client: Client) {
-    const isInLobby =
-      this.#clients[client.character._id.toString()] !== undefined;
+    const isInLobby = this.#clients[client.character._id.toString()] !== undefined;
 
     if (!isInLobby) {
       return false;
@@ -98,7 +97,7 @@ class Lobby implements LobbyData {
 
   kick(characterName: string): Client | undefined {
     const targetClient = Object.values(this.#clients).find(
-      (client) => client.characterName === characterName
+      client => client.characterName === characterName
     );
 
     if (targetClient !== undefined) {

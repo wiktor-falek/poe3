@@ -20,9 +20,7 @@ async function createCharacter(req: Request, res: Response) {
   const validationResult = schema.validate(req.body);
   if (validationResult.error) {
     if (BLACKLISTED_NAMES.includes(name)) {
-      return res
-        .status(422)
-        .json({ error: "This username is not allowed, try something else" });
+      return res.status(422).json({ error: "This username is not allowed, try something else" });
     }
     return res.status(422).json({ error: "Invalid data" });
   }
@@ -93,14 +91,7 @@ async function deleteCharacter(req: Request, res: Response) {
   if (!result.ok) {
     return res.status(500).json({ error: result.err });
   }
-  return res
-    .status(200)
-    .json({ message: `Successfully deleted the character ${characterName}` });
+  return res.status(200).json({ message: `Successfully deleted the character ${characterName}` });
 }
 
-export {
-  createCharacter,
-  getCharacter,
-  getAllCharactersOverview,
-  deleteCharacter,
-};
+export { createCharacter, getCharacter, getAllCharactersOverview, deleteCharacter };

@@ -12,9 +12,7 @@ beforeAll(async () => {
 
 describe("register", async () => {
   test.concurrent("status code 422 with missing body", async () => {
-    const response = await request(app)
-      .post("/auth/register")
-      .send({ completed: true });
+    const response = await request(app).post("/auth/register").send({ completed: true });
 
     expect(response.statusCode).toBe(422);
   });

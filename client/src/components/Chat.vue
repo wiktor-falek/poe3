@@ -16,8 +16,7 @@ const clientSideCommands: Commands = {
     gameServer.state.messages.push({
       sender: "SYSTEM",
       group: "SYSTEM",
-      content:
-        "/help - display this message\n" + "/clear - clear all the messages\n",
+      content: "/help - display this message\n" + "/clear - clear all the messages\n",
     });
   },
   clear: () => {
@@ -47,8 +46,7 @@ function send() {
     const args = message.split(" ").slice(1);
     console.log({ command, args });
 
-    const cb =
-      clientSideCommands[`${command}`] ?? serverSideCommands[`${command}`];
+    const cb = clientSideCommands[`${command}`] ?? serverSideCommands[`${command}`];
 
     if (cb === undefined) {
       gameServer.state.messages.push({
@@ -90,12 +88,7 @@ function send() {
           </p>
         </div>
       </div>
-      <input
-        type="text"
-        maxlength="128"
-        @keydown.enter="send"
-        v-model="content"
-      />
+      <input type="text" maxlength="128" @keydown.enter="send" v-model="content" />
     </div>
   </div>
 </template>

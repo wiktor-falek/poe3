@@ -11,20 +11,12 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendEmail = (
-  to: string,
-  subject: string,
-  text: string,
-  html?: string
-) => {
+export const sendEmail = (to: string, subject: string, text: string, html?: string) => {
   let mailOptions = { to, subject, text, html };
-  transporter.sendMail(
-    mailOptions,
-    (err: Error | null, info: SMTPTransport.SentMessageInfo) => {
-      if (err) {
-        console.log("Failed to send confirmation email");
-        return;
-      }
+  transporter.sendMail(mailOptions, (err: Error | null, info: SMTPTransport.SentMessageInfo) => {
+    if (err) {
+      console.log("Failed to send confirmation email");
+      return;
     }
-  );
+  });
 };

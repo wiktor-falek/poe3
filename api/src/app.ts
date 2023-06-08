@@ -23,12 +23,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.on("finish", () => {
-    console.log(
-      req.method,
-      decodeURI(req.url),
-      res.statusCode,
-      res.statusMessage
-    );
+    console.log(req.method, decodeURI(req.url), res.statusCode, res.statusMessage);
   });
   next();
 });

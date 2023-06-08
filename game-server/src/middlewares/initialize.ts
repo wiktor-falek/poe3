@@ -7,17 +7,12 @@ import { StaticCharacter } from "../../../common/types/index.js";
 import InstanceManager from "../game/instance/instanceManager.js";
 import { ServerMessage } from "../components/message.js";
 
-async function initialize(
-  socket: IoSocket,
-  next: (err?: ExtendedError | undefined) => void
-) {
+async function initialize(socket: IoSocket, next: (err?: ExtendedError | undefined) => void) {
   const { auth } = socket.handshake;
 
   const schema = Joi.object({
     sessionId: Joi.string()
-      .regex(
-        /[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/
-      )
+      .regex(/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/)
       .required(),
     // username: Joi.string().required().min(6).max(30),
     characterName: Joi.string().required().min(3).max(24),
@@ -76,10 +71,7 @@ async function initialize(
   }
   // if existing character does not match currently selected character
   // reinstantiate the client
-  if (
-    client === undefined ||
-    !client.character._id.equals(characterWithId._id)
-  ) {
+  if (client === undefined || !client.character._id.equals(characterWithId._id)) {
     client = ClientManager.createClient(userWithId, characterWithId, socket);
   }
 

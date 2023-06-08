@@ -55,9 +55,7 @@ onMounted(() => {
         >
           <p>
             {{ member.name }}
-            <span v-if="gameServer.state.lobby.ownerName === member.name"
-              >(Owner)</span
-            >
+            <span v-if="gameServer.state.lobby.ownerName === member.name">(Owner)</span>
           </p>
           <div class="member-data">
             <p class="member-data__level">Level {{ member.level }}</p>
@@ -67,8 +65,7 @@ onMounted(() => {
           <!-- displayed if this character is the owner, on all characters but this one -->
           <button
             v-if="
-              characterStore.staticCharacter?.name ===
-                gameServer.state.lobby.ownerName &&
+              characterStore.staticCharacter?.name === gameServer.state.lobby.ownerName &&
               member.name !== characterStore.staticCharacter?.name
             "
             @click="kickLobbyMember(member.name)"
@@ -79,10 +76,7 @@ onMounted(() => {
       </div>
       <button @click="leaveLobby">Leave</button>
       <button
-        v-if="
-          characterStore.staticCharacter?.name ===
-          gameServer.state.lobby.ownerName
-        "
+        v-if="characterStore.staticCharacter?.name === gameServer.state.lobby.ownerName"
         @click="createInstance"
       >
         Create Instance
@@ -95,10 +89,7 @@ onMounted(() => {
           {{ lobby.name }}
           {{ lobby.size }} / 4
         </div>
-        <button
-          @click="joinLobby(lobby.id)"
-          :disabled="gameServer.state.lobby !== null"
-        >
+        <button @click="joinLobby(lobby.id)" :disabled="gameServer.state.lobby !== null">
           Join
         </button>
       </div>

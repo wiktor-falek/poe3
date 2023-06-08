@@ -37,9 +37,7 @@ async function register(req: Request, res: Response) {
         `http://localhost:3000/auth/verify/${token}`
     );
   } else {
-    console.log(
-      `Confirm email address link:\nhttp://localhost:3000/auth/verify/${token}`
-    );
+    console.log(`Confirm email address link:\nhttp://localhost:3000/auth/verify/${token}`);
   }
 
   return res.status(200).json({

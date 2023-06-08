@@ -59,10 +59,7 @@ class User {
     return user !== null;
   }
 
-  private static async usernameAndEmailIsAvailable(
-    username: string,
-    email: string
-  ) {
+  private static async usernameAndEmailIsAvailable(username: string, email: string) {
     const user = await this.collection.findOne({
       $or: [
         { "account.username": username },

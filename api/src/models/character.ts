@@ -4,10 +4,7 @@ import Mongo from "../mongo.js";
 import startingGear from "../components/startingGear.js";
 import { MongoServerError } from "mongodb";
 import type { CharacterOverview } from "../../../common/api-types/index.js";
-import type {
-  CharacterClass,
-  StaticCharacter,
-} from "../../../common/types/index.js";
+import type { CharacterClass, StaticCharacter } from "../../../common/types/index.js";
 
 const characterSchema = Joi.object({
   userId: Joi.string().length(24).required(),
@@ -125,22 +122,17 @@ class Character {
   // will be stored in the characters field for fast access
   static async getAllCharactersOverview(userId: string) {
     try {
-      const cursor = this.collection.find(
-        { userId },
-        { projection: { _id: 0, userId: 0 } }
-      );
+      const cursor = this.collection.find({ userId }, { projection: { _id: 0, userId: 0 } });
 
       const characters = await cursor.toArray();
 
-      const charactersOverview: Array<CharacterOverview> = characters.map(
-        (c) => {
-          return {
-            name: c.name,
-            class: c.class,
-            level: c.level.value,
-          };
-        }
-      );
+      const charactersOverview: Array<CharacterOverview> = characters.map(c => {
+        return {
+          name: c.name,
+          class: c.class,
+          level: c.level.value,
+        };
+      });
 
       return Ok(charactersOverview);
     } catch {
@@ -159,9 +151,7 @@ class Character {
     }
 
     // insert the character to deletedCharacters collection
-    const inserted = await this.db
-      .collection("deletedCharacters")
-      .insertOne(character);
+    const inserted = await this.db.collection("deletedCharacters").insertOne(character);
 
     if (inserted.insertedId === null) {
       return Err("Failed to insert the character");

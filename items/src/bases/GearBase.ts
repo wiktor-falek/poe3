@@ -29,30 +29,25 @@ class GearBase {
     SUFFIX_MODIFIER_POOL: Array<ModifierWithWeight>
   ): this {
     if (PREFIX_MODIFIER_POOL.length === 0 || SUFFIX_MODIFIER_POOL.length === 0) {
-      throw new Error("Method requires #PREFIX_MODIFIER_POOL and #SUFFIX_MODIFIER_POOL to have at least one modifier")
-    }
-    
-    if (this.rarity !== "normal") {
-      console.error(
-        `Failed to upgrade to magic rarity, item is not of normal rarity`
+      throw new Error(
+        "Method requires #PREFIX_MODIFIER_POOL and #SUFFIX_MODIFIER_POOL to have at least one modifier"
       );
+    }
+
+    if (this.rarity !== "normal") {
+      console.error(`Failed to upgrade to magic rarity, item is not of normal rarity`);
       return this;
     }
     // filter tiers that don't satisfy ilvl requirement, and filter mods that have no tiers left
-    const prefix_pool = PREFIX_MODIFIER_POOL.map((mod) => {
-      const availableTiers = Object.values(mod.tiers).filter(
-        (tier) => tier.ilvl <= this.ilvl
-      );
+    const prefix_pool = PREFIX_MODIFIER_POOL.map(mod => {
+      const availableTiers = Object.values(mod.tiers).filter(tier => tier.ilvl <= this.ilvl);
       return { ...mod, tiers: availableTiers };
-    }).filter((mod) => Object.keys(mod.tiers).length > 0);
+    }).filter(mod => Object.keys(mod.tiers).length > 0);
 
-    const suffix_pool = SUFFIX_MODIFIER_POOL.map((mod) => {
-      const availableTiers = Object.values(mod.tiers).filter(
-        (tier) => tier.ilvl <= this.ilvl
-      );
+    const suffix_pool = SUFFIX_MODIFIER_POOL.map(mod => {
+      const availableTiers = Object.values(mod.tiers).filter(tier => tier.ilvl <= this.ilvl);
       return { ...mod, tiers: availableTiers };
-    }).filter((mod) => Object.keys(mod.tiers).length > 0);
-
+    }).filter(mod => Object.keys(mod.tiers).length > 0);
 
     // {
     //   console.log("************");

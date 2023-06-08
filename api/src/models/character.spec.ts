@@ -4,9 +4,7 @@ import Character from "./character.js";
 
 Mongo.connect();
 
-const deletedCharactersCollection = Mongo.getClient()
-  .db("game")
-  .collection("deletedCharacters");
+const deletedCharactersCollection = Mongo.getClient().db("game").collection("deletedCharacters");
 
 beforeEach(async () => {
   await Character.collection.deleteMany({});
@@ -83,22 +81,15 @@ describe("delete character", async () => {
       "third character"
     );
 
-    const deleteWrongCharacter = await Character.deleteCharacter(
-      "firstuser",
-      "second character"
-    );
+    const deleteWrongCharacter = await Character.deleteCharacter("firstuser", "second character");
 
     expect(deleteWrongCharacter.ok).toBeFalsy(); // cannot delete character of different user
 
-    let amountOfCharacters = (await Character.collection.find({}).toArray())
-      .length;
+    let amountOfCharacters = (await Character.collection.find({}).toArray()).length;
 
     expect(amountOfCharacters).toBe(3);
 
-    const deleteCorrectCharacter = await Character.deleteCharacter(
-      "firstuser",
-      "first character"
-    );
+    const deleteCorrectCharacter = await Character.deleteCharacter("firstuser", "first character");
 
     expect(deleteCorrectCharacter.ok).toBeTruthy();
 
@@ -112,15 +103,10 @@ describe("move deleted character to deletedCharacters collection", async () => {
   test("1", async () => {
     await Character.createCharacter("testuser", "ranger", "first character");
 
-    const deleteQueryResult = await Character.deleteCharacter(
-      "testuser",
-      "first character"
-    );
+    const deleteQueryResult = await Character.deleteCharacter("testuser", "first character");
     expect(deleteQueryResult.ok).toBeTruthy();
 
-    const deletedCharacters = await deletedCharactersCollection
-      .find({})
-      .toArray();
+    const deletedCharacters = await deletedCharactersCollection.find({}).toArray();
 
     expect(deletedCharacters.length).toBe(1);
   });

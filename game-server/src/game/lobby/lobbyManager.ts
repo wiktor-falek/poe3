@@ -6,9 +6,7 @@ class LobbyManager {
   static readonly lobbies: { [lobbyId: string]: Lobby } = {};
 
   static currentLobby(client: Client): Lobby | undefined {
-    return Object.values(this.lobbies).find((lobby) =>
-      lobby.clientIsInLobby(client)
-    );
+    return Object.values(this.lobbies).find(lobby => lobby.clientIsInLobby(client));
   }
 
   static createLobby(client: Client, name: string): Lobby {
@@ -21,10 +19,7 @@ class LobbyManager {
     delete this.lobbies[lobbyId];
   }
 
-  static joinLobby(
-    client: Client,
-    lobbyId: string
-  ): ResultOk<Lobby> | ResultErr {
+  static joinLobby(client: Client, lobbyId: string): ResultOk<Lobby> | ResultErr {
     const lobby = this.lobbies[lobbyId];
     if (lobby === undefined) {
       return Err("Lobby does not exist");
