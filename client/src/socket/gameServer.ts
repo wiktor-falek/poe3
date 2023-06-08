@@ -8,15 +8,18 @@ import getCookie from "../utils/getCookie";
 import useCharacterStore from "../stores/characterStore";
 import { StaticCharacter } from "../../../common/types";
 import { Message } from "../../../game-server/src/components/message";
-import Lobby, {
+import {
+  LobbyData,
   MembersOnlyLobbyData,
 } from "../../../game-server/src/game/lobby/lobby";
+import { InstanceData } from "../../../game-server/src/game/instance/instance";
 
 interface State {
   connected: boolean;
   messages: Array<Message>;
-  lobbies: { [lobbyId: string]: Lobby };
+  lobbies: { [lobbyId: string]: LobbyData };
   lobby: MembersOnlyLobbyData | null;
+  instance: InstanceData | null;
 }
 
 export const state: State = reactive({
@@ -24,6 +27,7 @@ export const state: State = reactive({
   messages: [],
   lobbies: {},
   lobby: null,
+  instance: null,
 });
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
@@ -76,4 +80,9 @@ socket.on("lobby:set", (lobby) => {
 
 socket.on("lobby:delete", (lobbyId) => {
   delete state.lobbies[lobbyId];
+});
+
+socket.on("instance:set", (instance) => {
+  console.log("instance:set");
+  state.instance = instance;
 });

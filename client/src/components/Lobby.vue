@@ -3,6 +3,8 @@ import { onMounted } from "vue";
 import * as gameServer from "../../src/socket/gameServer";
 import { ref } from "vue";
 import useCharacterStore from "../stores/characterStore";
+import { watch } from "vue";
+import router from "../router";
 
 const characterStore = useCharacterStore();
 
@@ -32,9 +34,23 @@ function kickLobbyMember(memberName: string) {
   gameServer.socket.emit("lobby:kick", memberName);
 }
 
+function createInstance() {
+  gameServer.socket.emit("instance:create");
+}
+
 onMounted(() => {
   gameServer.socket.emit("lobby:getCurrent");
   refresh();
+
+  watch(
+    () => gameServer.state.instance,
+    (newInstance, oldInstance) => {
+      console.log({ oldInstance, newInstance });
+      if (newInstance !== null) {
+        router.push("/game/instance");
+      }
+    }
+  );
 });
 </script>
 
@@ -74,6 +90,15 @@ onMounted(() => {
         </div>
       </div>
       <button @click="leaveLobby">Leave</button>
+      <button
+        v-if="
+          characterStore.staticCharacter?.name ===
+          gameServer.state.lobby.ownerName
+        "
+        @click="createInstance"
+      >
+        Create Instance
+      </button>
     </div>
     <div class="lobbies" v-else>
       <h4 class="title">Public Lobbies</h4>
