@@ -4,7 +4,7 @@ import { Err, Ok } from "resultat";
 import { CharacterClass } from "../../../../common/types/index.js";
 import { choice } from "pyrand";
 
-interface LobbyData {
+export interface LobbyData {
   name: string;
   ownerName: string;
   id: string;
@@ -47,6 +47,10 @@ class Lobby implements LobbyData {
         level: character.level.value,
       };
     });
+  }
+
+  get clients(): Array<Client> {
+    return Object.values(this.#clients);
   }
 
   clientIsInLobby(client: Client): boolean {
