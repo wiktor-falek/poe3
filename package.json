@@ -1,0 +1,19 @@
+{
+  "name": "poe3",
+  "version": "1.0.0",
+  "description": "Multiplayer browser game",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wiktor-falek/poe3.git"
+  },
+  "author": "Wiktor Falek",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/wiktor-falek/poe3/issues"
+  },
+  "homepage": "https://github.com/wiktor-falek/poe3#readme",
+  "devDependencies": {
+    "prettier": "2.8.8"
+  }
+}
