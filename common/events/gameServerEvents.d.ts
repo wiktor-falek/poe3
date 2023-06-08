@@ -19,6 +19,7 @@ export interface ClientToServerEvents {
   "lobby:kick": (characterName: string) => void;
   // instance
   "instance:create": () => void;
+  "instance:leave": () => void;
 }
 
 export interface ServerToClientEvents {
