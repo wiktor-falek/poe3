@@ -8,15 +8,18 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
   const createInstance = () => {
     const instance = InstanceManager.createInstance();
     instance.join(client);
+    client.instanceId = instance.id;
 
     // TODO: join each client in a lobby if it exists
     const room = `instance:${instance.id}`;
 
     const lobby = LobbyManager.currentLobby(client);
 
+
     if (lobby !== undefined) {
       for (const client of lobby.clients) {
         client.socket.join(room);
+        client.instanceId = instance.id;
       }
     }
 

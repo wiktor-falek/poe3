@@ -14,6 +14,7 @@ import assert from "./utils/assert.js";
 import registerLobbyHandler from "./handlers/lobbyHandler.js";
 import LobbyManager from "./game/lobby/lobbyManager.js";
 import registerInstanceHandler from "./handlers/instanceHandler.js";
+import InstanceManager from "./game/instance/instanceManager.js";
 
 await Mongo.connect();
 
@@ -53,8 +54,6 @@ io.on("connection", (socket) => {
     // socket.emit("connectionError");
   });
 
-  console.log(`${client.characterName} (${client.username}) connected`);
-
   socket.onAny((event, ...args) => {
     console.log(event, args);
   });
@@ -63,12 +62,14 @@ io.on("connection", (socket) => {
   registerLobbyHandler(io, socket, client);
   registerInstanceHandler(io, socket, client);
 
+  console.log(`${client.characterName} (${client.username}) connected`);
+
   socket.on("disconnect", (reason, description) => {
     client.setDisconnected();
 
     // handle disconnect
 
-    // TODO: make this dry
+    // TODO: make this dry if possible
     const lobby = LobbyManager.currentLobby(client);
     if (lobby !== undefined) {
       lobby.leave(client);

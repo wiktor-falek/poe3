@@ -1,3 +1,4 @@
+import Client from "../../components/client/client.js";
 import Instance from "./instance.js";
 
 class InstanceManager {
@@ -9,8 +10,14 @@ class InstanceManager {
     return instance;
   }
 
-  static currentInstance(): Instance | undefined {
-    return undefined;
+  static getInstance(instanceId: string): Instance | undefined {
+    return this.instances[instanceId];
+  }
+
+  static currentInstance(client: Client): Instance | undefined {
+    const instanceId = client.instanceId;
+    if (instanceId === null) return undefined;
+    return this.instances[instanceId];
   }
 }
 

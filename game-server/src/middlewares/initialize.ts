@@ -4,6 +4,8 @@ import Character from "../db/models/character.js";
 import { IoSocket } from "../index.js";
 import ClientManager from "../components/client/clientManager.js";
 import { StaticCharacter } from "../../../common/types/index.js";
+import InstanceManager from "../game/instance/instanceManager.js";
+import { ServerMessage } from "../components/message.js";
 
 async function initialize(
   socket: IoSocket,
@@ -68,13 +70,16 @@ async function initialize(
   // use previously client created in recent session
   let client = ClientManager.getClientByUsername(userWithId.account.username);
 
-  if (client) {
+  if (client !== undefined) {
     // update the socket reference of existing client
     client.socket = socket;
   }
   // if existing character does not match currently selected character
   // reinstantiate the client
-  if (!client || client.character._id !== characterWithId._id) {
+  if (
+    client === undefined ||
+    !client.character._id.equals(characterWithId._id)
+  ) {
     client = ClientManager.createClient(userWithId, characterWithId, socket);
   }
 
@@ -84,6 +89,22 @@ async function initialize(
   socket.data.isAuthenticated = true;
 
   socket.data.client = client;
+
+  // try to rejoin existing instance
+
+  const { instanceId } = client;
+  console.log({ instanceId: client.instanceId });
+  console.log(InstanceManager.instances);
+  if (instanceId !== null) {
+    const instance = InstanceManager.getInstance(instanceId);
+    if (instance !== undefined) {
+      console.log("rejoining instance");
+      console.log({ instance });
+      const room = `instance:${instance.id}`;
+      client.socket.join(room);
+      socket.emit("instance:set", instance);
+    }
+  }
 
   next();
 }
