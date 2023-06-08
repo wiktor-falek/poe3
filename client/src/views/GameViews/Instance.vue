@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import * as gameServer from "../../src/socket/gameServer";
+import * as gameServer from "../../../src/socket/gameServer";
 </script>
 
 <template>

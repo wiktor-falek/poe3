@@ -3,8 +3,6 @@ import { useRouter } from "vue-router";
 import { onUnmounted, onMounted, onBeforeMount, ref, watch } from "vue";
 import * as gameServer from "../socket/gameServer";
 import Chat from "../components/Chat.vue";
-import CharacterOverview from "../components/CharacterOverview.vue";
-import Lobby from "../components/Lobby.vue";
 
 const router = useRouter();
 
@@ -28,7 +26,7 @@ onMounted(() => {
       const timeSpentLoading = end - start;
 
       // if real load time was below MINIMUM_LOAD_TIME, timeout for the remaining duration
-      const MINIMUM_LOAD_TIME = 800;
+      const MINIMUM_LOAD_TIME = 0;
       const timeoutDuration = MINIMUM_LOAD_TIME - timeSpentLoading;
 
       setTimeout(() => {
@@ -38,6 +36,15 @@ onMounted(() => {
       unwatch();
     }
   });
+  watch(
+    () => gameServer.state.instance,
+    (newInstance, oldInstance) => {
+      console.log({ oldInstance, newInstance });
+      if (newInstance !== null) {
+        router.push("/game/instance");
+      }
+    }
+  );
 });
 
 onUnmounted(() => {
@@ -58,11 +65,12 @@ onUnmounted(() => {
       <div></div>
     </div>
   </main>
-
   <main v-else :class="{ loaded: gameServer.state.connected }">
-    <!-- <CharacterOverview /> -->
-    <Lobby />
+    <RouterView></RouterView>
     <Chat class="chat" />
+    <nav>
+      <RouterLink to="/game/lobby">Lobby</RouterLink>
+    </nav>
   </main>
 </template>
 

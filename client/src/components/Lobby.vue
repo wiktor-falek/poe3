@@ -3,8 +3,6 @@ import { onMounted } from "vue";
 import * as gameServer from "../../src/socket/gameServer";
 import { ref } from "vue";
 import useCharacterStore from "../stores/characterStore";
-import { watch } from "vue";
-import router from "../router";
 
 const characterStore = useCharacterStore();
 
@@ -41,16 +39,6 @@ function createInstance() {
 onMounted(() => {
   gameServer.socket.emit("lobby:getCurrent");
   refresh();
-
-  watch(
-    () => gameServer.state.instance,
-    (newInstance, oldInstance) => {
-      console.log({ oldInstance, newInstance });
-      if (newInstance !== null) {
-        router.push("/game/instance");
-      }
-    }
-  );
 });
 </script>
 

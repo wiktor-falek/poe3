@@ -13,6 +13,7 @@ import {
   MembersOnlyLobbyData,
 } from "../../../game-server/src/game/lobby/lobby";
 import { InstanceData } from "../../../game-server/src/game/instance/instance";
+import router from "../router";
 
 interface State {
   connected: boolean;
@@ -83,6 +84,5 @@ socket.on("lobby:delete", (lobbyId) => {
 });
 
 socket.on("instance:set", (instance) => {
-  console.log("instance:set");
   state.instance = instance;
 });
