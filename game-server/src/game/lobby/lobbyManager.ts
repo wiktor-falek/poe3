@@ -5,6 +5,15 @@ import Client from "../../components/client/client.js";
 class LobbyManager {
   static readonly lobbies: { [lobbyId: string]: Lobby } = {};
 
+  static get visibleLobbies(): { [lobbyId: string]: Lobby } {
+    // returns lobbies excluding ones where isHidden is true;
+    const copy = { ...this.lobbies };
+    for (const key of Object.keys(copy)) {
+      copy[key].isHidden && delete copy[key];
+    }
+    return copy;
+  }
+
   static currentLobby(client: Client): Lobby | undefined {
     return Object.values(this.lobbies).find(lobby => lobby.clientIsInLobby(client));
   }

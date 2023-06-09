@@ -90,10 +90,7 @@ async function initialize(socket: IoSocket, next: (err?: ExtendedError | undefin
   if (instanceId !== null) {
     const instance = InstanceManager.getInstance(instanceId);
     if (instance !== undefined) {
-      console.log("rejoining instance");
-      console.log({ instance });
-      const room = `instance:${instance.id}`;
-      client.socket.join(room);
+      client.socket.join(instance.room);
       socket.emit("instance:set", instance);
     }
   }

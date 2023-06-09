@@ -4,16 +4,16 @@ import { GlobalMessage, ServerMessage } from "../components/message.js";
 import Client from "../components/client/client.js";
 
 function registerChatHandler(io: Io, socket: IoSocket, client: Client) {
-  const join = (_room: number) => {
+  const join = (_roomId: number) => {
     const schema = Joi.number().required().min(1).max(1000);
-    const result = schema.validate(_room);
+    const result = schema.validate(_roomId);
     if (result.error) {
       return socket.emit("chat:message", new ServerMessage("Invalid argument 'room'"));
     }
 
-    const room = result.value;
+    const roomId = result.value;
 
-    const roomName = `global:${room}`;
+    const room = `global:${roomId}`;
 
     // leave other global rooms, because client is
     // allowed to only be in one global room at a time
@@ -22,8 +22,7 @@ function registerChatHandler(io: Io, socket: IoSocket, client: Client) {
         socket.leave(room);
       }
     }
-
-    socket.join(roomName);
+    socket.join(room);
 
     socket.emit("chat:message", new ServerMessage(`You joined global room ${room}`));
   };

@@ -23,6 +23,10 @@ class Instance implements InstanceData {
     return this.#id;
   }
 
+  get room() {
+    return `instance:${this.#id}`;
+  }
+
   join(client: Client) {
     this.#clients[client.character._id.toString()] = client;
   }

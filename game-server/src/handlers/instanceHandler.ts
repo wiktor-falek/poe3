@@ -7,25 +7,29 @@ import { PartyMessage } from "../components/message.js";
 
 function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
   const create = () => {
-    const instance = InstanceManager.createInstance();
-    instance.join(client);
-    client.instanceId = instance.id;
-
-    // TODO: join each client in a lobby if it exists
-    const room = `instance:${instance.id}`;
-
+    // if lobby exists prevent non-owner from creating a lobby
     const lobby = LobbyManager.currentLobby(client);
 
-    if (lobby !== undefined) {
-      for (const client of lobby.clients) {
-        client.socket.join(room);
-        client.instanceId = instance.id;
-      }
+    if (lobby && !lobby.clientIsOwner(client)) {
+      return;
     }
 
-    // have each client in the instance subscribe to the instance socket room
+    if (lobby) {
+      lobby.isHidden = true;
+    }
 
-    io.to(room).emit("instance:set", instance);
+    // initialize instance
+    const instance = InstanceManager.createInstance();
+
+    const clients = lobby === undefined ? [client] : [...lobby.clients];
+    // handle instance join for each client
+    for (const client of clients) {
+      instance.join(client);
+      client.instanceId = instance.id;
+      client.socket.join(instance.room);
+    }
+
+    io.to(instance.room).emit("instance:set", instance);
   };
 
   const leave = () => {
@@ -40,10 +44,9 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
 
     socket.emit("instance:set", null);
 
-    const room = `instance:${instance.id}`;
-    socket.leave(room);
+    socket.leave(instance.room);
     socket
-      .to(room)
+      .to(instance.room)
       .emit(
         "chat:message",
         new PartyMessage(`${client.characterName} has left the area`, "SYSTEM")

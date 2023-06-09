@@ -25,12 +25,14 @@ const LOBBY_MAX_SIZE = 4;
 
 class Lobby implements LobbyData {
   #clients: { [characterId: string]: Client };
+  #isHidden: boolean;
   name: string;
   ownerName: string;
   id: string;
   size: number;
   constructor(name: string, ownerName: string) {
     this.#clients = {};
+    this.#isHidden = false;
     this.name = name;
     this.ownerName = ownerName;
     this.id = nanoid();
@@ -52,8 +54,20 @@ class Lobby implements LobbyData {
     });
   }
 
+  get isHidden() {
+    return this.#isHidden;
+  }
+
+  set isHidden(hidden: boolean) {
+    this.#isHidden = hidden;
+  }
+
   get clients(): Array<Client> {
     return Object.values(this.#clients);
+  }
+
+  get room() {
+    return `lobby:${this.id}`;
   }
 
   clientIsInLobby(client: Client): boolean {
@@ -106,6 +120,10 @@ class Lobby implements LobbyData {
     }
 
     return targetClient;
+  }
+
+  clientIsOwner(client: Client) {
+    return this.ownerName === client.characterName;
   }
 }
 

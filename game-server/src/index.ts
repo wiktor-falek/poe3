@@ -71,7 +71,7 @@ io.on("connection", socket => {
     const lobby = LobbyManager.currentLobby(client);
     if (lobby !== undefined) {
       lobby.leave(client);
-      io.to(`lobby:${lobby.id}`).emit("lobby:data", lobby.membersOnlyData);
+      io.to(lobby.room).emit("lobby:data", lobby.membersOnlyData);
       lobby.id;
       if (lobby.size === 0) {
         LobbyManager.deleteLobby(lobby.id);
