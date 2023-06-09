@@ -24,8 +24,8 @@ class LobbyManager {
     return lobby;
   }
 
-  static deleteLobby(lobbyId: string) {
-    delete this.lobbies[lobbyId];
+  static deleteLobby(lobby: Lobby) {
+    delete this.lobbies[lobby.id];
   }
 
   static joinLobby(client: Client, lobbyId: string): ResultOk<Lobby> | ResultErr {

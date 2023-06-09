@@ -3,9 +3,7 @@ import Joi from "joi";
 import Character from "../db/models/character.js";
 import { IoSocket } from "../index.js";
 import ClientManager from "../components/client/clientManager.js";
-import { StaticCharacter } from "../../../common/types/index.js";
 import InstanceManager from "../game/instance/instanceManager.js";
-import { ServerMessage } from "../components/message.js";
 
 async function initialize(socket: IoSocket, next: (err?: ExtendedError | undefined) => void) {
   const { auth } = socket.handshake;

@@ -58,7 +58,7 @@ function registerLobbyHandler(io: Io, socket: IoSocket, client: Client) {
     socket.to(lobby.room).emit("lobby:data", lobby.membersOnlyData);
 
     if (lobby.size === 0) {
-      LobbyManager.deleteLobby(lobby.id);
+      LobbyManager.deleteLobby(lobby);
       io.emit("lobby:delete", lobby.id);
     }
   };

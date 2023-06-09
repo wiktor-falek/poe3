@@ -10,6 +10,10 @@ class InstanceManager {
     return instance;
   }
 
+  static deleteInstance(instance: Instance) {
+    delete this.instances[instance.id];
+  }
+
   static getInstance(instanceId: string): Instance | undefined {
     return this.instances[instanceId];
   }

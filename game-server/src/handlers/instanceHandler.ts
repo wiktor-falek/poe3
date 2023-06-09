@@ -1,4 +1,3 @@
-import Joi from "joi";
 import type { Io, IoSocket } from "../index.js";
 import Client from "../components/client/client.js";
 import InstanceManager from "../game/instance/instanceManager.js";
@@ -41,6 +40,11 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
 
     instance.leave(client);
     client.instanceId = null;
+
+    if (Object.keys(instance).length === 0) {
+      // all clients left
+      InstanceManager.deleteInstance(instance);
+    }
 
     socket.emit("instance:set", null);
 
