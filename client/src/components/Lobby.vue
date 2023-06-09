@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { onMounted } from "vue";
 import * as gameServer from "../../src/socket/gameServer";
 import { ref } from "vue";
 import useCharacterStore from "../stores/characterStore";
+import { onBeforeMount } from "vue";
 
 const characterStore = useCharacterStore();
 
@@ -36,7 +36,7 @@ function createInstance() {
   gameServer.socket.emit("instance:create");
 }
 
-onMounted(() => {
+onBeforeMount(() => {
   gameServer.socket.emit("lobby:getCurrent");
   refresh();
 });

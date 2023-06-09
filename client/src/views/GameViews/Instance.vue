@@ -13,7 +13,7 @@ onMounted(() => {
     () => gameServer.state.instance,
     (newInstance, _) => {
       if (newInstance === null) {
-        router.push("/game");
+        router.push("/game/lobby");
       }
     }
   );

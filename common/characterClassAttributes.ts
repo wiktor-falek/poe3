@@ -1,4 +1,4 @@
-import type { Attributes, CharacterClass } from "../../../common/types/index";
+import type { Attributes, CharacterClass } from "./types";
 
 export type CharacterClassAttributes = {
   [characterClass in CharacterClass]: Attributes;

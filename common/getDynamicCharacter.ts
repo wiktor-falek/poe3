@@ -1,4 +1,4 @@
-import type { StaticCharacter, DynamicCharacter } from "../../../common/types/index.js";
+import type { StaticCharacter, DynamicCharacter } from "./types";
 
 import { characterClassAttributes } from "./characterClassAttributes.js";
 
