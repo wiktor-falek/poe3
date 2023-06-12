@@ -1,7 +1,6 @@
-import { Message } from "../../game-server/src/components/message";
-import type Lobby from "../../game-server/src/game/lobby/lobby";
-import { LobbyData, MembersOnlyLobbyData } from "../../game-server/src/game/lobby/lobby";
-import type InstanceData from "../../game-server/src/game/instance/instance";
+import type { Message } from "../game-server/src/components/message";
+import type { LobbyData, MembersOnlyLobbyData } from "../game-server/src/game/lobby/lobby";
+import type InstanceData from "../game-server/src/game/instance/instance";
 
 export interface ClientToServerEvents {
   // chat

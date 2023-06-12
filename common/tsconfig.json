@@ -2,8 +2,10 @@
   "compilerOptions": {
     "declaration": true,
     "declarationMap": true,
-    "rootDir": ".",
-    "composite": true
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "composite": true,
+    "module": "ES2022"
   },
   "references": [{ "path": "../game-server" }]
 }

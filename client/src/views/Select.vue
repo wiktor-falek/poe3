@@ -3,11 +3,12 @@ import { ref } from "vue";
 import { onBeforeMount } from "vue";
 import { useRouter } from "vue-router";
 import type { Ref } from "vue";
-import type { ResponseGetAllCharactersOverview } from "../../../common/api-types/index";
+// import type { ResponseGetAllCharactersOverview } from "../../../game-server/index";
 
 const router = useRouter();
 
-const allCharacters: Ref<ResponseGetAllCharactersOverview> = ref([]);
+// const allCharacters: Ref<ResponseGetAllCharactersOverview> = ref([]);
+const allCharacters: Ref<any> = ref([]);
 const selectedCharacterName: Ref<string | null> = ref(null);
 
 function playHandler() {

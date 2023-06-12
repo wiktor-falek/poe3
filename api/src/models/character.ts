@@ -3,8 +3,8 @@ import { Ok, Err, ResultOk, ResultErr } from "resultat";
 import Mongo from "../mongo.js";
 import startingGear from "../components/startingGear.js";
 import { MongoServerError } from "mongodb";
-import type { CharacterOverview } from "../../../common/api-types/index.js";
-import type { CharacterClass, StaticCharacter } from "../../../common/types/index.js";
+import type { CharacterOverview } from "../../types.js";
+import type { CharacterClass, StaticCharacter } from "../../../common/index.js";
 
 const characterSchema = Joi.object({
   userId: Joi.string().length(24).required(),

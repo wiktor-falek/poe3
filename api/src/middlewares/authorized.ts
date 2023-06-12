@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../models/user.js";
-import { UserData } from "../*.js";
+import type { UserData } from "../../types.js";
 
 /**
  * Queries db for a user matching the cookie sessionId
