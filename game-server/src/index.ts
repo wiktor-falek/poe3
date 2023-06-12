@@ -67,7 +67,7 @@ io.on("connection", socket => {
 
   const instance = InstanceManager.currentInstance(client);
   if (instance !== undefined) {
-    io.to(instance.room).emit(
+    socket.to(instance.room).emit(
       "chat:message",
       new PartyMessage(`${client.characterName} has reconnected.`, "SYSTEM")
     );
