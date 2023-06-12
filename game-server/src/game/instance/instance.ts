@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import Client from "../../components/client/client.js";
-import { DynamicCharacter } from "../../../../common/types/index.js";
-import { getDynamicCharacter } from "../../../../common/getDynamicCharacter.js";
+import { DynamicCharacter } from "../../../../common/index.js";
+// import getDynamicCharacter from "../../../../common/dist/getDynamicCharacter.js";
 
 export interface InstanceData {
   someData: { test: string };
@@ -33,7 +33,7 @@ class Instance implements InstanceData {
 
   join(client: Client) {
     this.#clients[client.character._id.toString()] = client;
-    this.characters[client.character._id.toString()] = getDynamicCharacter(client.character);
+    // this.characters[client.character._id.toString()] = getDynamicCharacter(client.character);
   }
 
   leave(client: Client) {

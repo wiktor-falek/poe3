@@ -8,7 +8,7 @@ import type {
   ClientToServerEvents,
   ServerToClientEvents,
   InterServerEvents,
-} from "../../common/events/gameServerEvents.js";
+} from "../../common/gameServerEvents.js";
 import type Client from "./components/client/client.js";
 import assert from "./utils/assert.js";
 import registerLobbyHandler from "./handlers/lobbyHandler.js";

@@ -1,4 +1,4 @@
-import { StaticCharacter } from "../../../../common/types/index.js";
+import { StaticCharacter } from "../../../../common/index.js";
 import Mongo from "../mongo.js";
 
 class Character {

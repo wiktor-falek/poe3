@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.characterClassAttributes = void 0;
-exports.characterClassAttributes = Object.freeze({
+export const characterClassAttributes = Object.freeze({
     swordsman: {
         strength: 8,
         dexterity: 6,

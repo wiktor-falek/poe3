@@ -1,5 +1,5 @@
 import { WithId } from "mongodb";
-import { StaticCharacter, User } from "../../../../common/types/index.js";
+import { StaticCharacter, User } from "../../../../common/index.js";
 import { IoSocket } from "../../index.js";
 
 class Client {

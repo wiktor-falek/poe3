@@ -1,4 +1,4 @@
-import { StaticCharacter, User } from "../../../../common/types/index.js";
+import { StaticCharacter, User } from "../../../../common/index.js";
 import { IoSocket } from "../../index.js";
 import Client from "./client.js";
 import type { WithId } from "mongodb";
