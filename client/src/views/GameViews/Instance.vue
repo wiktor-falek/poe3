@@ -25,5 +25,6 @@ onBeforeMount(() => {
 
 <template>
   <h1>Instance</h1>
+  <p>{{gameServer.state.instance}}</p>
   <button @click="leaveInstance">Leave Instance</button>
 </template>

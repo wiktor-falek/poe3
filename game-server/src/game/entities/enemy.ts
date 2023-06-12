@@ -1,23 +1,17 @@
 import { nanoid } from "nanoid";
 import { randint } from "pyrand";
 
-interface IEnemy {
+class Enemy {
   id: string;
   name: string;
   level: number;
   hp: number;
   maxHp: number;
-}
-
-class Enemy implements IEnemy {
-  id: string;
-  hp: number;
-  public constructor(
-    public name: string,
-    public level: number,
-    public maxHp: number,
-  ) {
+  public constructor(name: string, level: number, maxHp: number) {
     this.id = nanoid();
+    this.name = name;
+    this.level = level;
+    this.maxHp = maxHp;
     this.hp = maxHp;
   }
 
@@ -40,5 +34,17 @@ class Enemy implements IEnemy {
     return { damage, critical: isCritical };
   }
 }
+
+export const testEnemies = () => {
+  const enemy1 = new Enemy("Rat", 1, 10);
+  const enemy2 = new Enemy("Rat", 1, 10);
+  const enemy3 = new Enemy("Rat", 1, 10);
+
+  return {
+    [`${enemy1.id}`]: enemy1,
+    [`${enemy2.id}`]: enemy2,
+    [`${enemy3.id}`]: enemy3,
+  };
+};
 
 export default Enemy;

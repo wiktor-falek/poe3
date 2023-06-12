@@ -1,15 +1,12 @@
 import { reactive } from "vue";
 import { io, Socket } from "socket.io-client";
-import type {
-  ServerToClientEvents,
-  ClientToServerEvents,
-} from "../../../common/events/gameServerEvents";
+import type { ServerToClientEvents, ClientToServerEvents } from "../../../common/gameServerEvents";
 import getCookie from "../utils/getCookie";
 import useCharacterStore from "../stores/characterStore";
-import { StaticCharacter } from "../../../common/types";
+import { StaticCharacter } from "../../../common/index";
 import { Message } from "../../../game-server/src/components/message";
 import { LobbyData, MembersOnlyLobbyData } from "../../../game-server/src/game/lobby/lobby";
-import { InstanceData } from "../../../game-server/src/game/instance/instance";
+import type Instance from "../../../game-server/src/game/instance/instance";
 import router from "../router";
 
 interface State {
@@ -17,7 +14,7 @@ interface State {
   messages: Array<Message>;
   lobbies: { [lobbyId: string]: LobbyData };
   lobby: MembersOnlyLobbyData | null;
-  instance: InstanceData | null;
+  instance: Instance | null;
 }
 
 export const state: State = reactive({

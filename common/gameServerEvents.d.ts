@@ -1,6 +1,6 @@
 import type { Message } from "../game-server/src/components/message.js";
 import type { LobbyData, MembersOnlyLobbyData } from "../game-server/src/game/lobby/lobby.js";
-import type InstanceData from "../game-server/src/game/instance/instance.js";
+import type Instance from "../game-server/src/game/instance/instance.js";
 
 export interface ClientToServerEvents {
   // chat
@@ -29,7 +29,7 @@ export interface ServerToClientEvents {
   "lobby:set": (lobby: LobbyData) => void;
   "lobby:delete": (lobbyId: string) => void;
   // instance
-  "instance:set": (instance: InstanceData | null) => void;
+  "instance:set": (instance: Instance | null) => void;
 }
 
 export interface InterServerEvents {

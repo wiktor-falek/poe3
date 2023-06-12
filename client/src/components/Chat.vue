@@ -118,7 +118,7 @@ function send() {
   /* TODO: let user expand height by left click dragging */
   max-height: 200px;
   border: 2px solid gray;
-  background-color: rgb(45, 45, 45, 0.4);
+  background-color: rgb(30, 30, 30, 0.95);
   padding: 2px 4px;
   overflow: scroll;
 }
