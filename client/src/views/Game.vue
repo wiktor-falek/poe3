@@ -39,7 +39,6 @@ onMounted(() => {
   watch(
     () => gameServer.state.instance,
     (newInstance, oldInstance) => {
-      console.log({ oldInstance, newInstance });
       if (newInstance !== null) {
         router.push("/game/instance");
       }

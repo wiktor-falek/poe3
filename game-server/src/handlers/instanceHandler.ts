@@ -2,7 +2,7 @@ import type { Io, IoSocket } from "../index.js";
 import Client from "../components/client/client.js";
 import InstanceManager from "../game/instance/instanceManager.js";
 import LobbyManager from "../game/lobby/lobbyManager.js";
-import { PartyMessage } from "../components/message.js";
+import { GlobalMessage, PartyMessage } from "../components/message.js";
 
 function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
   const create = () => {
@@ -49,11 +49,11 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     socket.emit("instance:set", null);
 
     socket.leave(instance.room);
-    socket
-      .to(instance.room)
-      .emit(
-        "chat:message",
-        new PartyMessage(`${client.characterName} has left the area`, "SYSTEM")
+    io
+    .to(instance.room)
+    .emit(
+      "chat:message",
+      new GlobalMessage(`${client.characterName} has left the instance`, "SYSTEM")
       );
   };
 

@@ -24,7 +24,7 @@ function registerChatHandler(io: Io, socket: IoSocket, client: Client) {
     }
     socket.join(room);
 
-    socket.emit("chat:message", new ServerMessage(`You joined global room ${room}`));
+    socket.emit("chat:message", new ServerMessage(`You joined global ${roomId}`));
   };
 
   const send = (_message: string) => {

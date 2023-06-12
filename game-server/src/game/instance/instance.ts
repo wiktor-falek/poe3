@@ -1,7 +1,8 @@
 import { nanoid } from "nanoid";
 import Client from "../../components/client/client.js";
 import { DynamicCharacter } from "../../../../common/index.js";
-// import getDynamicCharacter from "../../../../common/dist/getDynamicCharacter.js";
+import getDynamicCharacter from "../../../../common/dist/getDynamicCharacter.js";
+import Enemy from "../entities/enemy.js";
 
 export interface InstanceData {
   someData: { test: string };
@@ -10,6 +11,7 @@ export interface InstanceData {
 class Instance implements InstanceData {
   #clients: { [characterId: string]: Client };
   characters: { [characterId: string]: DynamicCharacter };
+  enemies: { [enemyId: string]: Enemy };
   #id: string;
   someData: { test: string };
   constructor() {
@@ -17,6 +19,7 @@ class Instance implements InstanceData {
     this.characters = {};
     this.#id = nanoid();
     this.someData = { test: "Instance Data" };
+    this.enemies = {};
   }
 
   get clients() {
@@ -33,7 +36,7 @@ class Instance implements InstanceData {
 
   join(client: Client) {
     this.#clients[client.character._id.toString()] = client;
-    // this.characters[client.character._id.toString()] = getDynamicCharacter(client.character);
+    this.characters[client.character._id.toString()] = getDynamicCharacter(client.character);
   }
 
   leave(client: Client) {

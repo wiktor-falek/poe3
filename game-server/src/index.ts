@@ -15,6 +15,9 @@ import registerLobbyHandler from "./handlers/lobbyHandler.js";
 import LobbyManager from "./game/lobby/lobbyManager.js";
 import registerInstanceHandler from "./handlers/instanceHandler.js";
 import InstanceManager from "./game/instance/instanceManager.js";
+import { PartyMessage } from "./components/message.js";
+
+process.env.NODE_ENV = process.env.NODE_ENV === "production" ? "production" : "development";
 
 await Mongo.connect();
 
@@ -62,6 +65,14 @@ io.on("connection", socket => {
 
   console.log(`${client.characterName} (${client.username}) connected`);
 
+  const instance = InstanceManager.currentInstance(client);
+  if (instance !== undefined) {
+    io.to(instance.room).emit(
+      "chat:message",
+      new PartyMessage(`${client.characterName} has reconnected.`, "SYSTEM")
+    );
+  }
+
   socket.on("disconnect", (reason, description) => {
     client.setDisconnected();
 
@@ -76,6 +87,14 @@ io.on("connection", socket => {
       if (lobby.size === 0) {
         LobbyManager.deleteLobby(lobby);
       }
+    }
+
+    const instance = InstanceManager.currentInstance(client);
+    if (instance !== undefined) {
+      io.to(instance.room).emit(
+        "chat:message",
+        new PartyMessage(`${client.characterName} has disconnected.`, "SYSTEM")
+      );
     }
 
     console.log(`${client.characterName} (${client.username}) disconnected (${reason})`);

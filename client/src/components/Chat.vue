@@ -173,6 +173,6 @@ input {
   color: rgb(223, 60, 60);
 }
 .message__sender--current-character {
-  color: rgb(64, 135, 243);
+  color: var(--current-character);
 }
 </style>

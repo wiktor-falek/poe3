@@ -1,14 +1,17 @@
 <script lang="ts" setup>
-import { onMounted } from "vue";
 import * as gameServer from "../../../src/socket/gameServer";
 import { watch } from "vue";
 import router from "../../router";
+import { onBeforeMount } from "vue";
 
 function leaveInstance() {
   gameServer.socket.emit("instance:leave");
 }
 
-onMounted(() => {
+onBeforeMount(() => {
+  if (gameServer.state.instance === null) {
+    router.push("/game/lobby");
+  }
   watch(
     () => gameServer.state.instance,
     (newInstance, _) => {
@@ -22,6 +25,5 @@ onMounted(() => {
 
 <template>
   <h1>Instance</h1>
-  <p>{{ gameServer.state.instance }}</p>
   <button @click="leaveInstance">Leave Instance</button>
 </template>
