@@ -38,8 +38,15 @@ const isCollapsed = ref(true);
 .accordion {
   display: flex;
   flex-direction: column;
+  -webkit-transition: width 0.2s ease-out;
+  -moz-transition: width 0.2s ease-out;
+  -ms-transition: width 0.2s ease-out;
+  -o-transition: width 0.2s ease-out;
+  transition: width 0.2s ease-out;
   background-color: rgb(60, 60, 60);
   gap: 10px;
+  overflow: hidden;
+  width: 200px;
 }
 
 .accordion > * {
@@ -47,6 +54,6 @@ const isCollapsed = ref(true);
 }
 
 .collapsed {
-  display: none;
+  width: 0;
 }
 </style>

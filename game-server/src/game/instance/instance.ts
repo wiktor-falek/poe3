@@ -6,13 +6,13 @@ import Enemy, { testEnemies } from "../entities/enemy.js";
 
 class Instance {
   #clients: { [characterId: string]: Client };
+  #id: string;
   characters: { [characterId: string]: DynamicCharacter };
   enemies: { [enemyId: string]: Enemy };
-  #id: string;
   constructor() {
     this.#clients = {};
-    this.characters = {};
     this.#id = nanoid();
+    this.characters = {};
     this.enemies = testEnemies();
   }
 
@@ -35,6 +35,7 @@ class Instance {
 
   leave(client: Client) {
     delete this.#clients[client.character._id.toString()];
+    delete this.characters[client.character._id.toString()];
   }
 }
 
