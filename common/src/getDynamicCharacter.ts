@@ -19,7 +19,7 @@ function getDynamicCharacter(character: StaticCharacter): DynamicCharacter {
       maxHp: 10,
       hp: 10,
       maxMp: 10,
-      mp: 5,
+      mp: 10,
     },
   };
   return dynamicCharacter;

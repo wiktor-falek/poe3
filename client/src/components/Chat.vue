@@ -109,7 +109,7 @@ function send() {
   background-color: rgb(55, 55, 55);
 }
 
-.expand:hover {
+.toggle-collapsed:hover {
   background-color: rgb(80, 80, 80);
 }
 
