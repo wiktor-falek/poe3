@@ -12,7 +12,7 @@ const getUri = /*async*/ () => {
     // const mongoServer = await MongoMemoryServer.create();
     // return mongoServer.getUri();
     default:
-      return `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.4zrjv3n.mongodb.net/?retryWrites=true&w=majority`;
+      return "mongodb://localhost:27017";
   }
 };
 
@@ -41,7 +41,7 @@ class Mongo {
   static async connect() {
     try {
       const client = await this.getClient().connect();
-      console.log("Connected to db");
+      console.log(`Connected to ${process.env.NODE_ENV} db`);
       return client;
     } catch (err) {
       console.log("Failed to connect to db");
