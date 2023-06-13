@@ -66,13 +66,18 @@ onUnmounted(() => {
     </div>
   </main>
   <main v-else :class="{ loaded: gameServer.state.connected }">
-    <RouterView></RouterView>
+    <RouterView class="game"></RouterView>
     <Chat class="chat" />
     <Navigation />
   </main>
 </template>
 
 <style scoped>
+.game {
+  margin: 25px;
+  margin-top: 0px;
+}
+
 .chat {
   position: absolute;
   bottom: 0px;

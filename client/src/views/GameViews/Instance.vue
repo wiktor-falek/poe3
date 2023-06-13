@@ -33,8 +33,9 @@ onBeforeMount(() => {
       <div class="party party--enemy">
         <div class="party__member" v-for="enemy in gameServer.state.instance.enemies">
           <p>
-            <span class="party__member__name">{{ enemy.name }}</span>
-            <span class="party__member__level">{{ enemy.level }}</span>
+            <span class="party__member__name">{{ enemy.name }}</span
+            >&nbsp;
+            <span class="party__member__level">Lvl {{ enemy.level }}</span>
           </p>
           <p>{{ enemy.hp }} / {{ enemy.maxHp }} HP</p>
         </div>

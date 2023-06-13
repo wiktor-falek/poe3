@@ -7,12 +7,14 @@ class Enemy {
   level: number;
   hp: number;
   maxHp: number;
+  speed: number;
   public constructor(name: string, level: number, maxHp: number) {
     this.id = nanoid();
     this.name = name;
     this.level = level;
     this.maxHp = maxHp;
     this.hp = maxHp;
+    this.speed = level;
   }
 
   isAlive() {

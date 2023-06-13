@@ -7,6 +7,7 @@ import Enemy, { testEnemies } from "../entities/enemy.js";
 class Instance {
   #clients: { [characterId: string]: Client };
   #id: string;
+  #turnOrder: Array<string>;
   characters: { [characterId: string]: DynamicCharacter };
   enemies: { [enemyId: string]: Enemy };
   constructor() {
@@ -14,6 +15,7 @@ class Instance {
     this.#id = nanoid();
     this.characters = {};
     this.enemies = testEnemies();
+    this.#turnOrder = []
   }
 
   get clients() {
