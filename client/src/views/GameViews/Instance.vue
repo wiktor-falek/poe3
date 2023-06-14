@@ -4,7 +4,16 @@ import { watch } from "vue";
 import router from "../../router";
 import { onBeforeMount } from "vue";
 import useCharacterStore from "../../stores/characterStore";
+import { ref, Ref } from "vue";
 const characterStore = useCharacterStore();
+
+function playerAction() {
+  if (targetId.value === null) {
+    gameServer.state.messages.push({ content: "Invalid target", sender: "SYSTEM", group: "ERROR" });
+    return;
+  }
+  gameServer.socket.emit("instance:action", targetId.value);
+}
 
 function leaveInstance() {
   gameServer.socket.emit("instance:leave");
@@ -23,15 +32,31 @@ onBeforeMount(() => {
     }
   );
 });
+
+// combat stuff
+// TODO: move to a separate component that will be render if instance.room.type === "combat"
+
+const targetId: Ref<string | null> = ref(null);
+
+function selectTarget(id: string) {
+  console.log(id);
+  targetId.value = id;
+}
 </script>
 
 <template>
   <div class="instance" v-if="gameServer.state.instance">
     <h1>Instance</h1>
+    <p v-if="gameServer.state.yourTurn">Your Turn</p>
 
     <div class="board" v-if="gameServer.state.instance.room">
       <div class="party party--enemy">
-        <div class="party__member" v-for="enemy in gameServer.state.instance.room.enemies">
+        <div
+          class="party__member"
+          v-for="enemy in gameServer.state.instance.room.enemies"
+          @click="selectTarget(enemy.id)"
+          :class="{ selected: enemy.id === targetId }"
+        >
           <p>
             <span class="party__member__name">{{ enemy.name }}</span
             >&nbsp;
@@ -58,7 +83,7 @@ onBeforeMount(() => {
         </div>
       </div>
     </div>
-
+    <button @click="playerAction">Player Action</button>
     <button @click="leaveInstance">Leave Instance</button>
   </div>
 </template>
@@ -95,5 +120,9 @@ onBeforeMount(() => {
 }
 
 .party__member__level {
+}
+
+.selected {
+  border-color: orange;
 }
 </style>

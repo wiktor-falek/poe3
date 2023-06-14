@@ -14,12 +14,14 @@ class Instance {
     this.#id = nanoid();
   }
 
-  createCombatRoom() {
+  createCombatRoom(): CombatRoom {
     const players = Object.values(this.#clients).map(
       client => new Player(getDynamicCharacter(client.character), client.character._id.toString())
     );
     const enemies = testEnemies();
-    this.room = new CombatRoom(players, enemies);
+    const room = new CombatRoom(players, enemies);
+    this.room = room;
+    return room;
   }
 
   get clients() {

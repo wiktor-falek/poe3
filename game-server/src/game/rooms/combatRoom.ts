@@ -1,4 +1,3 @@
-import { shuffle } from "pyrand";
 import Enemy from "../entities/enemy.js";
 import Player from "../entities/player.js";
 import Turn from "../combat/turn.js";

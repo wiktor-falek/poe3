@@ -1,6 +1,7 @@
 import type { Message } from "../game-server/src/components/message.js";
 import type { LobbyData, MembersOnlyLobbyData } from "../game-server/src/game/lobby/lobby.js";
 import type Instance from "../game-server/src/game/instance/instance.js";
+import { StaticCharacter } from "./index.js";
 
 export interface ClientToServerEvents {
   // chat
@@ -16,11 +17,12 @@ export interface ClientToServerEvents {
   // instance
   "instance:create": () => void;
   "instance:leave": () => void;
+  "instance:action": (targetId: string) => void;
 }
 
 export interface ServerToClientEvents {
   // global
-  character: (character: any) => void;
+  character: (character: StaticCharacter) => void;
   // chat
   "chat:message": (message: Message) => void;
   // lobby
@@ -30,6 +32,9 @@ export interface ServerToClientEvents {
   "lobby:delete": (lobbyId: string) => void;
   // instance
   "instance:set": (instance: Instance | null) => void;
+  "instance:your-turn": () => void;
+  "instance:player-action": (action: any) => void;
+  "instance:enemy-action": (action: any) => void;
 }
 
 export interface InterServerEvents {

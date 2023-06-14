@@ -7,7 +7,6 @@ import { StaticCharacter } from "../../../common/index";
 import { Message } from "../../../game-server/src/components/message";
 import { LobbyData, MembersOnlyLobbyData } from "../../../game-server/src/game/lobby/lobby";
 import type Instance from "../../../game-server/src/game/instance/instance";
-import router from "../router";
 
 interface State {
   connected: boolean;
@@ -15,6 +14,7 @@ interface State {
   lobbies: { [lobbyId: string]: LobbyData };
   lobby: MembersOnlyLobbyData | null;
   instance: Instance | null;
+  yourTurn: boolean;
 }
 
 export const state: State = reactive({
@@ -23,6 +23,7 @@ export const state: State = reactive({
   lobbies: {},
   lobby: null,
   instance: null,
+  yourTurn: false,
 });
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
@@ -79,4 +80,26 @@ socket.on("lobby:delete", lobbyId => {
 
 socket.on("instance:set", instance => {
   state.instance = instance;
+});
+
+socket.on("instance:your-turn", () => {
+  state.yourTurn = true;
+});
+
+socket.on("instance:enemy-action", action => {
+  const players = state.instance?.room?.players;
+  const target = players?.find(player => player.id === action.targetId);
+  if (target) {
+    target.resources.hp = Math.max(target.resources.hp - action.damage, 0);
+  }
+});
+
+socket.on("instance:player-action", action => {
+  const enemies = state.instance?.room?.enemies;
+  const target = enemies?.find(enemy => enemy.id === action.targetId);
+  console.log({ enemies, target, action });
+  console.log(target?.hp);
+  if (target) {
+    target.hp = Math.max(target.hp - action.damage, 0);
+  }
 });

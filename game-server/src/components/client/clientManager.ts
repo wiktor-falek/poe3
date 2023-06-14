@@ -11,6 +11,13 @@ class ClientManager {
     return client;
   }
 
+  static getClientByCharacterName(characterName: string): Client | undefined {
+    const client = Array.from(this.clients.values()).find(
+      client => client.characterName === characterName
+    );
+    return client;
+  }
+
   static createClient(
     user: WithId<User>,
     character: WithId<StaticCharacter>,

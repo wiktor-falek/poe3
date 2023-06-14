@@ -6,36 +6,43 @@ type Entity = Enemy | Player;
 
 class Turn {
   #entities: Array<Entity>;
-  turn: Generator<Entity, void, unknown>;
+  #turn: Generator<Entity, void, unknown>;
+  #current: Entity | null;
   constructor(players: Array<Player>, enemies: Array<Enemy>) {
     this.#entities = [...players, ...enemies];
     this.createTurnOrder();
-    this.turn = this.generateTurn();
+    this.#turn = this.generateTurn();
+    this.#current = null;
   }
 
   get hasEnded() {
-    return !!this.turn.return().done;
+    return this.current === null;
+  }
+
+  get current() {
+    return this.#current;
   }
 
   startTurn() {
-    this.turn = this.generateTurn();
+    this.#turn = this.generateTurn();
   }
 
   next() {
-    const entity = this.turn.next().value;
+    const entity = this.#turn.next().value ?? null;
+    this.#current = entity;
     return entity;
-  }
-
-  private *generateTurn() {
-    for (const entity of this.#entities) {
-      yield entity;
-    }
   }
 
   createTurnOrder() {
     // TODO: balance the odds by including the speed of each entity
     shuffle(this.#entities);
     return this.#entities;
+  }
+
+  private *generateTurn() {
+    for (const entity of this.#entities) {
+      yield entity;
+    }
   }
 }
 

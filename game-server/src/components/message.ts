@@ -1,4 +1,4 @@
-type Group = "SYSTEM" | "GLOBAL" | "PARTY" | "GUILD";
+type Group = "SYSTEM" | "GLOBAL" | "PARTY" | "GUILD" | "ERROR";
 
 export interface Message {
   content: string;
@@ -39,5 +39,11 @@ export class PartyMessage extends BaseMessage {
 export class GuildMessage extends BaseMessage {
   constructor(content: string, sender?: string) {
     super(content, sender ?? "SERVER", "GUILD");
+  }
+}
+
+export class ErrorMessage extends BaseMessage {
+  constructor(content: string) {
+    super(content, "SERVER", "ERROR");
   }
 }
