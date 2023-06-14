@@ -84,7 +84,6 @@ async function initialize(socket: IoSocket, next: (err?: ExtendedError | undefin
 
   const { instanceId } = client;
   console.log({ instanceId: client.instanceId });
-  console.log(InstanceManager.instances);
   if (instanceId !== null) {
     const instance = InstanceManager.getInstance(instanceId);
     if (instance !== undefined) {

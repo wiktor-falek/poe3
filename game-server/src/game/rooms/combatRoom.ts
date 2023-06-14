@@ -1,29 +1,20 @@
-import { choices, shuffle } from "pyrand";
-import Enemy, { testEnemies } from "../entities/enemy.js";
+import { shuffle } from "pyrand";
+import Enemy from "../entities/enemy.js";
 import Player from "../entities/player.js";
-
-type EntityId = string;
+import Turn from "../combat/turn.js";
 
 class CombatRoom {
-  #turnOrder: Array<EntityId>;
+  #turn: Turn;
   players: Array<Player>;
   enemies: Array<Enemy>;
   constructor(players: Array<Player>, enemies: Array<Enemy>) {
-    this.#turnOrder = [];
     this.players = players;
     this.enemies = enemies;
+    this.#turn = new Turn(players, enemies);
   }
 
-  get turnOrder() {
-    return this.#turnOrder;
-  }
-
-  randomizeTurnOrder() {
-    const entities = [...Object.values(this.players), ...Object.values(this.enemies)];
-    // TODO: balance the odds by including the speed of each entity
-    const ids = entities.map(entity => entity.id);
-    shuffle(ids);
-    return ids;
+  get turn() {
+    return this.#turn;
   }
 }
 

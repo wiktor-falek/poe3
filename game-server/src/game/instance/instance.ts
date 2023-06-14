@@ -1,8 +1,7 @@
 import { nanoid } from "nanoid";
 import Client from "../../components/client/client.js";
-import { DynamicCharacter } from "../../../../common/index.js";
 import getDynamicCharacter from "../../../../common/dist/getDynamicCharacter.js";
-import Enemy, { testEnemies } from "../entities/enemy.js";
+import { testEnemies } from "../entities/enemy.js";
 import Player from "../entities/player.js";
 import CombatRoom from "../rooms/combatRoom.js";
 
@@ -13,7 +12,6 @@ class Instance {
   constructor() {
     this.#clients = {};
     this.#id = nanoid();
-    // this.room = new CombatRoom()
   }
 
   createCombatRoom() {

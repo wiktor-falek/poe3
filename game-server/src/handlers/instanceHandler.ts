@@ -52,12 +52,14 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     socket.emit("instance:set", null);
 
     socket.leave(instance.socketRoom);
-    io
-    .to(instance.socketRoom)
-    .emit(
+    io.to(instance.socketRoom).emit(
       "chat:message",
       new GlobalMessage(`${client.characterName} has left the instance`, "SYSTEM")
-      );
+    );
+  };
+
+  const selectRoom = () => {
+    // make sure client is the instance owner
   };
 
   socket.on("instance:create", create);
