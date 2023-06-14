@@ -29,9 +29,9 @@ onBeforeMount(() => {
   <div class="instance" v-if="gameServer.state.instance">
     <h1>Instance</h1>
 
-    <div class="board">
+    <div class="board" v-if="gameServer.state.instance.room">
       <div class="party party--enemy">
-        <div class="party__member" v-for="enemy in gameServer.state.instance.enemies">
+        <div class="party__member" v-for="enemy in gameServer.state.instance.room.enemies">
           <p>
             <span class="party__member__name">{{ enemy.name }}</span
             >&nbsp;
@@ -41,20 +41,20 @@ onBeforeMount(() => {
         </div>
       </div>
       <div class="party party--ally">
-        <div class="party__member" v-for="character in gameServer.state.instance.characters">
+        <div class="party__member" v-for="player in gameServer.state.instance.room.players">
           <p>
             <span
               class="party__member__name"
               :class="{
                 'party__member--current-character':
-                  characterStore.staticCharacter?.name === character.name,
+                  characterStore.staticCharacter?.name === player.name,
               }"
-              >{{ character.name }}</span
+              >{{ player.name }}</span
             >&nbsp;
-            <span class="party__member__level"> Lv {{ character.level.value }}</span>
+            <span class="party__member__level"> Lv {{ player.level }}</span>
           </p>
-          <p>{{ character.resources.hp }} / {{ character.resources.maxHp }} HP</p>
-          <p>{{ character.resources.mp }} / {{ character.resources.maxMp }} MP</p>
+          <p>{{ player.resources.hp }} / {{ player.resources.maxHp }} HP</p>
+          <p>{{ player.resources.mp }} / {{ player.resources.maxMp }} MP</p>
         </div>
       </div>
     </div>

@@ -67,7 +67,7 @@ io.on("connection", socket => {
 
   const instance = InstanceManager.currentInstance(client);
   if (instance !== undefined) {
-    socket.to(instance.room).emit(
+    socket.to(instance.socketRoom).emit(
       "chat:message",
       new PartyMessage(`${client.characterName} has reconnected.`, "SYSTEM")
     );
@@ -82,7 +82,7 @@ io.on("connection", socket => {
     const lobby = LobbyManager.currentLobby(client);
     if (lobby !== undefined) {
       lobby.leave(client);
-      io.to(lobby.room).emit("lobby:data", lobby.membersOnlyData);
+      io.to(lobby.socketRoom).emit("lobby:data", lobby.membersOnlyData);
       lobby.id;
       if (lobby.size === 0) {
         LobbyManager.deleteLobby(lobby);
@@ -91,7 +91,7 @@ io.on("connection", socket => {
 
     const instance = InstanceManager.currentInstance(client);
     if (instance !== undefined) {
-      io.to(instance.room).emit(
+      io.to(instance.socketRoom).emit(
         "chat:message",
         new PartyMessage(`${client.characterName} has disconnected.`, "SYSTEM")
       );

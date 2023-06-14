@@ -88,7 +88,7 @@ async function initialize(socket: IoSocket, next: (err?: ExtendedError | undefin
   if (instanceId !== null) {
     const instance = InstanceManager.getInstance(instanceId);
     if (instance !== undefined) {
-      client.socket.join(instance.room);
+      client.socket.join(instance.socketRoom);
       socket.emit("instance:set", instance);
     }
   }

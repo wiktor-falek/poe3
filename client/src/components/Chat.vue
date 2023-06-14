@@ -44,7 +44,6 @@ function send() {
   if (message.startsWith("/")) {
     const command = message.slice(1).split(" ")[0];
     const args = message.split(" ").slice(1);
-    console.log({ command, args });
 
     const cb = clientSideCommands[`${command}`] ?? serverSideCommands[`${command}`];
 

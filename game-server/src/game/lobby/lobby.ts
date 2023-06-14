@@ -66,7 +66,7 @@ class Lobby implements LobbyData {
     return Object.values(this.#clients);
   }
 
-  get room() {
+  get socketRoom() {
     return `lobby:${this.id}`;
   }
 

@@ -3,19 +3,25 @@ import Client from "../../components/client/client.js";
 import { DynamicCharacter } from "../../../../common/index.js";
 import getDynamicCharacter from "../../../../common/dist/getDynamicCharacter.js";
 import Enemy, { testEnemies } from "../entities/enemy.js";
+import Player from "../entities/player.js";
+import CombatRoom from "../rooms/combatRoom.js";
 
 class Instance {
   #clients: { [characterId: string]: Client };
   #id: string;
-  #turnOrder: Array<string>;
-  characters: { [characterId: string]: DynamicCharacter };
-  enemies: { [enemyId: string]: Enemy };
+  room?: CombatRoom;
   constructor() {
     this.#clients = {};
     this.#id = nanoid();
-    this.characters = {};
-    this.enemies = testEnemies();
-    this.#turnOrder = []
+    // this.room = new CombatRoom()
+  }
+
+  createCombatRoom() {
+    const players = Object.values(this.#clients).map(
+      client => new Player(getDynamicCharacter(client.character), client.character._id.toString())
+    );
+    const enemies = testEnemies();
+    this.room = new CombatRoom(players, enemies);
   }
 
   get clients() {
@@ -26,18 +32,16 @@ class Instance {
     return this.#id;
   }
 
-  get room() {
+  get socketRoom() {
     return `instance:${this.#id}`;
   }
 
   join(client: Client) {
     this.#clients[client.character._id.toString()] = client;
-    this.characters[client.character._id.toString()] = getDynamicCharacter(client.character);
   }
 
   leave(client: Client) {
     delete this.#clients[client.character._id.toString()];
-    delete this.characters[client.character._id.toString()];
   }
 }
 

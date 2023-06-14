@@ -29,9 +29,9 @@ function registerLobbyHandler(io: Io, socket: IoSocket, client: Client) {
 
     const lobby = result.val;
 
-    socket.join(lobby.room);
+    socket.join(lobby.socketRoom);
 
-    io.to(lobby.room).emit("lobby:data", {
+    io.to(lobby.socketRoom).emit("lobby:data", {
       ...lobby,
       members: lobby.members,
     });
@@ -51,11 +51,11 @@ function registerLobbyHandler(io: Io, socket: IoSocket, client: Client) {
       return;
     }
 
-    socket.leave(lobby.room);
+    socket.leave(lobby.socketRoom);
     socket.emit("lobby:data", null);
 
     // TODO: this could be a separate ServerToClient emit 'lobby:member-leave' => (name: string) => void;
-    socket.to(lobby.room).emit("lobby:data", lobby.membersOnlyData);
+    socket.to(lobby.socketRoom).emit("lobby:data", lobby.membersOnlyData);
 
     if (lobby.size === 0) {
       LobbyManager.deleteLobby(lobby);
@@ -99,11 +99,11 @@ function registerLobbyHandler(io: Io, socket: IoSocket, client: Client) {
       return;
     }
 
-    targetClient.socket.leave(lobby.room);
+    targetClient.socket.leave(lobby.socketRoom);
 
     targetClient.socket.emit("lobby:data", null);
 
-    io.to(lobby.room).emit("lobby:data", {
+    io.to(lobby.socketRoom).emit("lobby:data", {
       ...lobby,
       members: lobby.members,
     });

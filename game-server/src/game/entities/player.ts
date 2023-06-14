@@ -1,10 +1,33 @@
 import { randint } from "pyrand";
-import { DynamicCharacter } from "../../../../common/index.js";
+import { DynamicCharacter, Resources } from "../../../../common/index.js";
 
-class Player {
+// data that will be shared between clients in an instance
+interface PlayerData {
+  name: string;
+  level: number;
+  resources: Resources;
+}
+
+class Player implements PlayerData {
   #dynamicCharacter: DynamicCharacter;
-  constructor(dynamicCharacter: DynamicCharacter) {
+  #id: string;
+  name: string;
+  level: number;
+  resources: Resources;
+  constructor(dynamicCharacter: DynamicCharacter, characterId: string) {
     this.#dynamicCharacter = dynamicCharacter;
+    this.#id = characterId;
+    this.name = dynamicCharacter.name;
+    this.level = dynamicCharacter.level.value;
+    this.resources = dynamicCharacter.resources;
+  }
+
+  get id() {
+    return this.#id;
+  }
+
+  get speed() {
+    return this.#dynamicCharacter.attributes.speed;
   }
 
   isAlive() {

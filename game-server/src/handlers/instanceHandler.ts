@@ -25,10 +25,13 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     for (const client of clients) {
       instance.join(client);
       client.instanceId = instance.id;
-      client.socket.join(instance.room);
+      client.socket.join(instance.socketRoom);
     }
 
-    io.to(instance.room).emit("instance:set", instance);
+    // temporarily init combat before everything is ready
+    instance.createCombatRoom();
+
+    io.to(instance.socketRoom).emit("instance:set", instance);
   };
 
   const leave = () => {
@@ -48,9 +51,9 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
 
     socket.emit("instance:set", null);
 
-    socket.leave(instance.room);
+    socket.leave(instance.socketRoom);
     io
-    .to(instance.room)
+    .to(instance.socketRoom)
     .emit(
       "chat:message",
       new GlobalMessage(`${client.characterName} has left the instance`, "SYSTEM")

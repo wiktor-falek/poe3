@@ -38,15 +38,7 @@ class Enemy {
 }
 
 export const testEnemies = () => {
-  const enemy1 = new Enemy("Rat", 1, 10);
-  const enemy2 = new Enemy("Rat", 1, 10);
-  const enemy3 = new Enemy("Rat", 1, 10);
-
-  return {
-    [`${enemy1.id}`]: enemy1,
-    [`${enemy2.id}`]: enemy2,
-    [`${enemy3.id}`]: enemy3,
-  };
+  return [new Enemy("Rat", 1, 10), new Enemy("Rat", 1, 10), new Enemy("Rat", 1, 10)];
 };
 
 export default Enemy;
