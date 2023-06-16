@@ -22,7 +22,7 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     // initialize instance
     const instance = InstanceManager.createInstance();
 
-    // have each client in lobby (or the sole client) join instance 
+    // have each client in lobby (or the sole client) join instance
     const clients = lobby === undefined ? [client] : [...lobby.clients];
     for (const client of clients) {
       instance.join(client);
@@ -37,43 +37,12 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     // emit the instance after everything has been set up
     io.to(instance.socketRoom).emit("instance:set", instance);
 
-    // TODO: move this to Combat.continue()
-    // TODO: emit result of Combat.continue()
-    while (true) {
-      const entity = room.turn.next();
-
-      if (entity === null) {
-        room.turn.startTurn();
-        continue;
-      }
-
-      if (entity instanceof Player) {
-        // emit to this client to take action
-        // broadcast emit to clients in the room?
-        // entity.dynamicCharacter
-        const client = ClientManager.getClientByCharacterName(entity.name);
-        if (client === undefined) {
-          // shouldn't be possible
-          console.error("Client is undefined");
-          break;
-        }
-        client.socket.emit("instance:your-turn");
-
-        break;
-      }
-
-      if (entity instanceof Enemy) {
-        const action = entity.basicAttack();
-        const target = choice(room.players);
-        target.takeDamage(action.damage);
-
-        io.to(instance.socketRoom).emit("instance:enemy-action", {
-          ...action,
-          targetId: target.id,
-        });
-        // select target and add attacker and target to action
-        // actionQueue.push({ ...action }); // queue actions of all enemies to send at once
-      }
+    const state = room.continue();
+    if (state.yourTurn === true) {
+      client.socket.emit("instance:your-turn");
+    }
+    if (state.actions.length !== 0) {
+      io.to(instance.socketRoom).emit("instance:enemy-actions", state.actions);
     }
   };
 
@@ -110,7 +79,7 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     // make sure client is the instance owner
   };
 
-  const playerAction = (_targetId: string) => {
+  const playerAction = (_targetId: string, _actionId: string) => {
     const instance = InstanceManager.currentInstance(client);
     const room = instance?.room;
     const turn = room?.turn;
@@ -119,52 +88,23 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
       return socket.emit("chat:message", new ErrorMessage("Invalid action"));
     }
 
-    const action = player.basicAttack();
-    const target = room.enemies.find(enemy => enemy.id === _targetId);
+    const targetId = _targetId; // TODO: validate type;
+    const actionId = _actionId; // TODO: validate type;
 
-    if (!target) {
-      return socket.emit("chat:message", new ErrorMessage("Invalid action"));
+    const result = room.playerAction(player, targetId, actionId);
+    if (!result.ok) {
+      return socket.emit("chat:message", new ErrorMessage(result.err));
     }
+    const action = result.val;
 
-    target.takeDamage(action.damage);
-    io.to(instance.socketRoom).emit("instance:player-action", { ...action, targetId: target.id });
+    io.to(instance.socketRoom).emit("instance:player-action", action);
 
-    // TODO: move this to a class
-    while (true) {
-      const entity = room.turn.next();
-
-      if (entity === null) {
-        room.turn.startTurn();
-        continue;
-      }
-
-      if (entity instanceof Player) {
-        // emit to this client to take action
-        // broadcast emit to clients in the room?
-        // entity.dynamicCharacter
-        const client = ClientManager.getClientByCharacterName(entity.name);
-        if (client === undefined) {
-          // shouldn't be possible
-          console.error("Client is undefined");
-          break;
-        }
-        client.socket.emit("instance:your-turn");
-
-        break;
-      }
-
-      if (entity instanceof Enemy) {
-        const action = entity.basicAttack();
-        const target = choice(room.players);
-        target.takeDamage(action.damage);
-
-        io.to(instance.socketRoom).emit("instance:enemy-action", {
-          ...action,
-          targetId: target.id,
-        });
-        // select target and add attacker and target to action
-        // actionLog.push({ ...action }); // queue actions of all enemies to send at once
-      }
+    const state = room.continue();
+    if (state.yourTurn === true) {
+      client.socket.emit("instance:your-turn");
+    }
+    if (state.actions.length !== 0) {
+      io.to(instance.socketRoom).emit("instance:enemy-actions", state.actions);
     }
   };
 

@@ -22,7 +22,10 @@ class Enemy {
   }
 
   takeDamage(amount: number) {
-    this.hp = Math.max(this.hp - amount, 0);
+    const amountAfterReduction = amount;
+    this.hp = Math.max(this.hp - amountAfterReduction, 0);
+    // TODO: amountAfterReduction might exceed this.hp, it also should be 0 at most 
+    return amountAfterReduction;
   }
 
   basicAttack() {

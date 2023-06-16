@@ -17,7 +17,7 @@ export interface ClientToServerEvents {
   // instance
   "instance:create": () => void;
   "instance:leave": () => void;
-  "instance:action": (targetId: string) => void;
+  "instance:action": (targetId: string, actionId: string) => void;
 }
 
 export interface ServerToClientEvents {
@@ -34,7 +34,7 @@ export interface ServerToClientEvents {
   "instance:set": (instance: Instance | null) => void;
   "instance:your-turn": () => void;
   "instance:player-action": (action: any) => void;
-  "instance:enemy-action": (action: any) => void;
+  "instance:enemy-actions": (action: Array<any>) => void;
 }
 
 export interface InterServerEvents {

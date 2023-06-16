@@ -86,19 +86,19 @@ socket.on("instance:your-turn", () => {
   state.yourTurn = true;
 });
 
-socket.on("instance:enemy-action", action => {
-  const players = state.instance?.room?.players;
-  const target = players?.find(player => player.id === action.targetId);
-  if (target) {
-    target.resources.hp = Math.max(target.resources.hp - action.damage, 0);
+socket.on("instance:enemy-actions", actions => {
+  for (const action of actions) {
+    const players = state.instance?.room?.players;
+    const target = players?.find(player => player.id === action.targetId);
+    if (target) {
+      target.resources.hp = Math.max(target.resources.hp - action.damage, 0);
+    }
   }
 });
 
 socket.on("instance:player-action", action => {
   const enemies = state.instance?.room?.enemies;
   const target = enemies?.find(enemy => enemy.id === action.targetId);
-  console.log({ enemies, target, action });
-  console.log(target?.hp);
   if (target) {
     target.hp = Math.max(target.hp - action.damage, 0);
   }

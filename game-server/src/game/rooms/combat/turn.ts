@@ -1,6 +1,6 @@
 import { shuffle } from "pyrand";
-import type Enemy from "../entities/enemy.js";
-import type Player from "../entities/player.js";
+import type Enemy from "../../entities/enemy.js";
+import type Player from "../../entities/player.js";
 
 type Entity = Enemy | Player;
 

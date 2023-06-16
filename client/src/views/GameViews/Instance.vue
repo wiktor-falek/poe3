@@ -12,7 +12,8 @@ function playerAction() {
     gameServer.state.messages.push({ content: "Invalid target", sender: "SYSTEM", group: "ERROR" });
     return;
   }
-  gameServer.socket.emit("instance:action", targetId.value);
+  const BASIC_ATTACK = "0";
+  gameServer.socket.emit("instance:action", targetId.value, BASIC_ATTACK);
 }
 
 function leaveInstance() {
