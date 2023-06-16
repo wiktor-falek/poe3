@@ -14,7 +14,7 @@ class Instance {
     this.#id = nanoid();
   }
 
-  createCombatRoom(): CombatRoom {
+  initCombatRoom(): CombatRoom {
     const players = Object.values(this.#clients).map(
       client => new Player(getDynamicCharacter(client.character), client.character._id.toString())
     );
@@ -26,6 +26,10 @@ class Instance {
 
   get clients() {
     return Object.values(this.#clients);
+  }
+
+  get clientCount() {
+    return Object.keys(this.#clients).length;
   }
 
   get id() {

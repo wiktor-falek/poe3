@@ -15,12 +15,10 @@ class Turn {
     this.#current = null;
   }
 
-  get hasEnded() {
-    return this.current === null;
-  }
-
-  get current() {
-    return this.#current;
+  private *generateTurn() {
+    for (const entity of this.#entities) {
+      yield entity;
+    }
   }
 
   startTurn() {
@@ -39,10 +37,12 @@ class Turn {
     return this.#entities;
   }
 
-  private *generateTurn() {
-    for (const entity of this.#entities) {
-      yield entity;
-    }
+  get hasEnded() {
+    return this.current === null;
+  }
+
+  get current() {
+    return this.#current;
   }
 }
 
