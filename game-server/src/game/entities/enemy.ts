@@ -35,7 +35,7 @@ class Enemy {
     let damage = randint(2, 3);
 
     const critRoll = randint(1, 100);
-    const isCritical = CRIT_CHANCE > CRIT_CHANCE;
+    const isCritical = CRIT_CHANCE > critRoll;
     if (isCritical) {
       damage = Math.floor(damage * CRIT_MULTIPLIER);
     }

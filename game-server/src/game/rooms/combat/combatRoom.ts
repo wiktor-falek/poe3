@@ -32,6 +32,10 @@ class CombatRoom {
       return Err("Invalid target");
     }
 
+    if (!target.isAlive) {
+      return Err("Target is dead");
+    }
+
     const VALID_ACTIONS: { [id: string]: string } = {
       "0": "BASIC_ATTACK",
     };
@@ -94,22 +98,19 @@ class CombatRoom {
       }
 
       if (entity instanceof Enemy) {
-        const action = entity.basicAttack();
-        const target = choice(this.players);
-        target.takeDamage(action.damage);
-
-        const actionData = { ...action, targetId: target.id };
-        state.actions.push(actionData);
+        const action = this.enemyAction(entity);
+        state.actions.push(action);
       }
     }
 
     return state;
   }
 
-  private enemyAction() {
-    // enemy ai choosing ability and targets
-    // updating state
-    // pushing action to actionQueue
+  private enemyAction(enemy: Enemy) {
+    const action = enemy.basicAttack();
+    const target = choice(this.players);
+    target.takeDamage(action.damage);
+    return { ...action, targetId: target.id };
   }
 }
 
