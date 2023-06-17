@@ -45,6 +45,8 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     if (state.turnStartUpdate) {
       io.to(instance.socketRoom).emit("instance:player-turn", state.turnStartUpdate);
     }
+
+    // handle win/lose
   };
 
   const leave = () => {
@@ -104,6 +106,8 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     const action = result.val;
 
     io.to(instance.socketRoom).emit("instance:player-action", action);
+
+    // handle win/lose
   };
 
   const endTurn = () => {
@@ -126,6 +130,8 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     if (state.actions.length !== 0) {
       io.to(instance.socketRoom).emit("instance:enemy-actions", state.actions);
     }
+
+    // handle win/lose
   };
 
   socket.on("instance:create", create);

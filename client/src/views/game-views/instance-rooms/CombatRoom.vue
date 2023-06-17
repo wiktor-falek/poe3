@@ -42,6 +42,9 @@ function leaveInstance() {
       Your Turn
     </p>
 
+    <p v-if="gameServer.state.instance.room.enemiesWon">Enemy Party Won</p>
+    <p v-if="gameServer.state.instance.room.playersWon">Your Party Won</p>
+
     <div class="board" v-if="gameServer.state.instance.room">
       <div class="party party--enemy">
         <div

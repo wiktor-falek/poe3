@@ -49,6 +49,10 @@ class CombatRoom {
     return this.players.filter(player => player.isAlive).length === 0;
   }
 
+  get hasConcluded() {
+    return this.enemiesWon || this.playersWon;
+  }
+
   playerAction(player: Player, targetId: string, actionId: string) {
     const target = this.enemies.find(enemy => enemy.id === targetId);
     if (target === undefined) {
@@ -91,23 +95,14 @@ class CombatRoom {
 
   continue() {
     const state: {
-      playersWon: boolean;
-      enemiesWon: boolean;
       actions: Array<ActionData>;
       turnStartUpdate?: TurnStartUpdate;
     } = {
-      playersWon: false,
-      enemiesWon: false,
       actions: [],
     };
 
     while (true) {
-      if (this.playersWon) {
-        state.playersWon = true;
-        return state;
-      }
-      if (this.enemiesWon) {
-        state.enemiesWon = true;
+      if (this.hasConcluded) {
         return state;
       }
 
