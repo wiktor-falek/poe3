@@ -67,27 +67,29 @@ function send() {
 <template>
   <div class="chat">
     <div class="toggle-collapsed" @click="isCollapsed = !isCollapsed"></div>
-    <div class="accordion" :class="{ collapsed: isCollapsed }">
-      <div class="top">
-        <div class="messages">
-          <p class="message" v-for="message in gameServer.state.messages">
-            <span
-              class="message__sender"
-              :class="{
-                'message__sender--server': message.sender === 'SERVER',
-                'message__sender--system': message.sender === 'SYSTEM',
-                'message__sender--error': message.sender === 'ERROR',
-                'message__sender--current-character':
-                  message.sender === characterStore.staticCharacter?.name,
-              }"
-              >{{ message.sender }}</span
-            >
-            <span class="message__separator">:&nbsp;</span>
-            <span class="message__content">{{ message.content }}</span>
-          </p>
+    <div class="wrapper">
+      <div class="accordion" :class="{ collapsed: isCollapsed }">
+        <div class="top">
+          <div class="messages">
+            <p class="message" v-for="message in gameServer.state.messages">
+              <span
+                class="message__sender"
+                :class="{
+                  'message__sender--server': message.sender === 'SERVER',
+                  'message__sender--system': message.sender === 'SYSTEM',
+                  'message__sender--error': message.sender === 'ERROR',
+                  'message__sender--current-character':
+                    message.sender === characterStore.staticCharacter?.name,
+                }"
+                >{{ message.sender }}</span
+              >
+              <span class="message__separator">:&nbsp;</span>
+              <span class="message__content">{{ message.content }}</span>
+            </p>
+          </div>
         </div>
+        <input type="text" maxlength="128" @keydown.enter="send" v-model="content" />
       </div>
-      <input type="text" maxlength="128" @keydown.enter="send" v-model="content" />
     </div>
   </div>
 </template>
@@ -96,6 +98,11 @@ function send() {
 .chat {
   width: 100%;
   max-width: 600px;
+}
+
+.wrapper {
+  box-sizing: border-box;
+  border: 1px solid gray;
 }
 
 .toggle-collapsed {
@@ -116,8 +123,7 @@ function send() {
   min-height: 200px;
   /* TODO: let user expand height by left click dragging */
   max-height: 200px;
-  border: 2px solid gray;
-  background-color: rgb(30, 30, 30, 0.95);
+  background-color: rgb(35, 35, 35, 0.95);
   padding: 2px 4px;
   overflow: scroll;
 }
