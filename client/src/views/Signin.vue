@@ -134,7 +134,7 @@ function setView(viewName: View) {
 
       <p class="error">{{ errorMessage }}</p>
 
-      <button type="submit">Sign In</button>
+      <button class="button" type="submit">Sign In</button>
     </form>
 
     <form v-show="view === 'signup'" @submit="signUpSubmit($event)">
@@ -173,7 +173,7 @@ function setView(viewName: View) {
 
       <p class="error">{{ errorMessage }}</p>
 
-      <button type="submit">Register</button>
+      <button class="button" type="submit">Register</button>
     </form>
 
     <form v-show="view === 'recovery'" @submit="recoverySubmit($event)">
@@ -188,7 +188,7 @@ function setView(viewName: View) {
 
       <p class="error">{{ errorMessage }}</p>
 
-      <button id="recover" type="submit">Recover</button>
+      <button class="button" id="recover" type="submit">Recover</button>
     </form>
 
     <hr />

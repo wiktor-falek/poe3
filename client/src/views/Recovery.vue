@@ -62,7 +62,7 @@ async function changePassword(e: Event) {
         required
         v-model="confirmPassword"
       />
-      <button type="submit">Submit</button>
+      <button class="button" type="submit">Submit</button>
     </form>
   </main>
 </template>

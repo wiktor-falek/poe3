@@ -21,6 +21,8 @@ interface Resources {
   hp: number;
   maxMp: number;
   mp: number;
+  ap: number;
+  maxAp: number;
 }
 
 /*

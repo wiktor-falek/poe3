@@ -11,8 +11,7 @@ a:hover {
   text-decoration: none;
 }
 
-.button,
-button {
+.button {
   display: inline-block;
   cursor: pointer;
   text-align: center;
@@ -29,16 +28,13 @@ button {
 }
 
 .button:disabled,
-button:disabled:hover,
-.button:disabled:hover,
-button:disabled {
+.button:disabled:hover {
   background-color: rgb(255, 255, 255, 0.05);
   color: rgb(150, 150, 150);
   cursor: default;
 }
 
-.button:hover,
-button:hover {
+.button:hover {
   color: white;
   background-color: rgb(255, 255, 255, 0.23);
 }

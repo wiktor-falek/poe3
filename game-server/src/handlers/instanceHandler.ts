@@ -46,7 +46,11 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
       io.to(instance.socketRoom).emit("instance:player-turn", state.turnStartUpdate);
     }
 
-    // handle win/lose
+    if (room.playersWon) {
+      /*
+        distribute rewards
+      */
+    }
   };
 
   const leave = () => {
@@ -61,7 +65,7 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     client.instanceId = null;
 
     // delete instance if it became empty
-    if (instance.clientCount) {
+    if (instance.clientCount === 0) {
       InstanceManager.deleteInstance(instance);
     }
 
@@ -131,7 +135,11 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
       io.to(instance.socketRoom).emit("instance:enemy-actions", state.actions);
     }
 
-    // handle win/lose
+    if (room.playersWon) {
+      /*
+        distribute rewards
+      */
+    }
   };
 
   socket.on("instance:create", create);

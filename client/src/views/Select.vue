@@ -56,7 +56,7 @@ onBeforeMount(async () => {
       </div>
     </div>
 
-    <button id="play" :disabled="selectedCharacterName === null" @click="playHandler">Play</button>
+    <button class="button" id="play" :disabled="selectedCharacterName === null" @click="playHandler">Play</button>
   </main>
 </template>
 

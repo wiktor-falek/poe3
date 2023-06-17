@@ -68,6 +68,7 @@ onBeforeMount(() => {
 
             <!-- displayed if this character is the owner, on all characters but this one -->
             <button
+              class="button"
               v-if="
                 characterStore.staticCharacter?.name === gameServer.state.lobby.ownerName &&
                 member.name !== characterStore.staticCharacter?.name
@@ -78,8 +79,9 @@ onBeforeMount(() => {
             </button>
           </div>
         </div>
-        <button @click="leaveLobby">Leave</button>
+        <button class="button" @click="leaveLobby">Leave</button>
         <button
+          class="button"
           v-if="characterStore.staticCharacter?.name === gameServer.state.lobby.ownerName"
           @click="createInstance"
         >
@@ -93,15 +95,19 @@ onBeforeMount(() => {
             {{ lobby.name }}
             {{ lobby.size }} / 4
           </div>
-          <button @click="joinLobby(lobby.id)" :disabled="gameServer.state.lobby !== null">
+          <button
+            class="button"
+            @click="joinLobby(lobby.id)"
+            :disabled="gameServer.state.lobby !== null"
+          >
             Join
           </button>
         </div>
         <div class="create-lobby">
           <input type="text" v-model="lobbyName" />
-          <button @click="createLobby">Create Lobby</button>
+          <button class="button" @click="createLobby">Create Lobby</button>
         </div>
-        <button @click="refresh">Refresh</button>
+        <button class="button" @click="refresh">Refresh</button>
       </div>
     </div>
   </main>
@@ -115,7 +121,7 @@ onBeforeMount(() => {
   justify-content: center;
   margin: auto;
   padding: 10px;
-  border: 2px solid gray;
+  border: 1px solid gray;
   flex-direction: column;
   gap: 30px;
   font-size: 1.2rem;
@@ -141,7 +147,7 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 2px solid gray;
+  border: 1px solid gray;
   border-radius: 10px;
   padding: 10px;
 }
@@ -171,7 +177,7 @@ button {
 .current-lobby__members__member {
   display: flex;
   flex-direction: column;
-  border: 2px solid gray;
+  border: 1px solid gray;
   border-radius: 10px;
   padding: 10px;
 }

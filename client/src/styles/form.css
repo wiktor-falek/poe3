@@ -11,13 +11,13 @@ form input {
 }
 
 form input,
-button {
+.button {
   height: 50px;
   border-radius: 10px;
   border: none;
   padding: 10px 15px;
 }
 
-form button {
+form .button {
   background: linear-gradient(90deg, rgb(29, 150, 191), rgb(14, 128, 167));
 }

@@ -2,9 +2,10 @@
   "name": "common",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "type": "module",
   "scripts": {
+    "dev": "tsc-watch --onSuccess \"node .\" ",
     "build": "tsc"
   },
   "keywords": [],
@@ -12,6 +13,7 @@
   "license": "ISC",
   "types": "./index.d.ts",
   "devDependencies": {
+    "tsc-watch": "^6.0.4",
     "typescript": "^5.1.3"
   }
 }

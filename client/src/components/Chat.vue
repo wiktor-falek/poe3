@@ -66,7 +66,7 @@ function send() {
 
 <template>
   <div class="chat">
-    <div class="toggle-collapsed" @click="isCollapsed = !isCollapsed"></div>
+    <button class="toggle-collapsed" @click="isCollapsed = !isCollapsed"></button>
     <div class="wrapper">
       <div class="accordion" :class="{ collapsed: isCollapsed }">
         <div class="top">
@@ -106,11 +106,14 @@ function send() {
 }
 
 .toggle-collapsed {
+  padding: 0;
+  border: none;
   position: relative;
   display: inline-block;
+  margin-bottom: 7px; /* idk why is it like this */
   left: 50%;
-  width: 24px;
-  height: 24px;
+  width: 24px !important;
+  height: 24px !important;
   transform: translate(-50%, 7px);
   background-color: rgb(55, 55, 55);
 }

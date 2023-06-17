@@ -17,6 +17,8 @@ function getDynamicCharacter(character) {
             hp: 20,
             maxMp: 10,
             mp: 10,
+            ap: 3,
+            maxAp: 3,
         },
     };
     return dynamicCharacter;

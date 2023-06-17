@@ -31,14 +31,7 @@ function leaveInstance() {
 
 <template>
   <div class="instance" v-if="gameServer.state.instance?.room">
-    <h1>Instance</h1>
-    <p>Current turn: {{ gameServer.state.instance.room.currentTurnPlayerName }}</p>
-    <p
-      v-if="
-        gameServer.state.instance.room.currentTurnPlayerName ===
-        characterStore.staticCharacter?.name
-      "
-    >
+    <p v-if="gameServer.state.currentTurnPlayer === characterStore.staticCharacter?.name">
       Your Turn
     </p>
 
@@ -80,9 +73,10 @@ function leaveInstance() {
         </div>
       </div>
     </div>
-    <button @click="playerAction">Player Action</button>
-    <button @click="endTurn">End Turn</button>
-    <button @click="leaveInstance">Leave Instance</button>
+    <button class="button" @click="playerAction">Player Action</button>
+    <button class="button" @click="endTurn">End Turn</button>
+    <button class="button" @click="leaveInstance">Leave Instance</button>
+    <h3 class="red" v-if="gameServer.state.isDead">You Are Dead</h3>
   </div>
 </template>
 
@@ -122,5 +116,9 @@ function leaveInstance() {
 
 .selected {
   border-color: orange;
+}
+
+.red {
+  color: rgb(212, 73, 73);
 }
 </style>

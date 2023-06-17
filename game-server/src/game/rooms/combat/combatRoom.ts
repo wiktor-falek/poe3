@@ -29,7 +29,6 @@ class CombatRoom {
   #turn: Turn;
   players: Array<Player>;
   enemies: Array<Enemy>;
-  currentTurnPlayerName?: string;
   constructor(players: Array<Player>, enemies: Array<Enemy>) {
     this.type = "combat";
     this.players = players;
@@ -130,7 +129,6 @@ class CombatRoom {
           playerName: entity.name,
         };
 
-        this.currentTurnPlayerName = this.#turn.current?.name;
         break;
       }
 

@@ -166,7 +166,9 @@ async function createCharacter(e: Event) {
         </div>
 
         <div class="menu__bottom">
-          <button type="submit" id="create" :disabled="selectedClass === null">Create</button>
+          <button type="submit" class="button" id="create" :disabled="selectedClass === null">
+            Create
+          </button>
         </div>
       </form>
     </div>
