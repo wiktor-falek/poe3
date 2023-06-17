@@ -67,33 +67,25 @@ io.on("connection", socket => {
 
   const instance = InstanceManager.currentInstance(client);
   if (instance !== undefined) {
-    socket.to(instance.socketRoom).emit(
-      "chat:message",
-      new PartyMessage(`${client.characterName} has reconnected.`, "SYSTEM")
-    );
+    socket
+      .to(instance.socketRoom)
+      .emit("chat:message", new PartyMessage(`${client.characterName} has reconnected`));
   }
 
   socket.on("disconnect", (reason, description) => {
     client.setDisconnected();
 
-    // handle disconnect
-
-    // TODO: make this dry if possible
     const lobby = LobbyManager.currentLobby(client);
     if (lobby !== undefined) {
       lobby.leave(client);
       io.to(lobby.socketRoom).emit("lobby:data", lobby.membersOnlyData);
-      lobby.id;
-      if (lobby.size === 0) {
-        LobbyManager.deleteLobby(lobby);
-      }
     }
 
     const instance = InstanceManager.currentInstance(client);
     if (instance !== undefined) {
       io.to(instance.socketRoom).emit(
         "chat:message",
-        new PartyMessage(`${client.characterName} has disconnected.`, "SYSTEM")
+        new PartyMessage(`${client.characterName} has disconnected`)
       );
     }
 
