@@ -17,7 +17,7 @@ class Enemy {
     this.speed = level;
   }
 
-  isAlive() {
+  get isAlive() {
     return this.hp > 0;
   }
 

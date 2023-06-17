@@ -27,7 +27,7 @@ class Player implements PlayerData {
     return this.#dynamicCharacter.attributes.speed;
   }
 
-  isAlive() {
+  get isAlive() {
     return this.#dynamicCharacter.resources.hp > 0;
   }
 

@@ -83,9 +83,6 @@ class CombatRoom {
       }
 
       if (entity instanceof Player) {
-        // emit to this client to take action
-        // broadcast emit to clients in the room?
-        // entity.dynamicCharacter
         const client = ClientManager.getClientByCharacterName(entity.name);
         if (client === undefined) {
           // shouldn't be possible
@@ -93,6 +90,7 @@ class CombatRoom {
           break;
         }
 
+        // TODO: make this work for multiple clients in the instance
         state.yourTurn = true;
         break;
       }
