@@ -6,8 +6,8 @@ import Creation from "./views/Creation.vue";
 import Verified from "./views/Verified.vue";
 import Recovery from "./views/Recovery.vue";
 import Game from "./views/Game.vue";
-import Instance from "./views/GameViews/Instance.vue";
-import Lobby from "./views/GameViews/Lobby.vue";
+import Instance from "./views/game-views/Instance.vue";
+import Lobby from "./views/game-views/Lobby.vue";
 
 const router = createRouter({
   history: createWebHistory(),

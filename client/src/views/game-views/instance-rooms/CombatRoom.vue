@@ -1,11 +1,16 @@
 <script lang="ts" setup>
-import * as gameServer from "../../../src/socket/gameServer";
-import { watch } from "vue";
-import router from "../../router";
-import { onBeforeMount } from "vue";
-import useCharacterStore from "../../stores/characterStore";
 import { ref, Ref } from "vue";
+import * as gameServer from "../../../../src/socket/gameServer";
+import useCharacterStore from "../../../stores/characterStore";
+
 const characterStore = useCharacterStore();
+
+const targetId: Ref<string | null> = ref(null);
+
+function selectTarget(id: string) {
+  console.log(id);
+  targetId.value = id;
+}
 
 function playerAction() {
   if (targetId.value === null) {
@@ -16,39 +21,27 @@ function playerAction() {
   gameServer.socket.emit("instance:action", targetId.value, BASIC_ATTACK);
 }
 
-function leaveInstance() {
-  gameServer.socket.emit("instance:leave");
+function endTurn() {
+  gameServer.socket.emit("instance:end-turn");
 }
 
-onBeforeMount(() => {
-  if (gameServer.state.instance === null) {
-    router.push("/game/lobby");
-  }
-  watch(
-    () => gameServer.state.instance,
-    (newInstance, _) => {
-      if (newInstance === null) {
-        router.push("/game/lobby");
-      }
-    }
-  );
-});
-
-// combat stuff
-// TODO: move to a separate component that will be render if instance.room.type === "combat"
-
-const targetId: Ref<string | null> = ref(null);
-
-function selectTarget(id: string) {
-  console.log(id);
-  targetId.value = id;
+function leaveInstance() {
+  gameServer.socket.emit("instance:leave");
 }
 </script>
 
 <template>
-  <div class="instance" v-if="gameServer.state.instance">
+  <div class="instance" v-if="gameServer.state.instance?.room">
     <h1>Instance</h1>
-    <p v-if="gameServer.state.yourTurn">Your Turn</p>
+    <p>{{ gameServer.state.instance.room.currentTurnPlayerName }}</p>
+    <p
+      v-if="
+        gameServer.state.instance.room.currentTurnPlayerName ===
+        characterStore.staticCharacter?.name
+      "
+    >
+      Your Turn
+    </p>
 
     <div class="board" v-if="gameServer.state.instance.room">
       <div class="party party--enemy">
@@ -85,6 +78,7 @@ function selectTarget(id: string) {
       </div>
     </div>
     <button @click="playerAction">Player Action</button>
+    <button @click="endTurn">End Turn</button>
     <button @click="leaveInstance">Leave Instance</button>
   </div>
 </template>
