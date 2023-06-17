@@ -14,7 +14,6 @@ interface State {
   lobbies: { [lobbyId: string]: LobbyData };
   lobby: MembersOnlyLobbyData | null;
   instance: Instance | null;
-  yourTurn: boolean;
 }
 
 export const state: State = reactive({
@@ -23,7 +22,6 @@ export const state: State = reactive({
   lobbies: {},
   lobby: null,
   instance: null,
-  yourTurn: false,
 });
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
@@ -82,8 +80,10 @@ socket.on("instance:set", instance => {
   state.instance = instance;
 });
 
-socket.on("instance:your-turn", () => {
-  state.yourTurn = true;
+socket.on("instance:player-turn", playerName => {
+  if (state.instance?.room) {
+    state.instance.room.currentTurnPlayerName = playerName;
+  }
 });
 
 socket.on("instance:enemy-actions", actions => {

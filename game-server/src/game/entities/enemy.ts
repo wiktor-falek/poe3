@@ -9,7 +9,7 @@ class Enemy {
   maxHp: number;
   speed: number;
   public constructor(name: string, level: number, maxHp: number) {
-    this.id = nanoid();
+    this.id = nanoid(8);
     this.name = name;
     this.level = level;
     this.maxHp = maxHp;

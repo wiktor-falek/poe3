@@ -17,7 +17,7 @@ class Player implements PlayerData {
   resources: Resources;
   constructor(dynamicCharacter: DynamicCharacter, characterId: string) {
     this.#dynamicCharacter = dynamicCharacter;
-    this.id = nanoid();
+    this.id = nanoid(8);
     this.name = dynamicCharacter.name;
     this.level = dynamicCharacter.level.value;
     this.resources = dynamicCharacter.resources;

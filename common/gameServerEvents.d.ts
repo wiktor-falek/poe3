@@ -18,6 +18,7 @@ export interface ClientToServerEvents {
   "instance:create": () => void;
   "instance:leave": () => void;
   "instance:action": (targetId: string, actionId: string) => void;
+  "instance:end-turn": () => void;
 }
 
 export interface ServerToClientEvents {
@@ -32,7 +33,7 @@ export interface ServerToClientEvents {
   "lobby:delete": (lobbyId: string) => void;
   // instance
   "instance:set": (instance: Instance | null) => void;
-  "instance:your-turn": () => void;
+  "instance:player-turn": (playerName: string) => void;
   "instance:player-action": (action: any) => void;
   "instance:enemy-actions": (action: Array<any>) => void;
 }

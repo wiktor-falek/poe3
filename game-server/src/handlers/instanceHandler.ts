@@ -38,11 +38,11 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     io.to(instance.socketRoom).emit("instance:set", instance);
 
     const state = room.continue();
-    if (state.yourTurn === true) {
-      client.socket.emit("instance:your-turn");
-    }
     if (state.actions.length !== 0) {
       io.to(instance.socketRoom).emit("instance:enemy-actions", state.actions);
+    }
+    if (state.currentTurnPlayerName) {
+      io.to(instance.socketRoom).emit("instance:player-turn", state.currentTurnPlayerName);
     }
   };
 
@@ -79,13 +79,18 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     // make sure client is the instance owner
   };
 
-  const playerAction = (_targetId: string, _actionId: string) => {
+  const action = (_targetId: string, _actionId: string) => {
     const instance = InstanceManager.currentInstance(client);
     const room = instance?.room;
     const turn = room?.turn;
     const player = turn?.current;
     if (!instance || !room || !turn || !(player instanceof Player)) {
       return socket.emit("chat:message", new ErrorMessage("Invalid action"));
+    }
+
+    // check if client is the player
+    if (player.name !== client.characterName) {
+      return socket.emit("chat:message", new ErrorMessage("Not your turn"));
     }
 
     const targetId = _targetId; // TODO: validate type;
@@ -98,10 +103,24 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     const action = result.val;
 
     io.to(instance.socketRoom).emit("instance:player-action", action);
+  };
+
+  const endTurn = () => {
+    const instance = InstanceManager.currentInstance(client);
+    const room = instance?.room;
+    const turn = room?.turn;
+    const player = turn?.current;
+    if (!instance || !room || !turn || !(player instanceof Player)) {
+      return socket.emit("chat:message", new ErrorMessage("Invalid action"));
+    }
+
+    if (client.characterName !== player.name) {
+      return socket.emit("chat:message", new ErrorMessage("Not your turn"));
+    }
 
     const state = room.continue();
-    if (state.yourTurn === true) {
-      client.socket.emit("instance:your-turn");
+    if (state.currentTurnPlayerName) {
+      io.to(instance.socketRoom).emit("instance:player-turn", state.currentTurnPlayerName);
     }
     if (state.actions.length !== 0) {
       io.to(instance.socketRoom).emit("instance:enemy-actions", state.actions);
@@ -110,7 +129,8 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
 
   socket.on("instance:create", create);
   socket.on("instance:leave", leave);
-  socket.on("instance:action", playerAction);
+  socket.on("instance:action", action);
+  socket.on("instance:end-turn", endTurn);
 }
 
 export default registerInstanceHandler;

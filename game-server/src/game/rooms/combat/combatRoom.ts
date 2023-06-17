@@ -12,11 +12,16 @@ interface ActionData {
   attackerId: string;
 }
 
+type RoomType = "combat" | "reward";
+
 class CombatRoom {
+  type: RoomType;
   #turn: Turn;
   players: Array<Player>;
   enemies: Array<Enemy>;
+  currentTurnPlayerName?: string;
   constructor(players: Array<Player>, enemies: Array<Enemy>) {
+    this.type = "combat";
     this.players = players;
     this.enemies = enemies;
     this.#turn = new Turn(players, enemies);
@@ -24,6 +29,14 @@ class CombatRoom {
 
   get turn() {
     return this.#turn;
+  }
+
+  get playersWon() {
+    return this.enemies.filter(enemy => enemy.isAlive).length === 0;
+  }
+
+  get enemiesWon() {
+    return this.players.filter(player => player.isAlive).length === 0;
   }
 
   playerAction(player: Player, targetId: string, actionId: string) {
@@ -61,20 +74,35 @@ class CombatRoom {
       critical: action.critical,
     };
 
+    console.log(actionData);
     return Ok(actionData);
   }
 
   continue() {
     const state: {
-      yourTurn: boolean;
+      currentTurnPlayerName?: string;
+      playersWon: boolean;
+      enemiesWon: boolean;
       actions: Array<ActionData>;
     } = {
-      yourTurn: false,
+      playersWon: false,
+      enemiesWon: false,
       actions: [],
     };
 
     while (true) {
+      if (this.playersWon) {
+        state.playersWon = true;
+        return state;
+      }
+      if (this.enemiesWon) {
+        state.enemiesWon = true;
+        return state;
+      }
+
       const entity = this.#turn.next();
+
+      console.log(entity);
 
       // if turn ended start next turn
       if (entity === null) {
@@ -90,8 +118,8 @@ class CombatRoom {
           break;
         }
 
-        // TODO: make this work for multiple clients in the instance
-        state.yourTurn = true;
+        this.currentTurnPlayerName = this.#turn.current?.name;
+        state.currentTurnPlayerName = this.currentTurnPlayerName;
         break;
       }
 
