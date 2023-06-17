@@ -8,7 +8,6 @@ const characterStore = useCharacterStore();
 const targetId: Ref<string | null> = ref(null);
 
 function selectTarget(id: string) {
-  console.log(id);
   targetId.value = id;
 }
 
@@ -33,7 +32,7 @@ function leaveInstance() {
 <template>
   <div class="instance" v-if="gameServer.state.instance?.room">
     <h1>Instance</h1>
-    <p>{{ gameServer.state.instance.room.currentTurnPlayerName }}</p>
+    <p>Current turn: {{ gameServer.state.instance.room.currentTurnPlayerName }}</p>
     <p
       v-if="
         gameServer.state.instance.room.currentTurnPlayerName ===
@@ -74,6 +73,7 @@ function leaveInstance() {
           </p>
           <p>{{ player.resources.hp }} / {{ player.resources.maxHp }} HP</p>
           <p>{{ player.resources.mp }} / {{ player.resources.maxMp }} MP</p>
+          <p>{{ player.resources.ap }} / {{ player.resources.maxAp }} AP</p>
         </div>
       </div>
     </div>

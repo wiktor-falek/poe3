@@ -98,6 +98,21 @@ socket.on("instance:enemy-actions", actions => {
 
 socket.on("instance:player-action", action => {
   const enemies = state.instance?.room?.enemies;
+  const players = state.instance?.room?.players;
+
+  const attacker = players?.find(player => player.id === action.attackerId);
+  if (attacker) {
+    if (action.cost?.ap) {
+      attacker.resources.ap -= action.cost.ap;
+    }
+    if (action.cost?.mp) {
+      attacker.resources.mp -= action.cost.mp;
+    }
+    if (action.cost?.hp) {
+      attacker.resources.hp -= action.cost.hp;
+    }
+  }
+
   const target = enemies?.find(enemy => enemy.id === action.targetId);
   if (target) {
     target.hp = Math.max(target.hp - action.damage, 0);

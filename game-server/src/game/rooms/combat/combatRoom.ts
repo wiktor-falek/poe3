@@ -1,15 +1,20 @@
 import { choice } from "pyrand";
 import ClientManager from "../../../components/client/clientManager.js";
 import Enemy from "../../entities/enemy.js";
-import Player from "../../entities/player.js";
+import Player, { ActionResult } from "../../entities/player.js";
 import Turn from "./turn.js";
 import { Err, Ok } from "resultat";
 
-interface ActionData {
+export interface ActionData {
   targetId: string;
+  attackerId: string;
   damage: number;
   critical: boolean;
-  attackerId: string;
+  cost?: {
+    ap?: number;
+    mp?: number;
+    hp?: number;
+  };
 }
 
 type RoomType = "combat" | "reward";
@@ -55,11 +60,14 @@ class CombatRoom {
 
     const actionName = VALID_ACTIONS[actionId];
 
-    let action;
+    let action: ActionResult;
     switch (actionName) {
       case "BASIC_ATTACK":
-        action = player.basicAttack();
-        break;
+        const result = player.basicAttack();
+        if (result.ok) {
+          action = result.val;
+          break;
+        }
 
       default:
         return Err("Invalid action");
@@ -68,10 +76,9 @@ class CombatRoom {
     const damage = target.takeDamage(action.damage);
 
     const actionData: ActionData = {
+      ...action,
       attackerId: player.id,
       targetId,
-      damage,
-      critical: action.critical,
     };
 
     console.log(actionData);
