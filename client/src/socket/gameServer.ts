@@ -80,9 +80,24 @@ socket.on("instance:set", instance => {
   state.instance = instance;
 });
 
-socket.on("instance:player-turn", playerName => {
+socket.on("instance:player-turn", turnStartUpdate => {
+  // TODO: clean this up or find a better way to sync state
   if (state.instance?.room) {
-    state.instance.room.currentTurnPlayerName = playerName;
+    state.instance.room.currentTurnPlayerName = turnStartUpdate.playerName;
+
+    const players = state.instance.room.players;
+    const player = players.find(player => player.name === turnStartUpdate.playerName);
+    if (player) {
+      if (turnStartUpdate.ap) {
+        player.resources.ap = turnStartUpdate.ap;
+      }
+      if (turnStartUpdate.mp) {
+        player.resources.mp = turnStartUpdate.mp;
+      }
+      if (turnStartUpdate.hp) {
+        player.resources.hp = turnStartUpdate.hp;
+      }
+    }
   }
 });
 

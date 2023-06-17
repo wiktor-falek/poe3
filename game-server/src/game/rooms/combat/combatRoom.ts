@@ -4,6 +4,7 @@ import Enemy from "../../entities/enemy.js";
 import Player, { ActionResult } from "../../entities/player.js";
 import Turn from "./turn.js";
 import { Err, Ok } from "resultat";
+import type { RestoredResources } from "../../entities/player.js";
 
 export interface ActionData {
   targetId: string;
@@ -15,6 +16,10 @@ export interface ActionData {
     mp?: number;
     hp?: number;
   };
+}
+
+export interface TurnStartUpdate extends RestoredResources {
+  playerName: string;
 }
 
 type RoomType = "combat" | "reward";
@@ -86,10 +91,10 @@ class CombatRoom {
 
   continue() {
     const state: {
-      currentTurnPlayerName?: string;
       playersWon: boolean;
       enemiesWon: boolean;
       actions: Array<ActionData>;
+      turnStartUpdate?: TurnStartUpdate;
     } = {
       playersWon: false,
       enemiesWon: false,
@@ -124,10 +129,13 @@ class CombatRoom {
 
         // TODO: return this and then emit to all clients in the instance
         const updates = entity.turnStart(); // { resources: { hp: 1, ap: 3 } }
-        const turnStartUpdateData = { ...updates, playerName: entity.name };
+
+        state.turnStartUpdate = {
+          ...updates,
+          playerName: entity.name,
+        };
 
         this.currentTurnPlayerName = this.#turn.current?.name;
-        state.currentTurnPlayerName = this.currentTurnPlayerName;
         break;
       }
 

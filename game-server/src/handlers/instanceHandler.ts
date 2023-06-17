@@ -38,11 +38,12 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     io.to(instance.socketRoom).emit("instance:set", instance);
 
     const state = room.continue();
+    // TODO: emit all at once?
     if (state.actions.length !== 0) {
       io.to(instance.socketRoom).emit("instance:enemy-actions", state.actions);
     }
-    if (state.currentTurnPlayerName) {
-      io.to(instance.socketRoom).emit("instance:player-turn", state.currentTurnPlayerName);
+    if (state.turnStartUpdate) {
+      io.to(instance.socketRoom).emit("instance:player-turn", state.turnStartUpdate);
     }
   };
 
@@ -119,8 +120,8 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     }
 
     const state = room.continue();
-    if (state.currentTurnPlayerName) {
-      io.to(instance.socketRoom).emit("instance:player-turn", state.currentTurnPlayerName);
+    if (state.turnStartUpdate) {
+      io.to(instance.socketRoom).emit("instance:player-turn", state.turnStartUpdate);
     }
     if (state.actions.length !== 0) {
       io.to(instance.socketRoom).emit("instance:enemy-actions", state.actions);
