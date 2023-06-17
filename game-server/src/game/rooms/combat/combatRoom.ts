@@ -81,7 +81,6 @@ class CombatRoom {
       targetId,
     };
 
-    console.log(actionData);
     return Ok(actionData);
   }
 
@@ -109,8 +108,6 @@ class CombatRoom {
 
       const entity = this.#turn.next();
 
-      console.log(entity);
-
       // if turn ended start next turn
       if (entity === null) {
         this.#turn.startTurn();
@@ -124,6 +121,10 @@ class CombatRoom {
           console.error("Client is undefined");
           break;
         }
+
+        // TODO: return this and then emit to all clients in the instance
+        const updates = entity.turnStart(); // { resources: { hp: 1, ap: 3 } }
+        const turnStartUpdateData = { ...updates, playerName: entity.name };
 
         this.currentTurnPlayerName = this.#turn.current?.name;
         state.currentTurnPlayerName = this.currentTurnPlayerName;

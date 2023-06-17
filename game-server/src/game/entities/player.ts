@@ -10,6 +10,12 @@ interface PlayerData {
   resources: Resources;
 }
 
+export interface RestoredResources {
+  ap?: number;
+  mp?: number;
+  hp?: number;
+}
+
 export interface ActionResult {
   damage: number;
   critical: boolean;
@@ -40,6 +46,11 @@ class Player implements PlayerData {
 
   get isAlive() {
     return this.#dynamicCharacter.resources.hp > 0;
+  }
+
+  turnStart(): RestoredResources {
+    this.resources.ap = this.resources.maxAp;
+    return { ap: this.resources.ap };
   }
 
   takeDamage(amount: number) {
