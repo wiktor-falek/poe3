@@ -23,8 +23,8 @@ interface AbilityDamage {
 }
 
 interface AbilityCost {
-  mp?: { base: number; levelIncrement: number };
-  hp?: { base: number; levelIncrement: number };
+  mp?: EachLevel<number>;
+  hp?: EachLevel<number>;
   ap?: number;
 }
 
@@ -69,8 +69,16 @@ const ability = new Ability(
   },
   {
     mp: {
-      base: 5,
-      levelIncrement: 2,
+      1: 4,
+      2: 5,
+      3: 6,
+      4: 7,
+      5: 8,
+      6: 10,
+      7: 12,
+      8: 15,
+      9: 18,
+      10: 20,
     },
     ap: 2,
   }
