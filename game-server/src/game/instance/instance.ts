@@ -17,7 +17,7 @@ class Instance {
 
   initPlayers() {
     const players = Object.values(this.#clients).map(
-      (client) => new Player(getDynamicCharacter(client.character), client.character._id.toString())
+      (client) => new Player(getDynamicCharacter(client.character))
     );
     this.#players = players;
     return players;

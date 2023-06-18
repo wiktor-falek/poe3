@@ -13,7 +13,7 @@ export interface Payload {
 // load secret if possible to allow decoding tokens after server restart
 const secret = process.env.JWT_SECRET ?? randomBytes(32).toString("hex");
 
-export const encode = (payload: Object) => {
+export const encode = (payload: object) => {
   const token = jwt.sign(payload, secret, { expiresIn: 86400 });
 
   return token;

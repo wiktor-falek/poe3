@@ -1,5 +1,4 @@
 import { choice, shuffle } from "pyrand";
-import ClientManager from "../../components/client/clientManager.js";
 import Enemy from "../entities/enemy.js";
 import Player, { ActionResult } from "../entities/player.js";
 import { Err, Ok } from "resultat";
