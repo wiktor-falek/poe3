@@ -82,55 +82,55 @@ socket.on("instance:set", instance => {
   state.instance = instance;
 });
 
-socket.on("instance:player-turn", turnStartUpdate => {
-  // TODO: clean this up or find a better way to sync state
-  if (state.instance?.room) {
-    // state.currentTurnPlayer = turnStartUpdate.playerName;
-    const players = state.instance.room.players;
-    const player = players.find(player => player.name === turnStartUpdate.playerName);
-    if (player) {
-      if (turnStartUpdate.ap) {
-        player.resources.ap = turnStartUpdate.ap;
-      }
-      if (turnStartUpdate.mp) {
-        player.resources.mp = turnStartUpdate.mp;
-      }
-      if (turnStartUpdate.hp) {
-        player.resources.hp = turnStartUpdate.hp;
-      }
-    }
-  }
-});
+// socket.on("instance:player-turn", turnStartUpdate => {
+//   // TODO: clean this up or find a better way to sync state
+//   if (state.instance?.room) {
+//     // state.currentTurnPlayer = turnStartUpdate.playerName;
+//     const players = state.instance.room.players;
+//     const player = players.find(player => player.name === turnStartUpdate.playerName);
+//     if (player) {
+//       if (turnStartUpdate.ap) {
+//         player.resources.ap = turnStartUpdate.ap;
+//       }
+//       if (turnStartUpdate.mp) {
+//         player.resources.mp = turnStartUpdate.mp;
+//       }
+//       if (turnStartUpdate.hp) {
+//         player.resources.hp = turnStartUpdate.hp;
+//       }
+//     }
+//   }
+// });
 
-socket.on("instance:enemy-actions", actions => {
-  for (const action of actions) {
-    const players = state.instance?.room?.players;
-    const target = players?.find(player => player.id === action.targetId);
-    if (target) {
-      target.resources.hp = Math.max(target.resources.hp - action.damage, 0);
-    }
-  }
-});
+// socket.on("instance:enemy-actions", actions => {
+//   for (const action of actions) {
+//     const players = state.instance?.room?.players;
+//     const target = players?.find(player => player.id === action.targetId);
+//     if (target) {
+//       target.resources.hp = Math.max(target.resources.hp - action.damage, 0);
+//     }
+//   }
+// });
 
-socket.on("instance:player-action", action => {
-  const enemies = state.instance?.room?.enemies;
-  const players = state.instance?.room?.players;
+// socket.on("instance:player-action", action => {
+//   const enemies = state.instance?.room?.enemies;
+//   const players = state.instance?.room?.players;
 
-  const attacker = players?.find(player => player.id === action.attackerId);
-  if (attacker) {
-    if (action.cost?.ap) {
-      attacker.resources.ap -= action.cost.ap;
-    }
-    if (action.cost?.mp) {
-      attacker.resources.mp -= action.cost.mp;
-    }
-    if (action.cost?.hp) {
-      attacker.resources.hp -= action.cost.hp;
-    }
-  }
+//   const attacker = players?.find(player => player.id === action.attackerId);
+//   if (attacker) {
+//     if (action.cost?.ap) {
+//       attacker.resources.ap -= action.cost.ap;
+//     }
+//     if (action.cost?.mp) {
+//       attacker.resources.mp -= action.cost.mp;
+//     }
+//     if (action.cost?.hp) {
+//       attacker.resources.hp -= action.cost.hp;
+//     }
+//   }
 
-  const target = enemies?.find(enemy => enemy.id === action.targetId);
-  if (target) {
-    target.hp = Math.max(target.hp - action.damage, 0);
-  }
-});
+//   const target = enemies?.find(enemy => enemy.id === action.targetId);
+//   if (target) {
+//     target.hp = Math.max(target.hp - action.damage, 0);
+//   }
+// });

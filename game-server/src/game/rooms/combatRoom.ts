@@ -17,8 +17,9 @@ export interface ActionData {
   };
 }
 
-export interface TurnStartUpdate extends RestoredResources {
-  playerName: string;
+export interface StateUpdate {
+  actions: Array<ActionData>;
+  resources?: RestoredResources;
 }
 
 type RoomType = "combat" | "reward";
@@ -52,7 +53,7 @@ class CombatRoom {
     shuffle(this.#turnOrder);
   }
 
-  *nextEntity() {
+  nextEntity() {
     if (this.#entityIdx > this.#turnOrder.length - 1) {
       this.#entityIdx = 0;
     }
@@ -117,12 +118,13 @@ class CombatRoom {
     return Ok(actionData);
   }
 
-  continue() {
+  continue(): StateUpdate {
     const state: {
       actions: Array<ActionData>;
-      turnStartUpdate?: TurnStartUpdate;
+      restoredResources: RestoredResources;
     } = {
       actions: [],
+      restoredResources: { entityId: "" },
     };
 
     while (true) {
@@ -132,34 +134,15 @@ class CombatRoom {
 
       const entity = this.nextEntity();
 
-      // if turn ended start next turn
-      // if (entity === null) {
-      //   this.#turn.startTurn();
-      //   continue;
-      // }
-
-      if (entity instanceof Player) {
-        const client = ClientManager.getClientByCharacterName(entity.name);
-        if (client === undefined) {
-          // shouldn't be possible
-          console.error("Client is undefined");
-          break;
-        }
-
-        // TODO: return this and then emit to all clients in the instance
-        const updates = entity.turnStart(); // { resources: { hp: 1, ap: 3 } }
-
-        state.turnStartUpdate = {
-          ...updates,
-          playerName: entity.name,
-        };
-
-        break;
-      }
+      console.log(entity);
 
       if (entity instanceof Enemy) {
         const action = this.enemyAction(entity);
         state.actions.push(action);
+      } else if (entity instanceof Player) {
+        const restoredResources = entity.turnStart();
+        state.restoredResources = restoredResources;
+        break;
       }
     }
 

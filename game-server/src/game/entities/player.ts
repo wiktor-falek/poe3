@@ -11,9 +11,12 @@ interface PlayerData {
 }
 
 export interface RestoredResources {
-  ap?: number;
-  mp?: number;
-  hp?: number;
+  entityId: string;
+  resources?: {
+    ap?: number;
+    mp?: number;
+    hp?: number;
+  };
 }
 
 export interface ActionResult {
@@ -50,7 +53,7 @@ class Player implements PlayerData {
 
   turnStart(): RestoredResources {
     this.resources.ap = this.resources.maxAp;
-    return { ap: this.resources.ap };
+    return { entityId: this.id, resources: { ap: this.resources.ap } };
   }
 
   takeDamage(amount: number) {

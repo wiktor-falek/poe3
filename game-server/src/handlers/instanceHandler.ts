@@ -4,9 +4,6 @@ import InstanceManager from "../game/instance/instanceManager.js";
 import LobbyManager from "../game/lobby/lobbyManager.js";
 import { ErrorMessage, GlobalMessage } from "../components/message.js";
 import Player from "../game/entities/player.js";
-import Enemy from "../game/entities/enemy.js";
-import ClientManager from "../components/client/clientManager.js";
-import { choice } from "pyrand";
 
 function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
   const create = () => {
@@ -38,13 +35,8 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     io.to(instance.socketRoom).emit("instance:set", instance);
 
     const state = room.continue();
-    // TODO: emit all at once?
-    if (state.actions.length !== 0) {
-      io.to(instance.socketRoom).emit("instance:enemy-actions", state.actions);
-    }
-    if (state.turnStartUpdate) {
-      io.to(instance.socketRoom).emit("instance:player-turn", state.turnStartUpdate);
-    }
+
+    io.to(instance.socketRoom).emit("instance:state-update", state);
 
     if (room.playersWon) {
       /*
@@ -126,12 +118,8 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     }
 
     const state = room.continue();
-    if (state.turnStartUpdate) {
-      io.to(instance.socketRoom).emit("instance:player-turn", state.turnStartUpdate);
-    }
-    if (state.actions.length !== 0) {
-      io.to(instance.socketRoom).emit("instance:enemy-actions", state.actions);
-    }
+
+    io.to(instance.socketRoom).emit("instance:state-update", state);
 
     if (room.playersWon) {
       /*
