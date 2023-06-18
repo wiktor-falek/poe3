@@ -17,7 +17,7 @@ class Instance {
 
   initPlayers() {
     const players = Object.values(this.#clients).map(
-      client => new Player(getDynamicCharacter(client.character), client.character._id.toString())
+      (client) => new Player(getDynamicCharacter(client.character), client.character._id.toString())
     );
     this.#players = players;
     return players;
@@ -28,7 +28,7 @@ class Instance {
       this.initPlayers();
     } else {
       // this is not the first room, filter out dead players
-      this.#players = this.#players.filter(player => player.isAlive);
+      this.#players = this.#players.filter((player) => player.isAlive);
     }
 
     const enemies = testEnemies();

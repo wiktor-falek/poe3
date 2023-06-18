@@ -42,7 +42,7 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
 // global middlewares
 io.use(initialize);
 
-io.on("connection", socket => {
+io.on("connection", (socket) => {
   // TypeScript doesn't know that this connection does not happen
   // unless socket.data.client is defined in initialize middleware,
   // since SocketData is wrapped in Partial<>
@@ -51,7 +51,7 @@ io.on("connection", socket => {
   const { client } = socket.data;
   client.setConnected();
 
-  socket.on("error", err => {
+  socket.on("error", (err) => {
     // socket.emit("connectionError");
   });
 

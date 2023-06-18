@@ -8,7 +8,6 @@ export interface CharacterOverview {
 
 export type ResponseGetAllCharactersOverview = Array<CharacterOverview>;
 
-
 interface UserData {
   _id: ObjectId;
   account: {

@@ -39,15 +39,15 @@ class GearBase {
       return this;
     }
     // filter tiers that don't satisfy ilvl requirement, and filter mods that have no tiers left
-    const prefix_pool = PREFIX_MODIFIER_POOL.map(mod => {
-      const availableTiers = Object.values(mod.tiers).filter(tier => tier.ilvl <= this.ilvl);
+    const prefix_pool = PREFIX_MODIFIER_POOL.map((mod) => {
+      const availableTiers = Object.values(mod.tiers).filter((tier) => tier.ilvl <= this.ilvl);
       return { ...mod, tiers: availableTiers };
-    }).filter(mod => Object.keys(mod.tiers).length > 0);
+    }).filter((mod) => Object.keys(mod.tiers).length > 0);
 
-    const suffix_pool = SUFFIX_MODIFIER_POOL.map(mod => {
-      const availableTiers = Object.values(mod.tiers).filter(tier => tier.ilvl <= this.ilvl);
+    const suffix_pool = SUFFIX_MODIFIER_POOL.map((mod) => {
+      const availableTiers = Object.values(mod.tiers).filter((tier) => tier.ilvl <= this.ilvl);
       return { ...mod, tiers: availableTiers };
-    }).filter(mod => Object.keys(mod.tiers).length > 0);
+    }).filter((mod) => Object.keys(mod.tiers).length > 0);
 
     // {
     //   console.log("************");

@@ -126,7 +126,7 @@ class Character {
 
       const characters = await cursor.toArray();
 
-      const charactersOverview: Array<CharacterOverview> = characters.map(c => {
+      const charactersOverview: Array<CharacterOverview> = characters.map((c) => {
         return {
           name: c.name,
           class: c.class,

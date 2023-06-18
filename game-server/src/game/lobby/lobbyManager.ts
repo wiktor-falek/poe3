@@ -15,7 +15,7 @@ class LobbyManager {
   }
 
   static currentLobby(client: Client): Lobby | undefined {
-    return Object.values(this.lobbies).find(lobby => lobby.clientIsInLobby(client));
+    return Object.values(this.lobbies).find((lobby) => lobby.clientIsInLobby(client));
   }
 
   static createLobby(client: Client, name: string): Lobby {
