@@ -21,10 +21,9 @@ class Enemy {
     return this.hp > 0;
   }
 
-  takeDamage(amount: number) {
+  takeDamage(amount: number): number {
     const amountAfterReduction = amount;
     this.hp = Math.max(this.hp - amountAfterReduction, 0);
-    // TODO: amountAfterReduction might exceed this.hp, it also should be 0 at most 
     return amountAfterReduction;
   }
 

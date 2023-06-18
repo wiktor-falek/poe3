@@ -1,11 +1,11 @@
-import { reactive } from "vue";
 import { io, Socket } from "socket.io-client";
-import type { ServerToClientEvents, ClientToServerEvents } from "../../../common/gameServerEvents";
+import { reactive } from "vue";
 import getCookie from "../utils/getCookie";
 import useCharacterStore from "../stores/characterStore";
-import { StaticCharacter } from "../../../common/index";
-import { Message } from "../../../game-server/src/components/message";
-import { LobbyData, MembersOnlyLobbyData } from "../../../game-server/src/game/lobby/lobby";
+import type { StaticCharacter } from "../../../common/index";
+import type { LobbyData, MembersOnlyLobbyData } from "../../../game-server/src/game/lobby/lobby";
+import type { Message } from "../../../game-server/src/components/message";
+import type { ServerToClientEvents, ClientToServerEvents } from "../../../common/gameServerEvents";
 import type Instance from "../../../game-server/src/game/instance/instance";
 
 interface State {
@@ -14,7 +14,6 @@ interface State {
   lobbies: { [lobbyId: string]: LobbyData };
   lobby: MembersOnlyLobbyData | null;
   instance: Instance | null;
-  // currentTurnPlayer: string;
 }
 
 export const state: State = reactive({
@@ -23,7 +22,6 @@ export const state: State = reactive({
   lobbies: {},
   lobby: null,
   instance: null,
-  // currentTurnPlayer: "",
 });
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
@@ -58,79 +56,26 @@ socket.on("character", (character: StaticCharacter) => {
   characterStore.setStaticCharacter(character);
 });
 
-socket.on("chat:message", message => {
+socket.on("chat:message", (message) => {
   state.messages.push(message);
 });
 
-socket.on("lobby:all", lobbies => {
+socket.on("lobby:all", (lobbies) => {
   state.lobbies = lobbies;
 });
 
-socket.on("lobby:data", lobby => {
+socket.on("lobby:data", (lobby) => {
   state.lobby = lobby;
 });
 
-socket.on("lobby:set", lobby => {
+socket.on("lobby:set", (lobby) => {
   state.lobbies[lobby.id] = lobby;
 });
 
-socket.on("lobby:delete", lobbyId => {
+socket.on("lobby:delete", (lobbyId) => {
   delete state.lobbies[lobbyId];
 });
 
-socket.on("instance:set", instance => {
+socket.on("instance:set", (instance) => {
   state.instance = instance;
 });
-
-// socket.on("instance:player-turn", turnStartUpdate => {
-//   // TODO: clean this up or find a better way to sync state
-//   if (state.instance?.room) {
-//     // state.currentTurnPlayer = turnStartUpdate.playerName;
-//     const players = state.instance.room.players;
-//     const player = players.find(player => player.name === turnStartUpdate.playerName);
-//     if (player) {
-//       if (turnStartUpdate.ap) {
-//         player.resources.ap = turnStartUpdate.ap;
-//       }
-//       if (turnStartUpdate.mp) {
-//         player.resources.mp = turnStartUpdate.mp;
-//       }
-//       if (turnStartUpdate.hp) {
-//         player.resources.hp = turnStartUpdate.hp;
-//       }
-//     }
-//   }
-// });
-
-// socket.on("instance:enemy-actions", actions => {
-//   for (const action of actions) {
-//     const players = state.instance?.room?.players;
-//     const target = players?.find(player => player.id === action.targetId);
-//     if (target) {
-//       target.resources.hp = Math.max(target.resources.hp - action.damage, 0);
-//     }
-//   }
-// });
-
-// socket.on("instance:player-action", action => {
-//   const enemies = state.instance?.room?.enemies;
-//   const players = state.instance?.room?.players;
-
-//   const attacker = players?.find(player => player.id === action.attackerId);
-//   if (attacker) {
-//     if (action.cost?.ap) {
-//       attacker.resources.ap -= action.cost.ap;
-//     }
-//     if (action.cost?.mp) {
-//       attacker.resources.mp -= action.cost.mp;
-//     }
-//     if (action.cost?.hp) {
-//       attacker.resources.hp -= action.cost.hp;
-//     }
-//   }
-
-//   const target = enemies?.find(enemy => enemy.id === action.targetId);
-//   if (target) {
-//     target.hp = Math.max(target.hp - action.damage, 0);
-//   }
-// });

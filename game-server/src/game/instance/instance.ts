@@ -9,7 +9,7 @@ class Instance {
   #clients: { [characterId: string]: Client };
   #id: string;
   room?: CombatRoom;
-  players?: Array<Player>;
+  #players?: Array<Player>;
   constructor() {
     this.#clients = {};
     this.#id = nanoid(16);
@@ -19,20 +19,20 @@ class Instance {
     const players = Object.values(this.#clients).map(
       client => new Player(getDynamicCharacter(client.character), client.character._id.toString())
     );
-    this.players = players;
+    this.#players = players;
     return players;
   }
 
   initCombatRoom(): CombatRoom {
-    if (this.players === undefined) {
+    if (this.#players === undefined) {
       this.initPlayers();
     } else {
       // this is not the first room, filter out dead players
-      this.players = this.players.filter(player => player.isAlive);
+      this.#players = this.#players.filter(player => player.isAlive);
     }
 
     const enemies = testEnemies();
-    const room = new CombatRoom(this.players!, enemies);
+    const room = new CombatRoom(this.#players!, enemies);
     this.room = room;
     return room;
   }

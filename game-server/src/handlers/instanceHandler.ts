@@ -35,6 +35,7 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     io.to(instance.socketRoom).emit("instance:set", instance);
 
     const state = room.continue();
+    console.log({ state });
 
     io.to(instance.socketRoom).emit("instance:state-update", state);
 

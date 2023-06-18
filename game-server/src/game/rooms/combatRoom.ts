@@ -19,7 +19,7 @@ export interface ActionData {
 
 export interface StateUpdate {
   actions: Array<ActionData>;
-  resources?: RestoredResources;
+  restoredResources?: RestoredResources;
 }
 
 type RoomType = "combat" | "reward";
@@ -31,7 +31,7 @@ class CombatRoom {
   #turnOrder: Array<Player | Enemy>;
   #entityIdx: number;
   #currentTurnEntity?: Player | Enemy;
-  currentTurnPlayerId: string;
+  currentTurnPlayerName: string;
   constructor(players: Array<Player>, enemies: Array<Enemy>) {
     this.type = "combat";
     this.players = players;
@@ -41,7 +41,7 @@ class CombatRoom {
     this.createTurnOrder();
     this.#entityIdx = 0;
     this.#currentTurnEntity; // private to avoid emitting whole entity data
-    this.currentTurnPlayerId = ""; // instead only id gets emitted
+    this.currentTurnPlayerName = ""; // instead only id gets emitted
   }
 
   get currentTurnEntity() {
@@ -60,18 +60,18 @@ class CombatRoom {
 
     const entity = this.#turnOrder[this.#entityIdx];
     this.#currentTurnEntity = entity;
-    this.currentTurnPlayerId = entity.id;
+    this.currentTurnPlayerName = entity.name;
 
     this.#entityIdx++;
     return entity;
   }
 
   get playersWon() {
-    return this.enemies.filter(enemy => enemy.isAlive).length === 0;
+    return this.enemies.filter((enemy) => enemy.isAlive).length === 0;
   }
 
   get enemiesWon() {
-    return this.players.filter(player => player.isAlive).length === 0;
+    return this.players.filter((player) => player.isAlive).length === 0;
   }
 
   get hasConcluded() {
@@ -79,7 +79,7 @@ class CombatRoom {
   }
 
   playerAction(player: Player, targetId: string, actionId: string) {
-    const target = this.enemies.find(enemy => enemy.id === targetId);
+    const target = this.enemies.find((enemy) => enemy.id === targetId);
     if (target === undefined) {
       return Err("Invalid target");
     }
@@ -134,8 +134,6 @@ class CombatRoom {
 
       const entity = this.nextEntity();
 
-      console.log(entity);
-
       if (entity instanceof Enemy) {
         const action = this.enemyAction(entity);
         state.actions.push(action);
@@ -152,7 +150,8 @@ class CombatRoom {
   private enemyAction(enemy: Enemy) {
     const action = enemy.basicAttack();
     const target = choice(this.players);
-    target.takeDamage(action.damage);
+    // const damage =
+    target.takeDamage(action.damage); // TODO: read damage after damage reduction
     return { ...action, targetId: target.id };
   }
 }

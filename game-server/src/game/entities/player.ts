@@ -56,8 +56,10 @@ class Player implements PlayerData {
     return { entityId: this.id, resources: { ap: this.resources.ap } };
   }
 
-  takeDamage(amount: number) {
-    this.resources.hp = Math.max(this.resources.hp - amount, 0);
+  takeDamage(amount: number): number {
+    const amountAfterReduction = amount;
+    this.resources.hp = Math.max(this.resources.hp - amountAfterReduction, 0);
+    return amountAfterReduction;
   }
 
   basicAttack(): Result<ActionResult> {
