@@ -89,9 +89,8 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
   const action = (_targetId: string, _actionId: string) => {
     const instance = InstanceManager.currentInstance(client);
     const room = instance?.room;
-    const turn = room?.turn;
-    const player = turn?.current;
-    if (!instance || !room || !turn || !(player instanceof Player)) {
+    const player = room?.currentTurnEntity;
+    if (!instance || !room || !(player instanceof Player)) {
       return socket.emit("chat:message", new ErrorMessage("Invalid action"));
     }
 
@@ -117,9 +116,8 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
   const endTurn = () => {
     const instance = InstanceManager.currentInstance(client);
     const room = instance?.room;
-    const turn = room?.turn;
-    const player = turn?.current;
-    if (!instance || !room || !turn || !(player instanceof Player)) {
+    const player = room?.currentTurnEntity;
+    if (!instance || !room || !(player instanceof Player)) {
       return socket.emit("chat:message", new ErrorMessage("Invalid action"));
     }
 

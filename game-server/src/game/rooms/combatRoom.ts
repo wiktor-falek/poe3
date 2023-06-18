@@ -1,10 +1,9 @@
-import { choice } from "pyrand";
-import ClientManager from "../../../components/client/clientManager.js";
-import Enemy from "../../entities/enemy.js";
-import Player, { ActionResult } from "../../entities/player.js";
-import Turn from "./turn.js";
+import { choice, shuffle } from "pyrand";
+import ClientManager from "../../components/client/clientManager.js";
+import Enemy from "../entities/enemy.js";
+import Player, { ActionResult } from "../entities/player.js";
 import { Err, Ok } from "resultat";
-import type { RestoredResources } from "../../entities/player.js";
+import type { RestoredResources } from "../entities/player.js";
 
 export interface ActionData {
   targetId: string;
@@ -26,18 +25,44 @@ type RoomType = "combat" | "reward";
 
 class CombatRoom {
   type: RoomType;
-  #turn: Turn;
   players: Array<Player>;
   enemies: Array<Enemy>;
+  #turnOrder: Array<Player | Enemy>;
+  #entityIdx: number;
+  #currentTurnEntity?: Player | Enemy;
+  currentTurnPlayerId: string;
   constructor(players: Array<Player>, enemies: Array<Enemy>) {
     this.type = "combat";
     this.players = players;
     this.enemies = enemies;
-    this.#turn = new Turn(players, enemies);
+    // turn order
+    this.#turnOrder = [];
+    this.createTurnOrder();
+    this.#entityIdx = 0;
+    this.#currentTurnEntity; // private to avoid emitting whole entity data
+    this.currentTurnPlayerId = ""; // instead only id gets emitted
   }
 
-  get turn() {
-    return this.#turn;
+  get currentTurnEntity() {
+    return this.#currentTurnEntity;
+  }
+
+  createTurnOrder() {
+    this.#turnOrder = [...this.players, ...this.enemies];
+    shuffle(this.#turnOrder);
+  }
+
+  *nextEntity() {
+    if (this.#entityIdx > this.#turnOrder.length - 1) {
+      this.#entityIdx = 0;
+    }
+
+    const entity = this.#turnOrder[this.#entityIdx];
+    this.#currentTurnEntity = entity;
+    this.currentTurnPlayerId = entity.id;
+
+    this.#entityIdx++;
+    return entity;
   }
 
   get playersWon() {
@@ -105,13 +130,13 @@ class CombatRoom {
         return state;
       }
 
-      const entity = this.#turn.next();
+      const entity = this.nextEntity();
 
       // if turn ended start next turn
-      if (entity === null) {
-        this.#turn.startTurn();
-        continue;
-      }
+      // if (entity === null) {
+      //   this.#turn.startTurn();
+      //   continue;
+      // }
 
       if (entity instanceof Player) {
         const client = ClientManager.getClientByCharacterName(entity.name);

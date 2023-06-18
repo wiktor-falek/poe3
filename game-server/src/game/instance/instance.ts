@@ -3,7 +3,7 @@ import Client from "../../components/client/client.js";
 import getDynamicCharacter from "../../../../common/dist/getDynamicCharacter.js";
 import { testEnemies } from "../entities/enemy.js";
 import Player from "../entities/player.js";
-import CombatRoom from "../rooms/combat/combatRoom.js";
+import CombatRoom from "../rooms/combatRoom.js";
 
 class Instance {
   #clients: { [characterId: string]: Client };
@@ -12,7 +12,7 @@ class Instance {
   players?: Array<Player>;
   constructor() {
     this.#clients = {};
-    this.#id = nanoid();
+    this.#id = nanoid(16);
   }
 
   initPlayers() {

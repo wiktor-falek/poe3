@@ -1,11 +1,8 @@
 import type { Message } from "../game-server/src/components/message.js";
 import type { LobbyData, MembersOnlyLobbyData } from "../game-server/src/game/lobby/lobby.js";
 import type Instance from "../game-server/src/game/instance/instance.js";
-import type {
-  ActionData,
-  TurnStartUpdate,
-} from "../game-server/src/game/rooms/combat/combatRoom.ts";
-import { StaticCharacter } from "./index.js";
+import type { ActionData, TurnStartUpdate } from "../game-server/src/game/rooms/combatRoom.ts";
+import type { StaticCharacter } from "./index.js";
 
 export interface ClientToServerEvents {
   // chat
@@ -39,7 +36,7 @@ export interface ServerToClientEvents {
   "instance:set": (instance: Instance | null) => void;
   "instance:player-turn": (turnStartUpdate: TurnStartUpdate) => void;
   "instance:player-action": (action: ActionData) => void;
-  "instance:enemy-actions": (action: Array<any>) => void;
+  "instance:enemy-actions": (action: Array<ActionData>) => void;
 }
 
 export interface InterServerEvents {

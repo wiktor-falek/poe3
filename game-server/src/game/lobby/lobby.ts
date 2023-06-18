@@ -35,7 +35,7 @@ class Lobby implements LobbyData {
     this.#isHidden = false;
     this.name = name;
     this.ownerName = ownerName;
-    this.id = nanoid();
+    this.id = nanoid(16);
     this.size = 0;
   }
 

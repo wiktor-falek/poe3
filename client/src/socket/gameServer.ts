@@ -14,7 +14,7 @@ interface State {
   lobbies: { [lobbyId: string]: LobbyData };
   lobby: MembersOnlyLobbyData | null;
   instance: Instance | null;
-  currentTurnPlayer: string;
+  // currentTurnPlayer: string;
 }
 
 export const state: State = reactive({
@@ -23,7 +23,7 @@ export const state: State = reactive({
   lobbies: {},
   lobby: null,
   instance: null,
-  currentTurnPlayer: "",
+  // currentTurnPlayer: "",
 });
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
@@ -85,7 +85,7 @@ socket.on("instance:set", instance => {
 socket.on("instance:player-turn", turnStartUpdate => {
   // TODO: clean this up or find a better way to sync state
   if (state.instance?.room) {
-    state.currentTurnPlayer = turnStartUpdate.playerName;
+    // state.currentTurnPlayer = turnStartUpdate.playerName;
     const players = state.instance.room.players;
     const player = players.find(player => player.name === turnStartUpdate.playerName);
     if (player) {
