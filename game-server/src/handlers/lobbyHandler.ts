@@ -1,4 +1,3 @@
-import Joi from "joi";
 import type { Io, IoSocket } from "../index.js";
 import LobbyManager from "../game/lobby/lobbyManager.js";
 import Client from "../components/client/client.js";
