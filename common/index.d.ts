@@ -102,7 +102,7 @@ interface User {
   account: {
     username: string;
     email: string;
-    confirmedEmail: boolean; // or somethign else idk
+    hasConfirmedEmail: boolean;
     registrationTimestamp: number;
     sessionId: string;
     characterLimit: number;
@@ -118,5 +118,4 @@ interface DynamicCharacter extends StaticCharacter {
   resistances: Resistances;
   attributes: Attributes;
   resources: Resources;
-  // actionPoints
 }
