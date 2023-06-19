@@ -3,19 +3,43 @@ import { ref, Ref } from "vue";
 import * as gameServer from "../../../../src/socket/gameServer";
 import useCharacterStore from "../../../stores/characterStore";
 import { onUnmounted } from "vue";
+import ResourceBars from "../../../components/ResourceBars.vue";
+
+interface DamagePopup {
+  attackerId: string;
+  targetId: string;
+  damage: number;
+  critical: boolean;
+}
+
+function displayDamagePopup(
+  attackerId: string,
+  targetId: string,
+  damage: number,
+  critical: boolean
+) {
+  damagePopup.value = {
+    attackerId,
+    targetId,
+    damage,
+    critical,
+  };
+  setTimeout(() => {
+    damagePopup.value = null;
+  }, 900);
+}
 
 gameServer.socket.on("instance:state-update", async (state) => {
   const room = gameServer.state.instance!.room!;
 
   // take all updates from the state.actions and update state incrementally with a delay
   for (const action of state.actions) {
-    await new Promise((resolve) => setTimeout(resolve, 300));
     const target = room.players.find((player) => player.id === action.targetId);
     if (target) {
-      console.log({ damage: action.damage });
+      displayDamagePopup(action.attackerId, action.targetId, action.damage, action.critical);
       target.resources.hp = Math.max(target.resources.hp - action.damage, 0);
-      // TODO: display damage number animation and flash target player
     }
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 
   if (state.restoredResources) {
@@ -75,6 +99,8 @@ const characterStore = useCharacterStore();
 
 const targetId: Ref<string | null> = ref(null);
 
+const damagePopup: Ref<DamagePopup | null> = ref(null);
+
 function selectTarget(id: string) {
   targetId.value = id;
 }
@@ -104,10 +130,80 @@ const player = ref(
 </script>
 
 <template>
-  <div class="instance" v-if="gameServer.state.instance?.room">
+  <div class="combat-room" v-if="gameServer.state.instance?.room">
+    <div class="board" v-if="gameServer.state.instance.room">
+      <div class="party party--enemy">
+        <div
+          class="entity"
+          v-for="enemy in gameServer.state.instance.room.enemies"
+          @click="selectTarget(enemy.id)"
+        >
+          <!-- damage popup space -->
+          <div class="entity__sprite">SPRITE</div>
+
+          <hr
+            class="entity__select"
+            :class="{
+              'entity__select--selected': targetId === enemy.id,
+              'entity__select--attacking': damagePopup?.attackerId === enemy.id,
+            }"
+          />
+
+          <div class="entity__resources">
+            <ResourceBars :resources="{ hp: enemy.hp, maxHp: enemy.maxHp }"></ResourceBars>
+          </div>
+
+          <p class="entity__text">
+            <span class="entity__name">{{ enemy.name }}</span
+            >&nbsp;
+            <span class="entity__level"> Lv {{ enemy.level }}</span>
+          </p>
+        </div>
+      </div>
+      <div class="party party--ally">
+        <div class="entity" v-for="player in gameServer.state.instance.room.players">
+          <div class="entity__damage-popup">
+            <p
+              v-show="damagePopup?.targetId === player.id"
+              class="entity__damage-popup__damage"
+              :class="{ 'entity__damage-popup__damage--critical': damagePopup?.critical }"
+            >
+              {{ damagePopup?.damage }}
+            </p>
+          </div>
+          <div class="entity__sprite">SPRITE</div>
+
+          <hr
+            class="entity__select"
+            :class="{
+              'entity__select--selected': targetId === player.id,
+            }"
+          />
+
+          <div class="entity__resources">
+            <ResourceBars :resources="player.resources"></ResourceBars>
+          </div>
+
+          <p class="entity__text">
+            <span
+              class="entity__name"
+              :class="{
+                'entity--current-character': characterStore.staticCharacter?.name === player.name,
+              }"
+              >{{ player.name }}</span
+            >&nbsp;
+            <span class="entity__level"> Lv {{ player.level }}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <button class="button" @click="playerAction">Player Action</button>
+    <button class="button" @click="endTurn">End Turn</button>
+    <button class="button" @click="leaveInstance">Leave Instance</button>
+    <p>{{ damagePopup }}</p>
     <p v-if="gameServer.state.instance.room.enemiesWon">Enemy Party Won</p>
     <p v-if="gameServer.state.instance.room.playersWon">Your Party Won</p>
-
     <p
       v-if="
         gameServer.state.instance.room.currentTurnPlayerName ===
@@ -119,50 +215,14 @@ const player = ref(
     <p v-if="gameServer.state.instance.room.currentTurnPlayerName">
       Current turn: {{ gameServer.state.instance.room.currentTurnPlayerName }}
     </p>
-
-    <div class="board" v-if="gameServer.state.instance.room">
-      <div class="party party--enemy">
-        <div
-          class="party__member"
-          v-for="enemy in gameServer.state.instance.room.enemies"
-          @click="selectTarget(enemy.id)"
-          :class="{ selected: enemy.id === targetId }"
-        >
-          <p>
-            <span class="party__member__name">{{ enemy.name }}</span
-            >&nbsp;
-            <span class="party__member__level">Lvl {{ enemy.level }}</span>
-          </p>
-          <p>{{ enemy.hp }} / {{ enemy.maxHp }} HP</p>
-        </div>
-      </div>
-      <div class="party party--ally">
-        <div class="party__member" v-for="player in gameServer.state.instance.room.players">
-          <p>
-            <span
-              class="party__member__name"
-              :class="{
-                'party__member--current-character':
-                  characterStore.staticCharacter?.name === player.name,
-              }"
-              >{{ player.name }}</span
-            >&nbsp;
-            <span class="party__member__level"> Lv {{ player.level }}</span>
-          </p>
-          <p>{{ player.resources.hp }} / {{ player.resources.maxHp }} HP</p>
-          <p>{{ player.resources.mp }} / {{ player.resources.maxMp }} MP</p>
-          <p>{{ player.resources.ap }} / {{ player.resources.maxAp }} AP</p>
-        </div>
-      </div>
-    </div>
-    <button class="button" @click="playerAction">Player Action</button>
-    <button class="button" @click="endTurn">End Turn</button>
-    <button class="button" @click="leaveInstance">Leave Instance</button>
     <h3 class="red" v-if="player && player.resources.hp <= 0">You Are Dead</h3>
   </div>
 </template>
 
 <style scoped>
+.combat-room {
+  user-select: none;
+}
 .board {
   display: flex;
   flex-direction: column;
@@ -175,29 +235,70 @@ const player = ref(
   gap: 10px;
 }
 
-.party__member {
-  border: 1px solid gray;
-  width: 120px;
-  height: 120px;
+.entity {
+  position: relative;
 }
 
-.party__member > * {
-  margin: 0;
+.entity__damage-popup {
+  height: 24px;
+}
+
+.entity__damage-popup__damage {
   padding: 0;
+  margin: 0;
+  font-size: 24px;
+  line-height: 1em;
+  font-weight: bold;
+  text-align: center;
 }
 
-.party__member__name {
+.entity__damage-popup__damage {
+  transition: visibility 1s ease-in;
 }
 
-.party__member--current-character {
+.entity__damage-popup__damage--critical {
+  color: rgb(229, 80, 35);
+}
+
+.entity__sprite {
+  border: 1px solid gray;
+  box-sizing: border-box;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+  background-color: rgb(57, 57, 57);
+  font-weight: bold;
+}
+
+.entity__text {
+  margin-top: 2px;
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+}
+
+.entity--current-character {
   color: var(--current-character);
 }
 
-.party__member__level {
+.entity__level {
 }
 
-.selected {
-  border-color: orange;
+.entity__select {
+  width: 80%;
+  margin: 2px auto 0px auto;
+  visibility: hidden;
+}
+.entity__select--selected {
+  visibility: visible;
+  color: rgb(107, 189, 237);
+}
+
+.entity__select--attacking {
+  visibility: visible;
+  color: rgb(228, 71, 71);
 }
 
 .red {
