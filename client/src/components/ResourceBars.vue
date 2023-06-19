@@ -3,7 +3,7 @@ import { Resources } from "../../../common/index";
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
 type ResourcesOptionalAp = Optional<Resources, "mp" | "maxMp" | "ap" | "maxAp">;
-5;
+
 defineProps<{ resources: ResourcesOptionalAp }>();
 </script>
 
