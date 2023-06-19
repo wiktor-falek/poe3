@@ -12,25 +12,19 @@ interface Resistances {
   fire: number;
   cold: number;
   lightning: number;
-  physical: number;
   poison: number;
 }
 
 interface Resources {
-  maxHp: number;
   hp: number;
-  maxMp: number;
+  maxHp: number;
   mp: number;
+  maxMp: number;
   ap: number;
   maxAp: number;
 }
 
 /*
-interface ActionPoints {
-  ap: number;
-  maxAp: number;
-}
-
 type InventorySlot =
   | "hand"
   | "offhand"
@@ -55,9 +49,22 @@ type EquipmentSlot =
   | "belt";
 */
 
-interface Item {}
+// interface Item {}
 
-interface EquipmentBase {}
+// interface EquipmentBase {}
+
+// interface CharacterEquipment {
+//   hand: EquipmentBase;
+//   offhand: EquipmentBase;
+//   helmet: EquipmentBase;
+//   chest: EquipmentBase;
+//   gloves: EquipmentBase;
+//   boots: EquipmentBase;
+//   ring_1: EquipmentBase;
+//   ring_2: EquipmentBase;
+//   amulet: EquipmentBase;
+//   belt: EquipmentBase;
+// }
 
 interface Level {
   value: number;
@@ -65,25 +72,10 @@ interface Level {
   requiredXp: number;
 }
 
-interface MainStoryProgression {
-  highestZoneId: number;
-}
-
 interface CharacterProgression {
-  mainStory: MainStoryProgression;
-}
-
-interface CharacterEquipment {
-  hand: EquipmentBase;
-  offhand: EquipmentBase;
-  helmet: EquipmentBase;
-  chest: EquipmentBase;
-  gloves: EquipmentBase;
-  boots: EquipmentBase;
-  ring_1: EquipmentBase;
-  ring_2: EquipmentBase;
-  amulet: EquipmentBase;
-  belt: EquipmentBase;
+  mainStory: {
+    highestZoneId: number;
+  };
 }
 
 // character data from the database
@@ -93,8 +85,8 @@ interface StaticCharacter {
   class: CharacterClass;
   silver: number;
   level: Level;
-  equipment: CharacterEquipment;
-  inventory: Array<Item | null>;
+  equipment: undefined;
+  inventory: Array<undefined>;
   progression: CharacterProgression;
 }
 
