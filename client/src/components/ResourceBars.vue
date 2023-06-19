@@ -1,48 +1,39 @@
 <script lang="ts" setup>
-import { Level, Resources } from "../../../common/types";
+import { Resources } from "../../../common/index";
 
-defineProps<{ resources: Resources; level: Level }>();
-
-function percent(value: number, maxValue: number) {
-  return Math.round((value / maxValue) * 100);
-}
+type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
+type ResourcesOptionalAp = Optional<Resources, "ap" | "maxAp">;
+5;
+defineProps<{ resources: ResourcesOptionalAp }>();
 </script>
 
 <template>
   <div class="resource-bars">
-    <div
-      class="resource-bar resource-bar__hp-bar"
-      v-if="resources.hp !== undefined && resources.hp !== null"
-    >
-      {{ resources.hp }} / {{ resources.maxHp }}
-      <div
-        class="resource-bar__progress resource-bar__progress--hp-bar"
-        :style="{
-          width: `${percent(resources.hp, resources.maxHp)}%`,
-        }"
-      ></div>
-    </div>
-    <div
-      class="resource-bar resource-bar__mp-bar"
-      v-if="resources.mp !== undefined && resources.mp !== null"
-    >
-      {{ resources.mp }} / {{ resources.maxMp }}
-      <div
-        class="resource-bar__progress resource-bar__progress--mp-bar"
-        :style="{
-          width: `${percent(resources.mp, resources.maxMp)}%`,
-        }"
-      ></div>
+    <div class="resource-bar resource-bar--hp">
+      <span class="resource-bar__text">{{ resources.hp }} / {{ resources.maxHp }}</span>
+      <progress
+        class="resource-bar__progress resource-bar__progress--hp"
+        :value="resources.hp"
+        :max="resources.maxHp"
+      ></progress>
     </div>
 
-    <div class="resource-bar" v-if="level">
-      {{ level.xp }} / {{ level.requiredXp }}
-      <div
-        class="resource-bar__progress resource-bar__progress--xp-bar"
-        :style="{
-          width: `${percent(level.xp, level.requiredXp)}%`,
-        }"
-      ></div>
+    <div class="resource-bar resource-bar--mp">
+      <span class="resource-bar__text">{{ resources.mp }} / {{ resources.maxMp }}</span>
+      <progress
+        class="resource-bar__progress resource-bar__progress--mp"
+        :value="resources.mp"
+        :max="resources.maxMp"
+      ></progress>
+    </div>
+
+    <div class="resource-bar resource-bar--ap" v-if="resources.ap">
+      <span class="resource-bar__text">{{ resources.ap }} / {{ resources.maxAp }}</span>
+      <progress
+        class="resource-bar__progress resource-bar__progress--ap"
+        :value="resources.ap"
+        :max="resources.maxAp"
+      ></progress>
     </div>
   </div>
 </template>
@@ -56,31 +47,44 @@ function percent(value: number, maxValue: number) {
 }
 
 .resource-bar {
-  background-color: rgb(110, 110, 110);
-  width: 100%;
-  border-radius: 5px;
-  font-size: 18px;
+  width: 96px;
   height: 22px;
+  position: relative;
+}
+
+.resource-bar__text {
+  position: absolute;
+  width: 100%;
   color: black;
+  opacity: 0.8;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  font-weight: bold;
   display: flex;
   align-items: center;
-  border: 2px solid white;
-  font-weight: 600;
   justify-content: center;
+  font-size: 16px;
+  transform: translate(0, 2px);
+  line-height: 22px;
 }
 .resource-bar__progress {
-  position: relative;
-  height: 100%;
-}
-.resource-bar__progress--hp-bar {
-  background-color: #ed4f51;
-}
-
-.resource-bar__progress--mp-bar {
-  background-color: #3185cf;
+  width: 96px;
+  appearance: none;
+  background-color: gray;
+  border: 2px solid rgb(218, 218, 218);
+  border-radius: 5px;
+  box-sizing: border-box;
 }
 
-.resource-bar__progress--xp-bar {
-  background-color: rgb(227, 230, 15);
+.resource-bar__progress--hp::-moz-progress-bar {
+  background: #ed4f51;
+}
+
+.resource-bar__progress--mp::-moz-progress-bar {
+  background: #3185cf;
+}
+.resource-bar__progress--ap::-moz-progress-bar {
+  background: rgba(214, 214, 12, 0.778);
 }
 </style>
