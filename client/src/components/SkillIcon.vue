@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import saberSlash from "../assets/game-icons/saber-slash.svg";
 import swordArray from "../assets/game-icons/sword-array.svg";
-const props = defineProps<{ apCost: number; keyBind: string; imgId: string }>();
+const props = defineProps<{ apCost: number; keyBind: string; imgId: string; selected?: boolean }>();
 
 const icons: { [id: string]: string } = {
   0: saberSlash,
@@ -10,7 +10,11 @@ const icons: { [id: string]: string } = {
 </script>
 
 <template>
-  <div class="skill-icon" :style="{ 'background-image': `url(${icons[imgId]})` }">
+  <div
+    class="skill-icon"
+    :class="{ selected: selected }"
+    :style="{ 'background-image': `url(${icons[imgId]})` }"
+  >
     <p v-if="props.keyBind">{{ props.keyBind }}</p>
     <p v-if="props.apCost">{{ props.apCost }}</p>
   </div>
@@ -21,7 +25,7 @@ const icons: { [id: string]: string } = {
   width: 48px;
   height: 48px;
   box-sizing: border-box;
-  border: 1px solid rgb(241, 241, 241);
+  border: 2px solid rgb(241, 241, 241);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -37,5 +41,9 @@ const icons: { [id: string]: string } = {
   font-weight: bold;
   font-family: BmCube;
   display: inline-block;
+}
+
+.selected {
+  border-color: var(--select);
 }
 </style>
