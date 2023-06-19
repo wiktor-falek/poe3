@@ -83,12 +83,9 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     const instance = InstanceManager.currentInstance(client);
     const room = instance?.room;
     const player = room?.currentTurnEntity;
-    if (!instance || !room || !(player instanceof Player)) {
-      return socket.emit("chat:message", new ErrorMessage("Invalid action"));
-    }
 
-    // check if client is the player
-    if (player.name !== client.characterName) {
+    // check if action can be performed, current entity must be a player and it must be this players turn
+    if (!instance || !room || !(player instanceof Player) || player.name !== client.characterName) {
       return socket.emit("chat:message", new ErrorMessage("Not your turn"));
     }
 
