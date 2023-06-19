@@ -5,30 +5,8 @@ import useCharacterStore from "../../../stores/characterStore";
 import { onUnmounted } from "vue";
 import ResourceBars from "../../../components/ResourceBars.vue";
 import SkillIcon from "../../../components/SkillIcon.vue";
-
-interface DamagePopup {
-  attackerId: string;
-  targetId: string;
-  damage: number;
-  critical: boolean;
-}
-
-function displayDamagePopup(
-  attackerId: string,
-  targetId: string,
-  damage: number,
-  critical: boolean
-) {
-  damagePopup.value = {
-    attackerId,
-    targetId,
-    damage,
-    critical,
-  };
-  setTimeout(() => {
-    damagePopup.value = null;
-  }, 900);
-}
+import { onMounted } from "vue";
+import Enemy from "../../../../../game-server/src/game/entities/enemy";
 
 gameServer.socket.on("instance:state-update", async (state) => {
   const room = gameServer.state.instance!.room!;
@@ -96,9 +74,34 @@ onUnmounted(() => {
   gameServer.socket.off("instance:player-action");
 });
 
+interface DamagePopup {
+  attackerId: string;
+  targetId: string;
+  damage: number;
+  critical: boolean;
+}
+
+function displayDamagePopup(
+  attackerId: string,
+  targetId: string,
+  damage: number,
+  critical: boolean
+) {
+  damagePopup.value = {
+    attackerId,
+    targetId,
+    damage,
+    critical,
+  };
+  setTimeout(() => {
+    damagePopup.value = null;
+  }, 900);
+}
+
 const characterStore = useCharacterStore();
 
 const targetId: Ref<string | null> = ref(null);
+const actionId: Ref<string | null> = ref(null);
 
 const damagePopup: Ref<DamagePopup | null> = ref(null);
 
@@ -106,13 +109,24 @@ function selectTarget(id: string) {
   targetId.value = id;
 }
 
+function selectSkill(id: string) {
+  actionId.value = id;
+}
+
 function playerAction() {
   if (targetId.value === null) {
     gameServer.state.messages.push({ content: "Invalid target", sender: "SYSTEM", group: "ERROR" });
     return;
   }
-  const BASIC_ATTACK = "0";
-  gameServer.socket.emit("instance:action", targetId.value, BASIC_ATTACK);
+
+  const validActions = ["0", "1", "2", "3", "4", "5", "6", "7", "8"];
+
+  if (actionId.value === null || !validActions.includes(actionId.value)) {
+    gameServer.state.messages.push({ content: "Invalid action", sender: "SYSTEM", group: "ERROR" });
+    return;
+  }
+
+  gameServer.socket.emit("instance:action", targetId.value, actionId.value);
 }
 
 function endTurn() {
@@ -128,16 +142,67 @@ const player = ref(
     (player) => player.name === characterStore.staticCharacter?.name
   )
 );
+
+function onPress(e: KeyboardEvent) {
+  const actionKeyBinds: { [keyBind: string]: string } = {
+    " ": "0",
+    q: "1",
+    w: "2",
+    e: "3",
+    r: "4",
+    a: "5",
+    s: "6",
+    d: "7",
+    f: "8",
+  };
+
+  const enemies = gameServer.state.instance?.room?.enemies!;
+
+  const enemyKeyBinds: { [keyBind: string]: Enemy | undefined } = {
+    1: enemies[0],
+    2: enemies[1],
+    3: enemies[2],
+    4: enemies[3],
+    5: enemies[4],
+    6: enemies[5],
+    7: enemies[6],
+    8: enemies[7],
+  };
+
+  const enemy = enemyKeyBinds[e.key];
+  if (enemy) {
+    selectTarget(enemy.id);
+  }
+
+  const action = actionKeyBinds[e.key];
+  if (action) {
+    selectSkill(action);
+  }
+}
+
+onMounted(() => {
+  console.log("mounted");
+  // focus the component to capture key events
+  const div: HTMLDivElement | null = document.querySelector(".combat-room");
+  if (div !== null) {
+    div.focus();
+  }
+});
 </script>
 
 <template>
-  <div class="combat-room" v-if="gameServer.state.instance?.room">
+  <div
+    class="combat-room"
+    v-if="gameServer.state.instance?.room"
+    @keydown="onPress($event)"
+    tabindex="-1"
+  >
     <div class="board" v-if="gameServer.state.instance.room">
       <div class="party party--enemy">
         <div
           class="entity"
           v-for="enemy in gameServer.state.instance.room.enemies"
-          @click="selectTarget(enemy.id)"
+          @click.stop="selectTarget(enemy.id)"
         >
           <!-- damage popup space -->
           <div class="entity__sprite">SPRITE</div>
@@ -162,7 +227,12 @@ const player = ref(
         </div>
       </div>
       <div class="party party--ally">
-        <div class="entity" v-for="player in gameServer.state.instance.room.players">
+        <div
+          class="entity"
+          v-for="player in gameServer.state.instance.room.players.sort((a, b) =>
+            a.name.localeCompare(b.name)
+          )"
+        >
           <div class="entity__damage-popup">
             <p
               v-show="damagePopup?.targetId === player.id"
@@ -213,27 +283,78 @@ const player = ref(
     >
       Your Turn
     </p>
-    <p v-if="gameServer.state.instance.room.currentTurnPlayerName">
-      Current turn: {{ gameServer.state.instance.room.currentTurnPlayerName }}
-    </p>
+    <p v-else>Current turn: {{ gameServer.state.instance.room.currentTurnPlayerName }}</p>
     <h3 class="red" v-if="player && player.resources.hp <= 0">You Are Dead</h3>
 
     <div class="hud">
       <div class="wrapper">
         <div class="side-skills">
           <!-- <SkillIcon @click="handleSkillIconClick($event, 0)" :ap-cost="1" :imgId="5833" /> -->
-          <SkillIcon keyBind="Q" :apCost="1" imgId="0" />
-          <SkillIcon keyBind="A" :apCost="1" imgId="0" />
+          <SkillIcon
+            keyBind="spc"
+            :apCost="1"
+            imgId="0"
+            :selected="actionId === '0'"
+            @click.stop="selectSkill('0')"
+          />
         </div>
         <div class="main-skills">
-          <SkillIcon keyBind="W" :apCost="1" imgId="1" />
-          <SkillIcon keyBind="E" :apCost="1" imgId="1" />
-          <SkillIcon keyBind="R" :apCost="1" imgId="1" />
-          <SkillIcon keyBind="T" :apCost="1" imgId="1" />
-          <SkillIcon keyBind="S" :apCost="1" imgId="1" />
-          <SkillIcon keyBind="D" :apCost="1" imgId="1" />
-          <SkillIcon keyBind="F" :apCost="1" imgId="1" />
-          <SkillIcon keyBind="G" :apCost="1" imgId="1" />
+          <SkillIcon
+            keyBind="q"
+            :apCost="1"
+            imgId="1"
+            :selected="actionId === '1'"
+            @click.stop="selectSkill('1')"
+          />
+          <SkillIcon
+            keyBind="w"
+            :apCost="1"
+            imgId="1"
+            :selected="actionId === '2'"
+            @click.stop="selectSkill('2')"
+          />
+          <SkillIcon
+            keyBind="e"
+            :apCost="1"
+            imgId="1"
+            :selected="actionId === '3'"
+            @click.stop="selectSkill('3')"
+          />
+          <SkillIcon
+            keyBind="r"
+            :apCost="1"
+            imgId="1"
+            :selected="actionId === '4'"
+            @click.stop="selectSkill('4')"
+          />
+          <SkillIcon
+            keyBind="a"
+            :apCost="1"
+            imgId="1"
+            :selected="actionId === '5'"
+            @click.stop="selectSkill('5')"
+          />
+          <SkillIcon
+            keyBind="s"
+            :apCost="1"
+            imgId="1"
+            :selected="actionId === '6'"
+            @click.stop="selectSkill('6')"
+          />
+          <SkillIcon
+            keyBind="d"
+            :apCost="1"
+            imgId="1"
+            :selected="actionId === '7'"
+            @click.stop="selectSkill('7')"
+          />
+          <SkillIcon
+            keyBind="f"
+            :apCost="1"
+            imgId="1"
+            :selected="actionId === '8'"
+            @click.stop="selectSkill('8')"
+          />
         </div>
       </div>
     </div>
@@ -243,6 +364,9 @@ const player = ref(
 <style scoped>
 .combat-room {
   user-select: none;
+}
+.combat-room:focus {
+  outline: none;
 }
 .board {
   display: flex;
@@ -341,9 +465,6 @@ const player = ref(
 }
 
 .side-skills {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  grid-template-rows: repeat(2, 1fr);
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   width: fit-content;
@@ -357,6 +478,6 @@ const player = ref(
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   width: fit-content;
-  gap: 10px;
+  gap: 8px;
 }
 </style>
