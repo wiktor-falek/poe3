@@ -2,7 +2,7 @@
 import { Resources } from "../../../common/index";
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
-type ResourcesOptionalAp = Optional<Resources, "ap" | "maxAp">;
+type ResourcesOptionalAp = Optional<Resources, "mp" | "maxMp" | "ap" | "maxAp">;
 5;
 defineProps<{ resources: ResourcesOptionalAp }>();
 </script>
@@ -18,7 +18,7 @@ defineProps<{ resources: ResourcesOptionalAp }>();
       ></progress>
     </div>
 
-    <div class="resource-bar resource-bar--mp">
+    <div class="resource-bar resource-bar--mp" v-if="resources.maxMp">
       <span class="resource-bar__text">{{ resources.mp }} / {{ resources.maxMp }}</span>
       <progress
         class="resource-bar__progress resource-bar__progress--mp"
@@ -27,7 +27,7 @@ defineProps<{ resources: ResourcesOptionalAp }>();
       ></progress>
     </div>
 
-    <div class="resource-bar resource-bar--ap" v-if="resources.ap">
+    <div class="resource-bar resource-bar--ap" v-if="resources.maxAp">
       <span class="resource-bar__text">{{ resources.ap }} / {{ resources.maxAp }}</span>
       <progress
         class="resource-bar__progress resource-bar__progress--ap"
@@ -48,7 +48,8 @@ defineProps<{ resources: ResourcesOptionalAp }>();
 
 .resource-bar {
   width: 96px;
-  height: 22px;
+  --height: 22px;
+  height: var(--height);
   position: relative;
 }
 
