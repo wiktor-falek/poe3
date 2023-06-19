@@ -289,7 +289,6 @@ onMounted(() => {
     <div class="hud">
       <div class="wrapper">
         <div class="side-skills">
-          <!-- <SkillIcon @click="handleSkillIconClick($event, 0)" :ap-cost="1" :imgId="5833" /> -->
           <SkillIcon
             keyBind="spc"
             :apCost="1"
