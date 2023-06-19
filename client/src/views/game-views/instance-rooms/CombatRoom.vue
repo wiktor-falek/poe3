@@ -4,6 +4,7 @@ import * as gameServer from "../../../../src/socket/gameServer";
 import useCharacterStore from "../../../stores/characterStore";
 import { onUnmounted } from "vue";
 import ResourceBars from "../../../components/ResourceBars.vue";
+import SkillIcon from "../../../components/SkillIcon.vue";
 
 interface DamagePopup {
   attackerId: string;
@@ -201,7 +202,7 @@ const player = ref(
     <button class="button" @click="playerAction">Player Action</button>
     <button class="button" @click="endTurn">End Turn</button>
     <button class="button" @click="leaveInstance">Leave Instance</button>
-    <p>{{ damagePopup }}</p>
+
     <p v-if="gameServer.state.instance.room.enemiesWon">Enemy Party Won</p>
     <p v-if="gameServer.state.instance.room.playersWon">Your Party Won</p>
     <p
@@ -216,6 +217,26 @@ const player = ref(
       Current turn: {{ gameServer.state.instance.room.currentTurnPlayerName }}
     </p>
     <h3 class="red" v-if="player && player.resources.hp <= 0">You Are Dead</h3>
+
+    <div class="hud">
+      <div class="wrapper">
+        <div class="side-skills">
+          <!-- <SkillIcon @click="handleSkillIconClick($event, 0)" :ap-cost="1" :imgId="5833" /> -->
+          <SkillIcon keyBind="Q" :apCost="1" imgId="0" />
+          <SkillIcon keyBind="A" :apCost="1" imgId="0" />
+        </div>
+        <div class="main-skills">
+          <SkillIcon keyBind="W" :apCost="1" imgId="1" />
+          <SkillIcon keyBind="E" :apCost="1" imgId="1" />
+          <SkillIcon keyBind="R" :apCost="1" imgId="1" />
+          <SkillIcon keyBind="T" :apCost="1" imgId="1" />
+          <SkillIcon keyBind="S" :apCost="1" imgId="1" />
+          <SkillIcon keyBind="D" :apCost="1" imgId="1" />
+          <SkillIcon keyBind="F" :apCost="1" imgId="1" />
+          <SkillIcon keyBind="G" :apCost="1" imgId="1" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -303,5 +324,39 @@ const player = ref(
 
 .red {
   color: rgb(212, 73, 73);
+}
+
+/* HUD */
+.hud {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}
+
+.side-skills {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  width: fit-content;
+  gap: 10px;
+}
+
+.main-skills {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  width: fit-content;
+  gap: 10px;
 }
 </style>
