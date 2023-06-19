@@ -134,8 +134,10 @@ class CombatRoom {
       const entity = this.nextEntity();
 
       if (entity instanceof Enemy) {
-        const action = this.enemyAction(entity);
-        state.actions.push(action);
+        if (entity.isAlive) {
+          const action = this.enemyAction(entity);
+          state.actions.push(action);
+        }
       } else if (entity instanceof Player) {
         const restoredResources = entity.turnStart();
         state.restoredResources = restoredResources;
