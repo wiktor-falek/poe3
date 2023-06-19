@@ -23,6 +23,8 @@
   --attribute-speed: #f1f164;
 
   --current-character: rgb(64, 135, 243);
+
+  --select: rgb(253, 172, 124);
 }
 
 body {
