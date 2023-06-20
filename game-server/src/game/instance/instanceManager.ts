@@ -14,13 +14,13 @@ class InstanceManager {
     delete this.instances[instance.id];
   }
 
-  static getInstance(instanceId: string): Instance | undefined {
+  static getInstance(instanceId: string): Instance | null {
     return this.instances[instanceId];
   }
 
-  static currentInstance(client: Client): Instance | undefined {
+  static currentInstance(client: Client): Instance | null {
     const instanceId = client.instanceId;
-    if (instanceId === null) return undefined;
+    if (instanceId === null) return null;
     return this.instances[instanceId];
   }
 }

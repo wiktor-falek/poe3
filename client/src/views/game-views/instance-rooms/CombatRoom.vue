@@ -8,6 +8,7 @@ import SkillIcon from "../../../components/SkillIcon.vue";
 import { onMounted } from "vue";
 import Enemy from "../../../../../game-server/src/game/entities/enemy";
 import Icon from "../../../components/Icon.vue";
+import { onBeforeMount } from "vue";
 
 gameServer.socket.on("instance:state-update", async (state) => {
   const room = gameServer.state.instance!.room!;
@@ -203,6 +204,11 @@ function onPress(e: KeyboardEvent) {
     return;
   }
 }
+
+onBeforeMount(() => {
+  // get the current instance data without iterating over each action
+  gameServer.socket.emit("instance:get");
+});
 
 onMounted(() => {
   // focus the component to capture key events
@@ -470,7 +476,7 @@ onMounted(() => {
 }
 .entity__select--selected {
   visibility: visible;
-  color: rgb(107, 189, 237);
+  color: var(--select);
 }
 
 .entity__select--attacking {

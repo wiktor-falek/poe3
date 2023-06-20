@@ -66,7 +66,7 @@ io.on("connection", (socket) => {
   console.log(`${client.characterName} (${client.username}) connected`);
 
   const instance = InstanceManager.currentInstance(client);
-  if (instance !== undefined) {
+  if (instance !== null) {
     socket
       .to(instance.socketRoom)
       .emit("chat:message", new PartyMessage(`${client.characterName} has reconnected`));
@@ -76,13 +76,13 @@ io.on("connection", (socket) => {
     client.setDisconnected();
 
     const lobby = LobbyManager.currentLobby(client);
-    if (lobby !== undefined) {
+    if (lobby) {
       lobby.leave(client);
       io.to(lobby.socketRoom).emit("lobby:data", lobby.membersOnlyData);
     }
 
     const instance = InstanceManager.currentInstance(client);
-    if (instance !== undefined) {
+    if (instance) {
       io.to(instance.socketRoom).emit(
         "chat:message",
         new PartyMessage(`${client.characterName} has disconnected`)

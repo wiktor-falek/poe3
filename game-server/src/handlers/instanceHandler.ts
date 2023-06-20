@@ -6,6 +6,11 @@ import { ErrorMessage, GlobalMessage } from "../components/message.js";
 import Player from "../game/entities/player.js";
 
 function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
+  const get = () => {
+    const instance = InstanceManager.currentInstance(client);
+    socket.emit("instance:set", instance);
+  };
+
   const create = () => {
     // prevent client from creating an instance if in a lobby and is not an owner
     const lobby = LobbyManager.currentLobby(client);
@@ -49,7 +54,7 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
   const leave = () => {
     // check if instance exists
     const instance = InstanceManager.currentInstance(client);
-    if (instance === undefined) {
+    if (instance === null) {
       return socket.emit("chat:message", new ErrorMessage("Not in an instance"));
     }
 
@@ -100,7 +105,13 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
 
     io.to(instance.socketRoom).emit("instance:player-action", action);
 
-    // handle win/lose
+    if (room.hasConcluded) {
+      if (room.enemiesWon) {
+        // io.to(instance.socketRoom).emit("instance:lose")
+      } else if (room.playersWon) {
+        // io.to(instance.socketRoom).emit("instance:reward")
+      }
+    }
   };
 
   const endTurn = () => {
@@ -126,6 +137,7 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     }
   };
 
+  socket.on("instance:get", get);
   socket.on("instance:create", create);
   socket.on("instance:leave", leave);
   socket.on("instance:action", action);

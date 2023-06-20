@@ -16,6 +16,7 @@ export interface ClientToServerEvents {
   "lobby:leave": () => void;
   "lobby:kick": (characterName: string) => void;
   // instance
+  "instance:get": () => void;
   "instance:create": () => void;
   "instance:leave": () => void;
   "instance:action": (targetId: string, actionId: string) => void;
