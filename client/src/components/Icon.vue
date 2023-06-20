@@ -2,7 +2,7 @@
 import exitDoor from "../assets/game-icons/exit-door.svg";
 import playerNext from "../assets/game-icons/player-next.svg";
 
-const props = defineProps<{ imgId: string; selected?: boolean }>();
+const props = defineProps<{ imgId: string; keyBind?: string; selected?: boolean }>();
 
 const icons: { [id: string]: string } = {
   0: exitDoor,
@@ -15,7 +15,9 @@ const icons: { [id: string]: string } = {
     class="skill-icon"
     :class="{ selected: selected }"
     :style="{ 'background-image': `url(${icons[imgId]})` }"
-  ></div>
+  >
+    <p v-if="keyBind">{{ keyBind }}</p>
+  </div>
 </template>
 
 <style scoped>
@@ -30,6 +32,15 @@ const icons: { [id: string]: string } = {
   background-repeat: no-repeat;
   background-size: cover;
   background-color: rgb(42, 42, 42);
+}
+
+.skill-icon > p {
+  font-size: 16px;
+  margin: 0;
+  line-height: 1em;
+  font-weight: bold;
+  font-family: BmCube;
+  display: inline-block;
 }
 .skill-icon:hover {
   border-color: white;
