@@ -21,22 +21,23 @@ gameServer.socket.on("instance:state-update", async (state) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 
-  if (state.restoredResources) {
-    const player = room.players.find((player) => player.id === state.restoredResources?.entityId)!;
-
-    const resources = state.restoredResources.resources;
-    if (resources) {
-      if (resources.ap) {
-        player.resources.ap = resources.ap;
+  if (state.turnStartUpdate) {
+    const player = room.players.find((player) => player.id === state.turnStartUpdate?.entityId);
+    if (player) {
+      const resources = state.turnStartUpdate.resources;
+      if (resources) {
+        if (resources.ap) {
+          player.resources.ap = resources.ap;
+        }
+        if (resources.hp) {
+          player.resources.hp = resources.hp;
+        }
+        if (resources.mp) {
+          player.resources.mp = resources.mp;
+        }
       }
-      if (resources.hp) {
-        player.resources.hp = resources.hp;
-      }
-      if (resources.mp) {
-        player.resources.mp = resources.mp;
-      }
+      room.currentTurnPlayerName = player.name;
     }
-    room.currentTurnPlayerName = player.name;
   }
 });
 
@@ -46,6 +47,11 @@ gameServer.socket.on("instance:player-action", (action) => {
 
   const attacker = players?.find((player) => player.id === action.attackerId);
   const target = enemies?.find((enemy) => enemy.id === action.targetId);
+
+  if (target) {
+    displayDamagePopup(action.attackerId, action.targetId, action.damage, action.critical);
+    target.hp = Math.max(target.hp - action.damage, 0);
+  }
 
   if (attacker) {
     if (action.cost?.ap) {
@@ -57,10 +63,6 @@ gameServer.socket.on("instance:player-action", (action) => {
     if (action.cost?.hp) {
       attacker.resources.hp -= action.cost.hp;
     }
-  }
-
-  if (target) {
-    target.hp = Math.max(target.hp - action.damage, 0);
   }
 });
 
@@ -199,7 +201,16 @@ onMounted(() => {
           v-for="enemy in gameServer.state.instance.room.enemies"
           @click.stop="selectTarget(enemy.id)"
         >
-          <!-- damage popup space -->
+          <div class="entity__damage-popup">
+            <p
+              v-show="damagePopup?.targetId === enemy.id"
+              class="entity__damage-popup__damage"
+              :class="{ 'entity__damage-popup__damage--critical': damagePopup?.critical }"
+            >
+              {{ damagePopup?.damage }}
+            </p>
+          </div>
+
           <div class="entity__sprite">SPRITE</div>
 
           <hr
@@ -237,6 +248,7 @@ onMounted(() => {
               {{ damagePopup?.damage }}
             </p>
           </div>
+
           <div class="entity__sprite">SPRITE</div>
 
           <hr
