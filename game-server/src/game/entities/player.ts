@@ -11,7 +11,7 @@ interface PlayerData {
 }
 
 export interface turnStartUpdate {
-  entityId: string;
+  playerId: string;
   resources?: {
     ap?: number;
     mp?: number;
@@ -53,7 +53,7 @@ class Player implements PlayerData {
 
   turnStart(): turnStartUpdate {
     this.resources.ap = this.resources.maxAp;
-    return { entityId: this.id, resources: { ap: this.resources.ap } };
+    return { playerId: this.id, resources: { ap: this.resources.ap } };
   }
 
   takeDamage(amount: number): number {

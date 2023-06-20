@@ -123,7 +123,7 @@ class CombatRoom {
       turnStartUpdate: turnStartUpdate;
     } = {
       actions: [],
-      turnStartUpdate: { entityId: "" },
+      turnStartUpdate: { playerId: "" },
     };
 
     while (true) {

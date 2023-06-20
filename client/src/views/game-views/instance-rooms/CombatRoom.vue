@@ -21,10 +21,11 @@ gameServer.socket.on("instance:state-update", async (state) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 
-  if (state.turnStartUpdate) {
-    const player = room.players.find((player) => player.id === state.turnStartUpdate?.entityId);
+  const { turnStartUpdate } = state;
+  if (turnStartUpdate) {
+    const { playerId, resources } = turnStartUpdate;
+    const player = room.players.find((player) => player.id === playerId);
     if (player) {
-      const resources = state.turnStartUpdate.resources;
       if (resources) {
         if (resources.ap) {
           player.resources.ap = resources.ap;
