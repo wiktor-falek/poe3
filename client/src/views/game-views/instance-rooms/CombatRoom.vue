@@ -22,9 +22,8 @@ gameServer.socket.on("instance:state-update", async (state) => {
   }
 
   if (state.restoredResources) {
-    // player turn start
-    room.currentTurnPlayerName = state.restoredResources.entityId;
     const player = room.players.find((player) => player.id === state.restoredResources?.entityId)!;
+
     const resources = state.restoredResources.resources;
     if (resources) {
       if (resources.ap) {
@@ -36,10 +35,8 @@ gameServer.socket.on("instance:state-update", async (state) => {
       if (resources.mp) {
         player.resources.mp = resources.mp;
       }
-
-      // update instance.room.currentTurnPlayerId from state
-      room.currentTurnPlayerName = player.name;
     }
+    room.currentTurnPlayerName = player.name;
   }
 });
 
@@ -63,8 +60,6 @@ gameServer.socket.on("instance:player-action", (action) => {
   }
 
   if (target) {
-    // animation
-    // alternate animation if action.critical
     target.hp = Math.max(target.hp - action.damage, 0);
   }
 });
