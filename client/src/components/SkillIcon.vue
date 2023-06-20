@@ -15,8 +15,8 @@ const icons: { [id: string]: string } = {
     :class="{ selected: selected }"
     :style="{ 'background-image': `url(${icons[imgId]})` }"
   >
-    <p v-if="props.keyBind">{{ props.keyBind }}</p>
-    <p v-if="props.apCost">{{ props.apCost }}</p>
+    <p v-if="keyBind">{{ keyBind }}</p>
+    <p v-if="apCost">{{ apCost }}</p>
   </div>
 </template>
 
