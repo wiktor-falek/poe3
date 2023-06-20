@@ -151,7 +151,6 @@ const player = ref(
 );
 
 function onPress(e: KeyboardEvent) {
-  console.log(e.key);
   const utilityKeys: { [keyBind: string]: () => void } = {
     Escape: () => {
       targetId.value = null;
@@ -206,7 +205,6 @@ function onPress(e: KeyboardEvent) {
 }
 
 onMounted(() => {
-  console.log("mounted");
   // focus the component to capture key events
   const div: HTMLDivElement | null = document.querySelector(".combat-room");
   if (div !== null) {
