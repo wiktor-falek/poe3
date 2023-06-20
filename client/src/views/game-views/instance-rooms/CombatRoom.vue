@@ -105,27 +105,35 @@ const actionId: Ref<string | null> = ref(null);
 const damagePopup: Ref<DamagePopup | null> = ref(null);
 
 function selectTarget(id: string) {
-  targetId.value = id;
+  if (actionId.value === null) {
+    targetId.value = id;
+  } else {
+    playerAction(id, actionId.value);
+  }
 }
 
 function selectSkill(id: string) {
-  actionId.value = id;
+  if (targetId.value === null) {
+    actionId.value = id;
+  } else {
+    playerAction(targetId.value, id);
+  }
 }
 
-function playerAction() {
-  if (targetId.value === null) {
+function playerAction(targetId: string, actionId: string) {
+  if (targetId === null) {
     gameServer.state.messages.push({ content: "Invalid target", sender: "SYSTEM", group: "ERROR" });
     return;
   }
 
   const validActions = ["0", "1", "2", "3", "4", "5", "6", "7", "8"];
 
-  if (actionId.value === null || !validActions.includes(actionId.value)) {
+  if (actionId === null || !validActions.includes(actionId)) {
     gameServer.state.messages.push({ content: "Invalid action", sender: "SYSTEM", group: "ERROR" });
     return;
   }
 
-  gameServer.socket.emit("instance:action", targetId.value, actionId.value);
+  gameServer.socket.emit("instance:action", targetId, actionId);
 }
 
 function endTurn() {
@@ -149,6 +157,8 @@ function onPress(e: KeyboardEvent) {
       targetId.value = null;
       actionId.value = null;
     },
+    n: endTurn,
+    l: leaveInstance,
   };
 
   const utility = utilityKeys[e.key];
@@ -379,8 +389,8 @@ onMounted(() => {
           />
         </div>
         <div class="hud__actions">
-          <Icon imgId="1" @click="endTurn"></Icon>
-          <Icon imgId="0" @click="leaveInstance"></Icon>
+          <Icon keyBind="n" imgId="1" @click="endTurn"></Icon>
+          <Icon keyBind="l" imgId="0" @click="leaveInstance"></Icon>
         </div>
       </div>
     </div>
@@ -403,7 +413,7 @@ onMounted(() => {
 .party {
   display: flex;
   flex-direction: row;
-  gap: 10px;
+  gap: 20px;
 }
 
 .entity {
