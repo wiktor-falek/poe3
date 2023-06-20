@@ -7,6 +7,7 @@ import ResourceBars from "../../../components/ResourceBars.vue";
 import SkillIcon from "../../../components/SkillIcon.vue";
 import { onMounted } from "vue";
 import Enemy from "../../../../../game-server/src/game/entities/enemy";
+import Icon from "../../../components/Icon.vue";
 
 gameServer.socket.on("instance:state-update", async (state) => {
   const room = gameServer.state.instance!.room!;
@@ -142,6 +143,20 @@ const player = ref(
 );
 
 function onPress(e: KeyboardEvent) {
+  console.log(e.key);
+  const utilityKeys: { [keyBind: string]: () => void } = {
+    Escape: () => {
+      targetId.value = null;
+      actionId.value = null;
+    },
+  };
+
+  const utility = utilityKeys[e.key];
+  if (utility) {
+    utility();
+    return;
+  }
+
   const actionKeyBinds: { [keyBind: string]: string } = {
     " ": "0",
     q: "1",
@@ -153,6 +168,12 @@ function onPress(e: KeyboardEvent) {
     d: "7",
     f: "8",
   };
+
+  const action = actionKeyBinds[e.key];
+  if (action) {
+    selectSkill(action);
+    return;
+  }
 
   const enemies = gameServer.state.instance?.room?.enemies!;
 
@@ -170,11 +191,7 @@ function onPress(e: KeyboardEvent) {
   const enemy = enemyKeyBinds[e.key];
   if (enemy) {
     selectTarget(enemy.id);
-  }
-
-  const action = actionKeyBinds[e.key];
-  if (action) {
-    selectSkill(action);
+    return;
   }
 }
 
@@ -278,8 +295,6 @@ onMounted(() => {
     </div>
 
     <button class="button" @click="playerAction">Player Action</button>
-    <button class="button" @click="endTurn">End Turn</button>
-    <button class="button" @click="leaveInstance">Leave Instance</button>
 
     <p v-if="gameServer.state.instance.room.enemiesWon">Enemy Party Won</p>
     <p v-if="gameServer.state.instance.room.playersWon">Your Party Won</p>
@@ -296,7 +311,7 @@ onMounted(() => {
 
     <div class="hud">
       <div class="wrapper">
-        <div class="side-skills">
+        <div class="hud__side-skills">
           <SkillIcon
             keyBind="spc"
             :apCost="1"
@@ -305,7 +320,7 @@ onMounted(() => {
             @click.stop="selectSkill('0')"
           />
         </div>
-        <div class="main-skills">
+        <div class="hud__main-skills">
           <SkillIcon
             keyBind="q"
             :apCost="1"
@@ -362,6 +377,10 @@ onMounted(() => {
             :selected="actionId === '8'"
             @click.stop="selectSkill('8')"
           />
+        </div>
+        <div class="hud__actions">
+          <Icon imgId="1" @click="endTurn"></Icon>
+          <Icon imgId="0" @click="leaveInstance"></Icon>
         </div>
       </div>
     </div>
@@ -471,20 +490,26 @@ onMounted(() => {
   gap: 30px;
 }
 
-.side-skills {
+.hud__side-skills {
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   width: fit-content;
   gap: 10px;
 }
 
-.main-skills {
+.hud__main-skills {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(2, 1fr);
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   width: fit-content;
+  gap: 8px;
+}
+
+.hud__actions {
+  display: grid;
+
   gap: 8px;
 }
 </style>
