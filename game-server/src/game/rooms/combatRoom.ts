@@ -2,7 +2,7 @@ import { choice, shuffle } from "pyrand";
 import Enemy from "../entities/enemy.js";
 import Player, { ActionResult } from "../entities/player.js";
 import { Err, Ok } from "resultat";
-import type { RestoredResources } from "../entities/player.js";
+import type { turnStartUpdate } from "../entities/player.js";
 
 export interface ActionData {
   targetId: string;
@@ -18,7 +18,7 @@ export interface ActionData {
 
 export interface StateUpdate {
   actions: Array<ActionData>;
-  restoredResources?: RestoredResources;
+  turnStartUpdate?: turnStartUpdate;
 }
 
 type RoomType = "combat" | "reward";
@@ -120,10 +120,10 @@ class CombatRoom {
   continue(): StateUpdate {
     const state: {
       actions: Array<ActionData>;
-      restoredResources: RestoredResources;
+      turnStartUpdate: turnStartUpdate;
     } = {
       actions: [],
-      restoredResources: { entityId: "" },
+      turnStartUpdate: { entityId: "" },
     };
 
     while (true) {
@@ -139,8 +139,8 @@ class CombatRoom {
           state.actions.push(action);
         }
       } else if (entity instanceof Player) {
-        const restoredResources = entity.turnStart();
-        state.restoredResources = restoredResources;
+        const turnStartUpdate = entity.turnStart();
+        state.turnStartUpdate = turnStartUpdate;
         break;
       }
     }

@@ -10,7 +10,7 @@ interface PlayerData {
   resources: Resources;
 }
 
-export interface RestoredResources {
+export interface turnStartUpdate {
   entityId: string;
   resources?: {
     ap?: number;
@@ -51,7 +51,7 @@ class Player implements PlayerData {
     return this.#dynamicCharacter.resources.hp > 0;
   }
 
-  turnStart(): RestoredResources {
+  turnStart(): turnStartUpdate {
     this.resources.ap = this.resources.maxAp;
     return { entityId: this.id, resources: { ap: this.resources.ap } };
   }
