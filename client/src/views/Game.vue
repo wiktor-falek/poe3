@@ -4,6 +4,7 @@ import { onUnmounted, onMounted, onBeforeMount, ref, watch } from "vue";
 import * as gameServer from "../socket/gameServer";
 import Chat from "../components/Chat.vue";
 import Navigation from "../components/Navigation.vue";
+import Character from "../components/Character.vue";
 
 const router = useRouter();
 
@@ -67,8 +68,9 @@ onUnmounted(() => {
   </main>
   <main v-else :class="{ loaded: gameServer.state.connected }">
     <RouterView class="game"></RouterView>
-    <Chat class="chat" />
     <Navigation />
+    <Chat />
+    <Character />
   </main>
 </template>
 
@@ -76,13 +78,6 @@ onUnmounted(() => {
 .game {
   margin: 25px;
   margin-top: 0px;
-}
-
-.chat {
-  position: absolute;
-  bottom: 0px;
-  left: 50%;
-  transform: translate(-50%, 0);
 }
 
 .loaded {

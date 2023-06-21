@@ -66,7 +66,7 @@ function send() {
 
 <template>
   <div class="chat">
-    <button class="toggle-collapsed" @click="isCollapsed = !isCollapsed"></button>
+    <button tabindex="2" class="toggle-collapsed" @click="isCollapsed = !isCollapsed"></button>
     <div class="wrapper">
       <div class="accordion" :class="{ collapsed: isCollapsed }">
         <div class="top">
@@ -88,7 +88,7 @@ function send() {
             </p>
           </div>
         </div>
-        <input type="text" maxlength="128" @keydown.enter="send" v-model="content" />
+        <input tabindex="3" type="text" maxlength="128" @keydown.enter="send" v-model="content" />
       </div>
     </div>
   </div>
@@ -98,6 +98,10 @@ function send() {
 .chat {
   width: 100%;
   max-width: 600px;
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translate(-50%, 0);
 }
 
 .wrapper {
@@ -109,11 +113,10 @@ function send() {
   padding: 0;
   border: none;
   position: relative;
-  display: inline-block;
   margin-bottom: 7px; /* idk why is it like this */
   left: 50%;
-  width: 24px !important;
-  height: 24px !important;
+  width: 24px;
+  height: 24px;
   transform: translate(-50%, 7px);
   background-color: rgb(55, 55, 55);
 }

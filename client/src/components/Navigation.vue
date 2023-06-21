@@ -10,7 +10,7 @@ const isCollapsed = ref(true);
       <RouterLink to="/game/lobby" class="button">Lobby</RouterLink>
       <RouterLink to="/game/instance" class="button">Instance</RouterLink>
     </div>
-    <div class="toggle-collapsed" @click="isCollapsed = !isCollapsed"></div>
+    <button tabindex="1" class="toggle-collapsed" @click="isCollapsed = !isCollapsed"></button>
   </nav>
 </template>
 
@@ -25,6 +25,9 @@ const isCollapsed = ref(true);
 }
 
 .toggle-collapsed {
+  padding: 0;
+  border: none;
+  margin-bottom: 7px; /* idk why is it like this */
   display: inline-block;
   width: 24px;
   height: 24px;

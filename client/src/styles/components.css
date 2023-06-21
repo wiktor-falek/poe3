@@ -42,3 +42,7 @@ a:hover {
 .monospace {
   font-family: "Courier New", Courier, monospace;
 }
+
+.capitalize {
+  text-transform: capitalize;
+}

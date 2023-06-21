@@ -63,7 +63,7 @@ onBeforeMount(() => {
             </p>
             <div class="member-data">
               <p class="member-data__level">Level {{ member.level }}</p>
-              <p class="member-data__class">{{ member.class }}</p>
+              <p class="member-data__class capitalize">{{ member.class }}</p>
             </div>
 
             <!-- displayed if this character is the owner, on all characters but this one -->
@@ -193,9 +193,6 @@ button {
 .member-data {
   display: flex;
   gap: 5px;
-}
-.member-data__class::first-letter {
-  text-transform: uppercase;
 }
 
 .title {
