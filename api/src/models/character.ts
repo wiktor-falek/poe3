@@ -1,7 +1,7 @@
 import Joi from "joi";
 import { Ok, Err, ResultOk, ResultErr } from "resultat";
 import Mongo from "../mongo.js";
-import startingGear from "../components/startingGear.js";
+import { StartingEquipmentFactory } from "../../../items/dist/index.js";
 import { MongoServerError } from "mongodb";
 import type { CharacterOverview } from "../../types.js";
 import type { CharacterClass, StaticCharacter } from "../../../common/index.js";
@@ -53,11 +53,12 @@ class Character {
     characterClass: CharacterClass,
     characterName: string
   ): Promise<ResultOk<CharacterOverview> | ResultErr> {
+    const equipment = StartingEquipmentFactory.createForClass(characterClass);
     const initialCharacterData = {
       userId,
       name: characterName,
       class: characterClass,
-      equipment: startingGear[characterClass],
+      equipment,
     };
 
     const validationResult = characterSchema.validate(initialCharacterData);
