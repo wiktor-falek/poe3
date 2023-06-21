@@ -36,6 +36,8 @@ type InventorySlot =
   | "amulet"
   | "belt";
 
+*/
+
 type EquipmentSlot =
   | "hand"
   | "offhand"
@@ -47,7 +49,6 @@ type EquipmentSlot =
   | "ring_2"
   | "amulet"
   | "belt";
-*/
 
 // interface Item {}
 
