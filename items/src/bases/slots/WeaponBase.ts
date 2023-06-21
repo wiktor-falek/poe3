@@ -1,6 +1,6 @@
 import { PREFIX_MODIFIERS, SUFFIX_MODIFIERS } from "../../modifiers";
 import { deepFreeze } from "../../utils";
-import GearBase from "../GearBase";
+import GearBase, { Options } from "../GearBase";
 
 class WeaponBase extends GearBase {
   #PREFIX_MODIFIER_POOL = deepFreeze([
@@ -17,14 +17,8 @@ class WeaponBase extends GearBase {
   ]);
 
   slot: GearSlot;
-  constructor(
-    name: string,
-    ilvl: number,
-    requirements: Requirements,
-    baseMods: Array<ModifierWithValues>,
-    implicits: Array<ModifierWithValues>
-  ) {
-    super(name, ilvl, requirements, baseMods, implicits);
+  constructor(options: Options) {
+    super(options);
     this.slot = "hand";
   }
 
