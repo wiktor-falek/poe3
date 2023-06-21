@@ -12,7 +12,7 @@ import type { UserData } from "../../types.js";
  * @example
  * import authorized from "./middlewares/authorized.js"
  * import apiRouter from "./routes/api.js"
- * app.use("/api", authorize, apiRouter);
+ * app.use("/api", authorized, apiRouter);
  */
 const authorized = async (req: Request, res: Response, next: NextFunction) => {
   const { sessionId } = req.cookies;
