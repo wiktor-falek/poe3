@@ -71,8 +71,16 @@ class GearBase {
     //   // assign values array from range(s) in the modifier.tier
     //   this.affixes.suffixes.push({ ...modifier, values: [value] });
     // }
-    // this.rarity = "magic";
-    // return this;
+    this.rarity = "magic";
+    return this;
+  }
+
+  rare(
+    PREFIX_MODIFIER_POOL: Array<ModifierWithWeight>,
+    SUFFIX_MODIFIER_POOL: Array<ModifierWithWeight>
+  ) {
+    this.rarity = "rare";
+    return this;
   }
 }
 

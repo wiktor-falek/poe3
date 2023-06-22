@@ -1,5 +1,5 @@
 import type { CharacterClass } from "../../common/index";
-import { ChestBase, WeaponBase } from "./bases";
+import { ChestBase, RingBase, WeaponBase } from "./bases";
 import { BASE_MODIFIERS, IMPLICIT_MODIFIERS } from "./modifiers";
 
 class StartingEquipmentFactory {
@@ -22,8 +22,15 @@ class StartingEquipmentFactory {
           }),
           gloves: null,
           boots: null,
-          ring_1: null,
-          ring_2: null,
+          ring_1: new RingBase({
+            name: "Sapphire Ring",
+            requirements: { level: 5 },
+            baseMods: [{ ...BASE_MODIFIERS.to_mana, values: [5] }],
+          }).magic(),
+          ring_2: new RingBase({
+            name: "Gold Ring",
+            baseMods: [{ ...BASE_MODIFIERS.to_life, values: [5] }],
+          }).rare(),
           amulet: null,
           belt: null,
         };

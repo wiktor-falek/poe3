@@ -25,6 +25,10 @@ class WeaponBase extends GearBase {
   magic() {
     return super.magic(this.#PREFIX_MODIFIER_POOL, this.#SUFFIX_MODIFIER_POOL);
   }
+
+  rare() {
+    return super.rare(this.#PREFIX_MODIFIER_POOL, this.#SUFFIX_MODIFIER_POOL);
+  }
 }
 
 export default WeaponBase;
