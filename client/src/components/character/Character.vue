@@ -1,27 +1,36 @@
 <script lang="ts" setup>
 import { ref } from "vue";
-import useCharacterStore from "../stores/characterStore";
+import useCharacterStore from "../../stores/characterStore";
+import Equipment from "./Equipment.vue";
+import Inventory from "./Inventory.vue";
 
 const characterStore = useCharacterStore();
 const character = characterStore.staticCharacter;
 
 const isCollapsed = ref(false);
+
+// context menu shared between equipment and inventory
 </script>
 
 <template>
-  <div class="character" v-if="character">
+  <div class="character" v-if="character" @contextmenu.prevent="">
     <button tabindex="4" class="toggle-collapsed" @click="isCollapsed = !isCollapsed"></button>
     <div class="accordion" :class="{ collapsed: isCollapsed }">
-      <h3>{{ character.name }}</h3>
-      <h3>
-        Lvl {{ character.level.value }} <span class="capitalize">{{ character.class }}</span>
-      </h3>
+      <div class="overview">
+        <h3>{{ character.name }}</h3>
+        <h3>
+          Lvl {{ character.level.value }} <span class="capitalize">{{ character.class }}</span>
+        </h3>
+      </div>
+      <Equipment />
+      <Inventory />
     </div>
   </div>
 </template>
 
 <style scoped>
 .character {
+  user-select: none;
   position: absolute;
   display: flex;
   align-items: center;
@@ -29,6 +38,10 @@ const isCollapsed = ref(false);
   top: 50%;
   right: 0;
   transform: translate(0, -50%);
+}
+
+.overview {
+  text-align: center;
 }
 
 .toggle-collapsed {

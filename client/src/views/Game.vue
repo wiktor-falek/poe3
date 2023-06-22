@@ -4,7 +4,7 @@ import { onUnmounted, onMounted, onBeforeMount, ref, watch } from "vue";
 import * as gameServer from "../socket/gameServer";
 import Chat from "../components/Chat.vue";
 import Navigation from "../components/Navigation.vue";
-import Character from "../components/Character.vue";
+import Character from "../components/character/Character.vue";
 
 const router = useRouter();
 

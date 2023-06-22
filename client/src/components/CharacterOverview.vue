@@ -25,7 +25,6 @@ const character = characterStore.dynamicCharacter;
   align-items: center;
   justify-content: center;
   font-size: 20px;
-  user-select: none;
 }
 .player-class {
   text-transform: capitalize;
