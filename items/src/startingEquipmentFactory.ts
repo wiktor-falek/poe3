@@ -25,11 +25,11 @@ class StartingEquipmentFactory {
           ring_1: new RingBase({
             name: "Sapphire Ring",
             requirements: { level: 5 },
-            baseMods: [{ ...BASE_MODIFIERS.to_mana, values: [5] }],
+            implicits: [{ ...IMPLICIT_MODIFIERS.to_mana, values: [5] }],
           }).magic(),
           ring_2: new RingBase({
             name: "Gold Ring",
-            baseMods: [{ ...BASE_MODIFIERS.to_life, values: [5] }],
+            implicits: [{ ...IMPLICIT_MODIFIERS.to_life, values: [5] }],
           }).rare(),
           amulet: null,
           belt: null,

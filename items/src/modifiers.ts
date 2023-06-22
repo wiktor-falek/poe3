@@ -1,5 +1,5 @@
 // IMPLICITS - can exist on any type of GearBase, regardless of rarity
-export const IMPLICIT_MODIFIERS: { [key: string]: BaseModifier } = {
+export const IMPLICIT_MODIFIERS = {
   cold_damage_to_spells: {
     modId: "cold_damage_to_spells",
     description: "Adds # to # Cold Damage to Spells",
@@ -15,14 +15,14 @@ export const IMPLICIT_MODIFIERS: { [key: string]: BaseModifier } = {
 };
 
 // BASE MODIFIERS - mods tied to the base, like critical strike chance on a weapon
-export const BASE_MODIFIERS: { [key: string]: BaseModifier } = {
+export const BASE_MODIFIERS = {
   critical_strike_chance: {
     modId: "critical_strike_chance",
     description: "Critical Strike Chance: #%",
   },
   physical_damage: {
     modId: "physical_damage",
-    description: "Physical Damage: # to #",
+    description: "Physical Damage: #-#",
   },
   evasion: {
     modId: "evasion",
@@ -39,7 +39,7 @@ export const BASE_MODIFIERS: { [key: string]: BaseModifier } = {
 // 1-2 prefixes and 1-2 suffixes on magic rarity item,
 // 2-3 prefixes and 2-3 suffixes on rare rarity item,
 
-export const PREFIX_MODIFIERS: { [key: string]: Modifier } = {
+export const PREFIX_MODIFIERS = {
   to_life: {
     modId: "to_life",
     description: "+# to Life",
@@ -60,7 +60,7 @@ export const PREFIX_MODIFIERS: { [key: string]: Modifier } = {
   },
 };
 
-export const SUFFIX_MODIFIERS: { [key: string]: Modifier } = {
+export const SUFFIX_MODIFIERS = {
   to_strength: {
     modId: "to_strength",
     description: "+# to Strength",
