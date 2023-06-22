@@ -29,7 +29,7 @@ const characterSchema = Joi.object({
     amulet: null,
     belt: null,
   }),
-  inventory: Joi.array().default(new Array(32).fill(null)),
+  inventory: Joi.array().default(new Array(35).fill(null)),
   progression: Joi.object().default({
     mainStory: {
       highestZoneId: 0,
@@ -54,6 +54,7 @@ class Character {
     characterName: string
   ): Promise<ResultOk<CharacterOverview> | ResultErr> {
     const equipment = StartingEquipmentFactory.createForClass(characterClass);
+
     const initialCharacterData = {
       userId,
       name: characterName,
