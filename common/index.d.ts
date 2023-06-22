@@ -24,20 +24,6 @@ interface Resources {
   maxAp: number;
 }
 
-/*
-type InventorySlot =
-  | "hand"
-  | "offhand"
-  | "helmet"
-  | "chest"
-  | "gloves"
-  | "boots"
-  | "ring"
-  | "amulet"
-  | "belt";
-
-*/
-
 type EquipmentSlot =
   | "hand"
   | "offhand"
