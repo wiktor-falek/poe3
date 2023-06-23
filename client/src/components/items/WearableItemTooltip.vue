@@ -36,16 +36,23 @@ function populateTemplateModDescription(mod: Mod) {
 </script>
 
 <template>
-  <div class="item-tooltip" v-if="item" :style="{
-    'border-color': `var(--item-rarity--${item.rarity})`,
-  }">
+  <div
+    class="item-tooltip"
+    v-if="item"
+    :style="{
+      'border-color': `var(--item-rarity--${item.rarity})`,
+    }"
+  >
     <!-- Name -->
-    <div class="item-tooltip__top" :class="{
-      'color--normal': item.rarity === 'normal',
-      'color--magic': item.rarity === 'magic',
-      'color--rare': item.rarity === 'rare',
-      'color--unique': item.rarity === 'unique',
-    }">
+    <div
+      class="item-tooltip__top"
+      :class="{
+        'color--normal': item.rarity === 'normal',
+        'color--magic': item.rarity === 'magic',
+        'color--rare': item.rarity === 'rare',
+        'color--unique': item.rarity === 'unique',
+      }"
+    >
       <p v-if="item.rarity === 'unique'" class="item-tooltip__top__unique-name">
         {{ item.uniqueName }}
       </p>
@@ -63,18 +70,19 @@ function populateTemplateModDescription(mod: Mod) {
       </div>
     </div>
 
-
     <!-- Requirements -->
     <hr v-if="item.requirements" />
     <div class="item-tooltip__level-requirement" v-if="item.requirements">
       <!-- TODO: comma signs between each span -->
-      <p>
+      <p
+        :class="{
+          'color--restricted': item.requirements.level > characterLvl,
+        }"
+      >
         Requires
         <span v-if="item.requirements.level">
           Level
-          <span :class="{
-            'color--disabled': item.requirements.level > characterLvl,
-          }">
+          <span>
             {{ item.requirements.level }}
           </span>
         </span>
@@ -89,23 +97,33 @@ function populateTemplateModDescription(mod: Mod) {
             {{ item.requirements.attributes.intelligence }} ING
           </span>
         </span>
-      <p>Item Level {{ item.ilvl }}</p>
       </p>
+      <p>Item Level {{ item.ilvl }}</p>
     </div>
 
     <!-- Implicits -->
     <hr v-if="item.modifiers.implicit.length" />
     <div class="item-tooltips__implicits" v-if="item.modifiers.implicit.length">
-      <div class="item-tooltip__implicits__implicit color--magic" v-for="implicit in item.modifiers.implicit">
+      <div
+        class="item-tooltip__implicits__implicit color--magic"
+        v-for="implicit in item.modifiers.implicit"
+      >
         {{ populateTemplateModDescription(implicit) }}
       </div>
     </div>
 
     <!-- Affixes -->
-    <hr v-if="item.rarity !== 'normal' && [...item.modifiers.affix.prefixes, ...item.modifiers.affix.suffixes].length" />
+    <hr
+      v-if="
+        item.rarity !== 'normal' &&
+        [...item.modifiers.affix.prefixes, ...item.modifiers.affix.suffixes].length
+      "
+    />
     <div class="item-tooltip__mods" v-if="item.modifiers.affix">
-      <div class="item-tooltip__mods__mod color--magic"
-        v-for="affix in [...item.modifiers.affix.prefixes, ...item.modifiers.affix.suffixes]">
+      <div
+        class="item-tooltip__mods__mod color--magic"
+        v-for="affix in [...item.modifiers.affix.prefixes, ...item.modifiers.affix.suffixes]"
+      >
         {{ populateTemplateModDescription(affix) }}
       </div>
     </div>
@@ -153,5 +171,22 @@ hr {
   height: 1px;
   width: 100%;
   margin: 10px 0;
+}
+
+.color--restricted {
+  color: rgb(218, 68, 68);
+}
+
+.color--normal {
+  color: var(--item-rarity--normal);
+}
+.color--magic {
+  color: var(--item-rarity--magic);
+}
+.color--rare {
+  color: var(--item-rarity--rare);
+}
+.color--unique {
+  color: var(--item-rarity--unique);
 }
 </style>
