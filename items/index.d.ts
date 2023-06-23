@@ -12,6 +12,7 @@ type WearableSlot =
 type Rarity = "normal" | "magic" | "rare" | "unique";
 
 interface Tier {
+  tier: number;
   range: Array<number>;
   ilvl: number;
 }
@@ -33,6 +34,7 @@ interface ModifierWithValues {
   modId: string;
   description: string;
   values: Array<number>;
+  tier?: number;
 }
 
 interface BaseModifier {

@@ -6,6 +6,8 @@ class Ring extends Wearable {
   #PREFIX_MODIFIER_POOL = deepFreeze([
     { ...PREFIX_MODIFIERS.to_life, weight: 1000 },
     { ...PREFIX_MODIFIERS.to_mana, weight: 1000 },
+    { ...PREFIX_MODIFIERS.to_life_regeneration, weight: 1000 },
+    { ...PREFIX_MODIFIERS.to_mana_regeneration, weight: 1000 },
   ]);
 
   #SUFFIX_MODIFIER_POOL = deepFreeze([
@@ -14,6 +16,9 @@ class Ring extends Wearable {
     { ...SUFFIX_MODIFIERS.to_intelligence, weight: 1000 },
     { ...SUFFIX_MODIFIERS.to_vitality, weight: 1000 },
     { ...SUFFIX_MODIFIERS.to_speed, weight: 1000 },
+    { ...SUFFIX_MODIFIERS.to_fire_resistance, weight: 1000 },
+    { ...SUFFIX_MODIFIERS.to_cold_resistance, weight: 1000 },
+    { ...SUFFIX_MODIFIERS.to_lightning_resistance, weight: 1000 },
   ]);
   slot: WearableSlot;
   constructor(options: Options) {

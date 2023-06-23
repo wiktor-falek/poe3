@@ -8,5 +8,5 @@ export function deepFreeze(obj: any) {
 }
 
 export function inspect(obj: any) {
-  return util.inspect(obj, false, null, true);
+  console.log(util.inspect(obj, false, null, true));
 }

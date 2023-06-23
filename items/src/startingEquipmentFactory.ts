@@ -23,7 +23,7 @@ class StartingEquipmentFactory {
             modifiers: {
               base: [{ ...BASE_MODIFIERS.armor, values: [6] }],
             },
-          }),
+          }).magic(),
           gloves: null,
           boots: null,
           ring_1: new Ring({
@@ -32,7 +32,7 @@ class StartingEquipmentFactory {
             modifiers: {
               implicit: [{ ...IMPLICIT_MODIFIERS.to_mana, values: [5] }],
             },
-          }).magic(),
+          }).rare(),
           ring_2: new Ring({
             name: "Gold Ring",
             modifiers: {

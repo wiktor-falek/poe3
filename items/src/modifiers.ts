@@ -43,67 +43,138 @@ export const PREFIX_MODIFIERS = {
   to_life: {
     modId: "to_life",
     description: "+# to Life",
-    tiers: {
-      10: { range: [1, 2], ilvl: 1 },
-      9: { range: [3, 5], ilvl: 10 },
-      8: { range: [6, 9], ilvl: 20 },
-    },
+    tiers: [
+      { tier: 10, range: [3, 5], ilvl: 1 },
+      { tier: 9, range: [6, 9], ilvl: 10 },
+      { tier: 8, range: [10, 16], ilvl: 20 },
+    ],
   },
   to_mana: {
     modId: "to_mana",
     description: "+# to Mana",
-    tiers: {
-      10: { range: [2, 3], ilvl: 1 },
-      9: { range: [4, 6], ilvl: 10 },
-      8: { range: [7, 10], ilvl: 20 },
-    },
+    tiers: [
+      { tier: 10, range: [3, 5], ilvl: 1 },
+      { tier: 9, range: [6, 9], ilvl: 10 },
+      { tier: 8, range: [10, 16], ilvl: 20 },
+    ],
   },
+  to_life_regeneration: {
+    modId: "to_life_regeneration",
+    description: "+# to Life Regeneration",
+    tiers: [
+      { tier: 10, range: [1, 1], ilvl: 1 },
+      { tier: 9, range: [1, 2], ilvl: 10 },
+      { tier: 8, range: [2, 3], ilvl: 20 },
+    ],
+  },
+  to_mana_regeneration: {
+    modId: "to_mana_regeneration",
+    description: "+# to Mana Regeneration",
+    tiers: [
+      { tier: 10, range: [1, 1], ilvl: 1 },
+      { tier: 9, range: [1, 2], ilvl: 10 },
+      { tier: 8, range: [2, 3], ilvl: 20 },
+    ],
+  },
+  to_armor: {
+    modId: "to_armor",
+    description: "+# to Armor",
+    tiers: [
+      { tier: 10, range: [4, 5], ilvl: 1 },
+      { tier: 9, range: [7, 10], ilvl: 10 },
+      { tier: 8, range: [10, 16], ilvl: 20 },
+    ],
+  },
+  to_evasion: {
+    modId: "to_evasion",
+    description: "+# to Evasion",
+    tiers: [
+      { tier: 10, range: [4, 5], ilvl: 1 },
+      { tier: 9, range: [7, 10], ilvl: 10 },
+      { tier: 8, range: [10, 16], ilvl: 20 },
+    ],
+  },
+  // to_physical_damage: {
+  //   modId: "to_physical_damage",
+  //   description: "Adds # to # Physical Damage"
+  // },
+  // increased_physical_damage: {
+  //   modId: "increased_physical_damage",
+  //   description: "#% Increased Physical Damage"
+  // },
 };
 
 export const SUFFIX_MODIFIERS = {
   to_strength: {
     modId: "to_strength",
     description: "+# to Strength",
-    tiers: {
-      10: { range: [1, 2], ilvl: 1 },
-      9: { range: [2, 3], ilvl: 10 },
-      8: { range: [3, 4], ilvl: 20 },
-    },
+    tiers: [
+      { tier: 10, range: [1, 2], ilvl: 1 },
+      { tier: 9, range: [2, 3], ilvl: 10 },
+      { tier: 8, range: [3, 4], ilvl: 20 },
+    ],
   },
   to_dexterity: {
     modId: "to_dexterity",
     description: "+# to Dexterity",
-    tiers: {
-      10: { range: [1, 2], ilvl: 1 },
-      9: { range: [2, 3], ilvl: 10 },
-      8: { range: [3, 4], ilvl: 20 },
-    },
+    tiers: [
+      { tier: 10, range: [1, 2], ilvl: 1 },
+      { tier: 9, range: [2, 3], ilvl: 10 },
+      { tier: 8, range: [3, 4], ilvl: 20 },
+    ],
   },
   to_intelligence: {
     modId: "to_intelligence",
     description: "+# to Intelligence",
-    tiers: {
-      10: { range: [1, 2], ilvl: 1 },
-      9: { range: [2, 3], ilvl: 10 },
-      8: { range: [3, 4], ilvl: 20 },
-    },
+    tiers: [
+      { tier: 10, range: [1, 2], ilvl: 1 },
+      { tier: 9, range: [2, 3], ilvl: 10 },
+      { tier: 8, range: [3, 4], ilvl: 20 },
+    ],
   },
   to_vitality: {
     modId: "to_vitality",
     description: "+# to Vitality",
-    tiers: {
-      10: { range: [1, 2], ilvl: 1 },
-      9: { range: [2, 3], ilvl: 10 },
-      8: { range: [3, 4], ilvl: 20 },
-    },
+    tiers: [
+      { tier: 10, range: [1, 2], ilvl: 1 },
+      { tier: 9, range: [2, 3], ilvl: 10 },
+      { tier: 8, range: [3, 4], ilvl: 20 },
+    ],
   },
   to_speed: {
     modId: "to_speed",
     description: "+# to Speed",
-    tiers: {
-      10: { range: [1, 2], ilvl: 1 },
-      9: { range: [2, 3], ilvl: 10 },
-      8: { range: [3, 4], ilvl: 20 },
-    },
+    tiers: [
+      { tier: 10, range: [1, 2], ilvl: 1 },
+      { tier: 9, range: [2, 3], ilvl: 10 },
+      { tier: 8, range: [3, 4], ilvl: 20 },
+    ],
+  },
+  to_fire_resistance: {
+    modId: "to_fire_resistance",
+    description: "+#% to Fire Resistance",
+    tiers: [
+      { tier: 10, range: [3, 4], ilvl: 1 },
+      { tier: 9, range: [4, 5], ilvl: 10 },
+      { tier: 8, range: [5, 7], ilvl: 20 },
+    ],
+  },
+  to_cold_resistance: {
+    modId: "to_cold_resistance",
+    description: "+#% to Cold Resistance",
+    tiers: [
+      { tier: 10, range: [3, 4], ilvl: 1 },
+      { tier: 9, range: [4, 5], ilvl: 10 },
+      { tier: 8, range: [5, 7], ilvl: 20 },
+    ],
+  },
+  to_lightning_resistance: {
+    modId: "to_lightning_resistance",
+    description: "+#% to Lightning Resistance",
+    tiers: [
+      { tier: 10, range: [3, 4], ilvl: 1 },
+      { tier: 9, range: [4, 5], ilvl: 10 },
+      { tier: 8, range: [5, 7], ilvl: 20 },
+    ],
   },
 };
