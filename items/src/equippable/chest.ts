@@ -1,11 +1,11 @@
-import { PREFIX_MODIFIERS, SUFFIX_MODIFIERS } from "../../modifiers";
-import GearBase, { Options } from "../GearBase";
+import { PREFIX_MODIFIERS, SUFFIX_MODIFIERS } from "../modifiers";
+import Equippable, { Options } from "../wearable/wearable";
 
-class ChestBase extends GearBase {
+class Chest extends Equippable {
   #PREFIX_MODIFIER_POOL = [];
   #SUFFIX_MODIFIER_POOL = [];
 
-  slot: GearSlot;
+  slot: WearableSlot;
   constructor(options: Options) {
     super(options);
     this.slot = "chest";
@@ -20,4 +20,4 @@ class ChestBase extends GearBase {
   }
 }
 
-export default ChestBase;
+export default Chest;

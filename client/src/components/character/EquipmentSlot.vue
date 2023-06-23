@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import type { EquipmentSlot } from "../../../../common";
 import useCharacterStore from "../../stores/characterStore";
-import EquippableItemTooltip from "../items/EquippableItemTooltip.vue";
+import WearableItemTooltip from "../items/WearableItemTooltip.vue";
 
 const characterStore = useCharacterStore();
 const equipment = characterStore.staticCharacter?.equipment;
@@ -19,7 +19,7 @@ const isHovered = ref(false);
 
 <template>
   <Teleport to="body" v-if="isHovered">
-    <EquippableItemTooltip :item="item" />
+    <WearableItemTooltip :item="item" />
   </Teleport>
   <div
     class="equipment-slot"

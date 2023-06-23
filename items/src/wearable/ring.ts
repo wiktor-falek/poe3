@@ -1,8 +1,8 @@
-import { PREFIX_MODIFIERS, SUFFIX_MODIFIERS } from "../../modifiers";
-import { deepFreeze } from "../../utils";
-import GearBase, { Options } from "../GearBase";
+import { PREFIX_MODIFIERS, SUFFIX_MODIFIERS } from "../modifiers";
+import { deepFreeze } from "../utils";
+import Wearable, { Options } from "../wearable/wearable";
 
-class WeaponBase extends GearBase {
+class Ring extends Wearable {
   #PREFIX_MODIFIER_POOL = deepFreeze([
     { ...PREFIX_MODIFIERS.to_life, weight: 1000 },
     { ...PREFIX_MODIFIERS.to_mana, weight: 1000 },
@@ -15,11 +15,10 @@ class WeaponBase extends GearBase {
     { ...SUFFIX_MODIFIERS.to_vitality, weight: 1000 },
     { ...SUFFIX_MODIFIERS.to_speed, weight: 1000 },
   ]);
-
-  slot: GearSlot;
+  slot: WearableSlot;
   constructor(options: Options) {
     super(options);
-    this.slot = "hand";
+    this.slot = "ring";
   }
 
   magic() {
@@ -31,4 +30,4 @@ class WeaponBase extends GearBase {
   }
 }
 
-export default WeaponBase;
+export default Ring;

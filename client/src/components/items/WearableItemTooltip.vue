@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import useCharacterStore from "../../stores/characterStore";
+import type WearableItem from "../../../../items/src/wearable/wearable";
 
-const props = defineProps<{item: any}>();
+const props = defineProps<{ item: WearableItem }>();
 
 const characterStore = useCharacterStore();
 const characterLvl = characterStore.staticCharacter?.level.value!;
@@ -35,23 +36,16 @@ function populateTemplateModDescription(mod: Mod) {
 </script>
 
 <template>
-  <div
-    class="item-tooltip"
-    v-if="item"
-    :style="{
-      'border-color': `var(--item-rarity--${item.rarity})`,
-    }"
-  >
+  <div class="item-tooltip" v-if="item" :style="{
+    'border-color': `var(--item-rarity--${item.rarity})`,
+  }">
     <!-- Name -->
-    <div
-      class="item-tooltip__top"
-      :class="{
-        'color--normal': item.rarity === 'normal',
-        'color--magic': item.rarity === 'magic',
-        'color--rare': item.rarity === 'rare',
-        'color--unique': item.rarity === 'unique',
-      }"
-    >
+    <div class="item-tooltip__top" :class="{
+      'color--normal': item.rarity === 'normal',
+      'color--magic': item.rarity === 'magic',
+      'color--rare': item.rarity === 'rare',
+      'color--unique': item.rarity === 'unique',
+    }">
       <p v-if="item.rarity === 'unique'" class="item-tooltip__top__unique-name">
         {{ item.uniqueName }}
       </p>
@@ -62,12 +56,13 @@ function populateTemplateModDescription(mod: Mod) {
     </div>
 
     <!-- Base Mods -->
-    <hr v-if="item.baseMods && item.baseMods.length" />
+    <hr v-if="item.modifiers.base.length" />
     <div class="item-tooltip__base-mods">
-      <div class="item-tooltip__base-mod" v-for="mod in item.baseMods">
+      <div class="item-tooltip__base-mod" v-for="mod in item.modifiers.base">
         {{ populateTemplateModDescription(mod) }}
       </div>
     </div>
+
 
     <!-- Requirements -->
     <hr v-if="item.requirements" />
@@ -77,11 +72,9 @@ function populateTemplateModDescription(mod: Mod) {
         Requires
         <span v-if="item.requirements.level">
           Level
-          <span
-            :class="{
-              'color--disabled': item.requirements.level > characterLvl,
-            }"
-          >
+          <span :class="{
+            'color--disabled': item.requirements.level > characterLvl,
+          }">
             {{ item.requirements.level }}
           </span>
         </span>
@@ -96,47 +89,31 @@ function populateTemplateModDescription(mod: Mod) {
             {{ item.requirements.attributes.intelligence }} ING
           </span>
         </span>
-        <p>Item Level {{ item.ilvl }}</p>
+      <p>Item Level {{ item.ilvl }}</p>
       </p>
     </div>
 
     <!-- Implicits -->
-    <hr v-if="item.implicits && item.implicits.length" />
-    <div class="item-tooltips__implicits" v-if="item.implicits">
-      <div
-        class="item-tooltip__implicits__implicit color--magic"
-        v-for="implicit in item.implicits"
-      >
+    <hr v-if="item.modifiers.implicit.length" />
+    <div class="item-tooltips__implicits" v-if="item.modifiers.implicit.length">
+      <div class="item-tooltip__implicits__implicit color--magic" v-for="implicit in item.modifiers.implicit">
         {{ populateTemplateModDescription(implicit) }}
       </div>
     </div>
 
     <!-- Affixes -->
-    <hr v-if="item.affixes && item.affixes.length && item.rarity !== 'normal'" />
-    <div class="item-tooltip__mods" v-if="item.affixes">
-      <div
-        v-if="item.affixes.prefixes || item.affixes.suffixes"
-        class="item-tooltip__mods__mod color--magic"
-        v-for="affix in [...item.affixes.prefixes, ...item.affixes.suffixes]"
-      >
-        {{ populateTemplateModDescription(affix) }}
-      </div>
-      <div
-        v-else
-        class="item-tooltip__mods__mod color--magic"
-        v-for="affix in item.affixes"
-      >
+    <hr v-if="item.rarity !== 'normal' && [...item.modifiers.affix.prefixes, ...item.modifiers.affix.suffixes].length" />
+    <div class="item-tooltip__mods" v-if="item.modifiers.affix">
+      <div class="item-tooltip__mods__mod color--magic"
+        v-for="affix in [...item.modifiers.affix.prefixes, ...item.modifiers.affix.suffixes]">
         {{ populateTemplateModDescription(affix) }}
       </div>
     </div>
 
     <!-- Description -->
-    <hr v-if="item.description" />
-    <div
-      class="item-tooltip__description color--unique"
-      v-if="item.description"
-    >
-      {{ item.description }}
+    <hr v-if="item.uniqueDescription" />
+    <div class="item-tooltip__description color--unique" v-if="item.uniqueDescription">
+      {{ item.uniqueDescription }}
     </div>
   </div>
 </template>

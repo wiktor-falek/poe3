@@ -1,32 +1,44 @@
 import { ObjectId } from "bson";
 import pyrand from "pyrand";
+import type { Item } from ".";
 
 export interface Options {
   name: string;
   ilvl?: number;
   requirements?: Requirements;
-  baseMods?: Array<ModifierWithValues>;
-  implicits?: Array<ModifierWithValues>;
+  modifiers?: {
+    base?: Array<ModifierWithValues>;
+    implicit?: Array<ModifierWithValues>;
+  };
 }
 
-class GearBase {
+class Wearable implements Item {
   _id: ObjectId;
   name: string;
+  uniqueName?: string | undefined;
+  uniqueDescription?: string | undefined;
   ilvl: number;
-  rarity: GearRarity;
+  rarity: Rarity;
   requirements: Requirements;
-  baseMods: Array<ModifierWithValues>;
-  implicits: Array<ModifierWithValues>;
-  affixes: Affixes;
+  modifiers: {
+    base: Array<ModifierWithValues>;
+    implicit: Array<ModifierWithValues>;
+    affix: {
+      prefixes: Array<ModifierWithValues>;
+      suffixes: Array<ModifierWithValues>;
+    };
+  };
   constructor(options: Options) {
     this._id = new ObjectId();
+    this.rarity = "normal";
     this.name = options.name;
     this.ilvl = options.ilvl ?? 1;
     this.requirements = options.requirements ?? { level: 1 };
-    this.baseMods = options.baseMods ?? [];
-    this.implicits = options.implicits ?? [];
-    this.rarity = "normal";
-    this.affixes = { prefixes: [], suffixes: [] };
+    this.modifiers = {
+      base: options.modifiers?.base ?? [],
+      implicit: options.modifiers?.implicit ?? [],
+      affix: { prefixes: [], suffixes: [] },
+    };
   }
 
   magic(
@@ -84,4 +96,4 @@ class GearBase {
   }
 }
 
-export default GearBase;
+export default Wearable;

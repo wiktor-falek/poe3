@@ -1,4 +1,4 @@
-type GearSlot =
+type WearableSlot =
   | "hand"
   | "offhand"
   | "helmet"
@@ -9,7 +9,7 @@ type GearSlot =
   | "amulet"
   | "belt";
 
-type GearRarity = "normal" | "magic" | "rare" | "unique";
+type Rarity = "normal" | "magic" | "rare" | "unique";
 
 interface Tier {
   range: Array<number>;
@@ -60,9 +60,4 @@ interface Requirements {
     dexterity?: number;
     intelligence?: number;
   };
-}
-
-interface Affixes {
-  prefixes: Array<Modifier>;
-  suffixes: Array<Modifier>;
 }
