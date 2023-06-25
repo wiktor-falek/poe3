@@ -1,5 +1,7 @@
+import { deepFreeze } from "./utils";
+
 // IMPLICITS - can exist on any type of GearBase, regardless of rarity
-export const IMPLICIT_MODIFIERS = {
+export const IMPLICIT_MODIFIERS = deepFreeze({
   cold_damage_to_spells: {
     modId: "cold_damage_to_spells",
     description: "Adds # to # Cold Damage to Spells",
@@ -12,10 +14,10 @@ export const IMPLICIT_MODIFIERS = {
     modId: "to_mana",
     description: "+# to Mana",
   },
-};
+});
 
 // BASE MODIFIERS - mods tied to the base, like critical strike chance on a weapon
-export const BASE_MODIFIERS = {
+export const BASE_MODIFIERS = deepFreeze({
   critical_strike_chance: {
     modId: "critical_strike_chance",
     description: "Critical Strike Chance: #%",
@@ -32,14 +34,14 @@ export const BASE_MODIFIERS = {
     modId: "armor",
     description: "Armor: #",
   },
-};
+});
 
 // AFFIXES
 //   0 prefixes and   0 suffixex on normal rarity item,
 // 1-2 prefixes and 1-2 suffixes on magic rarity item,
 // 2-3 prefixes and 2-3 suffixes on rare rarity item,
 
-export const PREFIX_MODIFIERS = {
+export const PREFIX_MODIFIERS = deepFreeze({
   to_life: {
     modId: "to_life",
     description: "+# to Life",
@@ -102,9 +104,9 @@ export const PREFIX_MODIFIERS = {
   //   modId: "increased_physical_damage",
   //   description: "#% Increased Physical Damage"
   // },
-};
+});
 
-export const SUFFIX_MODIFIERS = {
+export const SUFFIX_MODIFIERS = deepFreeze({
   to_strength: {
     modId: "to_strength",
     description: "+# to Strength",
@@ -177,4 +179,4 @@ export const SUFFIX_MODIFIERS = {
       { tier: 8, range: [5, 7], ilvl: 20 },
     ],
   },
-};
+});
