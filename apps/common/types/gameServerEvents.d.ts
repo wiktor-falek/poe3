@@ -1,7 +1,7 @@
-import type { Message } from "../game-server/src/components/message.js";
-import type { LobbyData, MembersOnlyLobbyData } from "../game-server/src/game/lobby/lobby.js";
-import type Instance from "../game-server/src/game/instance/instance.js";
-import type { ActionData, StateUpdate } from "../game-server/src/game/rooms/combatRoom.ts";
+import type { Message } from "../../game-server/src/components/message.js";
+import type { LobbyData, MembersOnlyLobbyData } from "../../game-server/src/game/lobby/lobby.js";
+import type Instance from "../../game-server/src/game/instance/instance.js";
+import type { ActionData, StateUpdate } from "../../game-server/src/game/rooms/combatRoom.ts";
 import type { StaticCharacter } from "./index.js";
 
 export interface ClientToServerEvents {
