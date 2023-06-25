@@ -37,17 +37,6 @@ interface ModifierWithValues {
   tier?: number;
 }
 
-interface BaseModifier {
-  modId: string;
-  description: string;
-}
-
-interface Modifier {
-  modId: string;
-  description: string;
-  tiers: ModifierTiers;
-}
-
 interface ModifierWithWeight {
   modId: string;
   description: string;
