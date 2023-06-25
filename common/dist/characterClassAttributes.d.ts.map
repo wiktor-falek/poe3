@@ -1,1 +1,0 @@
-{"version":3,"file":"characterClassAttributes.d.ts","sourceRoot":"","sources":["../src/characterClassAttributes.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,UAAU,EAAE,cAAc,EAAE,MAAM,aAAa,CAAC;AAE9D,MAAM,MAAM,wBAAwB,GAAG;KACpC,cAAc,IAAI,cAAc,GAAG,UAAU;CAC/C,CAAC;AAEF,eAAO,MAAM,wBAAwB,EAAE,wBA6BrC,CAAC"}

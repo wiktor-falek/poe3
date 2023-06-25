@@ -11,7 +11,6 @@ function getDynamicCharacter(character: StaticCharacter): DynamicCharacter {
       fire: 0,
       cold: 0,
       lightning: 0,
-      physical: 0,
       poison: 0,
     },
     attributes,
