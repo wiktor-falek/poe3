@@ -26,7 +26,7 @@ class Material implements StackableItem {
   }
 }
 
-export const materials: { [name: string]: () => Material } = {
+export const materialBlueprints: { [name: string]: () => Material } = {
   augmentingCore: () =>
     new Material({
       name: "Augmenting Core",
