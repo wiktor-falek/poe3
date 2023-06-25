@@ -16,8 +16,6 @@ import registerInstanceHandler from "./handlers/instanceHandler.js";
 import InstanceManager from "./game/instance/instanceManager.js";
 import { PartyMessage } from "./components/message.js";
 
-process.env.NODE_ENV = process.env.NODE_ENV === "production" ? "production" : "development";
-
 await Mongo.connect();
 
 interface SocketData {
