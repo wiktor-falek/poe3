@@ -1,8 +1,8 @@
 import { PREFIX_MODIFIERS, SUFFIX_MODIFIERS } from "../modifiers";
 import { deepFreeze } from "../utils";
-import Equippable, { Options } from "./wearable";
+import Wearable, { Options } from "./wearable";
 
-class Chest extends Equippable {
+class Chest extends Wearable {
   #PREFIX_MODIFIER_POOL = deepFreeze([
     { ...PREFIX_MODIFIERS.to_life, weight: 1000 },
     { ...PREFIX_MODIFIERS.to_mana, weight: 1000 },
