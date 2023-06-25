@@ -1,8 +1,3 @@
-import { createServer } from "http";
-import { Server } from "socket.io";
-import initialize from "./middlewares/initialize.js";
-import registerChatHandler from "./handlers/chatHandler.js";
-import Mongo from "./db/mongo.js";
 import type { Socket } from "socket.io";
 import type {
   ClientToServerEvents,
@@ -10,7 +5,11 @@ import type {
   InterServerEvents,
 } from "../../common/types/gameServerEvents.js";
 import type Client from "./components/client/client.js";
-import assert from "./utils/assert.js";
+import { createServer } from "http";
+import { Server } from "socket.io";
+import Mongo from "./db/mongo.js";
+import initialize from "./middlewares/initialize.js";
+import registerChatHandler from "./handlers/chatHandler.js";
 import registerLobbyHandler from "./handlers/lobbyHandler.js";
 import LobbyManager from "./game/lobby/lobbyManager.js";
 import registerInstanceHandler from "./handlers/instanceHandler.js";
@@ -43,11 +42,6 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
 io.use(initialize);
 
 io.on("connection", (socket) => {
-  // TypeScript doesn't know that this connection does not happen
-  // unless socket.data.client is defined in initialize middleware,
-  // since SocketData is wrapped in Partial<>
-  assert(socket.data.client);
-
   const { client } = socket.data;
   client.setConnected();
 

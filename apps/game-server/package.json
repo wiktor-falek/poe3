@@ -22,7 +22,7 @@
     "nanoid": "^4.0.2",
     "pyrand": "^1.1.3",
     "resultat": "^1.0.5",
-    "socket.io": "^4.6.2"
+    "socket.io": "^4.7.0"
   },
   "devDependencies": {
     "tsc-watch": "^6.0.4",
