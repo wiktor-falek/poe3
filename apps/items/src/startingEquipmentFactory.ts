@@ -1,6 +1,6 @@
 import { Chest, Ring, Weapon } from "./wearable";
 import { BASE_MODIFIERS, IMPLICIT_MODIFIERS } from "./modifiers";
-import type { CharacterClass } from "../../common/index";
+import type { CharacterClass } from "../../common/types/index";
 
 class StartingEquipmentFactory {
   static createForClass(characterClass: CharacterClass) {

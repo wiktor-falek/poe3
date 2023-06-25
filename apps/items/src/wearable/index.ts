@@ -4,7 +4,7 @@ import Chest from "./chest";
 
 export interface Item {
   name: string;
-  uniqueName?: string;
+  type: "material" | "wearable";
 }
 
 export interface StackableItem extends Item {

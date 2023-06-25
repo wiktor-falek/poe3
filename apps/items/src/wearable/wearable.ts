@@ -12,8 +12,9 @@ export interface Options {
   };
 }
 
-class Wearable implements Item {
+class Wearable {
   _id: ObjectId;
+  type: string;
   name: string;
   uniqueName?: string | undefined;
   uniqueDescription?: string | undefined;
@@ -30,6 +31,7 @@ class Wearable implements Item {
   };
   constructor(options: Options) {
     this._id = new ObjectId();
+    this.type = "wearable";
     this.rarity = "normal";
     this.name = options.name;
     this.ilvl = options.ilvl ?? 1;
