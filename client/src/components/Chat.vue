@@ -97,11 +97,12 @@ function send() {
 <style scoped>
 .chat {
   width: 100%;
-  max-width: 600px;
+  max-width: 550px;
   position: absolute;
   bottom: 0px;
   left: 50%;
   transform: translate(-50%, 0);
+  z-index: 1000;
 }
 
 .wrapper {
