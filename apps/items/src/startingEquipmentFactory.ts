@@ -1,67 +1,41 @@
-import { Chest, Ring, Weapon } from "./wearable";
-import { BASE_MODIFIERS, IMPLICIT_MODIFIERS } from "./modifiers";
 import type { CharacterClass } from "../../common/types/index";
+import { blueprints } from "./wearable/blueprints";
+import type { Chest, Ring, Weapon } from "./wearable";
 
 class StartingEquipmentFactory {
-  static createForClass(characterClass: CharacterClass) {
+  static createForClass(characterClass: CharacterClass): {
+    hand: Weapon | null;
+    offhand: null;
+    helmet: null;
+    chest: Chest | null;
+    gloves: null;
+    boots: null;
+    ring_1: Ring | null;
+    ring_2: Ring | null;
+    amulet: null;
+    belt: null;
+  } {
     switch (characterClass) {
       case "swordsman":
         return {
-          hand: new Weapon({
-            name: "Broken Sword",
-            modifiers: {
-              base: [
-                { ...BASE_MODIFIERS.physical_damage, values: [2, 3] },
-                { ...BASE_MODIFIERS.critical_strike_chance, values: [4] },
-              ],
-            },
-          }),
+          hand: blueprints.weapons.brokenSword(),
           offhand: null,
           helmet: null,
-          chest: new Chest({
-            name: "Rusted Plate Armor",
-            modifiers: {
-              base: [{ ...BASE_MODIFIERS.armor, values: [6] }],
-            },
-          }).magic(),
+          chest: blueprints.chests.rustedPlateArmor().magic(),
           gloves: null,
           boots: null,
-          ring_1: new Ring({
-            name: "Sapphire Ring",
-            requirements: { level: 5 },
-            modifiers: {
-              implicit: [{ ...IMPLICIT_MODIFIERS.to_mana, values: [5] }],
-            },
-          }).rare(),
-          ring_2: new Ring({
-            name: "Gold Ring",
-            modifiers: {
-              implicit: [{ ...IMPLICIT_MODIFIERS.to_life, values: [5] }],
-            },
-          }).rare(),
+          ring_1: blueprints.rings.sapphireRing().rare(),
+          ring_2: blueprints.rings.goldRing().rare(),
           amulet: null,
           belt: null,
         };
 
       case "ranger":
         return {
-          hand: new Weapon({
-            name: "Short Bow",
-            modifiers: {
-              base: [
-                { ...BASE_MODIFIERS.physical_damage, values: [2, 4] },
-                { ...BASE_MODIFIERS.critical_strike_chance, values: [5] },
-              ],
-            },
-          }),
+          hand: blueprints.weapons.shortBow(),
           offhand: null,
           helmet: null,
-          chest: new Chest({
-            name: "Torn Leather Tunic",
-            modifiers: {
-              base: [{ ...BASE_MODIFIERS.evasion, values: [6] }],
-            },
-          }),
+          chest: blueprints.chests.tornLeatherTunic(),
           gloves: null,
           boots: null,
           ring_1: null,
@@ -72,24 +46,10 @@ class StartingEquipmentFactory {
 
       case "sorcerer":
         return {
-          hand: new Weapon({
-            name: "Branch",
-            modifiers: {
-              base: [
-                { ...BASE_MODIFIERS.physical_damage, values: [1, 3] },
-                { ...BASE_MODIFIERS.critical_strike_chance, values: [4] },
-              ],
-              implicit: [{ ...IMPLICIT_MODIFIERS.cold_damage_to_spells, values: [1, 2] }],
-            },
-          }),
+          hand: blueprints.weapons.branch(),
           offhand: null,
           helmet: null,
-          chest: new Chest({
-            name: "Ragged Cloth",
-            modifiers: {
-              base: [{ ...BASE_MODIFIERS.evasion, values: [3] }],
-            },
-          }),
+          chest: blueprints.chests.raggedCloth(),
           gloves: null,
           boots: null,
           ring_1: null,
@@ -100,26 +60,10 @@ class StartingEquipmentFactory {
 
       case "assassin":
         return {
-          hand: new Weapon({
-            name: "Rusty Dagger",
-            modifiers: {
-              base: [
-                { ...BASE_MODIFIERS.physical_damage, values: [2, 4] },
-                { ...BASE_MODIFIERS.critical_strike_chance, values: [7] },
-              ],
-            },
-          }),
+          hand: blueprints.weapons.rustyDagger(),
           offhand: null,
           helmet: null,
-          chest: new Chest({
-            name: "Leather Harness",
-            modifiers: {
-              base: [
-                { ...BASE_MODIFIERS.evasion, values: [4] },
-                { ...BASE_MODIFIERS.armor, values: [2] },
-              ],
-            },
-          }),
+          chest: blueprints.chests.leatherHarness(),
           gloves: null,
           boots: null,
           ring_1: null,
