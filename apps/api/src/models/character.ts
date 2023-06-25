@@ -4,7 +4,7 @@ import Mongo from "../mongo.js";
 import { StartingEquipmentFactory } from "../../../items/dist/index.js";
 import { MongoServerError } from "mongodb";
 import type { CharacterOverview } from "../../types.js";
-import type { CharacterClass, StaticCharacter } from "../../../common/index.js";
+import type { CharacterClass, StaticCharacter } from "../../../common/types/index.js";
 
 const characterSchema = Joi.object({
   userId: Joi.string().length(24).required(),

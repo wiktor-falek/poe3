@@ -1,5 +1,5 @@
 import Mongo from "../mongo.js";
-import type { User as UserDocument } from "../../../../common/index.js";
+import type { User as UserDocument } from "../../../../common/types/index.js";
 
 class User {
   private static db = Mongo.getClient().db("game");

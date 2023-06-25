@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { StaticCharacter, EquipmentSlot } from "../../../../common/index.js";
+import { StaticCharacter, EquipmentSlot } from "../../../../common/types/index.js";
 import Mongo from "../mongo.js";
 import { Err, Ok } from "resultat";
 
