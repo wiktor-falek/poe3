@@ -1,6 +1,5 @@
 import { ObjectId } from "bson";
 import pyrand from "pyrand";
-import type { Item } from ".";
 
 export interface Options {
   name: string;
@@ -41,6 +40,11 @@ class Wearable {
       implicit: options.modifiers?.implicit ?? [],
       affix: { prefixes: [], suffixes: [] },
     };
+  }
+
+  setIlvl(ilvl: number) {
+    this.ilvl = ilvl;
+    return this;
   }
 
   private rollAmountOfPrefixes(
