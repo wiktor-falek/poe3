@@ -7,13 +7,12 @@
 ### Tech Stack
 
 - TypeScript
-- MongoDB Native Driver
+- Vue.js, Vue Router
 - Express
 - Socket.io
-- Vue.js, Pinia, xstate
-- Joi for MongoDB schema validation & socket event argument validation
-- [Redis (socket.io adapter)]
-- Vitest
+- MongoDB Native Driver
+- Joi for MongoDB schema validation & socket argument type validation
+- Vitest for unit tests
 
 My own npm modules:
 
@@ -24,21 +23,37 @@ My own npm modules:
 
 ### Features
 
-- Character inventory and equipment management (drag & drop API, popovers), with state synchronised between database, socket server and frontend in real time.
+- Global chat with client side and server side commands. Messages have different groups such as: System, Global, Whisper, Party, Guild whose visibility can be toggled on/off. Use `/global n` command to join a room number `n` (1-1000).
 
-- Global chat with client side and server side commands. Messages have different groups such as: System, Global, Whisper, Party, Guild whose visibility can be toggled on/off. Supports 1000 separate global rooms. Use `/global n` command to join a room number `n`.
+- Lobby system with ownership.
+  The lobby owner can kick other members or create an instance where players fight monsters.
 
-- Persisting character changes such as silver, experience points, and moving items between inventory.
-
-- Party system supporting up to four players.
-
-- Basic turn based combat prototype. Enemy and Ally party hold up to 8 entities each. Player is able to target an enemy and use Basic Attack to deal random amount of damage based on strength attribute. As of now doesn't support multiple clients in one dungeon instance.
+- Turn based combat prototype. Turn order is generated once per combat,
+  players get to use 3 action points per turn, while enemies can only basic attack a random target.
+  Players can use keyboard to select target or ability first, and then click the other one to attack an enemy.
 
 <br>
 
 ### Roadmap
 
-TODO
+Loot generation
+
+- [ ] Awarding materials and equipment pieces with weighted rarity
+
+Combat win rewards
+
+- [ ] Awarding random amount of silver to the players
+- [ ]
+
+Inventory management (drag & drop API, popovers):
+
+- [ ] Moving item to a different spot
+- [ ] Deleting an item
+
+Equipment management
+
+- [ ] Equipping an item (swap with already equipped item)
+- [ ] Unequipping an item
 
 <br>
 
@@ -66,9 +81,10 @@ TODO
 
 ### **`items`**
 
-#### Module that generates items randomly.
+#### Module for creating items, and generating them randomly.
 
 <br>
+
 <br>
 
 ## Getting started with development
