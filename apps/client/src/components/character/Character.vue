@@ -7,9 +7,9 @@ import Inventory from "./Inventory.vue";
 const characterStore = useCharacterStore();
 const character = characterStore.staticCharacter;
 
-const isCollapsed = ref(false);
+const isCollapsed = ref(true);
 
-// context menu shared between equipment and inventory
+// TODO: context menu shared between equipment and inventory
 </script>
 
 <template>
@@ -22,6 +22,7 @@ const isCollapsed = ref(false);
           Lvl {{ character.level.value }} <span class="capitalize">{{ character.class }}</span>
         </h3>
       </div>
+      <p>Silver: {{ character.silver }}</p>
       <Equipment />
       <Inventory />
     </div>
