@@ -7,7 +7,7 @@ const characterStore = useCharacterStore();
 
 const content: Ref<string> = ref("");
 
-const isCollapsed: Ref<boolean> = ref(false);
+const isCollapsed: Ref<boolean> = ref(true);
 
 type Commands = { [name: string]: Function | undefined };
 
