@@ -62,6 +62,11 @@ Combat
 - [ ] Clean way to apply updates from the server and play animations
 - [ ] One starting skill for each class
 - [ ] Different types of targeting
+- [ ] Awarding xp for each character that is alive at the end of combat
+
+Equipment
+
+- [ ] Parsing values of modifiers and applying them to the character 
 
 <br>
 
