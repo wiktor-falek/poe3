@@ -81,7 +81,7 @@ io.on("connection", (socket) => {
       );
     }
 
-    console.log(`${client.characterName} (${client.username}) disconnected (${reason})`);
+    console.log(`${client.username} (${client.characterName}) disconnected (${reason})`);
   });
 });
 
