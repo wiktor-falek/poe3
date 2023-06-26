@@ -2,8 +2,31 @@ import type { Io, IoSocket } from "../index.js";
 import Client from "../components/client/client.js";
 import InstanceManager from "../game/instance/instanceManager.js";
 import LobbyManager from "../game/lobby/lobbyManager.js";
-import { ErrorMessage, GlobalMessage } from "../components/message.js";
+import { ErrorMessage, GlobalMessage, ServerMessage } from "../components/message.js";
 import Player from "../game/entities/player.js";
+import { randint } from "pyrand";
+import Character from "../db/models/character.js";
+import Instance from "../game/instance/instance.js";
+
+const awardSilverToAlivePlayers = async (instance: Instance) => {
+  const players = instance.room?.players!;
+  const alivePlayers = players.filter((p) => p.isAlive);
+  const namesOfAlivePlayers = alivePlayers.map((p) => p.name);
+
+  const silver = randint(2, 3);
+
+  // TODO: one query for all clients
+  for (let i = 0; i < namesOfAlivePlayers.length; i++) {
+    const name = namesOfAlivePlayers[i];
+    const client = instance.clients.find((c) => c.characterName === name);
+    if (client) {
+      const result = await Character.addSilver(name, silver);
+      if (result.ok) {
+        client.socket.emit("chat:message", new ServerMessage(`You gained ${silver} silver`));
+      }
+    }
+  }
+};
 
 function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
   const get = () => {
@@ -109,12 +132,12 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
       if (room.enemiesWon) {
         // io.to(instance.socketRoom).emit("instance:lose")
       } else if (room.playersWon) {
-        // io.to(instance.socketRoom).emit("instance:reward")
+        awardSilverToAlivePlayers(instance);
       }
     }
   };
 
-  const endTurn = () => {
+  const endTurn = async () => {
     const instance = InstanceManager.currentInstance(client);
     const room = instance?.room;
     const player = room?.currentTurnEntity;
@@ -130,16 +153,12 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
 
     io.to(instance.socketRoom).emit("instance:state-update", state);
 
-    if (room.playersWon) {
-      const players = instance.room?.players!;
-      const namesOfAlivePlayers = players.filter((p) => p.isAlive).map((p) => p.name);
-      const clients = instance.clients;
-      /*
-      select all players that are still alive
-      map over them and return clients
-      (grant silver)
-      send chat message to each client
-      */
+    if (room.hasConcluded) {
+      if (room.enemiesWon) {
+        // io.to(instance.socketRoom).emit("instance:lose")
+      } else if (room.playersWon) {
+        awardSilverToAlivePlayers(instance);
+      }
     }
   };
 
