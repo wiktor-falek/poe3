@@ -38,12 +38,12 @@ My own npm modules:
 
 Loot generation
 
-- [ ] Awarding materials and equipment pieces with weighted rarity
+- [x] Generating loot from pool of materials and gear
+- [ ] Awarding loot after winning combat
 
 Combat win rewards
 
 - [ ] Awarding random amount of silver to the players
-- [ ]
 
 Inventory management (drag & drop API, popovers):
 
@@ -63,7 +63,7 @@ Equipment management
 
 ### **`api`**
 
-#### Handles auth and CRUD operations for player characters.
+#### Handles auth, account management and CRUD operations for player characters.
 
 <br>
 
