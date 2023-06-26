@@ -1,7 +1,7 @@
 import { BASE_MODIFIERS, IMPLICIT_MODIFIERS } from "../modifiers";
 import { Weapon, Chest, Ring } from "./index";
 
-const weapons = {
+const hand: { [key: string]: () => Weapon } = {
   brokenSword: () =>
     new Weapon({
       name: "Broken Sword",
@@ -45,7 +45,7 @@ const weapons = {
     }),
 };
 
-const chests = {
+const chest: { [key: string]: () => Chest } = {
   rustedPlateArmor: () =>
     new Chest({
       name: "Rusted Plate Armor",
@@ -79,7 +79,7 @@ const chests = {
     }),
 };
 
-const rings = {
+const ring: { [key: string]: () => Ring } = {
   goldRing: () =>
     new Ring({
       name: "Gold Ring",
@@ -98,8 +98,10 @@ const rings = {
     }),
 };
 
-export const blueprints = {
-  weapons,
-  chests,
-  rings,
+const blueprints = {
+  hand,
+  chest,
+  ring,
 };
+
+export default blueprints;

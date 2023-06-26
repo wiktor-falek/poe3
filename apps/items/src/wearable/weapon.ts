@@ -4,8 +4,10 @@ import Wearable, { Options } from "./wearable";
 
 class Weapon extends Wearable {
   #PREFIX_MODIFIER_POOL = deepFreeze([
+    // Temporary
     { ...PREFIX_MODIFIERS.to_life, weight: 1000 },
     { ...PREFIX_MODIFIERS.to_mana, weight: 1000 },
+    { ...PREFIX_MODIFIERS.to_life_regeneration, weight: 1000 },
   ]);
 
   #SUFFIX_MODIFIER_POOL = deepFreeze([

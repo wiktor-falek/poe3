@@ -1,5 +1,5 @@
 import type { CharacterClass } from "../../common/types/index";
-import { blueprints } from "./wearable/blueprints";
+import blueprints from "./wearable/blueprints";
 import type { Chest, Ring, Weapon } from "./wearable";
 
 class StartingEquipmentFactory {
@@ -18,24 +18,24 @@ class StartingEquipmentFactory {
     switch (characterClass) {
       case "swordsman":
         return {
-          hand: blueprints.weapons.brokenSword(),
+          hand: blueprints.hand.brokenSword(),
           offhand: null,
           helmet: null,
-          chest: blueprints.chests.rustedPlateArmor().magic(),
+          chest: blueprints.chest.rustedPlateArmor().magic(),
           gloves: null,
           boots: null,
-          ring_1: blueprints.rings.sapphireRing().rare(),
-          ring_2: blueprints.rings.goldRing().rare(),
+          ring_1: blueprints.ring.sapphireRing().rare(),
+          ring_2: blueprints.ring.goldRing().rare(),
           amulet: null,
           belt: null,
         };
 
       case "ranger":
         return {
-          hand: blueprints.weapons.shortBow(),
+          hand: blueprints.hand.shortBow(),
           offhand: null,
           helmet: null,
-          chest: blueprints.chests.tornLeatherTunic(),
+          chest: blueprints.chest.tornLeatherTunic(),
           gloves: null,
           boots: null,
           ring_1: null,
@@ -46,10 +46,10 @@ class StartingEquipmentFactory {
 
       case "sorcerer":
         return {
-          hand: blueprints.weapons.branch(),
+          hand: blueprints.hand.branch(),
           offhand: null,
           helmet: null,
-          chest: blueprints.chests.raggedCloth(),
+          chest: blueprints.chest.raggedCloth(),
           gloves: null,
           boots: null,
           ring_1: null,
@@ -60,10 +60,10 @@ class StartingEquipmentFactory {
 
       case "assassin":
         return {
-          hand: blueprints.weapons.rustyDagger(),
+          hand: blueprints.hand.rustyDagger(),
           offhand: null,
           helmet: null,
-          chest: blueprints.chests.leatherHarness(),
+          chest: blueprints.chest.leatherHarness(),
           gloves: null,
           boots: null,
           ring_1: null,
