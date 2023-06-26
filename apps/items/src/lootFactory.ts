@@ -1,6 +1,7 @@
 import { choice, choices } from "pyrand";
 import materialBlueprints from "./materials/blueprints";
 import wearableBlueprints from "./wearable/blueprints";
+import { Chest, Ring, Weapon } from "./wearable";
 
 export interface Options {}
 
@@ -25,7 +26,8 @@ class LootFactory {
       ring: 3,
     };
 
-    const blueprints: Array<any> = []; // TODO: not any for gods sake, () => Weapon | Chest | Ring ...
+    type Wearables = () => Weapon | Chest | Ring;
+    const blueprints: Array<Wearables> = []; // TODO: not any for gods sake, () => Weapon | Chest | Ring ...
     for (let i = 0; i < amount; i++) {
       const slot = choices(Object.keys(equipmentSlotWeights), amount, {
         weights: Object.values(equipmentSlotWeights),
@@ -57,7 +59,7 @@ class LootFactory {
 
     const materials = this.generateMaterials(amountOfMaterials, ilvl);
     const wearables = this.generateWearables(amountOfWearables, ilvl);
-    return materials.concat(wearables);
+    return [...materials, ...wearables];
   }
 }
 
