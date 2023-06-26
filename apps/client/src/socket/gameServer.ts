@@ -2,10 +2,13 @@ import { io, Socket } from "socket.io-client";
 import { reactive } from "vue";
 import getCookie from "../utils/getCookie";
 import useCharacterStore from "../stores/characterStore";
-import type { StaticCharacter } from "../../../common/index";
+import type { StaticCharacter } from "../../../common/types/index";
 import type { LobbyData, MembersOnlyLobbyData } from "../../../game-server/src/game/lobby/lobby";
 import type { Message } from "../../../game-server/src/components/message";
-import type { ServerToClientEvents, ClientToServerEvents } from "../../../common/gameServerEvents";
+import type {
+  ServerToClientEvents,
+  ClientToServerEvents,
+} from "../../../common/types/gameServerEvents";
 import type Instance from "../../../game-server/src/game/instance/instance";
 
 interface State {
