@@ -131,8 +131,14 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     io.to(instance.socketRoom).emit("instance:state-update", state);
 
     if (room.playersWon) {
+      const players = instance.room?.players!;
+      const namesOfAlivePlayers = players.filter((p) => p.isAlive).map((p) => p.name);
+      const clients = instance.clients;
       /*
-        distribute rewards
+      select all players that are still alive
+      map over them and return clients
+      (grant silver)
+      send chat message to each client
       */
     }
   };
