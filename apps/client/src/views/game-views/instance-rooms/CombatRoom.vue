@@ -152,6 +152,10 @@ const player = ref(
 );
 
 function onPress(e: KeyboardEvent) {
+  // prevent default behavior of specified keys
+  if ([" "].includes(e.key)) {
+    e.preventDefault();
+  }
   const utilityKeys: { [keyBind: string]: () => void } = {
     Escape: () => {
       targetId.value = null;
@@ -308,18 +312,20 @@ onMounted(() => {
       </div>
     </div>
 
-    <p v-if="gameServer.state.instance.room.enemiesWon">Enemy Party Won</p>
-    <p v-if="gameServer.state.instance.room.playersWon">Your Party Won</p>
-    <p
-      v-if="
-        gameServer.state.instance.room.currentTurnPlayerName ===
-        characterStore.staticCharacter?.name
-      "
-    >
-      Your Turn
-    </p>
-    <p v-else>Current turn: {{ gameServer.state.instance.room.currentTurnPlayerName }}</p>
-    <h3 class="red" v-if="player && player.resources.hp <= 0">You Are Dead</h3>
+    <div class="info">
+      <p v-if="gameServer.state.instance.room.enemiesWon">Enemy Party Won</p>
+      <p v-if="gameServer.state.instance.room.playersWon">Your Party Won</p>
+      <p
+        v-if="
+          gameServer.state.instance.room.currentTurnPlayerName ===
+          characterStore.staticCharacter?.name
+        "
+      >
+        Your Turn
+      </p>
+      <p v-else>Current turn: {{ gameServer.state.instance.room.currentTurnPlayerName }}</p>
+      <p class="red" v-if="player && player.resources.hp <= 0">You Are Dead</p>
+    </div>
 
     <div class="hud">
       <div class="wrapper">
@@ -401,6 +407,10 @@ onMounted(() => {
 
 <style scoped>
 .combat-room {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100%;
   user-select: none;
 }
 .combat-room:focus {
@@ -416,6 +426,7 @@ onMounted(() => {
   display: flex;
   flex-direction: row;
   gap: 20px;
+  justify-content: center;
 }
 
 .entity {
@@ -456,6 +467,7 @@ onMounted(() => {
 }
 
 .entity__text {
+  margin: 0;
   margin-top: 2px;
   font-weight: bold;
   font-size: 16px;
@@ -484,6 +496,13 @@ onMounted(() => {
   color: rgb(228, 71, 71);
 }
 
+.info {
+  text-align: center;
+}
+
+.info > * {
+  margin: 0;
+}
 .red {
   color: rgb(212, 73, 73);
 }

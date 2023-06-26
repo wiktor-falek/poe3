@@ -76,8 +76,9 @@ onUnmounted(() => {
 
 <style scoped>
 .game {
-  margin: 25px;
-  margin-top: 0px;
+  height: 100vh;
+  padding: 25px;
+  box-sizing: border-box;
 }
 
 .loaded {
