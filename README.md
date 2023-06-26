@@ -1,6 +1,8 @@
 # Overview
 
-## Multiplayer browser game that combines ARPG item and loot system similar to Diablo II and Path of Exile, randomised environment generation of roguelikes, with turn based strategy genre.
+### Multiplayer browser game that combines ARPG item and loot system similar to Diablo II and Path of Exile, randomised environment generation of roguelikes, with turn based strategy genre.
+
+### **Notice: This game is still in very early stages of development.**
 
 <br>
 
@@ -34,15 +36,15 @@ My own npm modules:
 
 <br>
 
-### Roadmap
+### Alpha Version Roadmap
 
 Loot generation
 
 - [x] Generating loot from pool of materials and gear
-- [ ] Awarding loot after winning combat
 
 Combat win rewards
 
+- [ ] Awarding generated loot after winning combat
 - [ ] Awarding random amount of silver to the players
 
 Inventory management (drag & drop API, popovers):
@@ -54,6 +56,12 @@ Equipment management
 
 - [ ] Equipping an item (swap with already equipped item)
 - [ ] Unequipping an item
+
+Combat
+
+- [ ] Clean way to apply updates from the server and play animations
+- [ ] One starting skill for each class
+- [ ] Different types of targeting
 
 <br>
 
