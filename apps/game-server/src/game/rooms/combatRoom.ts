@@ -2,7 +2,7 @@ import { choice, shuffle } from "pyrand";
 import Enemy from "../entities/enemy.js";
 import Player, { ActionResult } from "../entities/player.js";
 import { Err, Ok } from "resultat";
-import type { turnStartUpdate } from "../entities/player.js";
+import type { TurnStartUpdate } from "../entities/player.js";
 
 export interface ActionData {
   targetId: string;
@@ -18,7 +18,7 @@ export interface ActionData {
 
 export interface StateUpdate {
   actions: Array<ActionData>;
-  turnStartUpdate?: turnStartUpdate;
+  turnStartUpdate?: TurnStartUpdate;
 }
 
 type RoomType = "combat" | "reward";
@@ -37,10 +37,10 @@ class CombatRoom {
     this.enemies = enemies;
     // turn order
     this.#turnOrder = [];
-    this.createTurnOrder();
-    this.#entityIdx = 0;
     this.#currentTurnEntity; // private to avoid emitting whole entity data
     this.currentTurnPlayerName = ""; // instead only id gets emitted
+    this.#entityIdx = 0;
+    this.createTurnOrder();
   }
 
   get currentTurnEntity() {
@@ -50,6 +50,12 @@ class CombatRoom {
   createTurnOrder() {
     this.#turnOrder = [...this.players, ...this.enemies];
     shuffle(this.#turnOrder);
+
+    // in case one of the players goes first, initialize currentTurnPlayerName
+    const firstEntity = this.#turnOrder[0];
+    if (firstEntity instanceof Player) {
+      this.currentTurnPlayerName = firstEntity.name;
+    }
   }
 
   nextEntity() {
@@ -120,7 +126,7 @@ class CombatRoom {
   continue(): StateUpdate {
     const state: {
       actions: Array<ActionData>;
-      turnStartUpdate: turnStartUpdate;
+      turnStartUpdate: TurnStartUpdate;
     } = {
       actions: [],
       turnStartUpdate: { playerId: "" },

@@ -126,7 +126,7 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     }
     const action = result.val;
 
-    io.to(instance.socketRoom).emit("instance:player-action", action);
+    io.to(instance.socketRoom).emit("instance:state-update", { actions: [action] });
 
     if (room.hasConcluded) {
       if (room.enemiesWon) {

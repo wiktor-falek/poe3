@@ -15,8 +15,8 @@ function getDynamicCharacter(character: StaticCharacter): DynamicCharacter {
     },
     attributes,
     resources: {
-      maxHp: 20,
-      hp: 20,
+      maxHp: 100,
+      hp: 100,
       maxMp: 10,
       mp: 10,
       ap: 3,

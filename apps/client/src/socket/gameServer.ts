@@ -84,15 +84,13 @@ socket.on("lobby:delete", (lobbyId) => {
 });
 
 socket.on("instance:set", (instance) => {
-  state.instanceActionsQueue.items = [];
+  // state.instanceActionsQueue.items = [];
   state.instance = instance;
 });
 
-socket.on("instance:state-update", async (state) => {
-  // TODO: push state to instanceActionsQueue
+socket.on("instance:state-update", async (stateUpdate) => {
+  state.instanceActionsQueue.enqueue(stateUpdate);
 
-
-  // TODO: move this to a setInterval callback and try to dequeue
   // const room = gameServer.state.instance!.room!;
   // // take all updates from the state.actions and update state incrementally with a delay
   // for (const action of state.actions) {
@@ -124,24 +122,26 @@ socket.on("instance:state-update", async (state) => {
   // }
 });
 
-socket.on("instance:player-action", (action) => {
-  // const enemies = gameServer.state.instance?.room?.enemies;
-  // const players = gameServer.state.instance?.room?.players;
-  // const attacker = players?.find((player) => player.id === action.attackerId);
-  // const target = enemies?.find((enemy) => enemy.id === action.targetId);
-  // if (target) {
-  //   displayDamagePopup(action.attackerId, action.targetId, action.damage, action.critical);
-  //   target.hp = Math.max(target.hp - action.damage, 0);
-  // }
-  // if (attacker) {
-  //   if (action.cost?.ap) {
-  //     attacker.resources.ap -= action.cost.ap;
-  //   }
-  //   if (action.cost?.mp) {
-  //     attacker.resources.mp -= action.cost.mp;
-  //   }
-  //   if (action.cost?.hp) {
-  //     attacker.resources.hp -= action.cost.hp;
-  //   }
-  // }
-});
+// socket.on("instance:player-action", (stateUpdate) => {
+// state.instanceActionsQueue.enqueue(stateUpdate);
+
+// const enemies = gameServer.state.instance?.room?.enemies;
+// const players = gameServer.state.instance?.room?.players;
+// const attacker = players?.find((player) => player.id === action.attackerId);
+// const target = enemies?.find((enemy) => enemy.id === action.targetId);
+// if (target) {
+//   displayDamagePopup(action.attackerId, action.targetId, action.damage, action.critical);
+//   target.hp = Math.max(target.hp - action.damage, 0);
+// }
+// if (attacker) {
+//   if (action.cost?.ap) {
+//     attacker.resources.ap -= action.cost.ap;
+//   }
+//   if (action.cost?.mp) {
+//     attacker.resources.mp -= action.cost.mp;
+//   }
+//   if (action.cost?.hp) {
+//     attacker.resources.hp -= action.cost.hp;
+//   }
+// }
+// });

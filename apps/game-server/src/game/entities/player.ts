@@ -10,7 +10,7 @@ interface PlayerData {
   resources: Resources;
 }
 
-export interface turnStartUpdate {
+export interface TurnStartUpdate {
   playerId: string;
   resources?: {
     ap?: number;
@@ -51,7 +51,7 @@ class Player implements PlayerData {
     return this.#dynamicCharacter.resources.hp > 0;
   }
 
-  turnStart(): turnStartUpdate {
+  turnStart(): TurnStartUpdate {
     this.resources.ap = this.resources.maxAp;
     return { playerId: this.id, resources: { ap: this.resources.ap } };
   }
@@ -74,10 +74,10 @@ class Player implements PlayerData {
     this.resources.ap -= AP_COST;
 
     // roll the attack
-    const CRIT_CHANCE = 5;
-    const CRIT_MULTIPLIER = 1.5;
+    const CRIT_CHANCE = 20;
+    const CRIT_MULTIPLIER = 2.0;
 
-    let damage = randint(2, 3);
+    let damage = randint(3, 5);
     const critRoll = randint(1, 100);
     const isCritical = CRIT_CHANCE > critRoll;
     if (isCritical) {

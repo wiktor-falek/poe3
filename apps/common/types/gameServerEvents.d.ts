@@ -35,8 +35,8 @@ export interface ServerToClientEvents {
   "lobby:delete": (lobbyId: string) => void;
   // instance
   "instance:set": (instance: Instance | null) => void;
-  "instance:player-action": (action: ActionData) => void;
-  "instance:state-update": (turnStart: StateUpdate) => void;
+  // "instance:player-action": (stateUpdate: StateUpdate) => void;
+  "instance:state-update": (stateUpdate: StateUpdate) => void;
 }
 
 export interface InterServerEvents {
