@@ -6,4 +6,4 @@ const factory = new LootFactory();
 const loot = factory.generateLoot(1);
 inspect(loot);
 
-export { StartingEquipmentFactory };
+export { StartingEquipmentFactory, LootFactory };

@@ -1,4 +1,4 @@
-import { choice, choices } from "pyrand";
+  import { choice, choices } from "pyrand";
 import materialBlueprints from "./materials/blueprints";
 import wearableBlueprints from "./wearable/blueprints";
 import { Chest, Ring, Weapon } from "./wearable";

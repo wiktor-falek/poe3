@@ -3,6 +3,7 @@ import Enemy from "../entities/enemy.js";
 import Player, { ActionResult } from "../entities/player.js";
 import { Err, Ok } from "resultat";
 import type { turnStartUpdate } from "../entities/player.js";
+import { LootFactory } from "../../../../items/src/index.js";
 
 export interface ActionData {
   targetId: string;
@@ -31,6 +32,7 @@ class CombatRoom {
   #entityIdx: number;
   #currentTurnEntity?: Player | Enemy;
   currentTurnPlayerName: string;
+  #rewards: { [playerId: string]: Array<any> | null } = {}; // TODO: import return type of the LootFactory.generateLoot()
   constructor(players: Array<Player>, enemies: Array<Enemy>) {
     this.type = "combat";
     this.players = players;
@@ -154,6 +156,32 @@ class CombatRoom {
     // const damage =
     target.takeDamage(action.damage); // TODO: read damage after damage reduction
     return { ...action, targetId: target.id };
+  }
+
+  getRewards(player: Player): Array<any> | null {
+    /*
+    whenever a player tries to accces the reward
+    and it happens to be undefined it means it has not been
+    generated, in that case generate the reward
+
+    once the reward gets claimed by the player, 
+    this.#rewards[player.id] will be set to null
+    */
+
+    if (this.#rewards[player.id] === undefined) {
+      const lootFactory = new LootFactory();
+      this.#rewards[player.id] = lootFactory.generateLoot(1);
+    }
+    const rewards = this.#rewards[player.id];
+    return rewards;
+  }
+
+  claimRewards(player: Player) {
+    if (this.#rewards[player.id] !== undefined) {
+      this.#rewards[player.id] = null;
+      return Ok(1);
+    }
+    return Err("No reward to be claimed");
   }
 }
 
