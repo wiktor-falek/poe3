@@ -9,6 +9,7 @@ import { onMounted } from "vue";
 import Enemy from "../../../../../game-server/src/game/entities/enemy";
 import Icon from "../../../components/Icon.vue";
 import { onBeforeMount } from "vue";
+import RewardsModal from "../../../components/modals/RewardsModal.vue";
 
 gameServer.socket.on("instance:state-update", async (state) => {
   const room = gameServer.state.instance!.room!;
@@ -224,6 +225,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <RewardsModal></RewardsModal>
   <div
     class="combat-room"
     v-if="gameServer.state.instance?.room"

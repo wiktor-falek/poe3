@@ -17,6 +17,7 @@ interface State {
   lobbies: { [lobbyId: string]: LobbyData };
   lobby: MembersOnlyLobbyData | null;
   instance: Instance | null;
+  rewards: Array<any> | null; // TODO: type
 }
 
 export const state: State = reactive({
@@ -25,6 +26,7 @@ export const state: State = reactive({
   lobbies: {},
   lobby: null,
   instance: null,
+  rewards: null,
 });
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
@@ -81,4 +83,11 @@ socket.on("lobby:delete", (lobbyId) => {
 
 socket.on("instance:set", (instance) => {
   state.instance = instance;
+});
+
+socket.on("instance:rewards", (rewards) => {
+  // store the rewards somewhere it belongs
+  // make sure the rewards are still there on refresh (somewhere)
+  // maybe the rewards should be in the instance/room for each client when emitting?
+  state.rewards = rewards;
 });

@@ -3,7 +3,7 @@ import Enemy from "../entities/enemy.js";
 import Player, { ActionResult } from "../entities/player.js";
 import { Err, Ok } from "resultat";
 import type { turnStartUpdate } from "../entities/player.js";
-import { LootFactory } from "../../../../items/src/index.js";
+import { LootFactory } from "../../../../items/dist/index.js";
 
 export interface ActionData {
   targetId: string;
