@@ -37,6 +37,7 @@ export interface ServerToClientEvents {
   "instance:set": (instance: Instance | null) => void;
   "instance:player-action": (action: ActionData) => void;
   "instance:state-update": (turnStart: StateUpdate) => void;
+  "instance:rewards": (rewards: Array<any>) => void; // TODO: any -> LootFactory.generateLoot() return type
 }
 
 export interface InterServerEvents {

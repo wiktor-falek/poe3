@@ -133,6 +133,12 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
         // io.to(instance.socketRoom).emit("instance:lose")
       } else if (room.playersWon) {
         awardSilverToAlivePlayers(instance);
+        // temporarily give rewards to the current player
+        // TODO: for each alive player get the rewards and emit to the respective client
+        const rewards = room.getRewards(player);
+        if (rewards !== null) {
+          client.socket.emit("instance:rewards", rewards);
+        }
       }
     }
   };
