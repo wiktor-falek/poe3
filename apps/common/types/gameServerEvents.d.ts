@@ -1,7 +1,7 @@
 import type { Message } from "../../game-server/src/components/message.js";
 import type { LobbyData, MembersOnlyLobbyData } from "../../game-server/src/game/lobby/lobby.js";
 import type Instance from "../../game-server/src/game/instance/instance.js";
-import type { ActionData, StateUpdate } from "../../game-server/src/game/rooms/combatRoom.ts";
+import type { StateUpdate } from "../../game-server/src/game/rooms/combatRoom.ts";
 import type { StaticCharacter } from "./index.js";
 
 export interface ClientToServerEvents {
@@ -35,9 +35,9 @@ export interface ServerToClientEvents {
   "lobby:delete": (lobbyId: string) => void;
   // instance
   "instance:set": (instance: Instance | null) => void;
-  "instance:player-action": (action: ActionData) => void;
   "instance:state-update": (turnStart: StateUpdate) => void;
   "instance:rewards": (rewards: Array<any>) => void; // TODO: any -> LootFactory.generateLoot() return type
+  "instance:player-action": (stateUpdate: StateUpdate) => void;
 }
 
 export interface InterServerEvents {

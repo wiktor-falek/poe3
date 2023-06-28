@@ -10,6 +10,8 @@ import type {
   ClientToServerEvents,
 } from "../../../common/types/gameServerEvents";
 import type Instance from "../../../game-server/src/game/instance/instance";
+import Queue from "../utils/queue";
+import { StateUpdate } from "../../../game-server/src/game/rooms/combatRoom";
 
 interface State {
   connected: boolean;
@@ -18,6 +20,7 @@ interface State {
   lobby: MembersOnlyLobbyData | null;
   instance: Instance | null;
   rewards: Array<any> | null; // TODO: type
+  instanceActionsQueue: Queue<StateUpdate>;
 }
 
 export const state: State = reactive({
@@ -27,6 +30,7 @@ export const state: State = reactive({
   lobby: null,
   instance: null,
   rewards: null,
+  instanceActionsQueue: new Queue(),
 });
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
@@ -82,6 +86,7 @@ socket.on("lobby:delete", (lobbyId) => {
 });
 
 socket.on("instance:set", (instance) => {
+  // state.instanceActionsQueue.items = [];
   state.instance = instance;
 });
 
@@ -91,3 +96,60 @@ socket.on("instance:rewards", (rewards) => {
   // maybe the rewards should be in the instance/room for each client when emitting?
   state.rewards = rewards;
 });
+socket.on("instance:state-update", async (stateUpdate) => {
+  state.instanceActionsQueue.enqueue(stateUpdate);
+
+  // const room = gameServer.state.instance!.room!;
+  // // take all updates from the state.actions and update state incrementally with a delay
+  // for (const action of state.actions) {
+  //   const target = room.players.find((player) => player.id === action.targetId);
+  //   if (target) {
+  //     displayDamagePopup(action.attackerId, action.targetId, action.damage, action.critical);
+  //     target.resources.hp = Math.max(target.resources.hp - action.damage, 0);
+  //   }
+  //   await new Promise((resolve) => setTimeout(resolve, 1000));
+  // }
+  // const { turnStartUpdate } = state;
+  // if (turnStartUpdate) {
+  //   const { playerId, resources } = turnStartUpdate;
+  //   const player = room.players.find((player) => player.id === playerId);
+  //   if (player) {
+  //     if (resources) {
+  //       if (resources.ap) {
+  //         player.resources.ap = resources.ap;
+  //       }
+  //       if (resources.hp) {
+  //         player.resources.hp = resources.hp;
+  //       }
+  //       if (resources.mp) {
+  //         player.resources.mp = resources.mp;
+  //       }
+  //     }
+  //     room.currentTurnPlayerName = player.name;
+  //   }
+  // }
+});
+
+// socket.on("instance:player-action", (stateUpdate) => {
+// state.instanceActionsQueue.enqueue(stateUpdate);
+
+// const enemies = gameServer.state.instance?.room?.enemies;
+// const players = gameServer.state.instance?.room?.players;
+// const attacker = players?.find((player) => player.id === action.attackerId);
+// const target = enemies?.find((enemy) => enemy.id === action.targetId);
+// if (target) {
+//   displayDamagePopup(action.attackerId, action.targetId, action.damage, action.critical);
+//   target.hp = Math.max(target.hp - action.damage, 0);
+// }
+// if (attacker) {
+//   if (action.cost?.ap) {
+//     attacker.resources.ap -= action.cost.ap;
+//   }
+//   if (action.cost?.mp) {
+//     attacker.resources.mp -= action.cost.mp;
+//   }
+//   if (action.cost?.hp) {
+//     attacker.resources.hp -= action.cost.hp;
+//   }
+// }
+// });

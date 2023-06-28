@@ -1,4 +1,4 @@
-class Queue<T> {
+class Queue<T = any> {
   items: Array<T>;
   constructor(array?: Array<T>) {
     this.items = array ?? [];

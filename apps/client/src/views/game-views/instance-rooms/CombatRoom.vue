@@ -2,101 +2,114 @@
 import { ref, Ref } from "vue";
 import * as gameServer from "../../../../src/socket/gameServer";
 import useCharacterStore from "../../../stores/characterStore";
-import { onUnmounted } from "vue";
 import ResourceBars from "../../../components/ResourceBars.vue";
 import SkillIcon from "../../../components/SkillIcon.vue";
 import { onMounted } from "vue";
 import Enemy from "../../../../../game-server/src/game/entities/enemy";
 import Icon from "../../../components/Icon.vue";
-import { onBeforeMount } from "vue";
 import RewardsModal from "../../../components/modals/RewardsModal.vue";
 
-gameServer.socket.on("instance:state-update", async (state) => {
-  const room = gameServer.state.instance!.room!;
+setInterval(async () => {
+  const queue = gameServer.state.instanceActionsQueue;
+  const stateUpdate = queue.dequeue();
+  if (!stateUpdate) return;
 
-  // take all updates from the state.actions and update state incrementally with a delay
-  for (const action of state.actions) {
-    const target = room.players.find((player) => player.id === action.targetId);
-    if (target) {
-      displayDamagePopup(action.attackerId, action.targetId, action.damage, action.critical);
-      target.resources.hp = Math.max(target.resources.hp - action.damage, 0);
-    }
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-  }
+  const { actions, turnStartUpdate } = stateUpdate;
 
-  const { turnStartUpdate } = state;
-  if (turnStartUpdate) {
-    const { playerId, resources } = turnStartUpdate;
-    const player = room.players.find((player) => player.id === playerId);
-    if (player) {
-      if (resources) {
-        if (resources.ap) {
-          player.resources.ap = resources.ap;
+  let timeout = 0;
+  for (const action of actions) {
+    const animationDurationMs = 500;
+    // TODO: play animation
+
+    setTimeout(() => {
+      const room = gameServer.state.instance?.room;
+      if (!room) return;
+
+      displayDamagePopup(action.targetId, action.attackerId, action.damage, action.critical);
+
+      const { targetId, attackerId, damage, critical } = action;
+
+      (function playerAction() {
+        const player = room.players.find((player) => player.id === action.attackerId);
+        const enemy = room.enemies.find((enemy) => enemy.id === action.targetId);
+
+        if (player && enemy) {
+          enemy.hp = Math.max(enemy.hp - action.damage, 0);
+          if (action.cost?.ap) {
+            player.resources.ap -= action.cost.ap;
+          }
+          if (action.cost?.hp) {
+            player.resources.hp -= action.cost.hp;
+          }
+          if (action.cost?.mp) {
+            player.resources.mp -= action.cost.mp;
+          }
         }
-        if (resources.hp) {
-          player.resources.hp = resources.hp;
+      })();
+
+      (function enemyAction() {
+        const enemy = room.enemies.find((e) => e.id === action.attackerId);
+        const player = room.players.find((p) => p.id === action.targetId);
+
+        if (player) {
+          player.resources.hp = Math.max(player.resources.hp - action.damage, 0);
         }
-        if (resources.mp) {
-          player.resources.mp = resources.mp;
+
+        if (turnStartUpdate) {
+          const { playerId, resources } = turnStartUpdate;
+          console.log({ resources });
+          if (resources) {
+            const player = room.players.find((p) => p.id === playerId);
+            if (player) {
+              const room = gameServer.state.instance?.room;
+              if (room) {
+                room.currentTurnPlayerName = player.name;
+              }
+
+              if (resources.ap) {
+                player.resources.ap = resources.ap;
+              }
+              if (resources.hp) {
+                player.resources.hp = resources.hp;
+              }
+              if (resources.mp) {
+                player.resources.mp = resources.mp;
+              }
+            }
+          }
         }
-      }
-      room.currentTurnPlayerName = player.name;
-    }
+      })();
+    }, (timeout += animationDurationMs));
   }
-});
-
-gameServer.socket.on("instance:player-action", (action) => {
-  const enemies = gameServer.state.instance?.room?.enemies;
-  const players = gameServer.state.instance?.room?.players;
-
-  const attacker = players?.find((player) => player.id === action.attackerId);
-  const target = enemies?.find((enemy) => enemy.id === action.targetId);
-
-  if (target) {
-    displayDamagePopup(action.attackerId, action.targetId, action.damage, action.critical);
-    target.hp = Math.max(target.hp - action.damage, 0);
-  }
-
-  if (attacker) {
-    if (action.cost?.ap) {
-      attacker.resources.ap -= action.cost.ap;
-    }
-    if (action.cost?.mp) {
-      attacker.resources.mp -= action.cost.mp;
-    }
-    if (action.cost?.hp) {
-      attacker.resources.hp -= action.cost.hp;
-    }
-  }
-});
-
-onUnmounted(() => {
-  gameServer.socket.off("instance:state-update");
-  gameServer.socket.off("instance:player-action");
-});
+}, 50);
 
 interface DamagePopup {
-  attackerId: string;
   targetId: string;
+  attackerId: string;
   damage: number;
   critical: boolean;
 }
 
 function displayDamagePopup(
-  attackerId: string,
   targetId: string,
+  attackerId: string,
   damage: number,
   critical: boolean
 ) {
   damagePopup.value = {
-    attackerId,
     targetId,
+    attackerId,
     damage,
     critical,
   };
+  const copy = { ...damagePopup.value };
+
   setTimeout(() => {
-    damagePopup.value = null;
-  }, 900);
+    // hide the popup if a different popup has not been displayed
+    if (JSON.stringify({ ...damagePopup.value }) === JSON.stringify(copy)) {
+      damagePopup.value = null;
+    }
+  }, 600);
 }
 
 const characterStore = useCharacterStore();
@@ -210,11 +223,6 @@ function onPress(e: KeyboardEvent) {
   }
 }
 
-onBeforeMount(() => {
-  // get the current instance data without iterating over each action
-  gameServer.socket.emit("instance:get");
-});
-
 onMounted(() => {
   // focus the component to capture key events
   const div: HTMLDivElement | null = document.querySelector(".combat-room");
@@ -241,9 +249,11 @@ onMounted(() => {
         >
           <div class="entity__damage-popup">
             <p
-              v-show="damagePopup?.targetId === enemy.id"
               class="entity__damage-popup__damage"
-              :class="{ 'entity__damage-popup__damage--critical': damagePopup?.critical }"
+              :class="{
+                'entity__damage-popup__damage--critical': damagePopup?.critical,
+                'entity__damage-popup__damage--hide': damagePopup?.targetId !== enemy.id,
+              }"
             >
               {{ damagePopup?.damage }}
             </p>
@@ -279,9 +289,11 @@ onMounted(() => {
         >
           <div class="entity__damage-popup">
             <p
-              v-show="damagePopup?.targetId === player.id"
               class="entity__damage-popup__damage"
-              :class="{ 'entity__damage-popup__damage--critical': damagePopup?.critical }"
+              :class="{
+                'entity__damage-popup__damage--critical': damagePopup?.critical,
+                'entity__damage-popup__damage--hide': damagePopup?.targetId !== player.id,
+              }"
             >
               {{ damagePopup?.damage }}
             </p>
@@ -448,8 +460,8 @@ onMounted(() => {
   text-align: center;
 }
 
-.entity__damage-popup__damage {
-  transition: visibility 1s ease-in;
+.entity__damage-popup__damage--hide {
+  opacity: 0;
 }
 
 .entity__damage-popup__damage--critical {
