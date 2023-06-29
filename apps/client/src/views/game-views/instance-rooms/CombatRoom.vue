@@ -96,17 +96,18 @@ function displayDamagePopup(
   damage: number,
   critical: boolean
 ) {
-  damagePopup.value = {
+  const newPopup = {
     targetId,
     attackerId,
     damage,
     critical,
   };
-  const copy = { ...damagePopup.value };
+
+  damagePopup.value = newPopup;
 
   setTimeout(() => {
     // hide the popup if a different popup has not been displayed
-    if (JSON.stringify({ ...damagePopup.value }) === JSON.stringify(copy)) {
+    if (JSON.stringify({ ...damagePopup.value }) === JSON.stringify(newPopup)) {
       damagePopup.value = null;
     }
   }, 600);
