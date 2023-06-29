@@ -17,19 +17,42 @@ const characterSchema = Joi.object({
     xp: 0,
     requiredXp: 10,
   }),
-  equipment: Joi.object().default({
-    hand: null,
-    offhand: null,
-    helmet: null,
-    chest: null,
-    gloves: null,
-    boots: null,
-    ring_1: null,
-    ring_2: null,
-    amulet: null,
-    belt: null,
-  }),
-  inventory: Joi.array().default(new Array(35).fill(null)),
+  items: Joi.array().default([]),
+  /*
+  QUERIES:
+    - Equipment and Inventory
+      findOne({ name, "items": {} }, { "items": 1, _id: 0 })
+      then filter through them
+
+    - Equip item from inventory index 
+
+
+
+    - Move inventory item to a different index
+
+    - 
+      
+
+  { name, "items.$.equipment": "hand" }
+
+  items: [
+   { ...item, equipment: "hand" },
+   { ...item, inventory: 0 }, 
+  ]
+  */
+  // equipment: Joi.object().default({
+  //   hand: null,
+  //   offhand: null,
+  //   helmet: null,
+  //   chest: null,
+  //   gloves: null,
+  //   boots: null,
+  //   ring_1: null,
+  //   ring_2: null,
+  //   amulet: null,
+  //   belt: null,
+  // }),
+  // inventory: Joi.array().default(new Array(35).fill(null)),
   progression: Joi.object().default({
     mainStory: {
       highestZoneId: 0,
@@ -59,7 +82,7 @@ class Character {
       userId,
       name: characterName,
       class: characterClass,
-      equipment,
+      // equipment,
     };
 
     const validationResult = characterSchema.validate(initialCharacterData);

@@ -38,10 +38,105 @@ class Character {
   }
 
   static async unequipItem(name: string, equipmentSlot: EquipmentSlot) {
-    // WAITING FOR HELP: https://www.mongodb.com/community/forums/c/data/6
+    // find item where equipment equals ${equipmentSlot}, unset equipment and set inventory
+    // to first available inventory index: starting at 1, ending at INVENTORY_LIMIT (inclusive)
+
+    const INVENTORY_LIMIT = 35; // inclusive
+
+    const result = this.collection.updateOne(
+      {
+        name: "apdo",
+        $expr: {
+          $lt: [
+            {
+              $size: {
+                $filter: {
+                  input: "$items",
+                  as: "item",
+                  cond: { $ne: ["$$item.inventory", undefined] },
+                },
+              },
+            },
+            INVENTORY_LIMIT + 1,
+          ],
+        },
+      },
+      [
+        {
+          $set: {
+            items: {
+              $map: {
+                input: "$items",
+                as: "item",
+                in: {
+                  $cond: [
+                    {
+                      $and: [
+                        { $eq: ["$$item.equipment", equipmentSlot] },
+                        { $ne: ["$$item.inventory", undefined] },
+                      ],
+                    },
+                    {
+                      name: "$$item.name",
+                      inventory: {
+                        $let: {
+                          vars: {
+                            range: { $range: [1, INVENTORY_LIMIT + 1] },
+                            existingInventory: "$items.inventory",
+                          },
+                          in: {
+                            $arrayElemAt: [
+                              {
+                                $setDifference: ["$$range", "$$existingInventory"],
+                              },
+                              0,
+                            ],
+                          },
+                        },
+                      },
+                    },
+                    "$$item",
+                  ],
+                },
+              },
+            },
+          },
+        },
+      ]
+    );
+    console.log({ result });
   }
 
-  static async equipItem(name: string, id: ObjectId) {}
+  static async equipItem(name: string, inventoryIdx: number, equipmentSlot: EquipmentSlot) {
+    // find item where inventory equals ${inventoryIdx}, unset inventory field and set equipment to ${equipmentSlot}
+    // if there is an item with equipment: ${equipmentSlot} already, do the reverse
+    const result = this.collection.bulkWrite([
+      {
+        updateOne: {
+          filter: {
+            name,
+            $or: [{ "items.inventory": inventoryIdx }, { "items.equipment": equipmentSlot }],
+          },
+          update: {
+            $set: {
+              "items.$[inventoryItem].equipment": equipmentSlot,
+              "items.$[equippedItem].inventory": inventoryIdx,
+            },
+            $unset: {
+              "items.$[inventoryItem].inventory": "",
+              "items.$[equippedItem].equipment": "",
+            },
+          },
+          arrayFilters: [
+            { "inventoryItem.inventory": inventoryIdx },
+            { "equippedItem.equipment": equipmentSlot },
+          ],
+          upsert: true,
+        },
+      },
+    ]);
+    console.log({ result });
+  }
 }
 
 export default Character;
