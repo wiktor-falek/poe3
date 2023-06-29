@@ -1,22 +1,28 @@
 <script lang="ts" setup>
 import * as gameServer from "../../socket/gameServer";
 
-const rewards = gameServer.state.rewards;
-console.log({ ...rewards });
+function handleDiscard() {
+  gameServer.state.rewards = null;
+}
+
+function handleAccept() {}
 </script>
 
 <template>
   <!-- <Teleport to="body" class=""> -->
-  <div class="rewards modal">
+  <div class="rewards modal" v-if="gameServer.state.rewards">
     <p>Rewards</p>
+    <!-- <p>{{ gameServer.state.rewards }}</p> -->
     <div class="inventory">
-      <div class="inventory-slot" v-for="i in 18">
-        <div class="item"><img src="../../assets/item-icons/ring.jpg" alt="" /></div>
+      <div class="inventory-slot" v-for="i in 15">
+        <div class="item" v-if="gameServer.state.rewards[i]">
+          <img src="../../assets/item-icons/ring.jpg" />
+        </div>
       </div>
     </div>
     <div class="buttons">
-      <button class="button">Decline</button>
-      <button class="button">Accept</button>
+      <button class="button" @click="handleDiscard()">Discard</button>
+      <button class="button" @click="handleAccept()">Accept</button>
     </div>
   </div>
   <!-- </Teleport> -->
@@ -25,7 +31,7 @@ console.log({ ...rewards });
 <style scoped>
 .inventory {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(3, 1fr);
   border-left: 1px solid rgb(180, 180, 180);
   border-bottom: 1px solid rgb(180, 180, 180);
@@ -36,7 +42,7 @@ console.log({ ...rewards });
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1000;
+  z-index: 100;
   background-color: rgb(50, 50, 50);
   padding: 10px;
   display: flex;

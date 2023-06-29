@@ -136,7 +136,7 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
         // temporarily give rewards to the current player
         // TODO: for each alive player get the rewards and emit to the respective client
         const rewards = room.getRewards(player);
-        if (rewards !== null) {
+        if (rewards !== null && rewards.length !== 0) {
           client.socket.emit("instance:rewards", rewards);
         }
       }

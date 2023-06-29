@@ -29,7 +29,112 @@ export const state: State = reactive({
   lobbies: {},
   lobby: null,
   instance: null,
-  rewards: null,
+  rewards: [
+    {
+      // _id: new ObjectId("649d79ad9e6e3a6c3e602cdd"),
+      type: "wearable",
+      name: "Short Bow",
+      uniqueName: undefined,
+      uniqueDescription: undefined,
+      ilvl: 1,
+      rarity: "magic",
+      requirements: { level: 1 },
+      modifiers: {
+        base: [
+          {
+            modId: "physical_damage",
+            description: "Physical Damage: #-#",
+            values: [2, 4],
+          },
+          {
+            modId: "critical_strike_chance",
+            description: "Critical Strike Chance: #%",
+            values: [5],
+          },
+        ],
+        implicit: [],
+        affix: {
+          prefixes: [
+            {
+              modId: "to_life",
+              description: "+# to Life",
+              values: [5],
+              tier: 10,
+            },
+          ],
+          suffixes: [
+            {
+              modId: "to_dexterity",
+              description: "+# to Dexterity",
+              values: [2],
+              tier: 10,
+            },
+          ],
+        },
+      },
+      slot: "hand",
+    },
+    {
+      // _id: new ObjectId("649d79ad9e6e3a6c3e602cde"),
+      type: "wearable",
+      name: "Short Bow",
+      uniqueName: undefined,
+      uniqueDescription: undefined,
+      ilvl: 1,
+      rarity: "magic",
+      requirements: { level: 1 },
+      modifiers: {
+        base: [
+          {
+            modId: "physical_damage",
+            description: "Physical Damage: #-#",
+            values: [2, 4],
+          },
+          {
+            modId: "critical_strike_chance",
+            description: "Critical Strike Chance: #%",
+            values: [5],
+          },
+        ],
+        implicit: [],
+        affix: {
+          prefixes: [
+            {
+              modId: "to_mana",
+              description: "+# to Mana",
+              values: [3],
+              tier: 10,
+            },
+            {
+              modId: "to_life_regeneration",
+              description: "+# to Life Regeneration",
+              values: [1],
+              tier: 10,
+            },
+          ],
+          suffixes: [
+            {
+              modId: "to_intelligence",
+              description: "+# to Intelligence",
+              values: [2],
+              tier: 10,
+            },
+          ],
+        },
+      },
+      slot: "hand",
+    },
+    {
+      type: "material",
+      id: "augmenting_core",
+      name: "Augmenting Core",
+      description:
+        "Use in the Forge to attempt upgrading existing modifier of an item by one Tier.",
+      stackable: true,
+      stackSize: 1,
+      maxStackSize: 20,
+    },
+  ],
   instanceActionsQueue: new Queue(),
 });
 
@@ -98,58 +203,4 @@ socket.on("instance:rewards", (rewards) => {
 });
 socket.on("instance:state-update", async (stateUpdate) => {
   state.instanceActionsQueue.enqueue(stateUpdate);
-
-  // const room = gameServer.state.instance!.room!;
-  // // take all updates from the state.actions and update state incrementally with a delay
-  // for (const action of state.actions) {
-  //   const target = room.players.find((player) => player.id === action.targetId);
-  //   if (target) {
-  //     displayDamagePopup(action.attackerId, action.targetId, action.damage, action.critical);
-  //     target.resources.hp = Math.max(target.resources.hp - action.damage, 0);
-  //   }
-  //   await new Promise((resolve) => setTimeout(resolve, 1000));
-  // }
-  // const { turnStartUpdate } = state;
-  // if (turnStartUpdate) {
-  //   const { playerId, resources } = turnStartUpdate;
-  //   const player = room.players.find((player) => player.id === playerId);
-  //   if (player) {
-  //     if (resources) {
-  //       if (resources.ap) {
-  //         player.resources.ap = resources.ap;
-  //       }
-  //       if (resources.hp) {
-  //         player.resources.hp = resources.hp;
-  //       }
-  //       if (resources.mp) {
-  //         player.resources.mp = resources.mp;
-  //       }
-  //     }
-  //     room.currentTurnPlayerName = player.name;
-  //   }
-  // }
 });
-
-// socket.on("instance:player-action", (stateUpdate) => {
-// state.instanceActionsQueue.enqueue(stateUpdate);
-
-// const enemies = gameServer.state.instance?.room?.enemies;
-// const players = gameServer.state.instance?.room?.players;
-// const attacker = players?.find((player) => player.id === action.attackerId);
-// const target = enemies?.find((enemy) => enemy.id === action.targetId);
-// if (target) {
-//   displayDamagePopup(action.attackerId, action.targetId, action.damage, action.critical);
-//   target.hp = Math.max(target.hp - action.damage, 0);
-// }
-// if (attacker) {
-//   if (action.cost?.ap) {
-//     attacker.resources.ap -= action.cost.ap;
-//   }
-//   if (action.cost?.mp) {
-//     attacker.resources.mp -= action.cost.mp;
-//   }
-//   if (action.cost?.hp) {
-//     attacker.resources.hp -= action.cost.hp;
-//   }
-// }
-// });

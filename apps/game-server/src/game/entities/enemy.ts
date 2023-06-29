@@ -44,7 +44,7 @@ class Enemy {
 }
 
 export const testEnemies = () => {
-  return [new Enemy("Rat", 1, 30), new Enemy("Rat", 1, 30), new Enemy("Rat", 1, 30)];
+  return [new Enemy("Rat", 1, 20), new Enemy("Rat", 1, 20), new Enemy("Rat", 1, 20)];
 };
 
 export default Enemy;
