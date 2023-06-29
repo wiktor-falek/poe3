@@ -18,7 +18,7 @@ setInterval(async () => {
 
   let timeout = 0;
   for (const action of actions) {
-    const animationDurationMs = 500;
+    const animationDurationMs = 0;
     // TODO: play animation
 
     setTimeout(() => {
