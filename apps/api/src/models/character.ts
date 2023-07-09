@@ -90,7 +90,7 @@ class Character {
   }
 
   static async getCharacter(userId: string, characterName: string) {
-    const character = await this.collection.findOne(
+    const character = await this.collection.findOne<StaticCharacter>(
       {
         userId,
         name: characterName,
@@ -102,12 +102,9 @@ class Character {
       return Err("Character not found");
     }
 
-    // TODO: ask a typescript wizard how to avoid this cringe
-    return Ok(character as unknown as StaticCharacter);
+    return Ok(character);
   }
 
-  // OPTIMIZE: move this to user collection, where the subset data of each character
-  // will be stored in the characters field for fast access
   static async getAllCharactersOverview(userId: string) {
     try {
       const cursor = this.collection.find({ userId }, { projection: { _id: 0, userId: 0 } });

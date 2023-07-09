@@ -4,9 +4,6 @@ import cors from "cors";
 import apiRouter from "./routes/api.js";
 import authRouter from "./routes/auth.js";
 import authorized from "./middlewares/authorized.js";
-import Mongo from "./mongo.js";
-
-await Mongo.connect();
 
 const app = express();
 
