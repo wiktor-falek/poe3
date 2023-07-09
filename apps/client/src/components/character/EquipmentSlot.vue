@@ -1,18 +1,16 @@
 <script lang="ts" setup>
 import { ref } from "vue";
-import type { EquipmentSlot } from "../../../../common";
+import type { EquipmentSlot } from "../../../../common/types/index";
 import useCharacterStore from "../../stores/characterStore";
 import WearableItemTooltip from "../items/WearableItemTooltip.vue";
 
 const characterStore = useCharacterStore();
-const equipment = characterStore.staticCharacter?.equipment;
 
 const props = defineProps<{ invisible?: boolean; equipmentSlot?: EquipmentSlot }>();
 
-let item: any = null;
-if (equipment && props.equipmentSlot) {
-  item = equipment[props.equipmentSlot];
-}
+let item = characterStore.staticCharacter?.items.find(
+  (item) => item.equipment === props.equipmentSlot
+);
 
 const isHovered = ref(false);
 </script>
@@ -31,12 +29,7 @@ const isHovered = ref(false);
       'border--unique': item && item.rarity === 'unique',
     }"
   >
-    <div
-      class="item"
-      v-if="equipmentSlot && equipment && equipment[equipmentSlot]"
-      @mouseover="isHovered = true"
-      @mouseleave="isHovered = false"
-    >
+    <div class="item" v-if="item" @mouseover="isHovered = true" @mouseleave="isHovered = false">
       <img src="../../assets/item-icons/ring.jpg" alt="" />
     </div>
   </div>

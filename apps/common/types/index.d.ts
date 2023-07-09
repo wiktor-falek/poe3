@@ -72,8 +72,7 @@ interface StaticCharacter {
   class: CharacterClass;
   silver: number;
   level: Level;
-  equipment: undefined;
-  inventory: Array<undefined>;
+  items: Array<any>;
   progression: CharacterProgression;
 }
 

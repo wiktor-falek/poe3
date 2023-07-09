@@ -1,7 +1,9 @@
 <script lang="ts" setup>
 import useCharacterStore from "../../stores/characterStore";
 const characterStore = useCharacterStore();
-const inventory: Array<any> | undefined = characterStore.staticCharacter?.inventory;
+const inventory: Array<any> | undefined = characterStore.staticCharacter?.items.filter(
+  (item) => item.inventory
+);
 </script>
 
 <template>

@@ -15,8 +15,12 @@ import LobbyManager from "./game/lobby/lobbyManager.js";
 import registerInstanceHandler from "./handlers/instanceHandler.js";
 import InstanceManager from "./game/instance/instanceManager.js";
 import { PartyMessage } from "./components/message.js";
+import Character from "./db/models/character.js";
 
 await Mongo.connect();
+
+const result = await Character.unequipItem("new items", "chest");
+console.log(result);
 
 interface SocketData {
   isAuthenticated: boolean;

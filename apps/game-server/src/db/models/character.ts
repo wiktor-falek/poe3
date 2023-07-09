@@ -38,104 +38,71 @@ class Character {
   }
 
   static async unequipItem(name: string, equipmentSlot: EquipmentSlot) {
-    // find item where equipment equals ${equipmentSlot}, unset equipment and set inventory
-    // to first available inventory index: starting at 1, ending at INVENTORY_LIMIT (inclusive)
+    // unequip item as equipmentSlot if it exists, and there is enough inventory space
+    // item gets placed in the first available index of inventory
 
-    const INVENTORY_LIMIT = 35; // inclusive
+    const INVENTORY_LIMIT = 35;
 
-    const result = this.collection.updateOne(
+    /*
+    Character: {
+      name: "apdo",
+      ...,
+      items: [
+        { name: "item 1", ..., inventory: 1 },
+        { name: "item 2", ..., inventory: 2 },
+        { name: "item 3", ..., inventory: 4 },
+        { name: "item 4", ..., inventory: 7 },
+        { name: "item 5", ..., equipment: "hand" },
+        
+        // want to unequip this item
+        { name: "item 6", ..., equipment: "helmet" }
+        
+        // after unequipping it will look like this
+        { name: "item 6", ..., inventory: 3 } // 1 and 2 are taken, but 3 is the smallest available index
+      ]
+    }
+    */
+
+    const result = await this.collection.updateOne(
       {
-        name: "apdo",
+        name,
+        "items.equipment": equipmentSlot,
         $expr: {
           $lt: [
-            {
-              $size: {
-                $filter: {
-                  input: "$items",
-                  as: "item",
-                  cond: { $ne: ["$$item.inventory", undefined] },
-                },
-              },
-            },
-            INVENTORY_LIMIT + 1,
+            { $size: { $filter: { input: "$items", cond: { $isNumber: "$$this.inventory" } } } },
+            INVENTORY_LIMIT,
           ],
         },
       },
-      [
-        {
-          $set: {
-            items: {
-              $map: {
-                input: "$items",
-                as: "item",
-                in: {
-                  $cond: [
-                    {
-                      $and: [
-                        { $eq: ["$$item.equipment", equipmentSlot] },
-                        { $ne: ["$$item.inventory", undefined] },
-                      ],
-                    },
-                    {
-                      name: "$$item.name",
-                      inventory: {
-                        $let: {
-                          vars: {
-                            range: { $range: [1, INVENTORY_LIMIT + 1] },
-                            existingInventory: "$items.inventory",
-                          },
-                          in: {
-                            $arrayElemAt: [
-                              {
-                                $setDifference: ["$$range", "$$existingInventory"],
-                              },
-                              0,
-                            ],
-                          },
-                        },
-                      },
-                    },
-                    "$$item",
-                  ],
-                },
-              },
-            },
-          },
-        },
-      ]
+      {
+        // this needs to be first number between 1 and INVENTORY_LIMIT that is not already taken
+        // but i don't know this number when the query gets executed
+        $set: { "items.$.inventory": 3 },
+        $unset: { "items.$.equipment": "" },
+      }
     );
-    console.log({ result });
+
+    // return result;
   }
 
   static async equipItem(name: string, inventoryIdx: number, equipmentSlot: EquipmentSlot) {
-    // find item where inventory equals ${inventoryIdx}, unset inventory field and set equipment to ${equipmentSlot}
-    // if there is an item with equipment: ${equipmentSlot} already, do the reverse
-    const result = this.collection.bulkWrite([
+    // equips an item at inventoryIdx if it exists, and equipmentSlot is not taken
+    const result = await this.collection.updateOne(
+      { name, "items.inventory": inventoryIdx, "items.equipment": { $ne: equipmentSlot } },
       {
-        updateOne: {
-          filter: {
-            name,
-            $or: [{ "items.inventory": inventoryIdx }, { "items.equipment": equipmentSlot }],
-          },
-          update: {
-            $set: {
-              "items.$[inventoryItem].equipment": equipmentSlot,
-              "items.$[equippedItem].inventory": inventoryIdx,
-            },
-            $unset: {
-              "items.$[inventoryItem].inventory": "",
-              "items.$[equippedItem].equipment": "",
-            },
-          },
-          arrayFilters: [
-            { "inventoryItem.inventory": inventoryIdx },
-            { "equippedItem.equipment": equipmentSlot },
-          ],
-          upsert: true,
-        },
-      },
-    ]);
-    console.log({ result });
+        $set: { "items.$.equipment": equipmentSlot },
+        $unset: { "items.$.inventory": "" },
+      }
+    );
+
+    if (result.matchedCount === 0) {
+      return Err("The equipment slot is already taken");
+    }
+    if (result.modifiedCount !== 1) {
+      return Err("Failed to equip the item");
+    }
+
+    return Ok(1);
   }
 }
 

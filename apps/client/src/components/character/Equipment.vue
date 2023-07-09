@@ -3,7 +3,6 @@ import useCharacterStore from "../../stores/characterStore";
 import EquipmentSlot from "./EquipmentSlot.vue";
 
 const characterStore = useCharacterStore();
-const equipment = characterStore.staticCharacter?.inventory;
 </script>
 
 <template>
