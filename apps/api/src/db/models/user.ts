@@ -1,11 +1,10 @@
 import bcrypt from "bcrypt";
-import Joi from "joi";
-import { v4 as uuidv4 } from "uuid";
-import { decode, encode } from "../../utils/token.js";
-import { Ok, Err } from "resultat";
 import { SlonikError, sql } from "slonik";
-import { unknown, z } from "zod";
+import { Ok, Err, ResultErr, ResultOk } from "resultat";
+import { z } from "zod";
+import { v4 as uuidv4 } from "uuid";
 import pool from "../postgres.js";
+import { decode, encode } from "../../utils/token.js";
 import { sendEmail } from "../../utils/email.js";
 
 /*
@@ -42,28 +41,64 @@ class User {
 
         return result;
       } catch (error) {
-        console.log(error);
         if (error instanceof SlonikError) {
           console.error(error.name, error.message);
+        } else {
+          throw error;
         }
       }
       return null;
     });
 
     return result;
-    // const user = await this.collection.findOne({
-    // "account.username": username,
-    // });
-    //
-    // return user;
   }
 
   static async findByEmail(email: string) {
-    // const user = await this.collection.findOne({
-    //   "account.email": email,
-    //   "account.hasConfirmedEmail": true,
-    // });
-    // return user;
+    const result = await pool.connect(async (connection) => {
+      try {
+        const result = await connection.one(
+          sql.type(userObject)`SELECT * FROM "user" WHERE email = ${email}`
+        );
+
+        return result;
+      } catch (error) {
+        if (error instanceof SlonikError) {
+          console.error(error.name, error.message);
+        } else {
+          throw error;
+        }
+      }
+      return null;
+    });
+
+    return result;
+  }
+
+  static async emailIsInUse(email: string) {
+    const result = await pool.connect(async (connection) => {
+      try {
+        const result = await connection.one(
+          sql.type(
+            z.object({
+              username: z.string(),
+            })
+          )`SELECT username FROM "user" WHERE email = ${email} AND has_confirmed_email = TRUE`
+        );
+        return Ok(result);
+      } catch (error) {
+        if (error instanceof SlonikError) {
+          console.error(error.name, error.message);
+          if (error.name === "NotFoundError") {
+            return Ok({ username: null });
+          }
+        } else {
+          throw error;
+        }
+      }
+      return Err("Read fail");
+    });
+
+    return result;
   }
 
   static async register(username: string, password: string, email: string) {
@@ -91,61 +126,98 @@ class User {
     if (result.ok) {
       return Ok(1);
     } else {
-      return result.err;
+      return Err(result.err);
     }
   }
 
   static async login(username: string, password: string) {
-    // const user = await User.findByUsername(username);
-    // if (user === null) {
-    //   return Err("Incorrect username or password");
-    // }
-    // const isAuthenticated = await bcrypt.compare(password, user.account.hash);
-    // if (!isAuthenticated) {
-    //   return Err("Incorrect username or password");
-    // }
-    // const sessionId = uuidv4();
-    // const result = await this.collection.updateOne(
-    //   { "account.username": username },
-    //   { $set: { "account.sessionId": sessionId } }
-    // );
-    // if (result.modifiedCount !== 1) {
-    //   return Err("Database write failed");
-    // }
-    // return Ok({ sessionId });
+    const user = await this.findByUsername(username);
+
+    if (user === null) {
+      return Err("Incorrect username or password");
+    }
+
+    const isAuthenticated = await bcrypt.compare(password, user.hash);
+
+    if (!isAuthenticated) {
+      return Err("Incorrect username or password");
+    }
+
+    const result = await pool.connect(async (connection) => {
+      try {
+        const result = await connection.one(
+          sql.type(
+            z.object({
+              session_id: z.string(),
+            })
+          )`UPDATE "user" SET session_id = ${uuidv4()} WHERE username = ${username} RETURNING session_id`
+        );
+        return Ok(result.session_id);
+      } catch (error) {
+        if (error instanceof SlonikError) {
+          console.error(error.name, error.message);
+        } else {
+          throw error;
+        }
+      }
+      return Err("Incorrect username or password");
+    });
+
+    return result;
   }
 
-  static async verify(token: string) {
-    // const payload = decode(token);
-    // if (payload === null) {
-    //   return Err("Invalid token");
-    // }
-    // const { username, email, iat, exp } = payload;
-    // const userWithEmailTaken = await this.collection.findOne(
-    //   {
-    //     "account.email": email,
-    //     "account.hasConfirmedEmail": true,
-    //   },
-    //   { projection: { "account.username": 1, _id: 0 } }
-    // );
-    // if (userWithEmailTaken?.account.username === username) {
-    //   return Err("Your email is already verified");
-    // }
-    // if (userWithEmailTaken !== null) {
-    //   return Err("Something went wrong");
-    // }
-    // const result = await this.collection.updateOne(
-    //   {
-    //     "account.username": username,
-    //     "account.email": email,
-    //     "account.hasConfirmedEmail": false,
-    //   },
-    //   { $set: { "account.hasConfirmedEmail": true } }
-    // );
-    // if (result.modifiedCount === 0) {
-    //   return Err("Something went wrong");
-    // }
-    // return Ok({ username, verified: true });
+  static async verify(token: string): Promise<
+    | ResultErr
+    | ResultOk<{
+        username: string;
+        verified: boolean;
+      }>
+  > {
+    const payload = decode(token);
+    if (payload === null) {
+      return Err("Invalid token");
+    }
+    const { username, email, iat, exp } = payload;
+
+    const existingUsernameResult = await this.emailIsInUse(email);
+    if (!existingUsernameResult.ok) {
+      // was unable to read if email is in use
+      return Err("Something went wrong");
+    }
+
+    const existingUsername = existingUsernameResult.val.username;
+
+    if (existingUsername) {
+      if (existingUsername === username) {
+        return Err("Your email is already verified");
+      }
+      return Err("Email is already in use");
+    }
+
+    const result = pool.connect(async (connection) => {
+      try {
+        const result = await connection.one(
+          sql.type(
+            z.object({
+              username: z.string(),
+              verified: z.boolean(),
+            })
+          )`UPDATE "user" SET has_confirmed_email = TRUE 
+            WHERE username = ${username} AND email = ${email} AND has_confirmed_email = FALSE
+            RETURNING username, has_confirmed_email AS verified`
+        );
+        return Ok(result);
+      } catch (error) {
+        if (error instanceof SlonikError) {
+          console.error(error.name, error.message);
+        } else {
+          throw error;
+        }
+      }
+      return Err("Failed to verify");
+    });
+
+    return result;
   }
 
   static async recoverPassword(email: string) {
