@@ -20,9 +20,9 @@ async function createCharacter(req: Request, res: Response) {
   const validationResult = schema.validate(req.body);
   if (validationResult.error) {
     if (BLACKLISTED_NAMES.includes(name)) {
-      return res.status(422).json({ error: "This username is not allowed, try something else" });
+      return res.status(400).json({ error: "This username is not allowed, try something else" });
     }
-    return res.status(422).json({ error: "Invalid data" });
+    return res.status(400).json({ error: "Invalid parameters" });
   }
 
   const userId = res.locals.user._id.toString();
@@ -47,7 +47,7 @@ async function getCharacter(req: Request, res: Response) {
   const validationResult = schema.validate(name);
 
   if (validationResult.error) {
-    return res.status(422).json({ error: "Invalid data" });
+    return res.status(400).json({ error: "Invalid parameters" });
   }
 
   const result = await Character.getCharacter(userId, name);
@@ -84,7 +84,7 @@ async function deleteCharacter(req: Request, res: Response) {
   const validationResult = schema.validate(characterName);
 
   if (validationResult.error) {
-    return res.status(422).json({ error: "Invalid data" });
+    return res.status(400).json({ error: "Invalid parameters" });
   }
 
   const result = await Character.deleteCharacter(userId, characterName);

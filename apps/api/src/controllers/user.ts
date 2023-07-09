@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 async function register(req: Request, res: Response) {
-  const schema = Joi.object().keys({
+  const schema = Joi.object<{ username: string; password: string; email: string }>().keys({
     username: Joi.string().required().trim().min(6).max(30),
     password: Joi.string().required().min(8).max(128),
     email: Joi.string().required().email().min(6).max(254),
@@ -15,12 +15,10 @@ async function register(req: Request, res: Response) {
 
   const validationResult = schema.validate(req.body);
   if (validationResult.error) {
-    return res.status(422).json({ error: "Invalid data" });
+    return res.status(400).json({ error: "Invalid parameters" });
   }
 
-  const username: string = req.body.username;
-  const password: string = req.body.password;
-  const email: string = req.body.email;
+  const { username, password, email } = validationResult.value;
 
   const result = await User.register(username, password, email);
   if (!result.ok) {
@@ -37,7 +35,7 @@ async function register(req: Request, res: Response) {
         `http://localhost:3000/auth/verify/${token}`
     );
   } else {
-    console.log(`Confirm email address link:\nhttp://localhost:3000/auth/verify/${token}`);
+    console.log(`Email confirmation link:\nhttp://localhost:3000/auth/verify/${token}`);
   }
 
   return res.status(200).json({
@@ -46,17 +44,17 @@ async function register(req: Request, res: Response) {
 }
 
 async function login(req: Request, res: Response) {
-  const { username, password } = req.body;
-
-  const schema = Joi.object().keys({
+  const schema = Joi.object<{ username: string; password: string }>().keys({
     username: Joi.string().required().trim().min(6).max(30),
     password: Joi.string().required().min(8).max(128),
   });
 
   const validationResult = schema.validate(req.body);
   if (validationResult.error) {
-    return res.status(422).json({ error: "Invalid data" });
+    return res.status(400).json({ error: "Invalid parameters" });
   }
+
+  const { username, password } = validationResult.value;
 
   const result = await User.login(username, password);
   if (!result.ok) {
@@ -79,29 +77,15 @@ async function verify(req: Request, res: Response) {
 
   const result = await User.verify(token);
 
-  let verified = false;
-  let username;
-  let error;
-
-  if (result.ok) {
-    verified = result.val.verified;
-    username = result.val.username;
-  } else {
-    error = result.err;
-  }
-
-  // DEPLOY: update baseUrl
   const baseUrl = new URL("http://localhost:5173/verified");
   const params = new URLSearchParams(baseUrl.search);
 
-  params.append("verified", verified.toString());
-
-  if (username) {
+  if (result.ok) {
+    const { verified, username } = result.val;
+    params.append("verified", verified.toString());
     params.append("username", username);
-  }
-
-  if (error) {
-    params.append("error", error);
+  } else {
+    params.append("error", result.err);
   }
 
   const url = baseUrl.toString() + "?" + params.toString();
@@ -110,9 +94,13 @@ async function verify(req: Request, res: Response) {
 }
 
 async function recoverPassword(req: Request, res: Response) {
-  const { email } = req.body;
+  const schema = Joi.string().required().email().min(6).max(254);
+  const result = schema.validate(req.body);
+  if (result.error) {
+    return res.status(400).json({ error: "Invalid email" });
+  }
 
-  // TODO: validate email
+  const email = result.value;
 
   res.status(200).json({ message: "Confirmation email sent" });
 
@@ -120,9 +108,18 @@ async function recoverPassword(req: Request, res: Response) {
 }
 
 async function changePassword(req: Request, res: Response) {
-  const { token, password } = req.body;
-
   // TODO: validate token and password
+  const schema = Joi.object<{ token: string; password: string }>({
+    token: Joi.string().required(),
+    password: Joi.string().required().min(8).max(128),
+  });
+
+  const validationResult = schema.validate(req.body);
+  if (validationResult.error) {
+    return res.status(400).json({ error: "Invalid parameters" });
+  }
+
+  const { token, password } = validationResult.value;
 
   const result = await User.changePassword(token, password);
 
