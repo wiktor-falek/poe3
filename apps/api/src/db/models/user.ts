@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { DatabasePool, SlonikError, sql } from "slonik";
-import { Ok, Err, ResultErr, ResultOk } from "resultat";
+import { Ok, Err } from "resultat";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
 import pool, { testingPool } from "../postgres.js";

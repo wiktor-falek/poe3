@@ -1,0 +1,182 @@
+import { DatabasePool, SlonikError, sql } from "slonik";
+import { Ok, Err } from "resultat";
+import { z } from "zod";
+import pool, { testingPool } from "../postgres.js";
+
+// import type { CharacterOverview } from "../../../types.js";
+// import type { CharacterClass, StaticCharacter } from "../../../../common/types/index.js";
+
+/*
+CREATE TABLE "character" (
+  ID SERIAL PRIMARY KEY,
+  username -> "user" TABLE NOT NULL,
+  name VARCHAR(24) NOT NULL UNIQUE,
+  silver BIGINT DEFAULT 0  NOT NULL,
+  class VARCHAR(16)  NOT NULL,
+  level SMALLINT DEFAULT 1  NOT NULL,
+  xp BIGINT DEFAULT 0  NOT NULL,
+  req_xp BIGINT DEFAULT 0  NOT NULL,
+)
+*/
+
+// const characterSchema = Joi.object({
+//   userId: Joi.string().length(24).required(),
+//   // username: Joi.string().min(6).max(30).required(),
+//   name: Joi.string().min(3).max(24).required(),
+//   silver: Joi.number().integer().default(0),
+//   class: Joi.string().valid("swordsman", "ranger", "sorcerer", "assassin"),
+//   level: Joi.object().default({
+//     value: 1,
+//     xp: 0,
+//     requiredXp: 10,
+//   }),
+//   items: Joi.array(),
+//   progression: Joi.object().default({
+//     mainStory: {
+//       highestZoneId: 0,
+//     },
+//   }),
+// });
+
+// class Character {
+//   private static db = Mongo.getClient().db("game");
+//   static collection = this.db.collection("characters");
+
+//   static async getCharacterCount(userId: string): Promise<number> {
+//     const characterCount = await this.collection.countDocuments({
+//       userId,
+//     });
+//     return characterCount;
+//   }
+
+//   static async createCharacter(
+//     userId: string,
+//     characterClass: CharacterClass,
+//     characterName: string
+//   ): Promise<ResultOk<CharacterOverview> | ResultErr> {
+//     const initialCharacterData = {
+//       userId,
+//       name: characterName,
+//       class: characterClass,
+//       items: StartingItemsFactory.createForClass(characterClass),
+//     };
+
+//     const validationResult = characterSchema.validate(initialCharacterData);
+
+//     if (validationResult.error) {
+//       return Err("Data validation failed");
+//     }
+
+//     const character = validationResult.value;
+
+//     const characterCount = await this.getCharacterCount(userId);
+
+//     const CHARACTER_LIMIT = 12; // TODO: unhardcore character count
+//     if (characterCount >= CHARACTER_LIMIT) {
+//       return Err("Reached character limit");
+//     }
+
+//     try {
+//       const result = await this.collection.insertOne({
+//         userId,
+//         ...character,
+//       });
+
+//       if (result.insertedId === null) {
+//         return Err("Database write failed");
+//       }
+//     } catch (err) {
+//       const error = err as MongoServerError;
+//       if (error.code === 11000) {
+//         return Err("Character name is already taken");
+//       }
+//       return Err("Failed to create the character");
+//     }
+
+//     const characterOverview: CharacterOverview = {
+//       name: character.name,
+//       class: character.class,
+//       level: character.level.value,
+//     };
+
+//     return Ok(characterOverview);
+//   }
+
+//   static async getCharacter(userId: string, characterName: string) {
+//     const character = await this.collection.findOne<StaticCharacter>(
+//       {
+//         userId,
+//         name: characterName,
+//       },
+//       { projection: { _id: 0, userId: 0 } }
+//     );
+
+//     if (character === null) {
+//       return Err("Character not found");
+//     }
+
+//     return Ok(character);
+//   }
+
+//   static async getAllCharactersOverview(userId: string) {
+//     try {
+//       const cursor = this.collection.find({ userId }, { projection: { _id: 0, userId: 0 } });
+
+//       const characters = await cursor.toArray();
+
+//       const charactersOverview: Array<CharacterOverview> = characters.map((c) => {
+//         return {
+//           name: c.name,
+//           class: c.class,
+//           level: c.level.value,
+//         };
+//       });
+
+//       return Ok(charactersOverview);
+//     } catch {
+//       return Err("Database read failed");
+//     }
+//   }
+
+//   static async deleteCharacter(userId: string, characterName: string) {
+//     const character = await this.collection.findOne({
+//       userId,
+//       name: characterName,
+//     });
+
+//     if (character === null) {
+//       return Err("Character does not exist");
+//     }
+
+//     // insert the character to deletedCharacters collection
+//     const inserted = await this.db.collection("deletedCharacters").insertOne(character);
+
+//     if (inserted.insertedId === null) {
+//       return Err("Failed to insert the character");
+//     }
+
+//     // delete the character from characters collection after inserting
+//     const deleted = await this.collection.deleteOne({
+//       userId,
+//       name: characterName,
+//     });
+
+//     if (deleted.deletedCount !== 1) {
+//       return Err("Failed to delete the character");
+//     }
+
+//     return Ok(1);
+//   }
+// }
+
+// // Indexes
+// Character.collection.createIndexes([
+//   { key: { userId: 1 } },
+//   {
+//     key: { name: 1 },
+//     unique: true,
+//   },
+// ]);
+
+// export default Character;
+// export { characterSchema };
