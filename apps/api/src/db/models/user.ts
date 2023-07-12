@@ -1,9 +1,9 @@
 import bcrypt from "bcrypt";
-import { SlonikError, sql } from "slonik";
+import { DatabasePool, SlonikError, sql } from "slonik";
 import { Ok, Err, ResultErr, ResultOk } from "resultat";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
-import pool from "../postgres.js";
+import pool, { testingPool } from "../postgres.js";
 import { decode, encode } from "../../utils/token.js";
 import { sendEmail } from "../../utils/email.js";
 
@@ -31,9 +31,13 @@ const userObject = z.object({
   character_limit: z.number(),
 });
 
-class User {
-  static async findByUsername(username: string) {
-    const result = await pool.connect(async (connection) => {
+class UserModel {
+  pool: DatabasePool;
+  constructor(testEnv: boolean = false) {
+    this.pool = testEnv ? pool : testingPool;
+  }
+  async findByUsername(username: string) {
+    const result = await this.pool.connect(async (connection) => {
       try {
         const result = await connection.one(
           sql.type(userObject)`SELECT * FROM "user" WHERE username = ${username}`
@@ -53,8 +57,8 @@ class User {
     return result;
   }
 
-  static async findByEmail(email: string) {
-    const result = await pool.connect(async (connection) => {
+  async findByEmail(email: string) {
+    const result = await this.pool.connect(async (connection) => {
       try {
         const result = await connection.one(
           sql.type(userObject)`SELECT * FROM "user" WHERE email = ${email}`
@@ -74,8 +78,29 @@ class User {
     return result;
   }
 
-  static async emailIsInUse(email: string) {
-    const result = await pool.connect(async (connection) => {
+  async findBySessionId(sessionId: string) {
+    const result = await this.pool.connect(async (connection) => {
+      try {
+        const result = await connection.one(
+          sql.type(userObject)`SELECT * FROM "user" WHERE session_id = ${sessionId}`
+        );
+
+        return result;
+      } catch (error) {
+        if (error instanceof SlonikError) {
+          console.error(error.name, error.message);
+        } else {
+          throw error;
+        }
+      }
+      return null;
+    });
+
+    return result;
+  }
+
+  async emailIsInUse(email: string) {
+    const result = await this.pool.connect(async (connection) => {
       try {
         const result = await connection.one(
           sql.type(
@@ -101,11 +126,11 @@ class User {
     return result;
   }
 
-  static async register(username: string, password: string, email: string) {
+  async register(username: string, password: string, email: string) {
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
 
-    const result = await pool.connect(async (connection) => {
+    const result = await this.pool.connect(async (connection) => {
       try {
         const result = await connection.query(
           sql.unsafe`INSERT INTO "user" (username, email, hash, registration_timestamp) VALUES (${username}, ${email}, ${hash}, ${Date.now()})`
@@ -130,7 +155,7 @@ class User {
     }
   }
 
-  static async login(username: string, password: string) {
+  async login(username: string, password: string) {
     const user = await this.findByUsername(username);
 
     if (user === null) {
@@ -143,7 +168,7 @@ class User {
       return Err("Incorrect username or password");
     }
 
-    const result = await pool.connect(async (connection) => {
+    const result = await this.pool.connect(async (connection) => {
       try {
         const result = await connection.one(
           sql.type(
@@ -152,7 +177,7 @@ class User {
             })
           )`UPDATE "user" SET session_id = ${uuidv4()} WHERE username = ${username} RETURNING session_id`
         );
-        return Ok(result.session_id);
+        return Ok(result);
       } catch (error) {
         if (error instanceof SlonikError) {
           console.error(error.name, error.message);
@@ -166,13 +191,7 @@ class User {
     return result;
   }
 
-  static async verify(token: string): Promise<
-    | ResultErr
-    | ResultOk<{
-        username: string;
-        verified: boolean;
-      }>
-  > {
+  async verify(token: string) {
     const payload = decode(token);
     if (payload === null) {
       return Err("Invalid token");
@@ -194,15 +213,15 @@ class User {
       return Err("Email is already in use");
     }
 
-    const result = pool.connect(async (connection) => {
+    const result = await this.pool.connect(async (connection) => {
       try {
+        const returnType = z.object({
+          username: z.string(),
+          verified: z.boolean(),
+        });
         const result = await connection.one(
-          sql.type(
-            z.object({
-              username: z.string(),
-              verified: z.boolean(),
-            })
-          )`UPDATE "user" SET has_confirmed_email = TRUE 
+          sql.type(returnType)`
+            UPDATE "user" SET has_confirmed_email = TRUE 
             WHERE username = ${username} AND email = ${email} AND has_confirmed_email = FALSE
             RETURNING username, has_confirmed_email AS verified`
         );
@@ -220,46 +239,62 @@ class User {
     return result;
   }
 
-  static async recoverPassword(email: string) {
-    // const user = await User.findByEmail(email);
-    // if (user === null) {
-    //   return;
-    // }
-    // const username = user.account.username;
-    // const token = encode({ username: username, email: email });
-    // const url = `http://localhost:5173/recovery/?token=${token}`;
-    // if (process.env.NODE_ENV === "production") {
-    //   sendEmail(
-    //     email,
-    //     "Account Recovery",
-    //     `Hi ${username}\nClick the link below to change your password.\n${url}\nIf you did not try to recover you account simply ignore this email.`,
-    //     `<h1>Hi ${username}</h1>\n<h2>Click the link below to change your password.</h2>\n<a href="${url}">Reset Password</a>\nIf you did not try to recover you account simply ignore this email.`
-    //   );
-    // } else {
-    //   console.log(`Account recovery link:\n${url}`);
-    // }
+  async recoverPassword(email: string) {
+    const user = await this.findByEmail(email);
+    if (user === null || !user.has_confirmed_email) {
+      return Err("User with this email does not exist");
+    }
+
+    const { username } = user;
+    const token = encode({ username: username, email: email });
+    const url = `http://localhost:5173/recovery/?token=${token}`;
+
+    if (process.env.NODE_ENV === "production") {
+      sendEmail(
+        email,
+        "Account Recovery",
+        `Hi ${username}\nClick the link below to change your password.\n${url}\nIf you did not try to recover you account simply ignore this email.`,
+        `<h1>Hi ${username}</h1>\n<h2>Click the link below to change your password.</h2>\n<a href="${url}">Reset Password</a>\nIf you did not try to recover you account simply ignore this email.`
+      );
+    } else {
+      console.log(`Account recovery link:\n${url}`);
+    }
+
+    return Ok(url);
   }
 
-  static async changePassword(token: string, password: string) {
-    // const payload = decode(token);
-    // if (payload === null) {
-    //   return Err("Invalid token");
-    // }
-    // const { username, email } = payload;
-    // const saltRounds = 10;
-    // const salt = await bcrypt.genSalt(saltRounds);
-    // const hash = await bcrypt.hash(password, salt);
-    // const result = await this.collection.updateOne(
-    //   {
-    //     "account.username": username,
-    //   },
-    //   { $set: { "account.hash": hash } }
-    // );
-    // if (result.modifiedCount === 0) {
-    //   return Err("Failed to change the password");
-    // }
-    // return Ok(1);
+  async changePassword(token: string, password: string) {
+    const payload = decode(token);
+    if (payload === null) {
+      return Err("Invalid token");
+    }
+    const { username, email } = payload;
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hash = await bcrypt.hash(password, salt);
+
+    const returnType = z.object({
+      hash: z.string(),
+    });
+
+    const result = await this.pool.connect(async (connection) => {
+      try {
+        const result = await connection.one(
+          sql.type(returnType)`UPDATE "user" SET "hash" = ${hash} RETURNING "hash"`
+        );
+        return Ok(result.hash);
+      } catch (error) {
+        if (error instanceof SlonikError) {
+          console.error(error.name, error.message);
+        } else {
+          throw error;
+        }
+      }
+      return Err("Failed to change the password");
+    });
+
+    return result;
   }
 }
 
-export default User;
+export default UserModel;

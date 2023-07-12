@@ -9,11 +9,14 @@ export interface CharacterOverview {
 export type ResponseGetAllCharactersOverview = Array<CharacterOverview>;
 
 interface UserData {
-  _id: ObjectId;
-  account: {
-    username: string;
-    sessionId: string;
-  };
+  id: number;
+  username: string;
+  email: string;
+  has_confirmed_email: boolean;
+  hash: string;
+  registration_timestamp: number;
+  session_id: string;
+  character_limit: number;
 }
 
 declare global {

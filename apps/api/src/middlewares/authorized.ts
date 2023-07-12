@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import User from "../models/user.js";
-import type { UserData } from "../../types.js";
+import UserModel from "../db/models/user.js";
+// import type { UserData } from "../../types.js";
+
+const User = new UserModel();
 
 /**
  * Queries db for a user matching the cookie sessionId
@@ -23,12 +25,7 @@ const authorized = async (req: Request, res: Response, next: NextFunction) => {
     });
   }
 
-  const user = await User.collection.findOne<UserData>(
-    {
-      "account.sessionId": sessionId,
-    },
-    { projection: { "account.username": 1, "account.sessionId": 1, _id: 1 } }
-  );
+  const user = await User.findBySessionId(sessionId);
 
   if (user === null) {
     return res.status(401).json({

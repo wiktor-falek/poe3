@@ -1,10 +1,12 @@
 import { Request, Response } from "express";
-import User from "../models/user.js";
+import UserModel from "../db/models/user.js";
 import Joi from "joi";
 import { sendEmail } from "../utils/email.js";
 import { encode } from "../utils/token.js";
 import dotenv from "dotenv";
 dotenv.config();
+
+const User = new UserModel();
 
 async function register(req: Request, res: Response) {
   const schema = Joi.object<{ username: string; password: string; email: string }>().keys({
@@ -61,9 +63,9 @@ async function login(req: Request, res: Response) {
     return res.status(401).json({ error: result.err });
   }
 
-  const { sessionId } = result.val;
+  const { session_id } = result.val;
 
-  res.cookie("sessionId", sessionId, {
+  res.cookie("sessionId", session_id, {
     httpOnly: false,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",

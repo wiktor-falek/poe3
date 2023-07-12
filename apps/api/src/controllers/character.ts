@@ -25,7 +25,7 @@ async function createCharacter(req: Request, res: Response) {
     return res.status(400).json({ error: "Invalid parameters" });
   }
 
-  const userId = res.locals.user._id.toString();
+  const userId = res.locals.user.id.toString();
 
   const result = await Character.createCharacter(userId, characterClass, name);
 
@@ -39,7 +39,7 @@ async function createCharacter(req: Request, res: Response) {
 }
 
 async function getCharacter(req: Request, res: Response) {
-  const userId = res.locals.user._id.toString();
+  const userId = res.locals.user.id.toString();
   const { name } = req.params;
 
   const schema = Joi.string().required().min(3).max(24);
@@ -62,7 +62,7 @@ async function getCharacter(req: Request, res: Response) {
 }
 
 async function getAllCharactersOverview(req: Request, res: Response) {
-  const userId = res.locals.user._id.toString();
+  const userId = res.locals.user.id.toString();
 
   const result = await Character.getAllCharactersOverview(userId);
 
@@ -76,7 +76,7 @@ async function getAllCharactersOverview(req: Request, res: Response) {
 }
 
 async function deleteCharacter(req: Request, res: Response) {
-  const userId = res.locals.user._id.toString();
+  const userId = res.locals.user.id.toString();
   const characterName = req.params.name;
 
   const schema = Joi.string().required().min(3).max(24);
