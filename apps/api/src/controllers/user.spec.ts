@@ -1,16 +1,19 @@
 import request from "supertest";
 import app from "../app.js";
 import { beforeAll, describe, expect, test } from "vitest";
+import UserModel from "../db/models/user.js";
+
+const User = new UserModel(true);
 
 beforeAll(async () => {
-  // await client.db("game").collection("users").deleteMany();
+  User._deleteAllUsers();
 });
 
 describe("register", async () => {
-  test.concurrent("status code 422 with missing body", async () => {
+  test.concurrent("status code 400 with missing body", async () => {
     const response = await request(app).post("/auth/register").send({ completed: true });
 
-    expect(response.statusCode).toBe(422);
+    expect(response.statusCode).toBe(400);
   });
 
   test.concurrent("status code 200 if registered the user", async () => {
@@ -35,10 +38,10 @@ describe("register", async () => {
 });
 
 describe("login", async () => {
-  test.concurrent("status code 422 with missing body", async () => {
+  test.concurrent("status code 400 with missing body", async () => {
     const response = await request(app).post("/auth/login").send();
 
-    expect(response.statusCode).toBe(422);
+    expect(response.statusCode).toBe(400);
   });
 
   test.concurrent("can not log in with invalid username", async () => {

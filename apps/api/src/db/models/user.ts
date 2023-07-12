@@ -32,10 +32,14 @@ const userObject = z.object({
 });
 
 class UserModel {
+  testEnv: boolean;
   pool: DatabasePool;
+
   constructor(testEnv: boolean = false) {
+    this.testEnv = testEnv;
     this.pool = testEnv ? pool : testingPool;
   }
+
   async findByUsername(username: string) {
     const result = await this.pool.connect(async (connection) => {
       try {
@@ -294,6 +298,13 @@ class UserModel {
     });
 
     return result;
+  }
+
+  _deleteAllUsers() {
+    if (!this.testEnv) {
+      throw new Error("Cannot delete all users outside of test environment");
+    }
+    // TODO: delete all users query
   }
 }
 
