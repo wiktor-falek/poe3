@@ -1,7 +1,7 @@
 import request from "supertest";
 import app from "../app.js";
 import { beforeAll, describe, expect, test } from "vitest";
-import UserModel from "../db/models/user.js";
+import UserModel from "../db/models/userModel.js";
 
 const User = new UserModel(true);
 
@@ -11,7 +11,7 @@ beforeAll(async () => {
 
 describe("register", async () => {
   test.concurrent("status code 400 with missing body", async () => {
-    const response = await request(app).post("/auth/register").send({ completed: true });
+    const response = await request(app).post("/auth/register").send();
 
     expect(response.statusCode).toBe(400);
   });

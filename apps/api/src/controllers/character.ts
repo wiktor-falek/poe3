@@ -1,15 +1,19 @@
 import { Request, Response } from "express";
-import Character from "../models/character.js";
+import CharacterModel from "../db/models/characterModel.js";
 import Joi from "joi";
+import { Character, CharacterOverview } from "types/character.js";
+
+const Character = new CharacterModel();
 
 async function createCharacter(req: Request, res: Response) {
   const characterClass = req.body.class;
   const name = req.body.name;
 
+  const VALID_CLASSES = ["swordsman", "ranger", "sorcerer", "assassin"];
   const BLACKLISTED_NAMES = ["SERVER", "ERROR", "SYSTEM"];
 
   const schema = Joi.object().keys({
-    class: Joi.string().required().min(3).max(16),
+    class: Joi.string().required().valid(VALID_CLASSES),
     name: Joi.string()
       .required()
       .invalid(...BLACKLISTED_NAMES)
@@ -27,15 +31,15 @@ async function createCharacter(req: Request, res: Response) {
 
   const userId = res.locals.user.id.toString();
 
-  const result = await Character.createCharacter(userId, characterClass, name);
+  const result = await Character.createCharacter(userId, name, characterClass);
 
   if (!result.ok) {
     return res.status(403).json({ error: result.err });
   }
 
-  const character = result.val;
+  const characterOverview = result.val;
 
-  return res.status(200).json(character);
+  return res.status(200).json(characterOverview);
 }
 
 async function getCharacter(req: Request, res: Response) {
@@ -50,7 +54,7 @@ async function getCharacter(req: Request, res: Response) {
     return res.status(400).json({ error: "Invalid parameters" });
   }
 
-  const result = await Character.getCharacter(userId, name);
+  const result = await Character.findCharacter(userId, name);
 
   if (!result.ok) {
     return res.status(204).json({});

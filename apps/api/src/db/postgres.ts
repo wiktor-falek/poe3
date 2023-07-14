@@ -1,7 +1,18 @@
-import { createPool, sql } from "slonik";
+import { createPool } from "slonik";
+import { createFieldNameTransformationInterceptor } from "slonik-interceptor-field-name-transformation";
 
-const pool = await createPool("postgresql://postgres:@localhost:5432/poe3");
+const interceptors = [
+  createFieldNameTransformationInterceptor({
+    format: "CAMEL_CASE",
+  }),
+];
 
-export const testingPool = await createPool("postgresql://postgres:@localhost:5432/poe3-testing");
+const pool = await createPool("postgresql://postgres:@localhost:5432/poe3", {
+  interceptors,
+});
+
+export const testingPool = await createPool("postgresql://postgres:@localhost:5432/poe3-testing", {
+  interceptors,
+});
 
 export default pool;

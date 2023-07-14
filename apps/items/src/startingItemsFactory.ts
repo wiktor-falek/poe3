@@ -1,9 +1,9 @@
-import type { CharacterClass } from "../../common/types/index";
+import type { CharacterClass } from "../../common/types/character";
 import blueprints from "./wearable/blueprints";
 import type { Chest, Ring, Weapon } from "./wearable";
 
 class StartingItemsFactory {
-  static createForClass(characterClass: CharacterClass) /*: {
+  static createForClass(characterClass: CharacterClass): {
     hand: Weapon | null;
     offhand: null;
     helmet: null;
@@ -14,63 +14,63 @@ class StartingItemsFactory {
     ring_2: Ring | null;
     amulet: null;
     belt: null;
-  }*/ {
+  } {
     switch (characterClass) {
       case "swordsman":
-        return [
-          { ...blueprints.hand.brokenSword(), equipment: "hand" },
-          // { ...blueprints.offhand.???(), equipment: "offhand" },
-          // { ...blueprints.helmet.???(), equipment: "helmet" },
-          { ...blueprints.chest.rustedPlateArmor(), equipment: "chest" },
-          // { ...blueprints.gloves.???(), equipment: "gloves" },
-          // { ...blueprints.boots.???(), equipment: "boots" },
-          { ...blueprints.ring.goldRing(), equipment: "ring_1" },
-          { ...blueprints.ring.sapphireRing(), equipment: "ring_2" },
-          // { ...blueprints.amulet.???(), equipment: "amulet" },
-          // { ...blueprints.belt.???(), equipment: "belt" },
-        ];
+        return {
+          hand: blueprints.hand.brokenSword(),
+          offhand: null,
+          helmet: null,
+          chest: blueprints.chest.rustedPlateArmor(),
+          gloves: null,
+          boots: null,
+          ring_1: blueprints.ring.goldRing().magic(),
+          ring_2: blueprints.ring.sapphireRing().rare(),
+          amulet: null,
+          belt: null,
+        };
 
       case "ranger":
-        return [
-          { ...blueprints.hand.shortBow(), equipment: "hand" },
-          // { ...blueprints.offhand.???(), equipment: "offhand" },
-          // { ...blueprints.helmet.???(), equipment: "helmet" },
-          { ...blueprints.chest.tornLeatherTunic(), equipment: "chest" },
-          // { ...blueprints.gloves.???(), equipment: "gloves" },
-          // { ...blueprints.boots.???(), equipment: "boots" },
-          // { ...blueprints.ring.???(), equipment: "ring_1" },
-          // { ...blueprints.ring.???(), equipment: "ring_2" },
-          // { ...blueprints.amulet.???(), equipment: "amulet" },
-          // { ...blueprints.belt.???(), equipment: "belt" },
-        ];
+        return {
+          hand: blueprints.hand.shortBow(),
+          offhand: null,
+          helmet: null,
+          chest: blueprints.chest.tornLeatherTunic(),
+          gloves: null,
+          boots: null,
+          ring_1: null,
+          ring_2: null,
+          amulet: null,
+          belt: null,
+        };
 
       case "sorcerer":
-        return [
-          { ...blueprints.hand.branch(), equipment: "hand" },
-          // { ...blueprints.offhand.???(), equipment: "offhand" },
-          // { ...blueprints.helmet.???(), equipment: "helmet" },
-          { ...blueprints.chest.raggedCloth(), equipment: "chest" },
-          // { ...blueprints.gloves.???(), equipment: "gloves" },
-          // { ...blueprints.boots.???(), equipment: "boots" },
-          // { ...blueprints.ring.???(), equipment: "ring_1" },
-          // { ...blueprints.ring.???(), equipment: "ring_2" },
-          // { ...blueprints.amulet.???(), equipment: "amulet" },
-          // { ...blueprints.belt.???(), equipment: "belt" },
-        ];
+        return {
+          hand: blueprints.hand.branch(),
+          offhand: null,
+          helmet: null,
+          chest: blueprints.chest.raggedCloth(),
+          gloves: null,
+          boots: null,
+          ring_1: null,
+          ring_2: null,
+          amulet: null,
+          belt: null,
+        };
 
       case "assassin":
-        return [
-          { ...blueprints.hand.rustyDagger(), equipment: "hand" },
-          // { ...blueprints.offhand.???(), equipment: "offhand" },
-          // { ...blueprints.helmet.???(), equipment: "helmet" },
-          { ...blueprints.chest.leatherHarness(), equipment: "chest" },
-          // { ...blueprints.gloves.???(), equipment: "gloves" },
-          // { ...blueprints.boots.???(), equipment: "boots" },
-          // { ...blueprints.ring.???(), equipment: "ring_1" },
-          // { ...blueprints.ring.???(), equipment: "ring_2" },
-          // { ...blueprints.amulet.???(), equipment: "amulet" },
-          // { ...blueprints.belt.???(), equipment: "belt" },
-        ];
+        return {
+          hand: blueprints.hand.rustyDagger(),
+          offhand: null,
+          helmet: null,
+          chest: blueprints.chest.leatherHarness(),
+          gloves: null,
+          boots: null,
+          ring_1: null,
+          ring_2: null,
+          amulet: null,
+          belt: null,
+        };
     }
   }
 }

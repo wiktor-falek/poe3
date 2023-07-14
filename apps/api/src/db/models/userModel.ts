@@ -8,8 +8,8 @@ import { decode, encode } from "../../utils/token.js";
 import { sendEmail } from "../../utils/email.js";
 
 /*
-CREATE TABLE "user" ( 
-  ID SERIAL PRIMARY KEY,
+CREATE TABLE users ( 
+  id SERIAL PRIMARY KEY,
   username VARCHAR (32) NOT NULL UNIQUE,
   email VARCHAR (255) NOT NULL,
   has_confirmed_email BOOLEAN DEFAULT FALSE NOT NULL,
@@ -24,11 +24,11 @@ const userObject = z.object({
   id: z.number(),
   username: z.string(),
   email: z.string(),
-  has_confirmed_email: z.boolean(),
+  hasConfirmedEmail: z.boolean(),
   hash: z.string(),
-  registration_timestamp: z.number(),
-  session_id: z.string(),
-  character_limit: z.number(),
+  registrationTimestamp: z.number(),
+  sessionId: z.string(),
+  characterLimit: z.number(),
 });
 
 class UserModel {
@@ -40,78 +40,90 @@ class UserModel {
     this.pool = testEnv ? pool : testingPool;
   }
 
-  async findByUsername(username: string) {
-    const result = await this.pool.connect(async (connection) => {
+  findByUsername(username: string) {
+    return this.pool.connect(async (connection) => {
       try {
         const result = await connection.one(
-          sql.type(userObject)`SELECT * FROM "user" WHERE username = ${username}`
+          sql.type(userObject)`
+            SELECT * FROM users WHERE username = ${username}
+          `
         );
 
         return result;
       } catch (error) {
         if (error instanceof SlonikError) {
-          console.error(error.name, error.message);
+          if (error.name === "NotFoundError") {
+            return undefined;
+          } else {
+            console.error(error.name, error.message);
+          }
         } else {
           throw error;
         }
       }
-      return null;
     });
-
-    return result;
   }
 
-  async findByEmail(email: string) {
-    const result = await this.pool.connect(async (connection) => {
+  findByEmail(email: string) {
+    return this.pool.connect(async (connection) => {
       try {
         const result = await connection.one(
-          sql.type(userObject)`SELECT * FROM "user" WHERE email = ${email}`
+          sql.type(userObject)`
+            SELECT * FROM users WHERE email = ${email}
+          `
         );
 
         return result;
       } catch (error) {
         if (error instanceof SlonikError) {
-          console.error(error.name, error.message);
+          if (error.name === "NotFoundError") {
+            return undefined;
+          } else {
+            console.error(error.name, error.message);
+          }
         } else {
           throw error;
         }
       }
-      return null;
     });
-
-    return result;
   }
 
-  async findBySessionId(sessionId: string) {
-    const result = await this.pool.connect(async (connection) => {
+  findBySessionId(sessionId: string) {
+    return this.pool.connect(async (connection) => {
       try {
         const result = await connection.one(
-          sql.type(userObject)`SELECT * FROM "user" WHERE session_id = ${sessionId}`
+          sql.type(userObject)`
+            SELECT * FROM users WHERE session_id = ${sessionId}
+          `
         );
 
         return result;
       } catch (error) {
         if (error instanceof SlonikError) {
-          console.error(error.name, error.message);
+          if (error.name === "NotFoundError") {
+            return undefined;
+          } else {
+            console.error(error.name, error.message);
+          }
         } else {
           throw error;
         }
       }
-      return null;
     });
-
-    return result;
   }
 
-  async emailIsInUse(email: string) {
-    const result = await this.pool.connect(async (connection) => {
+  emailIsInUse(email: string) {
+    return this.pool.connect(async (connection) => {
       try {
         const result = await connection.one(
           sql.type(
             z.object({
               username: z.string(),
             })
-          )`SELECT username FROM "user" WHERE email = ${email} AND has_confirmed_email = TRUE`
+          )`
+            SELECT username FROM users 
+            WHERE email = ${email} AND has_confirmed_email = TRUE
+          `
         );
         return Ok(result);
       } catch (error) {
@@ -126,43 +138,38 @@ class UserModel {
       }
       return Err("Read fail");
     });
-
-    return result;
   }
 
   async register(username: string, password: string, email: string) {
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
 
-    const result = await this.pool.connect(async (connection) => {
+    return this.pool.connect(async (connection) => {
       try {
-        const result = await connection.query(
-          sql.unsafe`INSERT INTO "user" (username, email, hash, registration_timestamp) VALUES (${username}, ${email}, ${hash}, ${Date.now()})`
+        await connection.query(
+          sql.unsafe`
+            INSERT INTO users (username, email, hash, registration_timestamp) 
+            VALUES (${username}, ${email}, ${hash}, ${Date.now()})
+          `
         );
-        if (result.rowCount === 1) {
-          return Ok(result.rowCount);
-        }
+        return Ok(1);
       } catch (error) {
         if (error instanceof SlonikError) {
           if (error.name === "UniqueIntegrityConstraintViolationError") {
             return Err("Username is already taken");
           }
+        } else {
+          throw error;
         }
       }
       return Err("Failed to create user");
     });
-
-    if (result.ok) {
-      return Ok(1);
-    } else {
-      return Err(result.err);
-    }
   }
 
   async login(username: string, password: string) {
     const user = await this.findByUsername(username);
 
-    if (user === null) {
+    if (!user) {
       return Err("Incorrect username or password");
     }
 
@@ -172,14 +179,18 @@ class UserModel {
       return Err("Incorrect username or password");
     }
 
-    const result = await this.pool.connect(async (connection) => {
+    return this.pool.connect(async (connection) => {
       try {
         const result = await connection.one(
           sql.type(
             z.object({
               session_id: z.string(),
             })
-          )`UPDATE "user" SET session_id = ${uuidv4()} WHERE username = ${username} RETURNING session_id`
+          )`
+            UPDATE users SET session_id = ${uuidv4()} 
+            WHERE username = ${username} 
+            RETURNING session_id
+          `
         );
         return Ok(result);
       } catch (error) {
@@ -191,8 +202,6 @@ class UserModel {
       }
       return Err("Incorrect username or password");
     });
-
-    return result;
   }
 
   async verify(token: string) {
@@ -217,7 +226,7 @@ class UserModel {
       return Err("Email is already in use");
     }
 
-    const result = await this.pool.connect(async (connection) => {
+    return this.pool.connect(async (connection) => {
       try {
         const returnType = z.object({
           username: z.string(),
@@ -225,7 +234,7 @@ class UserModel {
         });
         const result = await connection.one(
           sql.type(returnType)`
-            UPDATE "user" SET has_confirmed_email = TRUE 
+            UPDATE users SET has_confirmed_email = TRUE 
             WHERE username = ${username} AND email = ${email} AND has_confirmed_email = FALSE
             RETURNING username, has_confirmed_email AS verified`
         );
@@ -239,13 +248,11 @@ class UserModel {
       }
       return Err("Failed to verify");
     });
-
-    return result;
   }
 
   async recoverPassword(email: string) {
     const user = await this.findByEmail(email);
-    if (user === null || !user.has_confirmed_email) {
+    if (!user?.hasConfirmedEmail) {
       return Err("User with this email does not exist");
     }
 
@@ -281,10 +288,13 @@ class UserModel {
       hash: z.string(),
     });
 
-    const result = await this.pool.connect(async (connection) => {
+    return this.pool.connect(async (connection) => {
       try {
         const result = await connection.one(
-          sql.type(returnType)`UPDATE "user" SET "hash" = ${hash} RETURNING "hash"`
+          sql.type(returnType)`
+            UPDATE users SET "hash" = ${hash} 
+            RETURNING "hash"
+            `
         );
         return Ok(result.hash);
       } catch (error) {
@@ -296,8 +306,6 @@ class UserModel {
       }
       return Err("Failed to change the password");
     });
-
-    return result;
   }
 
   _deleteAllUsers() {

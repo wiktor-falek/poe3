@@ -112,7 +112,7 @@ class Wearable {
   }
 
   /**
-   * Rolls 1-2 random prefix and 1-2 random suffix modifiers from the specified pool
+   * Rolls 1-2 random prefix and 1-2 random suffix modifiers
    */
   magic(
     PREFIX_MODIFIER_POOL: Array<ModifierWithWeight>,
@@ -138,7 +138,7 @@ class Wearable {
   }
 
   /**
-   * Rolls 2-4 random prefix and 2-4 random suffix modifiers from the specified pool
+   * Rolls 2-4 random prefix and 2-4 random suffix modifiers
    */
   rare(
     PREFIX_MODIFIER_POOL: Array<ModifierWithWeight>,

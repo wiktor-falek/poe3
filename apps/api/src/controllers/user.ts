@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import UserModel from "../db/models/user.js";
+import UserModel from "../db/models/userModel.js";
 import Joi from "joi";
 import { sendEmail } from "../utils/email.js";
 import { encode } from "../utils/token.js";

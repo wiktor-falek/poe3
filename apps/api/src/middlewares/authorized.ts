@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import UserModel from "../db/models/user.js";
+import UserModel from "../db/models/userModel.js";
 // import type { UserData } from "../../types.js";
 
 const User = new UserModel();
