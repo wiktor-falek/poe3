@@ -15,5 +15,8 @@
   "homepage": "https://github.com/wiktor-falek/poe3#readme",
   "dependencies": {
     "prettier": "^2.8.8"
+  },
+  "devDependencies": {
+    "prettier-eslint": "^15.0.1"
   }
 }
