@@ -1,4 +1,5 @@
-import { StaticCharacter, User } from "../../../../common/types/index.js";
+import { User } from "types/user.js";
+import { Character } from "types/character.js";
 import { IoSocket } from "../../index.js";
 import Client from "./client.js";
 import type { WithId } from "mongodb";
@@ -18,13 +19,9 @@ class ClientManager {
     return client;
   }
 
-  static createClient(
-    user: WithId<User>,
-    character: WithId<StaticCharacter>,
-    socket: IoSocket
-  ): Client {
+  static createClient(user: User, character: Character, socket: IoSocket): Client {
     const client = new Client(user, character, socket);
-    this.clients.set(user.account.username, client);
+    this.clients.set(user.username, client);
     return client;
   }
 }

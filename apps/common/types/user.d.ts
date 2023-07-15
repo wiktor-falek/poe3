@@ -1,9 +1,10 @@
 export interface User {
+  id: number;
   username: string;
   email: string;
   hasConfirmedEmail: boolean;
-  registrationTimestamp: number;
   hash: string;
+  registrationTimestamp: number;
   sessionId: string;
   characterLimit: number;
 }

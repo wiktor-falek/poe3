@@ -13,6 +13,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
+    "paths": {
+      "types/*": ["../common/types/*"],
+      "common/*": ["../common/src/*"]
+    },
 
     /* Linting */
     "strict": true,

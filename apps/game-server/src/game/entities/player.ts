@@ -1,5 +1,6 @@
 import { randint } from "pyrand";
-import { DynamicCharacter, Resources } from "../../../../common/types/index.js";
+import { Resources } from "types/unorganized.js";
+import { DynamicCharacter } from "types/character.js";
 import { nanoid } from "nanoid";
 import { Err, Ok, Result } from "resultat";
 
@@ -39,7 +40,7 @@ class Player implements PlayerData {
     this.#dynamicCharacter = dynamicCharacter;
     this.id = nanoid(8);
     this.name = dynamicCharacter.name;
-    this.level = dynamicCharacter.level.value;
+    this.level = dynamicCharacter.level;
     this.resources = dynamicCharacter.resources;
   }
 

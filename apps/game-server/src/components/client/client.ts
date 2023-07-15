@@ -1,15 +1,15 @@
-import { WithId } from "mongodb";
-import { StaticCharacter, User } from "../../../../common/types/index.js";
+import { User } from "types/user.js";
+import { Character } from "types/character.js";
 import { IoSocket } from "../../index.js";
 
 class Client {
-  #user: WithId<User>;
-  #character: WithId<StaticCharacter>;
+  #user: User;
+  #character: Character;
   #isConnected: boolean;
   #disconnectTimestamp: number | null;
   #socket: IoSocket;
   #instanceId: string | null;
-  constructor(user: WithId<User>, character: WithId<StaticCharacter>, socket: IoSocket) {
+  constructor(user: User, character: Character, socket: IoSocket) {
     this.#user = user;
     this.#character = character;
     this.#isConnected = false;
@@ -27,7 +27,7 @@ class Client {
   }
 
   get username() {
-    return this.#user.account.username;
+    return this.#user.username;
   }
 
   get characterName() {

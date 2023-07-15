@@ -2,7 +2,7 @@ import { io, Socket } from "socket.io-client";
 import { reactive } from "vue";
 import getCookie from "../utils/getCookie";
 import useCharacterStore from "../stores/characterStore";
-import type { StaticCharacter } from "../../../common/types/index";
+import type { Character } from "types/character";
 import type { LobbyData, MembersOnlyLobbyData } from "../../../game-server/src/game/lobby/lobby";
 import type { Message } from "../../../game-server/src/components/message";
 import type {
@@ -31,7 +31,7 @@ export const state: State = reactive({
   instance: null,
   rewards: [
     {
-      // _id: new ObjectId("649d79ad9e6e3a6c3e602cdd"),
+      id: 42069,
       type: "wearable",
       name: "Short Bow",
       uniqueName: undefined,
@@ -75,7 +75,7 @@ export const state: State = reactive({
       slot: "hand",
     },
     {
-      // _id: new ObjectId("649d79ad9e6e3a6c3e602cde"),
+      id: 42069,
       type: "wearable",
       name: "Short Bow",
       uniqueName: undefined,
@@ -165,9 +165,9 @@ socket.on("disconnect", () => {
   state.connected = false;
 });
 
-socket.on("character", (character: StaticCharacter) => {
+socket.on("character", (character: Character) => {
   const characterStore = useCharacterStore();
-  characterStore.setStaticCharacter(character);
+  characterStore.setCharacter(character);
 });
 
 socket.on("chat:message", (message) => {

@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import Client from "../../components/client/client.js";
 import { Err, Ok } from "resultat";
-import { CharacterClass } from "../../../../common/types/index.js";
+import { CharacterClass } from "types/character.js";
 import { choice } from "pyrand";
 
 export interface LobbyData {
@@ -49,7 +49,7 @@ class Lobby implements LobbyData {
       return {
         name: character.name,
         class: character.class,
-        level: character.level.value,
+        level: character.level,
       };
     });
   }
@@ -71,8 +71,8 @@ class Lobby implements LobbyData {
   }
 
   clientIsInLobby(client: Client): boolean {
-    const member = Object.values(this.#clients).find((member) =>
-      member.character._id.equals(client.character._id)
+    const member = Object.values(this.#clients).find(
+      (member) => member.character.id === client.character.id
     );
     return member !== undefined;
   }
@@ -82,22 +82,22 @@ class Lobby implements LobbyData {
       return Err("Lobby is full");
     }
 
-    if (this.#clients[client.character._id.toString()] !== undefined) {
+    if (this.#clients[client.character.id] !== undefined) {
       return Err("Already in the lobby");
     }
 
-    this.#clients[client.character._id.toString()] = client;
+    this.#clients[client.character.id] = client;
     this.size++;
     return Ok(1);
   }
 
   leave(client: Client) {
-    const isInLobby = this.#clients[client.character._id.toString()] !== undefined;
+    const isInLobby = this.#clients[client.character.id] !== undefined;
 
     if (!isInLobby) {
       return false;
     }
-    delete this.#clients[client.character._id.toString()];
+    delete this.#clients[client.character.id];
     this.size--;
 
     if (this.size > 0) {
@@ -115,7 +115,7 @@ class Lobby implements LobbyData {
     );
 
     if (targetClient !== undefined) {
-      delete this.#clients[targetClient.character._id.toString()];
+      delete this.#clients[targetClient.character.id];
       this.size--;
     }
 

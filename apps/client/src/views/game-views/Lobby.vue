@@ -55,7 +55,7 @@ onBeforeMount(() => {
           >
             <p
               :class="{
-                'member--current-character': member.name === characterStore.staticCharacter?.name,
+                'member--current-character': member.name === characterStore.character?.name,
               }"
             >
               {{ member.name }}
@@ -70,8 +70,8 @@ onBeforeMount(() => {
             <button
               class="button"
               v-if="
-                characterStore.staticCharacter?.name === gameServer.state.lobby.ownerName &&
-                member.name !== characterStore.staticCharacter?.name
+                characterStore.character?.name === gameServer.state.lobby.ownerName &&
+                member.name !== characterStore.character?.name
               "
               @click="kickLobbyMember(member.name)"
             >
@@ -82,7 +82,7 @@ onBeforeMount(() => {
         <button class="button" @click="leaveLobby">Leave</button>
         <button
           class="button"
-          v-if="characterStore.staticCharacter?.name === gameServer.state.lobby.ownerName"
+          v-if="characterStore.character?.name === gameServer.state.lobby.ownerName"
           @click="createInstance"
         >
           Create Instance

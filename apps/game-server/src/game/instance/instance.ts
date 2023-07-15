@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
 import Client from "../../components/client/client.js";
-import getDynamicCharacter from "../../../../common/dist/getDynamicCharacter.js";
+import getDynamicCharacter from "../../../../common/src/getDynamicCharacter.js";
 import { testEnemies } from "../entities/enemy.js";
 import Player from "../entities/player.js";
 import CombatRoom from "../rooms/combatRoom.js";
@@ -54,11 +54,11 @@ class Instance {
   }
 
   join(client: Client) {
-    this.#clients[client.character._id.toString()] = client;
+    this.#clients[client.character.id] = client;
   }
 
   leave(client: Client) {
-    delete this.#clients[client.character._id.toString()];
+    delete this.#clients[client.character.id];
   }
 }
 

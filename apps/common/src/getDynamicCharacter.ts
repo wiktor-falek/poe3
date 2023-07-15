@@ -1,7 +1,7 @@
 import { characterClassAttributes } from "./characterClassAttributes.js";
-import type { StaticCharacter, DynamicCharacter } from "../types/index.js";
+import type { Character, DynamicCharacter } from "../types/character.js";
 
-function getDynamicCharacter(character: StaticCharacter): DynamicCharacter {
+function getDynamicCharacter(character: Character): DynamicCharacter {
   const baseAttributes = characterClassAttributes[character.class];
   const attributes = { ...baseAttributes }; // calculate attributes
 

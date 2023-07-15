@@ -9,23 +9,25 @@ async function createCharacter(req: Request, res: Response) {
   const VALID_CLASSES: CharacterClass[] = ["swordsman", "ranger", "sorcerer", "assassin"];
   const BLACKLISTED_NAMES = ["SERVER", "ERROR", "SYSTEM"];
 
-  const schema = Joi.object<{ characterClass: string; name: string }>().keys({
-    characterClass: Joi.string()
-      .required()
-      .valid(...VALID_CLASSES),
+  const schema = Joi.object<{ name: string; class: CharacterClass }>().keys({
     name: Joi.string()
       .required()
       .invalid(...BLACKLISTED_NAMES)
       .min(3)
       .max(24),
+    class: Joi.string()
+      .required()
+      .valid(...VALID_CLASSES),
   });
 
+  console.log(req.body);
   const validationResult = schema.validate(req.body);
   if (validationResult.error) {
     return res.status(400).json({ error: "Invalid parameters" });
   }
 
-  const { name, characterClass } = validationResult.value;
+  const name = validationResult.value.name;
+  const characterClass = validationResult.value.class;
 
   if (BLACKLISTED_NAMES.includes(name)) {
     return res.status(400).json({ error: "This username is not allowed, try something else" });

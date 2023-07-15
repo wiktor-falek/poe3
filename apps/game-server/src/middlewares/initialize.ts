@@ -1,9 +1,12 @@
-import User from "../db/models/user.js";
 import Joi from "joi";
-import Character from "../db/models/character.js";
+import CharacterModel from "../db/models/characterModel.js";
+import UserModel from "../db/models/userModel.js";
 import { IoSocket } from "../index.js";
 import ClientManager from "../components/client/clientManager.js";
 import InstanceManager from "../game/instance/instanceManager.js";
+
+const Character = new CharacterModel();
+const User = new UserModel();
 
 async function initialize(socket: IoSocket, next: (err?: ExtendedError | undefined) => void) {
   const { auth } = socket.handshake;
@@ -12,56 +15,44 @@ async function initialize(socket: IoSocket, next: (err?: ExtendedError | undefin
     sessionId: Joi.string()
       .regex(/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/)
       .required(),
-    // username: Joi.string().required().min(6).max(30),
     characterName: Joi.string().required().min(3).max(24),
   });
 
   const result = schema.validate(auth);
   if (result.error) {
-    console.log(result.error);
     const err: ExtendedError = new Error("Invalid session");
     console.log(err.message);
-    // err.data = { content: "Additional details" };
     return next(err);
   }
 
-  interface Result {
-    sessionId: string;
-    username: string;
-    characterName: string;
-  }
-
-  const { sessionId, characterName } = result.value as Result;
+  const { sessionId, characterName } = result.value;
 
   const fetchUserPromise = User.findBySessionId(sessionId);
   const fetchCharacterPromise = Character.findByName(characterName);
 
-  const userWithId = await fetchUserPromise;
-  const characterWithId = await fetchCharacterPromise;
+  const user = await fetchUserPromise;
+  const character = await fetchCharacterPromise;
 
-  if (userWithId === null) {
+  if (user === null) {
     const err: ExtendedError = new Error("User not found");
-    console.log("ERROR", err.message);
-    // err.data = { content: "Additional details" };
+    console.log(err.message);
     return next(err);
   }
 
-  if (characterWithId === null) {
+  if (character === null) {
     const err: ExtendedError = new Error("Character not found");
-    console.log("ERROR", err.message);
-    // err.data = { content: "Additional details" };
+    console.log(err.message);
     return next(err);
   }
 
-  if (characterWithId.userId !== userWithId._id.toString()) {
+  if (character.userId !== user.id) {
     const err: ExtendedError = new Error("What are you trying to do? ._.");
-    console.log("ERROR", err.message);
-    // err.data = { content: "Additional details" };
+    console.log(err.message);
     return next(err);
   }
 
   // get previously client created in recent session
-  let client = ClientManager.getClientByUsername(userWithId.account.username);
+  let client = ClientManager.getClientByUsername(user.username);
 
   if (client !== undefined) {
     // update the socket reference of existing client
@@ -69,11 +60,10 @@ async function initialize(socket: IoSocket, next: (err?: ExtendedError | undefin
   }
   // if existing character does not match currently selected character
   // reinstantiate the client
-  if (client === undefined || !client.character._id.equals(characterWithId._id)) {
-    client = ClientManager.createClient(userWithId, characterWithId, socket);
+  if (client === undefined || client.character.id !== character.id) {
+    client = ClientManager.createClient(user, character, socket);
   }
 
-  const { _id, ...character } = characterWithId;
   socket.emit("character", character);
 
   socket.data.isAuthenticated = true;

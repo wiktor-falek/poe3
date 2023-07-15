@@ -1,0 +1,15 @@
+{
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "root": ["./src"],
+        "alias": {
+          "types": "../../common/types",
+          "common": "../../common/src",
+          "items": "../items/src"
+        }
+      }
+    ]
+  ]
+}

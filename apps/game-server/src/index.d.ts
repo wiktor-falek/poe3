@@ -4,7 +4,7 @@ import type {
   ClientToServerEvents,
   ServerToClientEvents,
   InterServerEvents,
-} from "../../common/events/gameServerEvents.js";
+} from "../../common/types/gameServerEvents";
 import type Client from "./components/client/client.js";
 interface SocketData {
   isAuthenticated: boolean;

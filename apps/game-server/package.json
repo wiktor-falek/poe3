@@ -16,6 +16,7 @@
   "dependencies": {
     "@socket.io/cluster-adapter": "^0.2.2",
     "@socket.io/sticky": "^1.0.3",
+    "babel-plugin-module-resolver": "^5.0.0",
     "dotenv": "^16.0.3",
     "joi": "^17.9.2",
     "mongodb": "^5.5.0",

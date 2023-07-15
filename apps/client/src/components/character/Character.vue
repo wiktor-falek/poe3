@@ -5,7 +5,7 @@ import Equipment from "./Equipment.vue";
 import Inventory from "./Inventory.vue";
 
 const characterStore = useCharacterStore();
-const character = characterStore.staticCharacter;
+const character = characterStore.character;
 
 const isCollapsed = ref(true);
 
@@ -19,7 +19,7 @@ const isCollapsed = ref(true);
       <div class="overview">
         <h3>{{ character.name }}</h3>
         <h3>
-          Lvl {{ character.level.value }} <span class="capitalize">{{ character.class }}</span>
+          Lvl {{ character.level }} <span class="capitalize">{{ character.class }}</span>
         </h3>
       </div>
       <p>Silver: {{ character.silver }}</p>

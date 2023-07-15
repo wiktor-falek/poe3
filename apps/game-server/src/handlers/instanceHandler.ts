@@ -5,8 +5,10 @@ import LobbyManager from "../game/lobby/lobbyManager.js";
 import { ErrorMessage, GlobalMessage, ServerMessage } from "../components/message.js";
 import Player from "../game/entities/player.js";
 import { randint } from "pyrand";
-import Character from "../db/models/character.js";
+import CharacterModel from "../db/models/characterModel.js";
 import Instance from "../game/instance/instance.js";
+
+const Character = new CharacterModel();
 
 const awardSilverToAlivePlayers = async (instance: Instance) => {
   const players = instance.room?.players!;

@@ -112,7 +112,6 @@ async function recoverPassword(req: Request, res: Response) {
 }
 
 async function changePassword(req: Request, res: Response) {
-  // TODO: validate token and password
   const schema = Joi.object<{ token: string; password: string }>({
     token: Joi.string().required(),
     password: Joi.string().required().min(8).max(128),

@@ -162,7 +162,7 @@ function leaveInstance() {
 
 const player = ref(
   gameServer.state.instance?.room?.players.find(
-    (player) => player.name === characterStore.staticCharacter?.name
+    (player) => player.name === characterStore.character?.name
   )
 );
 
@@ -317,7 +317,7 @@ onMounted(() => {
             <span
               class="entity__name"
               :class="{
-                'entity--current-character': characterStore.staticCharacter?.name === player.name,
+                'entity--current-character': characterStore.character?.name === player.name,
               }"
               >{{ player.name }}</span
             >&nbsp;
@@ -333,7 +333,7 @@ onMounted(() => {
       <p
         v-if="
           gameServer.state.instance.room.currentTurnPlayerName ===
-          characterStore.staticCharacter?.name
+          characterStore.character?.name
         "
       >
         Your Turn

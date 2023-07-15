@@ -5,7 +5,8 @@ import type WearableItem from "../../../../items/src/wearable/wearable";
 const props = defineProps<{ item: WearableItem }>();
 
 const characterStore = useCharacterStore();
-const characterLvl = characterStore.staticCharacter?.level.value!;
+const character = characterStore.character;
+const characterLvl = characterStore.character?.level;
 
 interface Mod {
   description: string;
@@ -38,7 +39,7 @@ function populateTemplateModDescription(mod: Mod) {
 <template>
   <div
     class="item-tooltip"
-    v-if="item"
+    v-if="item && characterStore.character"
     :style="{
       'border-color': `var(--item-rarity--${item.rarity})`,
     }"
@@ -76,7 +77,7 @@ function populateTemplateModDescription(mod: Mod) {
       <!-- TODO: comma signs between each span -->
       <p
         :class="{
-          'color--restricted': item.requirements.level > characterLvl,
+          'color--restricted': item.requirements.level,
         }"
       >
         Requires

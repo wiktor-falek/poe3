@@ -79,7 +79,7 @@ function send() {
                   'message__sender--system': message.sender === 'SYSTEM',
                   'message__sender--error': message.sender === 'ERROR',
                   'message__sender--current-character':
-                    message.sender === characterStore.staticCharacter?.name,
+                    message.sender === characterStore.character?.name,
                 }"
                 >{{ message.sender }}</span
               >

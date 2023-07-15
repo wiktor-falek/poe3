@@ -5,7 +5,7 @@ import useCharacterStore from "../../stores/characterStore";
 import WearableItemTooltip from "../items/WearableItemTooltip.vue";
 
 const characterStore = useCharacterStore();
-const equipment = characterStore.staticCharacter?.equipment;
+const equipment = characterStore.character?.equipment;
 
 const props = defineProps<{ invisible?: boolean; equipmentSlot?: EquipmentSlot }>();
 

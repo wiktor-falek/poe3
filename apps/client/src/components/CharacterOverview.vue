@@ -10,7 +10,7 @@ const character = characterStore.dynamicCharacter;
     <p class="name color--this-player">{{ character.name }}</p>
     <p>
       <span class="player-class">{{ character.class }} &nbsp;</span>
-      <span>Lv {{ character.level.value }}</span>
+      <span>Lv {{ character.level }}</span>
     </p>
     <div class="resources">
       <ResourceBars :resources="character.resources" :level="character.level" />
