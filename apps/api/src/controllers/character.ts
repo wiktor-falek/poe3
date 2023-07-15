@@ -1,20 +1,16 @@
 import { Request, Response } from "express";
 import CharacterModel from "../db/models/characterModel.js";
 import Joi from "joi";
-import { Character, CharacterOverview } from "types/character.js";
-import { z } from "zod";
+import { Character, CharacterClass } from "types/character.js";
 
 const Character = new CharacterModel();
 
 async function createCharacter(req: Request, res: Response) {
-  const characterClass = req.body.class;
-  const name = req.body.name;
-
-  const VALID_CLASSES = ["swordsman", "ranger", "sorcerer", "assassin"];
+  const VALID_CLASSES: CharacterClass[] = ["swordsman", "ranger", "sorcerer", "assassin"];
   const BLACKLISTED_NAMES = ["SERVER", "ERROR", "SYSTEM"];
 
-  const schema = Joi.object().keys({
-    class: Joi.string()
+  const schema = Joi.object<{ characterClass: string; name: string }>().keys({
+    characterClass: Joi.string()
       .required()
       .valid(...VALID_CLASSES),
     name: Joi.string()
@@ -26,15 +22,18 @@ async function createCharacter(req: Request, res: Response) {
 
   const validationResult = schema.validate(req.body);
   if (validationResult.error) {
-    if (BLACKLISTED_NAMES.includes(name)) {
-      return res.status(400).json({ error: "This username is not allowed, try something else" });
-    }
     return res.status(400).json({ error: "Invalid parameters" });
+  }
+
+  const { name, characterClass } = validationResult.value;
+
+  if (BLACKLISTED_NAMES.includes(name)) {
+    return res.status(400).json({ error: "This username is not allowed, try something else" });
   }
 
   const userName = res.locals.user.username;
 
-  const result = await Character.createCharacter(userName, name, characterClass);
+  const result = await Character.createCharacter(userName, name, characterClass as CharacterClass);
 
   if (!result.ok) {
     return res.status(403).json({ error: result.err });

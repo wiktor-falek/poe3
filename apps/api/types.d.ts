@@ -1,10 +1,10 @@
-export interface CharacterOverview {
-  name: string;
-  class: "swordsman" | "ranger" | "sorcerer" | "assassin";
-  level: number;
+declare global {
+  namespace Express {
+    interface Locals {
+      user: User;
+    }
+  }
 }
-
-export type ResponseGetAllCharactersOverview = Array<CharacterOverview>;
 
 interface User {
   id: number;
@@ -17,10 +17,10 @@ interface User {
   characterLimit: number;
 }
 
-declare global {
-  namespace Express {
-    interface Locals {
-      user: UserData;
-    }
-  }
+export interface CharacterOverview {
+  name: string;
+  class: "swordsman" | "ranger" | "sorcerer" | "assassin";
+  level: number;
 }
+
+export type ResponseGetAllCharactersOverview = Array<CharacterOverview>;

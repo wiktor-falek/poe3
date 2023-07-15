@@ -19,7 +19,7 @@ const User = new UserModel();
 const authorized = async (req: Request, res: Response, next: NextFunction) => {
   const { sessionId } = req.cookies;
 
-  if (!sessionId) {
+  if (!(typeof sessionId === "string") || !sessionId) {
     return res.status(401).json({
       message: "Not Authorized",
     });
@@ -27,7 +27,7 @@ const authorized = async (req: Request, res: Response, next: NextFunction) => {
 
   const user = await User.findBySessionId(sessionId);
 
-  if (user === null) {
+  if (!user) {
     return res.status(401).json({
       message: "Not Authorized",
     });

@@ -8,7 +8,7 @@ import InstanceManager from "../game/instance/instanceManager.js";
 async function initialize(socket: IoSocket, next: (err?: ExtendedError | undefined) => void) {
   const { auth } = socket.handshake;
 
-  const schema = Joi.object({
+  const schema = Joi.object<{ sessionId: string; characterName: string }>({
     sessionId: Joi.string()
       .regex(/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/)
       .required(),
