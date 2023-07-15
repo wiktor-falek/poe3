@@ -1,7 +1,7 @@
 import { DatabasePool, SlonikError, sql } from "slonik";
 import { Ok, Err } from "resultat";
 import { z } from "zod";
-import pool, { testingPool } from "../postgres.js";
+import pool from "../postgres.js";
 import type { CharacterClass, CharacterOverview, Character } from "types/character.js";
 
 /*
@@ -35,36 +35,34 @@ const characterOverviewObject = z.object({
 });
 
 class CharacterModel {
-  testEnv: boolean;
   pool: DatabasePool;
 
-  constructor(options?: { testEnv: boolean }) {
-    this.testEnv = options?.testEnv ?? false;
-    this.pool = this.testEnv ? testingPool : pool;
+  constructor() {
+    this.pool = pool;
   }
 
-  async createCharacter(userId: string, characterName: string, characterClass: CharacterClass) {
-    const result = await this.getCharacterCount(userId);
+  async createCharacter(userName: string, characterName: string, characterClass: CharacterClass) {
+    const result = await this.getCharacterCount(userName);
     if (!result.ok) {
       return Err("Something went wrong");
     }
-
     const CHARACTER_LIMIT = 12; // TODO: read from user instead
-    const characterCount = result.val.count;
+    const characterCount = result.val;
     if (characterCount >= CHARACTER_LIMIT) {
       return Err("Character limit reached");
     }
-
     return this.pool.connect(async (connection) => {
       try {
-        const result = await connection.query(
+        const result = await connection.one(
           sql.type(characterOverviewObject)`
-            INSERT INTO characters (user_id, name, class) 
-            VALUES (${userId}, ${characterName}, ${characterClass}) 
+            INSERT INTO characters (user_id, name, class)
+            SELECT users.id, ${characterName}, ${characterClass}
+            FROM users
+            WHERE users.username = ${userName}
             RETURNING name, class, level
           `
         );
-        return Ok(result.rows[0] as CharacterOverview);
+        return Ok(result as CharacterOverview);
       } catch (error) {
         if (error instanceof SlonikError) {
           if (error.name === "UniqueIntegrityConstraintViolationError") {
@@ -80,13 +78,15 @@ class CharacterModel {
     });
   }
 
-  findCharacter(userId: string, characterName: string) {
+  findCharacter(userName: string, characterName: string) {
     return this.pool.connect(async (connection) => {
       try {
         const result = await connection.one(
           sql.type(characterObject)`
-            SELECT * FROM characters
-            WHERE user_id = ${userId} AND name = ${characterName}
+            SELECT c.*
+            FROM characters c
+            JOIN users u ON c.user_id = u.id
+            WHERE u.username = ${userName} AND c.name = ${characterName};
           `
         );
         return Ok(result as Character);
@@ -103,20 +103,22 @@ class CharacterModel {
     });
   }
 
-  async getCharacterCount(userId: string) {
+  async getCharacterCount(userName: string) {
     return this.pool.connect(async (connection) => {
       try {
-        const result = await connection.query(
+        const result = await connection.one(
           sql.type(
             z.object({
               count: z.number(),
             })
           )`
-            SELECT COUNT(*) FROM characters
-            WHERE user_id = ${userId}
+            SELECT COUNT(*) AS count
+            FROM characters c
+            JOIN users u ON c.user_id = u.id
+            WHERE u.username = ${userName}
           `
         );
-        return Ok(result.rows[0]);
+        return Ok(result.count);
       } catch (error) {
         if (error instanceof SlonikError) {
           console.error(error.name, error.message);
@@ -128,13 +130,15 @@ class CharacterModel {
     });
   }
 
-  getAllCharactersOverview(userId: string) {
+  getAllCharactersOverview(userName: string) {
     return this.pool.connect(async (connection) => {
       try {
         const result = await connection.many(
           sql.type(characterOverviewObject)`
-            SELECT name, class, level FROM characters
-            WHERE user_id = ${userId}
+            SELECT c.name, c.class, c.level
+            FROM characters c
+            JOIN users u ON c.user_id = u.id
+            WHERE u.username = ${userName}
           `
         );
         return Ok(result as CharacterOverview[]);
@@ -151,7 +155,7 @@ class CharacterModel {
     });
   }
 
-  deleteCharacter(userId: string, characterName: string) {
+  deleteCharacter(userName: string, characterName: string) {
     // TODO: transaction insert character into deleted_characters, and delete from characters
     return this.pool.connect(async (connection) => {
       try {
@@ -161,8 +165,12 @@ class CharacterModel {
               deletedCharacterName: z.string(),
             })
           )`
-            DELETE FROM characters 
-            WHERE user_id = ${userId} AND name = ${characterName}
+            DELETE FROM characters
+            WHERE user_id = (
+              SELECT id
+              FROM users
+              WHERE username = ${userName}
+            ) AND name = ${characterName}
             RETURNING name AS deleted_character_name
           `
         );

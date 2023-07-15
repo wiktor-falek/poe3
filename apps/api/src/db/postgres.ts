@@ -38,8 +38,4 @@ const pool = await createPool("postgresql://postgres:@localhost:5432/poe3", {
   interceptors,
 });
 
-export const testingPool = await createPool("postgresql://postgres:@localhost:5432/poe3-testing", {
-  interceptors,
-});
-
 export default pool;

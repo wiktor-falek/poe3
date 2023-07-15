@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import CharacterModel from "../db/models/characterModel.js";
 import Joi from "joi";
 import { Character, CharacterOverview } from "types/character.js";
+import { z } from "zod";
 
 const Character = new CharacterModel();
 
@@ -13,7 +14,9 @@ async function createCharacter(req: Request, res: Response) {
   const BLACKLISTED_NAMES = ["SERVER", "ERROR", "SYSTEM"];
 
   const schema = Joi.object().keys({
-    class: Joi.string().required().valid(VALID_CLASSES),
+    class: Joi.string()
+      .required()
+      .valid(...VALID_CLASSES),
     name: Joi.string()
       .required()
       .invalid(...BLACKLISTED_NAMES)
@@ -29,9 +32,9 @@ async function createCharacter(req: Request, res: Response) {
     return res.status(400).json({ error: "Invalid parameters" });
   }
 
-  const userId = res.locals.user.id.toString();
+  const userName = res.locals.user.username;
 
-  const result = await Character.createCharacter(userId, name, characterClass);
+  const result = await Character.createCharacter(userName, name, characterClass);
 
   if (!result.ok) {
     return res.status(403).json({ error: result.err });
@@ -43,7 +46,7 @@ async function createCharacter(req: Request, res: Response) {
 }
 
 async function getCharacter(req: Request, res: Response) {
-  const userId = res.locals.user.id.toString();
+  const userName = res.locals.user.username;
   const { name } = req.params;
 
   const schema = Joi.string().required().min(3).max(24);
@@ -54,10 +57,10 @@ async function getCharacter(req: Request, res: Response) {
     return res.status(400).json({ error: "Invalid parameters" });
   }
 
-  const result = await Character.findCharacter(userId, name);
+  const result = await Character.findCharacter(userName, name);
 
   if (!result.ok) {
-    return res.status(204).json({});
+    return res.status(404).json({ error: "Character not found" });
   }
 
   const character = result.val;
@@ -66,9 +69,9 @@ async function getCharacter(req: Request, res: Response) {
 }
 
 async function getAllCharactersOverview(req: Request, res: Response) {
-  const userId = res.locals.user.id.toString();
+  const userName = res.locals.user.username;
 
-  const result = await Character.getAllCharactersOverview(userId);
+  const result = await Character.getAllCharactersOverview(userName);
 
   if (!result.ok) {
     return res.status(500).json({ error: result.err });
@@ -80,7 +83,7 @@ async function getAllCharactersOverview(req: Request, res: Response) {
 }
 
 async function deleteCharacter(req: Request, res: Response) {
-  const userId = res.locals.user.id.toString();
+  const userName = res.locals.user.username;
   const characterName = req.params.name;
 
   const schema = Joi.string().required().min(3).max(24);
@@ -91,7 +94,7 @@ async function deleteCharacter(req: Request, res: Response) {
     return res.status(400).json({ error: "Invalid parameters" });
   }
 
-  const result = await Character.deleteCharacter(userId, characterName);
+  const result = await Character.deleteCharacter(userName, characterName);
   if (!result.ok) {
     return res.status(500).json({ error: result.err });
   }

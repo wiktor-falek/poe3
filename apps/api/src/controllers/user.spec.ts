@@ -3,10 +3,10 @@ import app from "../app.js";
 import { beforeAll, describe, expect, test } from "vitest";
 import UserModel from "../db/models/userModel.js";
 
-const User = new UserModel({ testEnv: true });
+const User = new UserModel();
 
 beforeAll(async () => {
-  User._deleteAllUsers();
+  // User._deleteAllUsers();
 });
 
 describe("register", async () => {

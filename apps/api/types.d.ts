@@ -1,5 +1,3 @@
-import type { ObjectId } from "mongodb";
-
 export interface CharacterOverview {
   name: string;
   class: "swordsman" | "ranger" | "sorcerer" | "assassin";
@@ -8,15 +6,15 @@ export interface CharacterOverview {
 
 export type ResponseGetAllCharactersOverview = Array<CharacterOverview>;
 
-interface UserData {
+interface User {
   id: number;
   username: string;
   email: string;
-  has_confirmed_email: boolean;
+  hasConfirmedEmail: boolean;
   hash: string;
-  registration_timestamp: number;
-  session_id: string;
-  character_limit: number;
+  registrationTimestamp: number;
+  sessionId: string;
+  characterLimit: number;
 }
 
 declare global {

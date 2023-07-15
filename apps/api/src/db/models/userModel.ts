@@ -3,9 +3,10 @@ import { DatabasePool, SlonikError, sql } from "slonik";
 import { Ok, Err } from "resultat";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
-import pool, { testingPool } from "../postgres.js";
+import pool from "../postgres.js";
 import { decode, encode } from "../../utils/token.js";
 import { sendEmail } from "../../utils/email.js";
+import { User } from "types.js";
 
 /*
 CREATE TABLE users ( 
@@ -32,13 +33,10 @@ const userObject = z.object({
 });
 
 class UserModel {
-  testEnv: boolean;
   pool: DatabasePool;
 
-  constructor(options?: { testEnv: boolean }) {
-    this.testEnv = options?.testEnv ?? false;
-    console.log({ testEnv: this.testEnv });
-    this.pool = this.testEnv ? testingPool : pool;
+  constructor() {
+    this.pool = pool;
   }
 
   findByUsername(username: string) {
@@ -50,7 +48,7 @@ class UserModel {
           `
         );
 
-        return result;
+        return result as User;
       } catch (error) {
         if (error instanceof SlonikError) {
           if (error.name === "NotFoundError") {
@@ -74,7 +72,7 @@ class UserModel {
           `
         );
 
-        return result;
+        return result as User;
       } catch (error) {
         if (error instanceof SlonikError) {
           if (error.name === "NotFoundError") {
@@ -98,7 +96,7 @@ class UserModel {
           `
         );
 
-        return result;
+        return result as User;
       } catch (error) {
         if (error instanceof SlonikError) {
           if (error.name === "NotFoundError") {
@@ -309,13 +307,6 @@ class UserModel {
       }
       return Err("Failed to change the password");
     });
-  }
-
-  _deleteAllUsers() {
-    if (!this.testEnv) {
-      throw new Error("Cannot delete all users outside of test environment");
-    }
-    // TODO: delete all users query
   }
 }
 

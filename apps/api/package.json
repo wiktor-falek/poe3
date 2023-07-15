@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "tsc-watch --onSuccess \"node .\" ",
     "start": "NODE_ENV=production  node . ",
+    "test-db": "docker run --rm -it -e POSTGRES_HOST_AUTH_METHOD=trust -p 5555:5555 postgres",
     "test": "NODE_ENV=testing vitest",
     "coverage": "vitest run --coverage"
   },
