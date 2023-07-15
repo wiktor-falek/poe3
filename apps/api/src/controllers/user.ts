@@ -27,11 +27,13 @@ async function register(req: Request, res: Response) {
     return res.status(400).json({ error: result.err });
   }
 
-  const token = encode({ username: username, email: email });
+  const user = result.val;
+
+  const token = encode({ username: user.username, email: user.email });
 
   if (process.env.NODE_ENV === "production") {
     sendEmail(
-      email,
+      user.email,
       "Please confirm your email address",
       `Hi ${username}, Click here to confirm your email address and activate your account\n` +
         `http://localhost:3000/auth/verify/${token}`
@@ -63,9 +65,9 @@ async function login(req: Request, res: Response) {
     return res.status(401).json({ error: result.err });
   }
 
-  const { session_id } = result.val;
+  const { sessionId } = result.val;
 
-  res.cookie("sessionId", session_id, {
+  res.cookie("sessionId", sessionId, {
     httpOnly: false,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",

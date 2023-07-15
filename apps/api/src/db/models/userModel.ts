@@ -35,9 +35,10 @@ class UserModel {
   testEnv: boolean;
   pool: DatabasePool;
 
-  constructor(testEnv: boolean = false) {
-    this.testEnv = testEnv;
-    this.pool = testEnv ? pool : testingPool;
+  constructor(options?: { testEnv: boolean }) {
+    this.testEnv = options?.testEnv ?? false;
+    console.log({ testEnv: this.testEnv });
+    this.pool = this.testEnv ? testingPool : pool;
   }
 
   findByUsername(username: string) {
@@ -146,15 +147,17 @@ class UserModel {
 
     return this.pool.connect(async (connection) => {
       try {
-        await connection.query(
-          sql.unsafe`
+        const result = await connection.query(
+          sql.type(userObject)`
             INSERT INTO users (username, email, hash, registration_timestamp) 
             VALUES (${username}, ${email}, ${hash}, ${Date.now()})
+            RETURNING *
           `
         );
-        return Ok(1);
+        return Ok(result.rows[0]);
       } catch (error) {
         if (error instanceof SlonikError) {
+          console.log(error);
           if (error.name === "UniqueIntegrityConstraintViolationError") {
             return Err("Username is already taken");
           }
@@ -184,7 +187,7 @@ class UserModel {
         const result = await connection.one(
           sql.type(
             z.object({
-              session_id: z.string(),
+              sessionId: z.string(),
             })
           )`
             UPDATE users SET session_id = ${uuidv4()} 

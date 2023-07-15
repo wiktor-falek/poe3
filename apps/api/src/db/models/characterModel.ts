@@ -38,9 +38,9 @@ class CharacterModel {
   testEnv: boolean;
   pool: DatabasePool;
 
-  constructor(testEnv: boolean = false) {
-    this.testEnv = testEnv;
-    this.pool = testEnv ? pool : testingPool;
+  constructor(options?: { testEnv: boolean }) {
+    this.testEnv = options?.testEnv ?? false;
+    this.pool = this.testEnv ? testingPool : pool;
   }
 
   async createCharacter(userId: string, characterName: string, characterClass: CharacterClass) {
