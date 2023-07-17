@@ -8,12 +8,17 @@ import InstanceManager from "../game/instance/instanceManager.js";
 const Character = new CharacterModel();
 const User = new UserModel();
 
-async function initialize(socket: IoSocket, next: (err?: ExtendedError | undefined) => void) {
+async function initialize(
+  socket: IoSocket,
+  next: (err?: ExtendedError | undefined) => void
+) {
   const { auth } = socket.handshake;
 
   const schema = Joi.object<{ sessionId: string; characterName: string }>({
     sessionId: Joi.string()
-      .regex(/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/)
+      .regex(
+        /[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/
+      )
       .required(),
     characterName: Joi.string().required().min(3).max(24),
   });
@@ -74,8 +79,8 @@ async function initialize(socket: IoSocket, next: (err?: ExtendedError | undefin
 
   const { instanceId } = client;
   console.log({ instanceId: client.instanceId });
-  if (instanceId !== null) {        
-    const instance = InstanceManager.getInstance(instanceId)
+  if (instanceId !== null) {
+    const instance = InstanceManager.getInstance(instanceId);
     const x = 1;
 
     if (instance) {

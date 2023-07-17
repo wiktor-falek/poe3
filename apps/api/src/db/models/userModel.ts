@@ -3,7 +3,7 @@ import { DatabasePool, SlonikError, sql } from "slonik";
 import { Ok, Err } from "resultat";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
-import pool from "../postgres.js";
+import { pool, testingPool } from "../postgres.js";
 import { decode, encode } from "../../utils/token.js";
 import { sendEmail } from "../../utils/email.js";
 import { User } from "types/user.js";
@@ -32,11 +32,21 @@ const userObject = z.object({
   characterLimit: z.number(),
 });
 
+const usernameObject = z.object({
+  username: z.string(),
+});
+
 class UserModel {
+  prod: boolean;
   pool: DatabasePool;
 
-  constructor() {
-    this.pool = pool;
+  /**
+   * By default connect to testing database,
+   * opt into production database by passing { prod: true }
+   */
+  constructor(options: { prod: boolean } = { prod: false }) {
+    this.prod = options.prod;
+    this.pool = options.prod ? pool : testingPool;
   }
 
   findByUsername(username: string) {
@@ -115,11 +125,7 @@ class UserModel {
     return this.pool.connect(async (connection) => {
       try {
         const result = await connection.one(
-          sql.type(
-            z.object({
-              username: z.string(),
-            })
-          )`
+          sql.type(usernameObject)`
             SELECT username FROM users 
             WHERE email = ${email} AND has_confirmed_email = TRUE
           `
@@ -236,7 +242,9 @@ class UserModel {
         const result = await connection.one(
           sql.type(returnType)`
             UPDATE users SET has_confirmed_email = TRUE 
-            WHERE username = ${username} AND email = ${email} AND has_confirmed_email = FALSE
+            WHERE username = ${username} 
+            AND email = ${email} 
+            AND has_confirmed_email = FALSE
             RETURNING username, has_confirmed_email AS verified`
         );
         return Ok(result);
@@ -307,6 +315,10 @@ class UserModel {
       }
       return Err("Failed to change the password");
     });
+  }
+
+  async deleteUser(name: string) {
+    return Err("Not Implemented");
   }
 }
 

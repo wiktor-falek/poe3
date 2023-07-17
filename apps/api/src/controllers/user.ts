@@ -6,10 +6,14 @@ import { encode } from "../utils/token.js";
 import dotenv from "dotenv";
 dotenv.config();
 
-const User = new UserModel();
+const User = new UserModel({ prod: true });
 
 async function register(req: Request, res: Response) {
-  const schema = Joi.object<{ username: string; password: string; email: string }>().keys({
+  const schema = Joi.object<{
+    username: string;
+    password: string;
+    email: string;
+  }>().keys({
     username: Joi.string().required().trim().min(6).max(30),
     password: Joi.string().required().min(8).max(128),
     email: Joi.string().required().email().min(6).max(254),
@@ -39,7 +43,9 @@ async function register(req: Request, res: Response) {
         `http://localhost:3000/auth/verify/${token}`
     );
   } else {
-    console.log(`Email confirmation link:\nhttp://localhost:3000/auth/verify/${token}`);
+    console.log(
+      `Email confirmation link:\nhttp://localhost:3000/auth/verify/${token}`
+    );
   }
 
   return res.status(200).json({

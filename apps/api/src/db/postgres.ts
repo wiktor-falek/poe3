@@ -1,6 +1,5 @@
 import { createPool } from "slonik";
 import { createFieldNameTransformationInterceptor } from "slonik-interceptor-field-name-transformation";
-
 // import { type Interceptor, type QueryResultRow, SchemaValidationError } from "slonik";
 
 // const createResultParserInterceptor = (): Interceptor => {
@@ -34,15 +33,16 @@ const interceptors = [
   }),
 ];
 
-const pool = await createPool("postgresql://postgres:@localhost:5432/poe3", {
-  interceptors,
-});
-
-const testingPool = await createPool(
+export const pool = await createPool(
   "postgresql://postgres:@localhost:5432/poe3",
   {
     interceptors,
   }
 );
 
-export default pool;
+export const testingPool = await createPool(
+  "postgresql://postgres:@localhost:5432/poe3-testing",
+  {
+    interceptors,
+  }
+);
