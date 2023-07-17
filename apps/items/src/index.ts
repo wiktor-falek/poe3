@@ -1,4 +1,4 @@
-import LootFactory from "./lootFactory";
 import StartingItemsFactory from "./startingItemsFactory";
+import LootFactory from "./lootFactory";
 
 export { StartingItemsFactory, LootFactory };

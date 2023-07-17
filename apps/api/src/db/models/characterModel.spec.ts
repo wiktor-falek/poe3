@@ -2,11 +2,8 @@ import { beforeEach, describe, expect, test } from "vitest";
 import CharacterModel from "./characterModel.js";
 
 const Character = new CharacterModel();
-// const deletedCharactersCollection = Mongo.getClient().db("game").collection("deletedCharacters");
 
 beforeEach(async () => {
-  // await Character.collection.deleteMany({});
-  // await deletedCharactersCollection.deleteMany({});
 });
 
 describe("create character", async () => {

@@ -1,4 +1,5 @@
-import type { Attributes, CharacterClass } from "../types/index.js";
+import type { CharacterClass } from "../types/character.js";
+import type { Attributes } from "../types/unorganized.js";
 
 export type CharacterClassAttributes = {
   [characterClass in CharacterClass]: Attributes;

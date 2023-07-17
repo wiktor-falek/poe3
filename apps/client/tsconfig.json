@@ -13,9 +13,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
+    "baseUrl": ".",
     "paths": {
       "types/*": ["../common/types/*"],
-      "common/*": ["../common/src/*"]
+      "common/*": ["../common/dist/*"]
     },
 
     /* Linting */

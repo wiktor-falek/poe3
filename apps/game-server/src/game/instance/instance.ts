@@ -1,9 +1,42 @@
 import { nanoid } from "nanoid";
 import Client from "../../components/client/client.js";
-import getDynamicCharacter from "../../../../common/src/getDynamicCharacter.js";
+import getDynamicCharacter from "../../../../common/dist/getDynamicCharacter.js";
+console.log(getDynamicCharacter);
+import { Character, DynamicCharacter } from "types/character.js";
 import { testEnemies } from "../entities/enemy.js";
 import Player from "../entities/player.js";
 import CombatRoom from "../rooms/combatRoom.js";
+
+function _getDynamicCharacter(character: Character): DynamicCharacter {
+  const baseAttributes = {
+    strength: 8,
+    dexterity: 6,
+    intelligence: 5,
+    vitality: 8,
+    speed: 5,
+  };
+  const attributes = { ...baseAttributes }; // calculate attributes
+
+  const dynamicCharacter: DynamicCharacter = {
+    ...character,
+    resistances: {
+      fire: 0,
+      cold: 0,
+      lightning: 0,
+      poison: 0,
+    },
+    attributes,
+    resources: {
+      maxHp: 30,
+      hp: 30,
+      maxMp: 10,
+      mp: 10,
+      ap: 3,
+      maxAp: 3,
+    },
+  };
+  return dynamicCharacter;
+}
 
 class Instance {
   #clients: { [characterId: string]: Client };
@@ -17,7 +50,7 @@ class Instance {
 
   initPlayers() {
     const players = Object.values(this.#clients).map(
-      (client) => new Player(getDynamicCharacter(client.character))
+      (client) => new Player(_getDynamicCharacter(client.character))
     );
     this.#players = players;
     return players;

@@ -6,7 +6,7 @@
         "root": ["./src"],
         "alias": {
           "types": "../../common/types",
-          "items": "../items/src"
+          "items": "../items/dist"
         }
       }
     ]

@@ -3,7 +3,7 @@ import type {
   ClientToServerEvents,
   ServerToClientEvents,
   InterServerEvents,
-} from "../../common/types/gameServerEvents.js";
+} from "types/gameServerEvents.js";
 import type Client from "./components/client/client.js";
 import { createServer } from "http";
 import { Server } from "socket.io";

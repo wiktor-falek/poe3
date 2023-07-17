@@ -6,8 +6,8 @@
         "root": ["./src"],
         "alias": {
           "types": "../../common/types",
-          "common": "../../common/src",
-          "items": "../items/src"
+          "common": "../../common/dist",
+          "items": "../../items/dist"
         }
       }
     ]
