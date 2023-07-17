@@ -106,7 +106,63 @@ Equipment
 
 ## Getting started with development
 
+### Installation
+
 ```bash
-# Installation
 git clone https://github.com/wiktor-falek/poe3 && cd poe3
+```
+
+<hr>
+
+### Install dependencies in all npm workspaces
+
+```bash
+npm install
+```
+
+<hr>
+
+### Postgres
+
+### Installing with a package manager
+
+```bash
+yay -S postgresql
+```
+
+### Change to _postgres_ user
+
+```bash
+sudo -iu postgres
+```
+
+### Initialize database
+
+```
+initdb -D /var/lib/postgres/data
+```
+
+### Interactive terminal (as postgres user)
+
+```
+psql
+```
+
+<hr>
+
+### Running main projects in dev mode
+
+```bash
+npm run api
+npm run client
+npm run game-server
+```
+
+<hr>
+
+### Optionally if making any changes to apps/common or apps/items
+
+```bash
+npm run common
+npm run items
 ```
