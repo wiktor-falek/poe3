@@ -9,11 +9,11 @@
 ### Tech Stack
 
 - TypeScript
-- Vue.js, Vue Router
 - Express
 - Socket.io
-- MongoDB Native Driver
-- Joi for MongoDB schema validation & socket argument type validation
+- Postgresql
+- Vue.js
+- Joi and Zod for validation
 - Vitest for unit tests
 
 My own npm modules:
@@ -66,7 +66,7 @@ Combat
 
 Equipment
 
-- [ ] Parsing values of modifiers and applying them to the character 
+- [ ] Parsing values of modifiers and applying them to the character
 
 <br>
 
@@ -76,7 +76,7 @@ Equipment
 
 ### **`api`**
 
-#### Handles auth, account management and CRUD operations for player characters.
+#### Auth, account management and creating/deleting player characters.
 
 <br>
 
@@ -95,6 +95,10 @@ Equipment
 ### **`items`**
 
 #### Module for creating items, and generating them randomly.
+
+### **`common`**
+
+#### Type declarations and functions reused in multiple projects
 
 <br>
 
