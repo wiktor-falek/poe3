@@ -166,3 +166,13 @@ npm run game-server
 npm run common
 npm run items
 ```
+
+## Production checklist
+
+### Create `.env` file in the api project
+
+#### Add email provider credentials and JWT Secret
+
+```bash
+cp apps/api/.env.example .env
+```

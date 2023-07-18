@@ -133,7 +133,6 @@ class UserModel {
         return Ok(result);
       } catch (error) {
         if (error instanceof SlonikError) {
-          console.error(error.name, error.message);
           if (error.name === "NotFoundError") {
             return Ok({ username: null });
           }
@@ -161,7 +160,6 @@ class UserModel {
         return Ok(result.rows[0]);
       } catch (error) {
         if (error instanceof SlonikError) {
-          console.log(error);
           if (error.name === "UniqueIntegrityConstraintViolationError") {
             return Err("Username is already taken");
           }
