@@ -1,9 +1,4 @@
 import type { Socket } from "socket.io";
-import type {
-  ClientToServerEvents,
-  ServerToClientEvents,
-  InterServerEvents,
-} from "types/gameServerEvents.js";
 import type Client from "./components/client/client.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
@@ -15,26 +10,29 @@ import LobbyManager from "./game/lobby/lobbyManager.js";
 import registerInstanceHandler from "./handlers/instanceHandler.js";
 import InstanceManager from "./game/instance/instanceManager.js";
 import { PartyMessage } from "./components/message.js";
+import {
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  SocketData,
+} from "index.js";
 
 await Mongo.connect();
 
-interface SocketData {
-  isAuthenticated: boolean;
-  client: Client;
-}
-
 const httpServer = createServer();
-const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>(
-  httpServer,
-  {
-    transports: ["websocket", "polling"],
-    cors: {
-      origin: "http://localhost:5173",
-      methods: ["GET", "POST"],
-      credentials: true,
-    },
-  }
-);
+const io = new Server<
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  SocketData
+>(httpServer, {
+  transports: ["websocket", "polling"],
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
 
 // global middlewares
 io.use(initialize);
@@ -61,7 +59,10 @@ io.on("connection", (socket) => {
   if (instance !== null) {
     socket
       .to(instance.socketRoom)
-      .emit("chat:message", new PartyMessage(`${client.characterName} has reconnected`));
+      .emit(
+        "chat:message",
+        new PartyMessage(`${client.characterName} has reconnected`)
+      );
   }
 
   socket.on("disconnect", (reason, description) => {
@@ -81,18 +82,12 @@ io.on("connection", (socket) => {
       );
     }
 
-    console.log(`${client.username} (${client.characterName}) disconnected (${reason})`);
+    console.log(
+      `${client.username} (${client.characterName}) disconnected (${reason})`
+    );
   });
 });
 
 httpServer.listen(4000, () => {
   console.log("http://localhost:4000");
 });
-
-export type Io = typeof io;
-export type IoSocket = Socket<
-  ClientToServerEvents,
-  ServerToClientEvents,
-  InterServerEvents,
-  SocketData
->;

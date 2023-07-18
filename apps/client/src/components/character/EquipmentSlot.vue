@@ -1,13 +1,16 @@
 <script lang="ts" setup>
 import { ref } from "vue";
-import type { EquipmentSlot } from "../../../../common";
+import type { EquipmentSlot } from "types/unorganized";
 import useCharacterStore from "../../stores/characterStore";
 import WearableItemTooltip from "../items/WearableItemTooltip.vue";
 
 const characterStore = useCharacterStore();
 const equipment = characterStore.character?.equipment;
 
-const props = defineProps<{ invisible?: boolean; equipmentSlot?: EquipmentSlot }>();
+const props = defineProps<{
+  invisible?: boolean;
+  equipmentSlot?: EquipmentSlot;
+}>();
 
 let item: any = null;
 if (equipment && props.equipmentSlot) {

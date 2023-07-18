@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsc-watch --onSuccess \"node .\" ",
-    "build": "tsc"
+    "build": "tsc --build"
   },
   "keywords": [],
   "author": "",

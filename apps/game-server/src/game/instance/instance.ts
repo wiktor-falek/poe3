@@ -1,7 +1,6 @@
 import { nanoid } from "nanoid";
 import Client from "../../components/client/client.js";
-import getDynamicCharacter from "../../../../common/dist/getDynamicCharacter.js";
-console.log(getDynamicCharacter);
+import getDynamicCharacter from "common/getDynamicCharacter.js";
 import { Character, DynamicCharacter } from "types/character.js";
 import { testEnemies } from "../entities/enemy.js";
 import Player from "../entities/player.js";

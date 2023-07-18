@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import useCharacterStore from "../../stores/characterStore";
-import type WearableItem from "../../../../items/dist/wearable/wearable";
+import type WearableItem from "../../../../items/src/wearable/wearable";
 
 const props = defineProps<{ item: WearableItem }>();
 

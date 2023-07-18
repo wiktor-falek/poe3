@@ -31,8 +31,8 @@
     "baseUrl": "." /* Specify the base directory to resolve non-relative module names. */,
     "paths": {
       "types/*": ["../common/types/*"],
-      "common/*": ["../common/dist/*"],
-      "items/*": ["../items/dist/*"]
+      "common/*": ["../common/src/*"],
+      "items/*": ["../items/src/*"]
     },
     // "rootDirs": ["./src", "../events"],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     // "typeRoots": [],                                  /* Specify multiple folders that act like './node_modules/@types'. */

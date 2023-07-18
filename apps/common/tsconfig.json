@@ -10,6 +10,5 @@
     "target": "ES2022",
     "moduleResolution": "nodenext"
   },
-  "exclude": ["./dist"],
-  "references": [{ "path": "../game-server" }]
+  "exclude": ["./dist"]
 }

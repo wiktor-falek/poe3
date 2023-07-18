@@ -1,6 +1,5 @@
 {
-  "name": "client-refactor",
-  "private": true,
+  "name": "client",
   "version": "0.0.0",
   "type": "module",
   "scripts": {

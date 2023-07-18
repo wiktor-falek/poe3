@@ -1,14 +1,14 @@
 {
-  "name": "socket-server-refactor",
+  "name": "game-server",
   "version": "1.0.0",
   "description": "",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
-    "start": "NODE_ENV=production pm2 start ecosystem.config.js -i 0",
-    "stop": "pm2 stop app",
     "dev": "tsc-watch --onSuccess \"node .\" ",
-    "build": "tsc --build"
+    "build": "tsc --build",
+    "start": "NODE_ENV=production pm2 start ecosystem.config.js -i 0",
+    "stop": "pm2 stop app"
   },
   "keywords": [],
   "author": "",

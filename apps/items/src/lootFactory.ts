@@ -3,9 +3,9 @@ import materialBlueprints from "./materials/blueprints";
 import wearableBlueprints from "./wearable/blueprints";
 import { Chest, Ring, Weapon } from "./wearable";
 
-export interface Options {}
+// export interface Options {}
 
-class LootFactory {
+export class LootFactory {
   constructor(/*options: Options*/) {}
 
   generateMaterials(amount: number, ilvl: number) {
@@ -20,7 +20,9 @@ class LootFactory {
 
   generateWearables(amount: number, ilvl: number) {
     // TODO: change to WearableSlot once all wearables are implemented aswell as blueprints
-    const equipmentSlotWeights: { [slot in /*WearableSlot*/ "hand" | "chest" | "ring"]: number } = {
+    const equipmentSlotWeights: {
+      [slot in /*WearableSlot*/ "hand" | "chest" | "ring"]: number;
+    } = {
       hand: 10,
       chest: 5,
       ring: 3,
@@ -40,7 +42,9 @@ class LootFactory {
 
     const wearables = blueprints.map((bp) => {
       const wearable = bp();
-      const rarity = choices(["normal", "magic", "rare"], 1, { weights: [45, 35, 20] })[0];
+      const rarity = choices(["normal", "magic", "rare"], 1, {
+        weights: [45, 35, 20],
+      })[0];
       if (rarity === "magic") {
         wearable.magic();
       } else if (rarity === "rare") {
@@ -54,13 +58,15 @@ class LootFactory {
   }
 
   generateLoot(ilvl: number, playerCount?: number, enemyCount?: number) {
-    const amountOfMaterials = choices([0, 1, 2], 1, { weights: [40, 50, 10] })[0];
-    const amountOfWearables = choices([0, 1, 2, 3], 1, { weights: [10, 20, 30, 40] })[0];
+    const amountOfMaterials = choices([0, 1, 2], 1, {
+      weights: [40, 50, 10],
+    })[0];
+    const amountOfWearables = choices([0, 1, 2, 3], 1, {
+      weights: [10, 20, 30, 40],
+    })[0];
 
     const materials = this.generateMaterials(amountOfMaterials, ilvl);
     const wearables = this.generateWearables(amountOfWearables, ilvl);
     return [...materials, ...wearables];
   }
 }
-
-export default LootFactory;
