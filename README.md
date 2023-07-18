@@ -169,10 +169,17 @@ npm run items
 
 ## Production checklist
 
-### Create `.env` file in the api project
+### Provide environment variables
 
-#### Add email provider credentials and JWT Secret
+#### Add email provider credentials and JWT Secret in `api`
 
 ```bash
 cp apps/api/.env.example .env
+
+# ./apps/api/.env
+EMAIL_USER=emailprovideruser
+EMAIL_PASS=emailproviderpass
+
+# https://generate-random.org/encryption-key-generator?count=1&bytes=256&cipher=aes-256-cbc&string=&password=
+JWT_SECRET=w0kZ4yCL6VtxNISQeDpa28kL84+ik6ofWSdMObgU0WC3eglpePf/chlM46eyRBZeXQAjGH2/47cLqw61lfkXyXd+W5dC9UOX1j+K8jR18BkJ/bQYRCEOOfIjUWPwCRqPeOKZ0DSekKFuxsA5IRPJF02uvrlA8EVbtnA3wWVpTwCDivipRmu5gloGwIzB4gqJU2Q/TqPJcsGXdwxcFfv4YWsraG2tn/VYA74VrBFtfAIihHOYsCjHsmoZofRKgxvkMq0Tl0iw6oJm0mJYOKqFJvocnfhCTlK6UyLg9x4wS6OZVsbTn49av4UkzEZ7uYTRY2+V2JSfg89IGDVxUrL93+hTX5k6VNy7Zc1ss2koRng=
 ```
