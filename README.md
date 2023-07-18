@@ -160,7 +160,7 @@ npm run game-server
 
 <hr>
 
-### Optionally if making any changes to apps/common or apps/items
+### Optionally if making any changes to `common` or `items`
 
 ```bash
 npm run common
