@@ -1,7 +1,7 @@
 import { DatabasePool, SlonikError, sql } from "slonik";
 import { Ok, Err } from "resultat";
 import { z } from "zod";
-import { pool } from "../postgres.js";
+import { pool, testingPool } from "../postgres.js";
 import type {
   CharacterClass,
   CharacterOverview,
@@ -39,10 +39,16 @@ const characterOverviewObject = z.object({
 });
 
 class CharacterModel {
+  prod: boolean;
   pool: DatabasePool;
 
-  constructor() {
-    this.pool = pool;
+  /**
+   * By default connect to testing database,
+   * opt into production database by passing { prod: true }
+   */
+  constructor(options: { prod: boolean } = { prod: false }) {
+    this.prod = options.prod;
+    this.pool = options.prod ? pool : testingPool;
   }
 
   async createCharacter(
