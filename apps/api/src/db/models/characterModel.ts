@@ -1,8 +1,12 @@
 import { DatabasePool, SlonikError, sql } from "slonik";
 import { Ok, Err } from "resultat";
 import { z } from "zod";
-import pool from "../postgres.js";
-import type { CharacterClass, CharacterOverview, Character } from "types/character.js";
+import { pool } from "../postgres.js";
+import type {
+  CharacterClass,
+  CharacterOverview,
+  Character,
+} from "types/character.js";
 
 /*
 CREATE TABLE characters (
@@ -41,7 +45,11 @@ class CharacterModel {
     this.pool = pool;
   }
 
-  async createCharacter(userName: string, characterName: string, characterClass: CharacterClass) {
+  async createCharacter(
+    userName: string,
+    characterName: string,
+    characterClass: CharacterClass
+  ) {
     const result = await this.getCharacterCount(userName);
     if (!result.ok) {
       return Err("Something went wrong");
