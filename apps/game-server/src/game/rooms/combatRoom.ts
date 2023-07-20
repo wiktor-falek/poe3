@@ -1,9 +1,9 @@
 import { choice, shuffle } from "pyrand";
-import Enemy from "../entities/enemy.js";
-import Player, { ActionResult } from "../entities/player.js";
+import Enemy from "../../game/entities/enemy.js";
+import Player, { ActionResult } from "../../game/entities/player.js";
 import { Err, Ok } from "resultat";
 import { LootFactory } from "items/lootFactory.js";
-import type { TurnStartUpdate } from "../entities/player.js";
+import type { TurnStartUpdate } from "@/game/entities/player.js";
 
 export interface ActionData {
   targetId: string;
@@ -102,16 +102,16 @@ class CombatRoom {
     const actionName = VALID_ACTIONS[actionId];
 
     let action: ActionResult;
-    switch (actionName) {
-      case "BASIC_ATTACK":
-        const result = player.basicAttack();
-        if (result.ok) {
-          action = result.val;
-          break;
-        }
 
-      default:
-        return Err("Invalid action");
+    if (actionName === "BASIC_ATTACK") {
+      const result = player.basicAttack();
+      if (result.ok) {
+        action = result.val;
+      } else {
+        return Err("Invalid Action");
+      }
+    } else {
+      return Err("Invalid Action");
     }
 
     const damage = target.takeDamage(action.damage);

@@ -3,12 +3,17 @@ import { ref } from "vue";
 import { onBeforeMount } from "vue";
 import { useRouter } from "vue-router";
 import type { Ref } from "vue";
-// import type { ResponseGetAllCharactersOverview } from "../../../game-server/index";
+import { CharacterClass } from "types/character";
 
 const router = useRouter();
 
-// const allCharacters: Ref<ResponseGetAllCharactersOverview> = ref([]);
-const allCharacters: Ref<any> = ref([]);
+const charactersOverview: Ref<
+  Array<{
+    name: string;
+    level: number;
+    class: CharacterClass;
+  }>
+> = ref([]);
 const selectedCharacterName: Ref<string | null> = ref(null);
 
 function playHandler() {
@@ -29,7 +34,7 @@ onBeforeMount(async () => {
 
   const result = await response.json();
 
-  allCharacters.value = result;
+  charactersOverview.value = result;
 });
 </script>
 
@@ -38,10 +43,10 @@ onBeforeMount(async () => {
     <h2>Characters</h2>
     <div class="characters">
       <RouterLink to="/creation" class="button">Create Character</RouterLink>
-      <p v-if="allCharacters.length === 0">No characters</p>
+      <p v-if="charactersOverview.length === 0">No characters</p>
       <div
         class="character"
-        v-for="character in allCharacters"
+        v-for="character in charactersOverview"
         tabindex="0"
         @click="selectedCharacterName = character.name"
         @keyup.enter="selectedCharacterName = character.name"

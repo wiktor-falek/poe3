@@ -2,16 +2,20 @@ import { io, Socket } from "socket.io-client";
 import { reactive } from "vue";
 import getCookie from "../utils/getCookie";
 import useCharacterStore from "../stores/characterStore";
-import type { Character } from "types/character";
-import type { LobbyData, MembersOnlyLobbyData } from "../../../game-server/src/game/lobby/lobby";
-import type { Message } from "../../../game-server/src/components/message";
+import Queue from "../utils/queue";
 import type {
   ServerToClientEvents,
   ClientToServerEvents,
-} from "../../../common/types/gameServerEvents";
-import type Instance from "../../../game-server/src/game/instance/instance";
-import Queue from "../utils/queue";
-import { StateUpdate } from "../../../game-server/src/game/rooms/combatRoom";
+} from "game-server/socket";
+import type { Character } from "types/character";
+import type {
+  LobbyData,
+  MembersOnlyLobbyData,
+} from "game-server/game/lobby/lobby";
+import type { Message } from "game-server/components/message";
+
+import type Instance from "game-server/game/instance/instance";
+import type { StateUpdate } from "game-server/game/rooms/combatRoom";
 
 interface State {
   connected: boolean;

@@ -28,11 +28,11 @@
     "module": "ES2022" /* Specify what module code is generated. */,
     "rootDir": "./src" /* Specify the root folder within your source files. */,
     "moduleResolution": "node16" /* Specify how TypeScript looks up a file from a given module specifier. */,
-    "baseUrl": "." /* Specify the base directory to resolve non-relative module names. */,
+    // "baseUrl": "./src" /* Specify the base directory to resolve non-relative module names. But we wont compile it because fuck you. */,
     "paths": {
-      "types/*": ["../common/types/*"],
-      "common/*": ["../common/src/*"],
-      "items/*": ["../items/src/*"]
+      "types/*": ["../../common/types/*"],
+      "common/*": ["../../common/src/*"],
+      "items/*": ["../../items/src/*"]
     },
     // "rootDirs": ["./src", "../events"],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     // "typeRoots": [],                                  /* Specify multiple folders that act like './node_modules/@types'. */

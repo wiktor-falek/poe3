@@ -6,7 +6,8 @@
         "root": ["./src"],
         "alias": {
           "types": "../../common/types",
-          "common": "../../common/dist"
+          "common": "../../common/dist",
+          "game-server": "../../common/game-server/dist"
         }
       }
     ]

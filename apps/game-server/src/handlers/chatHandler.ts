@@ -1,14 +1,17 @@
 import Joi from "joi";
-import type { Io, IoSocket } from "../index.js";
-import { GlobalMessage, ServerMessage } from "../components/message.js";
-import Client from "../components/client/client.js";
+import { GlobalMessage, ServerMessage } from "components/message.js";
+import Client from "components/client/client.js";
+import type { Io, IoSocket } from "../../socket.js";
 
 function registerChatHandler(io: Io, socket: IoSocket, client: Client) {
   const join = (_roomId: number) => {
     const schema = Joi.number().required().min(1).max(1000);
     const result = schema.validate(_roomId);
     if (result.error) {
-      return socket.emit("chat:message", new ServerMessage("Invalid argument 'room'"));
+      return socket.emit(
+        "chat:message",
+        new ServerMessage("Invalid argument 'room'")
+      );
     }
 
     const roomId = result.value;
@@ -24,7 +27,10 @@ function registerChatHandler(io: Io, socket: IoSocket, client: Client) {
     }
     socket.join(room);
 
-    socket.emit("chat:message", new ServerMessage(`You joined global ${roomId}`));
+    socket.emit(
+      "chat:message",
+      new ServerMessage(`You joined global ${roomId}`)
+    );
   };
 
   const send = (_message: string) => {
@@ -32,7 +38,10 @@ function registerChatHandler(io: Io, socket: IoSocket, client: Client) {
     const result = schema.validate(_message);
 
     if (result.error) {
-      return socket.emit("chat:message", new ServerMessage("Invalid argument 'message'"));
+      return socket.emit(
+        "chat:message",
+        new ServerMessage("Invalid argument 'message'")
+      );
     }
     const message = result.value;
 
@@ -45,7 +54,10 @@ function registerChatHandler(io: Io, socket: IoSocket, client: Client) {
       }
     }
 
-    io.to(roomName).emit("chat:message", new GlobalMessage(message, client.characterName));
+    io.to(roomName).emit(
+      "chat:message",
+      new GlobalMessage(message, client.characterName)
+    );
   };
 
   socket.on("chat:join", join);

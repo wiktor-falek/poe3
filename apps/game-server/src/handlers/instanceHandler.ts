@@ -1,12 +1,16 @@
-import type { Io, IoSocket } from "../index.js";
-import Client from "../components/client/client.js";
-import InstanceManager from "../game/instance/instanceManager.js";
-import LobbyManager from "../game/lobby/lobbyManager.js";
-import { ErrorMessage, GlobalMessage, ServerMessage } from "../components/message.js";
-import Player from "../game/entities/player.js";
+import Client from "components/client/client.js";
+import InstanceManager from "@/game/instance/instanceManager.js";
+import LobbyManager from "@/game/lobby/lobbyManager.js";
+import {
+  ErrorMessage,
+  GlobalMessage,
+  ServerMessage,
+} from "components/message.js";
+import Player from "@/game/entities/player.js";
 import { randint } from "pyrand";
-import CharacterModel from "../db/models/characterModel.js";
-import Instance from "../game/instance/instance.js";
+import CharacterModel from "db/models/characterModel.js";
+import Instance from "@/game/instance/instance.js";
+import type { Io, IoSocket } from "../../socket.js";
 
 const Character = new CharacterModel();
 
@@ -24,7 +28,10 @@ const awardSilverToAlivePlayers = async (instance: Instance) => {
     if (client) {
       const result = await Character.addSilver(name, silver);
       if (result.ok) {
-        client.socket.emit("chat:message", new ServerMessage(`You gained ${silver} silver`));
+        client.socket.emit(
+          "chat:message",
+          new ServerMessage(`You gained ${silver} silver`)
+        );
       }
     }
   }
@@ -41,7 +48,10 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     const lobby = LobbyManager.currentLobby(client);
     if (lobby) {
       if (!lobby.clientIsOwner(client)) {
-        return socket.emit("chat:message", new ErrorMessage("You're not the lobby owner"));
+        return socket.emit(
+          "chat:message",
+          new ErrorMessage("You're not the lobby owner")
+        );
       }
       lobby.isHidden = true;
     }
@@ -80,7 +90,10 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     // check if instance exists
     const instance = InstanceManager.currentInstance(client);
     if (instance === null) {
-      return socket.emit("chat:message", new ErrorMessage("Not in an instance"));
+      return socket.emit(
+        "chat:message",
+        new ErrorMessage("Not in an instance")
+      );
     }
 
     // exit the instance
@@ -115,7 +128,12 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     const player = room?.currentTurnEntity;
 
     // check if action can be performed, current entity must be a player and it must be this players turn
-    if (!instance || !room || !(player instanceof Player) || player.name !== client.characterName) {
+    if (
+      !instance ||
+      !room ||
+      !(player instanceof Player) ||
+      player.name !== client.characterName
+    ) {
       return socket.emit("chat:message", new ErrorMessage("Not your turn"));
     }
 
@@ -128,7 +146,9 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     }
     const action = result.val;
 
-    io.to(instance.socketRoom).emit("instance:state-update", { actions: [action] });
+    io.to(instance.socketRoom).emit("instance:state-update", {
+      actions: [action],
+    });
 
     if (room.hasConcluded) {
       if (room.enemiesWon) {

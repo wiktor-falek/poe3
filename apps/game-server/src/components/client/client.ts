@@ -1,6 +1,6 @@
 import { User } from "types/user.js";
 import { Character } from "types/character.js";
-import { IoSocket } from "../../index.js";
+import { IoSocket } from "../../../socket.js";
 
 class Client {
   #user: User;

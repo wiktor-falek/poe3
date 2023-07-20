@@ -1,14 +1,13 @@
 import type { Socket, Server } from "socket.io";
-import type { Message } from "./components/message.ts";
-import type { LobbyData, MembersOnlyLobbyData } from "./game/lobby/lobby.js";
-import type Instance from "./game/instance/instance.js";
+import type { Message } from "./src/components/message.ts";
+import type {
+  LobbyData,
+  MembersOnlyLobbyData,
+} from "./src/game/lobby/lobby.js";
+import type Instance from "./src/game/instance/instance.js";
 import type { Character } from "common/types/character.js";
-import type Client from "./components/client/client.js";
-import type { StateUpdate } from "./game/rooms/combatRoom.js";
-
-interface ExtendedError extends Error {
-  data?: any;
-}
+import type Client from "./src/components/client/client.js";
+import type { StateUpdate } from "./src/game/rooms/combatRoom.js";
 
 export interface ClientToServerEvents {
   "chat:send": (content: string) => void;
@@ -43,10 +42,17 @@ export interface InterServerEvents {
   ping: () => void;
 }
 
-interface SocketData {
+export interface SocketData {
   isAuthenticated: boolean;
   client: Client;
 }
+
+export type Io = Server<
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  SocketData
+>;
 
 export type IoSocket = Socket<
   ClientToServerEvents,

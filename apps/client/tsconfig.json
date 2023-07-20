@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "types/*": ["../common/types/*"],
-      "common/*": ["../common/src/*"]
+      "common/*": ["../common/src/*"],
+      "game-server/*": ["../game-server/src/*"]
     },
 
     /* Linting */

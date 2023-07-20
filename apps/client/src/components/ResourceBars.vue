@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Resources } from "../../../common/types/index";
+import { Resources } from "types/unorganized";
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
 type ResourcesOptionalAp = Optional<Resources, "mp" | "maxMp" | "ap" | "maxAp">;
@@ -10,7 +10,9 @@ defineProps<{ resources: ResourcesOptionalAp }>();
 <template>
   <div class="resource-bars">
     <div class="resource-bar resource-bar--hp">
-      <span class="resource-bar__text">{{ resources.hp }} / {{ resources.maxHp }}</span>
+      <span class="resource-bar__text"
+        >{{ resources.hp }} / {{ resources.maxHp }}</span
+      >
       <progress
         class="resource-bar__progress resource-bar__progress--hp"
         :value="resources.hp"
@@ -19,7 +21,9 @@ defineProps<{ resources: ResourcesOptionalAp }>();
     </div>
 
     <div class="resource-bar resource-bar--mp" v-if="resources.maxMp">
-      <span class="resource-bar__text">{{ resources.mp }} / {{ resources.maxMp }}</span>
+      <span class="resource-bar__text"
+        >{{ resources.mp }} / {{ resources.maxMp }}</span
+      >
       <progress
         class="resource-bar__progress resource-bar__progress--mp"
         :value="resources.mp"
@@ -28,7 +32,9 @@ defineProps<{ resources: ResourcesOptionalAp }>();
     </div>
 
     <div class="resource-bar resource-bar--ap" v-if="resources.maxAp">
-      <span class="resource-bar__text">{{ resources.ap }} / {{ resources.maxAp }}</span>
+      <span class="resource-bar__text"
+        >{{ resources.ap }} / {{ resources.maxAp }}</span
+      >
       <progress
         class="resource-bar__progress resource-bar__progress--ap"
         :value="resources.ap"

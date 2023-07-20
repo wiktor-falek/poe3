@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { Ref } from "vue";
-import type { CharacterClass, Attributes } from "../../../common/types/index";
+import type { CharacterClass } from "types/character";
+import type { Attributes } from "types/unorganized";
 import { ref } from "vue";
 import AttributesVue from "../components/global/Attributes.vue";
 import router from "../router";
@@ -143,12 +144,19 @@ async function createCharacter(e: Event) {
 
         <div class="character-detail__attributes">
           <div class="character-detail__attributes--strength">
-            <AttributesVue :attributes="classesData[selectedClass].attributes" />
+            <AttributesVue
+              :attributes="classesData[selectedClass].attributes"
+            />
           </div>
         </div>
       </div>
 
-      <form class="menu" id="create-character" action="POST" @submit="createCharacter($event)">
+      <form
+        class="menu"
+        id="create-character"
+        action="POST"
+        @submit="createCharacter($event)"
+      >
         <div class="menu__top">
           <RouterLink to="/select" class="button">&lt;</RouterLink>
           <input
@@ -166,7 +174,12 @@ async function createCharacter(e: Event) {
         </div>
 
         <div class="menu__bottom">
-          <button type="submit" class="button" id="create" :disabled="selectedClass === null">
+          <button
+            type="submit"
+            class="button"
+            id="create"
+            :disabled="selectedClass === null"
+          >
             Create
           </button>
         </div>

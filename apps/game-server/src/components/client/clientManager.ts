@@ -1,8 +1,7 @@
 import { User } from "types/user.js";
 import { Character } from "types/character.js";
-import { IoSocket } from "../../index.js";
 import Client from "./client.js";
-import type { WithId } from "mongodb";
+import type { IoSocket } from "../../../socket.js";
 
 class ClientManager {
   static readonly clients: Map<string, Client> = new Map();
@@ -19,7 +18,11 @@ class ClientManager {
     return client;
   }
 
-  static createClient(user: User, character: Character, socket: IoSocket): Client {
+  static createClient(
+    user: User,
+    character: Character,
+    socket: IoSocket
+  ): Client {
     const client = new Client(user, character, socket);
     this.clients.set(user.username, client);
     return client;
