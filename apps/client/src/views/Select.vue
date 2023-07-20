@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { onBeforeMount } from "vue";
 import { useRouter } from "vue-router";
 import type { Ref } from "vue";
-import { CharacterClass } from "types/character";
+import { CharacterClass } from "../../../common/types/character";
 
 const router = useRouter();
 

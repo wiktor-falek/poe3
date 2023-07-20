@@ -1,8 +1,8 @@
 import Joi from "joi";
-import CharacterModel from "db/models/characterModel.js";
-import UserModel from "db/models/userModel.js";
-import ClientManager from "components/client/clientManager.js";
-import InstanceManager from "@/game/instance/instanceManager.js";
+import CharacterModel from "../db/models/characterModel.js";
+import UserModel from "../db/models/userModel.js";
+import ClientManager from "../components/client/clientManager.js";
+import InstanceManager from "../game/instance/instanceManager.js";
 import type { IoSocket } from "../../socket.js";
 
 const Character = new CharacterModel();

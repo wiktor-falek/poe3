@@ -1,9 +1,9 @@
 import { nanoid } from "nanoid";
-import Client from "components/client/client.js";
-import getDynamicCharacter from "common/getDynamicCharacter.js";
-import { testEnemies } from "@/game/entities/enemy.js";
-import Player from "@/game/entities/player.js";
-import CombatRoom from "@/game/rooms/combatRoom.js";
+import Client from "../../components/client/client.js";
+import getDynamicCharacter from "../../../../common/src/getDynamicCharacter.js";
+import { testEnemies } from "../../game/entities/enemy.js";
+import Player from "../../game/entities/player.js";
+import CombatRoom from "../../game/rooms/combatRoom.js";
 
 class Instance {
   #clients: { [characterId: string]: Client };

@@ -6,7 +6,11 @@ import type {
   CharacterClass,
   CharacterOverview,
   Character,
-} from "types/character.js";
+} from "../../../../common/types/character.js";
+import { LootFactory } from "../../../../items/src/lootFactory.js";
+
+const factory = new LootFactory()
+console.log(factory);
 
 /*
 CREATE TABLE characters (

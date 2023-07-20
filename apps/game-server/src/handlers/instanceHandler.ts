@@ -1,15 +1,15 @@
-import Client from "components/client/client.js";
-import InstanceManager from "@/game/instance/instanceManager.js";
-import LobbyManager from "@/game/lobby/lobbyManager.js";
+import Client from "../components/client/client.js";
+import InstanceManager from "../game/instance/instanceManager.js";
+import LobbyManager from "../game/lobby/lobbyManager.js";
 import {
   ErrorMessage,
   GlobalMessage,
   ServerMessage,
-} from "components/message.js";
-import Player from "@/game/entities/player.js";
+} from "../components/message.js";
+import Player from "../game/entities/player.js";
 import { randint } from "pyrand";
-import CharacterModel from "db/models/characterModel.js";
-import Instance from "@/game/instance/instance.js";
+import CharacterModel from "../db/models/characterModel.js";
+import Instance from "../game/instance/instance.js";
 import type { Io, IoSocket } from "../../socket.js";
 
 const Character = new CharacterModel();

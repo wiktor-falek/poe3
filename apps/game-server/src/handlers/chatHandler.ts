@@ -1,6 +1,6 @@
 import Joi from "joi";
-import { GlobalMessage, ServerMessage } from "components/message.js";
-import Client from "components/client/client.js";
+import { GlobalMessage, ServerMessage } from "../components/message.js";
+import Client from "../components/client/client.js";
 import type { Io, IoSocket } from "../../socket.js";
 
 function registerChatHandler(io: Io, socket: IoSocket, client: Client) {

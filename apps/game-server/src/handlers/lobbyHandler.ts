@@ -1,5 +1,5 @@
-import LobbyManager from "@/game/lobby/lobbyManager.js";
-import Client from "components/client/client.js";
+import LobbyManager from "../game/lobby/lobbyManager.js";
+import Client from "../components/client/client.js";
 import { Err } from "resultat";
 import type { Io, IoSocket } from "../../socket.js";
 

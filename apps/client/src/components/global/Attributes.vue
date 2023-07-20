@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Attributes } from "types/unorganized";
+import type { Attributes } from "../../../../common/types/unorganized";
 const props = defineProps<{ attributes: Attributes }>();
 </script>
 

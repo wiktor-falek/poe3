@@ -2,8 +2,8 @@ import { choice, shuffle } from "pyrand";
 import Enemy from "../../game/entities/enemy.js";
 import Player, { ActionResult } from "../../game/entities/player.js";
 import { Err, Ok } from "resultat";
-import { LootFactory } from "items/lootFactory.js";
-import type { TurnStartUpdate } from "@/game/entities/player.js";
+import { LootFactory } from "../../../../items/src/lootFactory.js";
+import type { TurnStartUpdate } from "../../game/entities/player.js";
 
 export interface ActionData {
   targetId: string;

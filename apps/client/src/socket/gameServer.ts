@@ -6,16 +6,16 @@ import Queue from "../utils/queue";
 import type {
   ServerToClientEvents,
   ClientToServerEvents,
-} from "game-server/socket";
-import type { Character } from "types/character";
+} from "../../../game-server/socket";
+import type { Character } from "../../../common/types/character";
 import type {
   LobbyData,
   MembersOnlyLobbyData,
-} from "game-server/game/lobby/lobby";
-import type { Message } from "game-server/components/message";
+} from "../../../game-server/src/game/lobby/lobby";
+import type { Message } from "../../../game-server/src/components/message";
 
-import type Instance from "game-server/game/instance/instance";
-import type { StateUpdate } from "game-server/game/rooms/combatRoom";
+import type Instance from "../../../game-server/src/game/instance/instance";
+import type { StateUpdate } from "../../../game-server/src/game/rooms/combatRoom";
 
 interface State {
   connected: boolean;

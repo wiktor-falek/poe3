@@ -13,12 +13,6 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    "baseUrl": ".",
-    "paths": {
-      "types/*": ["../common/types/*"],
-      "common/*": ["../common/src/*"],
-      "game-server/*": ["../game-server/src/*"]
-    },
 
     /* Linting */
     "strict": true,

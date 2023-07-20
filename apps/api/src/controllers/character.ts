@@ -1,12 +1,17 @@
 import { Request, Response } from "express";
 import CharacterModel from "../db/models/characterModel.js";
 import Joi from "joi";
-import { Character, CharacterClass } from "types/character.js";
+import { Character, CharacterClass } from "../../../common/types/character.js";
 
 const Character = new CharacterModel();
 
 async function createCharacter(req: Request, res: Response) {
-  const VALID_CLASSES: CharacterClass[] = ["swordsman", "ranger", "sorcerer", "assassin"];
+  const VALID_CLASSES: CharacterClass[] = [
+    "swordsman",
+    "ranger",
+    "sorcerer",
+    "assassin",
+  ];
   const BLACKLISTED_NAMES = ["SERVER", "ERROR", "SYSTEM"];
 
   const schema = Joi.object<{ name: string; class: CharacterClass }>().keys({
@@ -30,12 +35,18 @@ async function createCharacter(req: Request, res: Response) {
   const characterClass = validationResult.value.class;
 
   if (BLACKLISTED_NAMES.includes(name)) {
-    return res.status(400).json({ error: "This username is not allowed, try something else" });
+    return res
+      .status(400)
+      .json({ error: "This username is not allowed, try something else" });
   }
 
   const userName = res.locals.user.username;
 
-  const result = await Character.createCharacter(userName, name, characterClass as CharacterClass);
+  const result = await Character.createCharacter(
+    userName,
+    name,
+    characterClass as CharacterClass
+  );
 
   if (!result.ok) {
     return res.status(403).json({ error: result.err });
@@ -99,7 +110,14 @@ async function deleteCharacter(req: Request, res: Response) {
   if (!result.ok) {
     return res.status(500).json({ error: result.err });
   }
-  return res.status(200).json({ message: `Successfully deleted the character ${characterName}` });
+  return res
+    .status(200)
+    .json({ message: `Successfully deleted the character ${characterName}` });
 }
 
-export { createCharacter, getCharacter, getAllCharactersOverview, deleteCharacter };
+export {
+  createCharacter,
+  getCharacter,
+  getAllCharactersOverview,
+  deleteCharacter,
+};

@@ -1,4 +1,4 @@
-import type { CharacterClass } from "types/character";
+import type { CharacterClass } from "../../common/types/character";
 import blueprints from "./wearable/blueprints";
 import type { Chest, Ring, Weapon } from "./wearable";
 

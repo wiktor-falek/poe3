@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { Ref } from "vue";
-import type { CharacterClass } from "types/character";
-import type { Attributes } from "types/unorganized";
+import type { CharacterClass } from "../../../common/types/character";
+import type { Attributes } from "../../../common/types/unorganized";
 import { ref } from "vue";
 import AttributesVue from "../components/global/Attributes.vue";
 import router from "../router";

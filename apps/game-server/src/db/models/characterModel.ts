@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
-import { Character } from "types/character.js";
-import { EquipmentSlot } from "types/unorganized.js";
+import { Character } from "../../../../common/types/character.js";
+import { EquipmentSlot } from "../../../../common/types/unorganized.js";
 import { Err, Ok } from "resultat";
 
 class CharacterModel {

@@ -1,6 +1,6 @@
 import { randint } from "pyrand";
-import { Resources } from "types/unorganized.js";
-import { DynamicCharacter } from "types/character.js";
+import { Resources } from "../../../../common/types/unorganized.js";
+import { DynamicCharacter } from "../../../../common/types/character.js";
 import { nanoid } from "nanoid";
 import { Err, Ok, Result } from "resultat";
 

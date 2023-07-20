@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Resources } from "types/unorganized";
+import { Resources } from "../../../common/types/unorganized";
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
 type ResourcesOptionalAp = Optional<Resources, "mp" | "maxMp" | "ap" | "maxAp">;

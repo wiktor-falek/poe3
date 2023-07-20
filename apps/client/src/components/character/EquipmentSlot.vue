@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import { ref } from "vue";
-import type { EquipmentSlot } from "types/unorganized";
+import type { EquipmentSlot } from "../../../../common/types/unorganized";
 import useCharacterStore from "../../stores/characterStore";
 import WearableItemTooltip from "../items/WearableItemTooltip.vue";
 
 const characterStore = useCharacterStore();
-const equipment = characterStore.character?.equipment;
+// const equipment = characterStore.character?.equipment;
+const equipment: unknown = {};
 
 const props = defineProps<{
   invisible?: boolean;
@@ -14,7 +15,7 @@ const props = defineProps<{
 
 let item: any = null;
 if (equipment && props.equipmentSlot) {
-  item = equipment[props.equipmentSlot];
+  // item = equipment[props.equipmentSlot];
 }
 
 const isHovered = ref(false);
@@ -36,7 +37,7 @@ const isHovered = ref(false);
   >
     <div
       class="item"
-      v-if="equipmentSlot && equipment && equipment[equipmentSlot]"
+      v-if="equipmentSlot && item"
       @mouseover="isHovered = true"
       @mouseleave="isHovered = false"
     >

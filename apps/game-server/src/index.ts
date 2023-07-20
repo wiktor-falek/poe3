@@ -1,12 +1,12 @@
 import { createServer } from "http";
 import { Server } from "socket.io";
-import initialize from "middlewares/initialize.js";
-import registerChatHandler from "handlers/chatHandler.js";
-import registerLobbyHandler from "handlers/lobbyHandler.js";
-import LobbyManager from "@/game/lobby/lobbyManager.js";
-import registerInstanceHandler from "handlers/instanceHandler.js";
-import InstanceManager from "@/game/instance/instanceManager.js";
-import { PartyMessage } from "components/message.js";
+import initialize from "./middlewares/initialize.js";
+import registerChatHandler from "./handlers/chatHandler.js";
+import registerLobbyHandler from "./handlers/lobbyHandler.js";
+import LobbyManager from "./game/lobby/lobbyManager.js";
+import registerInstanceHandler from "./handlers/instanceHandler.js";
+import InstanceManager from "./game/instance/instanceManager.js";
+import { PartyMessage } from "./components/message.js";
 import {
   ClientToServerEvents,
   ServerToClientEvents,
