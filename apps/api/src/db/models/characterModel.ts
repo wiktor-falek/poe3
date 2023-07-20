@@ -7,10 +7,9 @@ import type {
   CharacterOverview,
   Character,
 } from "../../../../common/types/character.js";
-import { LootFactory } from "../../../../items/src/lootFactory.js";
+import { StartingItemsFactory } from "../../../../items/dist/index.js";
 
-const factory = new LootFactory()
-console.log(factory);
+console.log(StartingItemsFactory.createForClass("ranger"));
 
 /*
 CREATE TABLE characters (

@@ -5,7 +5,7 @@ import useCharacterStore from "../../../stores/characterStore";
 import ResourceBars from "../../../components/ResourceBars.vue";
 import SkillIcon from "../../../components/SkillIcon.vue";
 import { onMounted } from "vue";
-import Enemy from "../../../../../game-server/src/game/entities/enemy";
+import Enemy from "../../../../../game-server/dist/game/entities/enemy";
 import Icon from "../../../components/Icon.vue";
 import RewardsModal from "../../../components/modals/RewardsModal.vue";
 

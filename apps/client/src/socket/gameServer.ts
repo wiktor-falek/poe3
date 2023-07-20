@@ -11,11 +11,11 @@ import type { Character } from "../../../common/types/character";
 import type {
   LobbyData,
   MembersOnlyLobbyData,
-} from "../../../game-server/src/game/lobby/lobby";
-import type { Message } from "../../../game-server/src/components/message";
+} from "../../../game-server/dist/game/lobby/lobby";
+import type { Message } from "../../../game-server/dist/components/message";
 
-import type Instance from "../../../game-server/src/game/instance/instance";
-import type { StateUpdate } from "../../../game-server/src/game/rooms/combatRoom";
+import type Instance from "../../../game-server/dist/game/instance/instance";
+import type { StateUpdate } from "../../../game-server/dist/game/rooms/combatRoom";
 
 interface State {
   connected: boolean;
