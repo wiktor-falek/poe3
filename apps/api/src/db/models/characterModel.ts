@@ -93,13 +93,10 @@ class CharacterModel {
             WHERE u.username = ${username} AND c.name = ${characterName};
           `
         );
-        return Ok(result as Character);
+        return result as Character;
       } catch (error) {
         if (error instanceof SlonikError) {
-          if (error.name === "NotFoundError") {
-            return Err("Character does not exist");
-          }
-          return Err("Something went wrong");
+          return undefined;
         } else {
           throw error;
         }
@@ -149,7 +146,7 @@ class CharacterModel {
       } catch (error) {
         if (error instanceof SlonikError) {
           if (error.name === "NotFoundError") {
-            return Err("Character does not exist");
+            return Ok([]);
           }
           return Err("Something went wrong");
         } else {

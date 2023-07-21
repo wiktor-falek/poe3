@@ -71,13 +71,11 @@ async function getCharacter(req: Request, res: Response) {
     return res.status(400).json({ error: "Invalid parameters" });
   }
 
-  const result = await Character.findCharacter(username, name);
+  const character = await Character.findCharacter(username, name);
 
-  if (!result.ok) {
-    return res.status(404).json({ error: "Character not found" });
+  if (!character) {
+    return res.status(404).json({ error: "Character does not exist" });
   }
-
-  const character = result.val;
 
   return res.status(200).json(character);
 }
