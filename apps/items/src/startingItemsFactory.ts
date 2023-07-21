@@ -1,4 +1,4 @@
-import type { CharacterClass } from "../../common/types/character";
+import type { CharacterClass } from "@poe3/types";
 import blueprints from "./wearable/blueprints";
 import type { Chest, Ring, Weapon } from "./wearable";
 

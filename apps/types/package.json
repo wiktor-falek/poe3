@@ -1,0 +1,6 @@
+{
+  "name": "@poe3/types",
+  "version": "1.0.0",
+  "description": "Types shared across the codebase",
+  "types": "./index.d.ts"
+}

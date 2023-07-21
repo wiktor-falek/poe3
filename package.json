@@ -7,7 +7,7 @@
     "api": "npm run dev -w api",
     "client": "npm run dev -w client",
     "game-server": "npm run dev -w game-server",
-    "common": "npm run dev -w common",
+    "core": "npm run dev -w core",
     "items": "npm run dev -w items"
   },
   "repository": {

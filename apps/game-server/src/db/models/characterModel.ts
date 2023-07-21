@@ -1,6 +1,5 @@
 import { ObjectId } from "mongodb";
-import { Character } from "../../../../common/types/character.js";
-import { EquipmentSlot } from "../../../../common/types/unorganized.js";
+import { Character, EquipmentSlot } from "@poe3/types";
 import { Err, Ok } from "resultat";
 
 class CharacterModel {

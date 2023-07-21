@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { pool, testingPool } from "../postgres.js";
 import { decode, encode } from "../../utils/token.js";
 import { sendEmail } from "../../utils/email.js";
-import { User } from "../../../../common/types/user.js";
+import { User } from "@poe3/types";
 
 /*
 CREATE TABLE users ( 
