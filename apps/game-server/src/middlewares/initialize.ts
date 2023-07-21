@@ -79,14 +79,10 @@ async function initialize(
 
   socket.data.client = client;
 
-  // try to rejoin existing instance
-
+  // attempt to rejoin existing instance<
   const { instanceId } = client;
-  console.log({ instanceId: client.instanceId });
   if (instanceId !== null) {
     const instance = InstanceManager.getInstance(instanceId);
-    const x = 1;
-
     if (instance) {
       client.socket.join(instance.socketRoom);
       socket.emit("instance:set", instance);
