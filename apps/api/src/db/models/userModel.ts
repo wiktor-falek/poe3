@@ -3,7 +3,7 @@ import { DatabasePool, SlonikError, sql } from "slonik";
 import { Ok, Err } from "resultat";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
-import { pool, testingPool } from "../postgres.js";
+import { pool } from "../postgres.js";
 import { decode, encode } from "../../utils/token.js";
 import { sendEmail } from "../../utils/email.js";
 import { User } from "@poe3/types";
@@ -37,16 +37,10 @@ const usernameObject = z.object({
 });
 
 class UserModel {
-  prod: boolean;
   pool: DatabasePool;
 
-  /**
-   * By default connect to testing database,
-   * opt into production database by passing { prod: true }
-   */
-  constructor(options: { prod: boolean } = { prod: false }) {
-    this.prod = options.prod;
-    this.pool = options.prod ? pool : testingPool;
+  constructor() {
+    this.pool = pool;
   }
 
   findByUsername(username: string) {
@@ -64,7 +58,7 @@ class UserModel {
           if (error.name === "NotFoundError") {
             return undefined;
           } else {
-            console.error(error.name, error.message);
+            console.error(error);
           }
         } else {
           throw error;
@@ -88,7 +82,7 @@ class UserModel {
           if (error.name === "NotFoundError") {
             return undefined;
           } else {
-            console.error(error.name, error.message);
+            console.error(error);
           }
         } else {
           throw error;
@@ -112,7 +106,7 @@ class UserModel {
           if (error.name === "NotFoundError") {
             return undefined;
           } else {
-            console.error(error.name, error.message);
+            console.error(error);
           }
         } else {
           throw error;
@@ -150,14 +144,14 @@ class UserModel {
 
     return this.pool.connect(async (connection) => {
       try {
-        const result = await connection.query(
+        const result = await connection.one(
           sql.type(userObject)`
             INSERT INTO users (username, email, hash, registration_timestamp) 
             VALUES (${username}, ${email}, ${hash}, ${Date.now()})
             RETURNING *
           `
         );
-        return Ok(result.rows[0]);
+        return Ok(result);
       } catch (error) {
         if (error instanceof SlonikError) {
           if (error.name === "UniqueIntegrityConstraintViolationError") {
@@ -200,7 +194,7 @@ class UserModel {
         return Ok(result);
       } catch (error) {
         if (error instanceof SlonikError) {
-          console.error(error.name, error.message);
+          console.error(error);
         } else {
           throw error;
         }
@@ -248,7 +242,7 @@ class UserModel {
         return Ok(result);
       } catch (error) {
         if (error instanceof SlonikError) {
-          console.error(error.name, error.message);
+          console.error(error);
         } else {
           throw error;
         }
@@ -306,7 +300,7 @@ class UserModel {
         return Ok(result.hash);
       } catch (error) {
         if (error instanceof SlonikError) {
-          console.error(error.name, error.message);
+          console.error(error);
         } else {
           throw error;
         }

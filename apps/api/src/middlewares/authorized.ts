@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import UserModel from "../db/models/userModel.js";
-// import type { UserData } from "../../types.js";
 
-const User = new UserModel({ prod: true });
+const User = new UserModel();
 
 /**
  * Queries db for a user matching the cookie sessionId

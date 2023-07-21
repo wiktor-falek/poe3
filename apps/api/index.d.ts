@@ -1,4 +1,4 @@
-import { User } from "../common/types/user.js";
+import { User } from "@poe3/types";
 
 declare global {
   namespace Express {

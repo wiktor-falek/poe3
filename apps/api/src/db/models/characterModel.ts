@@ -1,7 +1,7 @@
 import { DatabasePool, SlonikError, sql } from "slonik";
 import { Ok, Err } from "resultat";
 import { z } from "zod";
-import { pool, testingPool } from "../postgres.js";
+import { pool } from "../postgres.js";
 import type { CharacterClass, CharacterOverview, Character } from "@poe3/types";
 
 /*
@@ -35,24 +35,18 @@ const characterOverviewObject = z.object({
 });
 
 class CharacterModel {
-  prod: boolean;
   pool: DatabasePool;
 
-  /**
-   * By default connect to testing database,
-   * opt into production database by passing { prod: true }
-   */
-  constructor(options: { prod: boolean } = { prod: false }) {
-    this.prod = options.prod;
-    this.pool = options.prod ? pool : testingPool;
+  constructor() {
+    this.pool = pool;
   }
 
   async createCharacter(
-    userName: string,
+    username: string,
     characterName: string,
     characterClass: CharacterClass
   ) {
-    const result = await this.getCharacterCount(userName);
+    const result = await this.getCharacterCount(username);
     if (!result.ok) {
       return Err("Something went wrong");
     }
@@ -68,7 +62,7 @@ class CharacterModel {
             INSERT INTO characters (user_id, name, class)
             SELECT users.id, ${characterName}, ${characterClass}
             FROM users
-            WHERE users.username = ${userName}
+            WHERE username = ${username}
             RETURNING name, class, level
           `
         );
@@ -78,7 +72,7 @@ class CharacterModel {
           if (error.name === "UniqueIntegrityConstraintViolationError") {
             return Err("Character name is already taken");
           } else {
-            console.error(error.name, error.message);
+            console.error(error);
             return Err("Failed to create the character");
           }
         } else {
@@ -88,7 +82,7 @@ class CharacterModel {
     });
   }
 
-  findCharacter(userName: string, characterName: string) {
+  findCharacter(username: string, characterName: string) {
     return this.pool.connect(async (connection) => {
       try {
         const result = await connection.one(
@@ -96,7 +90,7 @@ class CharacterModel {
             SELECT c.*
             FROM characters c
             JOIN users u ON c.user_id = u.id
-            WHERE u.username = ${userName} AND c.name = ${characterName};
+            WHERE u.username = ${username} AND c.name = ${characterName};
           `
         );
         return Ok(result as Character);
@@ -113,7 +107,7 @@ class CharacterModel {
     });
   }
 
-  async getCharacterCount(userName: string) {
+  async getCharacterCount(username: string) {
     return this.pool.connect(async (connection) => {
       try {
         const result = await connection.one(
@@ -125,13 +119,13 @@ class CharacterModel {
             SELECT COUNT(*) AS count
             FROM characters c
             JOIN users u ON c.user_id = u.id
-            WHERE u.username = ${userName}
+            WHERE u.username = ${username}
           `
         );
         return Ok(result.count);
       } catch (error) {
         if (error instanceof SlonikError) {
-          console.error(error.name, error.message);
+          console.error(error);
           return Err("Read fail");
         } else {
           throw error;
@@ -140,7 +134,7 @@ class CharacterModel {
     });
   }
 
-  getAllCharactersOverview(userName: string) {
+  getAllCharactersOverview(username: string) {
     return this.pool.connect(async (connection) => {
       try {
         const result = await connection.many(
@@ -148,7 +142,7 @@ class CharacterModel {
             SELECT c.name, c.class, c.level
             FROM characters c
             JOIN users u ON c.user_id = u.id
-            WHERE u.username = ${userName}
+            WHERE u.username = ${username}
           `
         );
         return Ok(result as CharacterOverview[]);
@@ -165,7 +159,7 @@ class CharacterModel {
     });
   }
 
-  deleteCharacter(userName: string, characterName: string) {
+  deleteCharacter(username: string, characterName: string) {
     // TODO: transaction insert character into deleted_characters, and delete from characters
     return this.pool.connect(async (connection) => {
       try {
@@ -179,7 +173,7 @@ class CharacterModel {
             WHERE user_id = (
               SELECT id
               FROM users
-              WHERE username = ${userName}
+              WHERE username = ${username}
             ) AND name = ${characterName}
             RETURNING name AS deleted_character_name
           `

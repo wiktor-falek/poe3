@@ -6,7 +6,7 @@ import { encode } from "../utils/token.js";
 import dotenv from "dotenv";
 dotenv.config();
 
-const User = new UserModel({ prod: true });
+const User = new UserModel();
 
 async function register(req: Request, res: Response) {
   const schema = Joi.object<{
@@ -49,7 +49,7 @@ async function register(req: Request, res: Response) {
   }
 
   return res.status(200).json({
-    message: `Successfully created an account with username '${username}'`,
+    message: "Account created",
   });
 }
 

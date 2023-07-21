@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import CharacterModel from "../db/models/characterModel.js";
 import Joi from "joi";
-import { Character, CharacterClass } from "@poe3/types";
+import { CharacterClass } from "@poe3/types";
 
 const Character = new CharacterModel();
 
@@ -25,26 +25,28 @@ async function createCharacter(req: Request, res: Response) {
       .valid(...VALID_CLASSES),
   });
 
-  console.log(req.body);
   const validationResult = schema.validate(req.body);
   if (validationResult.error) {
     return res.status(400).json({ error: "Invalid parameters" });
   }
 
-  const name = validationResult.value.name;
+  const characterName = validationResult.value.name;
   const characterClass = validationResult.value.class;
 
-  if (BLACKLISTED_NAMES.includes(name)) {
+  if (BLACKLISTED_NAMES.includes(characterName)) {
     return res
       .status(400)
       .json({ error: "This username is not allowed, try something else" });
   }
 
-  const userName = res.locals.user.username;
+  const { username } = res.locals.user;
 
+  // username: string,
+  // characterName: string,
+  // characterClass: CharacterClass
   const result = await Character.createCharacter(
-    userName,
-    name,
+    username,
+    characterName,
     characterClass as CharacterClass
   );
 
@@ -58,7 +60,7 @@ async function createCharacter(req: Request, res: Response) {
 }
 
 async function getCharacter(req: Request, res: Response) {
-  const userName = res.locals.user.username;
+  const { username } = res.locals.user;
   const { name } = req.params;
 
   const schema = Joi.string().required().min(3).max(24);
@@ -69,7 +71,7 @@ async function getCharacter(req: Request, res: Response) {
     return res.status(400).json({ error: "Invalid parameters" });
   }
 
-  const result = await Character.findCharacter(userName, name);
+  const result = await Character.findCharacter(username, name);
 
   if (!result.ok) {
     return res.status(404).json({ error: "Character not found" });
@@ -81,9 +83,9 @@ async function getCharacter(req: Request, res: Response) {
 }
 
 async function getAllCharactersOverview(req: Request, res: Response) {
-  const userName = res.locals.user.username;
+  const { username } = res.locals.user;
 
-  const result = await Character.getAllCharactersOverview(userName);
+  const result = await Character.getAllCharactersOverview(username);
 
   if (!result.ok) {
     return res.status(500).json({ error: result.err });
@@ -95,7 +97,7 @@ async function getAllCharactersOverview(req: Request, res: Response) {
 }
 
 async function deleteCharacter(req: Request, res: Response) {
-  const userName = res.locals.user.username;
+  const { username } = res.locals.user;
   const characterName = req.params.name;
 
   const schema = Joi.string().required().min(3).max(24);
@@ -106,13 +108,11 @@ async function deleteCharacter(req: Request, res: Response) {
     return res.status(400).json({ error: "Invalid parameters" });
   }
 
-  const result = await Character.deleteCharacter(userName, characterName);
+  const result = await Character.deleteCharacter(username, characterName);
   if (!result.ok) {
     return res.status(500).json({ error: result.err });
   }
-  return res
-    .status(200)
-    .json({ message: `Successfully deleted the character ${characterName}` });
+  return res.status(200).json({ message: "Character deleted" });
 }
 
 export {
