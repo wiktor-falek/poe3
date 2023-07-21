@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { Ref, ref, watch } from "vue";
-import getDynamicCharacter from "common/dist/getDynamicCharacter";
-import type { Character, DynamicCharacter } from "../../../common/types/character";
+import { getDynamicCharacter } from "@poe3/core";
+import type { Character, DynamicCharacter } from "@poe3/types";
 
 const useCharacterStore = defineStore("character", () => {
   const character: Ref<Character | null> = ref(null);

@@ -7,24 +7,24 @@ import type {
   ServerToClientEvents,
   ClientToServerEvents,
 } from "../../../game-server/socket";
-import type { Character } from "../../../common/types/character";
-import type {
-  LobbyData,
-  MembersOnlyLobbyData,
-} from "../../../game-server/dist/game/lobby/lobby";
-import type { Message } from "../../../game-server/dist/components/message";
+import type { Character } from "@poe3/types";
+// import type {
+//   LobbyData,
+//   MembersOnlyLobbyData,
+// } from "../../../game-server/dist/game/lobby/lobby.js";
+// import type { Message } from "../../../game-server/dist/components/message";
 
-import type Instance from "../../../game-server/dist/game/instance/instance";
-import type { StateUpdate } from "../../../game-server/dist/game/rooms/combatRoom";
+// import type Instance from "../../../game-server/dist/game/instance/instance";
+// import type { StateUpdate } from "../../../game-server/dist/game/rooms/combatRoom";
 
 interface State {
   connected: boolean;
-  messages: Array<Message>;
-  lobbies: { [lobbyId: string]: LobbyData };
-  lobby: MembersOnlyLobbyData | null;
-  instance: Instance | null;
+  messages: Array<unknown>;
+  lobbies: { [lobbyId: string]: unknown };
+  lobby: unknown | null;
+  instance: unknown | null;
   rewards: Array<any> | null; // TODO: type
-  instanceActionsQueue: Queue<StateUpdate>;
+  instanceActionsQueue: Queue<unknown>;
 }
 
 export const state: State = reactive({

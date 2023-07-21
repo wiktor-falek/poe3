@@ -1,4 +1,8 @@
-<script lang="ts" setup>
+<template>
+  <h1>TODO</h1>
+</template>
+
+<!-- <script lang="ts" setup>
 import { ref, Ref } from "vue";
 import * as gameServer from "../../../../src/socket/gameServer";
 import useCharacterStore from "../../../stores/characterStore";
@@ -558,4 +562,4 @@ onMounted(() => {
 
   gap: 8px;
 }
-</style>
+</style> -->
