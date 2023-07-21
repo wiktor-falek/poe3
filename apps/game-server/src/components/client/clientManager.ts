@@ -1,6 +1,6 @@
 import type { User, Character } from "@poe3/types";
 import Client from "./client.js";
-import type { IoSocket } from "../../../socket.js";
+import type { IoSocket } from "../../../types/socket.js";
 
 class ClientManager {
   static readonly clients: Map<string, Client> = new Map();

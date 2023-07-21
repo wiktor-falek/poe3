@@ -1,10 +1,4 @@
-type Group = "SYSTEM" | "GLOBAL" | "PARTY" | "GUILD" | "ERROR";
-
-export interface Message {
-  content: string;
-  sender: string;
-  group: Group;
-}
+import type { Message, Group } from "../../types/message.js";
 
 class BaseMessage implements Message {
   content: string;

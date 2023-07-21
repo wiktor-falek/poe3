@@ -10,7 +10,7 @@ import Player from "../game/entities/player.js";
 import { randint } from "pyrand";
 import CharacterModel from "../db/models/characterModel.js";
 import Instance from "../game/instance/instance.js";
-import type { Io, IoSocket } from "../../socket.js";
+import type { Io, IoSocket } from "../../types/socket.js";
 
 const Character = new CharacterModel();
 
@@ -26,7 +26,7 @@ const awardSilverToAlivePlayers = async (instance: Instance) => {
     const name = namesOfAlivePlayers[i];
     const client = instance.clients.find((c) => c.characterName === name);
     if (client) {
-      const result = await Character.addSilver(name, silver);
+      const result = await Character.grantSilver(name, silver);
       if (result.ok) {
         client.socket.emit(
           "chat:message",

@@ -1,7 +1,7 @@
 import LobbyManager from "../game/lobby/lobbyManager.js";
 import Client from "../components/client/client.js";
 import { Err } from "resultat";
-import type { Io, IoSocket } from "../../socket.js";
+import type { Io, IoSocket } from "../../types/socket.js";
 
 function registerLobbyHandler(io: Io, socket: IoSocket, client: Client) {
   const getAll = () => {

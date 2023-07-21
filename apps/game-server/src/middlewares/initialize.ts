@@ -3,7 +3,7 @@ import CharacterModel from "../db/models/characterModel.js";
 import UserModel from "../db/models/userModel.js";
 import ClientManager from "../components/client/clientManager.js";
 import InstanceManager from "../game/instance/instanceManager.js";
-import type { IoSocket } from "../../socket.js";
+import type { IoSocket } from "../../types/socket.js";
 
 const Character = new CharacterModel();
 const User = new UserModel();
@@ -37,26 +37,26 @@ async function initialize(
   const { sessionId, characterName } = result.value;
 
   const fetchUserPromise = User.findBySessionId(sessionId);
-  const fetchCharacterPromise = Character.findByName(characterName);
+  const fetchCharacterPromise = Character.findCharacterByName(characterName);
 
   const user = await fetchUserPromise;
   const character = await fetchCharacterPromise;
 
-  if (user === null) {
+  if (!user) {
     const err: ExtendedError = new Error("User not found");
-    console.log(err.message);
+    console.error(err.message);
     return next(err);
   }
 
-  if (character === null) {
+  if (!character) {
     const err: ExtendedError = new Error("Character not found");
-    console.log(err.message);
+    console.error(err.message);
     return next(err);
   }
 
   if (character.userId !== user.id) {
     const err: ExtendedError = new Error("What are you trying to do? ._.");
-    console.log(err.message);
+    console.error(err.message);
     return next(err);
   }
 

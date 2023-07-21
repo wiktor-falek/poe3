@@ -12,7 +12,7 @@ import {
   ServerToClientEvents,
   InterServerEvents,
   SocketData,
-} from "../socket.js";
+} from "../types/socket.js";
 
 const httpServer = createServer();
 const io = new Server<

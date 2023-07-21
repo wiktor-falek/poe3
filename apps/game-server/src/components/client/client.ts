@@ -1,5 +1,5 @@
 import type { User, Character } from "@poe3/types";
-import type { IoSocket } from "../../../socket.js";
+import type { IoSocket } from "../../../types/socket.js";
 
 class Client {
   #user: User;

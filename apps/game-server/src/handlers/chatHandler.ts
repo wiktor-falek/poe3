@@ -1,7 +1,7 @@
 import Joi from "joi";
 import { GlobalMessage, ServerMessage } from "../components/message.js";
 import Client from "../components/client/client.js";
-import type { Io, IoSocket } from "../../socket.js";
+import type { Io, IoSocket } from "../../types/socket.js";
 
 function registerChatHandler(io: Io, socket: IoSocket, client: Client) {
   const join = (_roomId: number) => {
