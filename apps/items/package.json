@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "dev": "tsc-watch --onSuccess \"node .\" ",
-    "build": "tsc --build"
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",

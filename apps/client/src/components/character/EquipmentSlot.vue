@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref } from "vue";
-import type { EquipmentSlot } from "../../../../common/types/unorganized";
+import type { EquipmentSlot } from "@poe3/types";
 import useCharacterStore from "../../stores/characterStore";
 import WearableItemTooltip from "../items/WearableItemTooltip.vue";
 

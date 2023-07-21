@@ -1,4 +1,4 @@
-import { baseCharacterClassAttributes } from ".";
+import { baseCharacterClassAttributes } from "./index.js";
 import type { Character, DynamicCharacter } from "@poe3/types";
 
 function getDynamicCharacter(character: Character): DynamicCharacter {

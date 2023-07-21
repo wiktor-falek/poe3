@@ -1,4 +1,5 @@
-import * as formulas from "./lib/formulas";
-import { baseCharacterClassAttributes } from "./lib/characterClassAttributes";
+import * as formulas from "./lib/formulas.js";
+import { baseCharacterClassAttributes } from "./lib/characterClassAttributes.js";
+import getDynamicCharacter from "./getDynamicCharacter.js";
 
-export { formulas, baseCharacterClassAttributes };
+export { formulas, baseCharacterClassAttributes, getDynamicCharacter };

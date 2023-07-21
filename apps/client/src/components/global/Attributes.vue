@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Attributes } from "../../../../common/types/unorganized";
+import type { Attributes } from "@poe3/types";
 const props = defineProps<{ attributes: Attributes }>();
 </script>
 

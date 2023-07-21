@@ -1,5 +1,4 @@
-import type { User } from "../../../../common/types/user.js";
-import type { Character } from "../../../../common/types/character.js";
+import type { User, Character } from "@poe3/types";
 import Client from "./client.js";
 import type { IoSocket } from "../../../socket.js";
 

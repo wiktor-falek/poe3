@@ -1,6 +1,5 @@
 import { randint } from "pyrand";
-import { Resources } from "../../../../common/types/unorganized.js";
-import { DynamicCharacter } from "../../../../common/types/character.js";
+import { Resources, DynamicCharacter } from "@poe3/types";
 import { nanoid } from "nanoid";
 import { Err, Ok, Result } from "resultat";
 

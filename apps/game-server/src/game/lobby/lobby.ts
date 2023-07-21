@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import Client from "../../components/client/client.js";
 import { Err, Ok } from "resultat";
-import { CharacterClass } from "../../../../common/types/character.js";
+import { CharacterClass } from "@poe3/types";
 import { choice } from "pyrand";
 
 export interface LobbyData {
