@@ -1,6 +1,6 @@
 import Client from "../components/client/client.js";
 import InstanceManager from "../game/instance/instanceManager.js";
-import LobbyManager from "../game/lobby/lobbyManager.js";
+import LobbyManager from "../components/lobby/lobbyManager.js";
 import {
   ErrorMessage,
   GlobalMessage,
@@ -19,13 +19,13 @@ const awardSilverToAlivePlayers = async (instance: Instance) => {
   const alivePlayers = players.filter((p) => p.isAlive);
   const namesOfAlivePlayers = alivePlayers.map((p) => p.name);
 
-  const silver = randint(2, 3);
-
-  // TODO: one query for all clients
   for (let i = 0; i < namesOfAlivePlayers.length; i++) {
     const name = namesOfAlivePlayers[i];
-    const client = instance.clients.find((c) => c.characterName === name);
+    const client = instance.clients.find(
+      (client) => client.character.name === name
+    );
     if (client) {
+      const silver = randint(2, 3);
       const result = await Character.grantSilver(name, silver);
       if (result.ok) {
         client.socket.emit(
@@ -114,7 +114,7 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
     // emit leave message to remaining instance members
     io.to(instance.socketRoom).emit(
       "chat:message",
-      new GlobalMessage(`${client.characterName} has left the instance`)
+      new GlobalMessage(`${client.character.name} has left the instance`)
     );
   };
 
@@ -132,7 +132,7 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
       !instance ||
       !room ||
       !(player instanceof Player) ||
-      player.name !== client.characterName
+      player.name !== client.character.name
     ) {
       return socket.emit("chat:message", new ErrorMessage("Not your turn"));
     }
@@ -173,7 +173,7 @@ function registerInstanceHandler(io: Io, socket: IoSocket, client: Client) {
       return socket.emit("chat:message", new ErrorMessage("Invalid action"));
     }
 
-    if (client.characterName !== player.name) {
+    if (client.character.name !== player.name) {
       return socket.emit("chat:message", new ErrorMessage("Not your turn"));
     }
 

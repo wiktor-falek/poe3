@@ -103,7 +103,7 @@ class Lobby implements LobbyData {
     if (this.size > 0) {
       // transfer ownership after leaving to a random client
       const randomClient = choice(Object.values(this.#clients));
-      this.ownerName = randomClient.characterName;
+      this.ownerName = randomClient.character.name;
     }
 
     return true;
@@ -111,7 +111,7 @@ class Lobby implements LobbyData {
 
   kick(characterName: string): Client | undefined {
     const targetClient = Object.values(this.#clients).find(
-      (client) => client.characterName === characterName
+      (client) => client.character.name === characterName
     );
 
     if (targetClient !== undefined) {
@@ -123,7 +123,7 @@ class Lobby implements LobbyData {
   }
 
   clientIsOwner(client: Client) {
-    return this.ownerName === client.characterName;
+    return this.ownerName === client.character.name;
   }
 }
 

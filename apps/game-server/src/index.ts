@@ -3,7 +3,7 @@ import { Server } from "socket.io";
 import initialize from "./middlewares/initialize.js";
 import registerChatHandler from "./handlers/chatHandler.js";
 import registerLobbyHandler from "./handlers/lobbyHandler.js";
-import LobbyManager from "./game/lobby/lobbyManager.js";
+import LobbyManager from "./components/lobby/lobbyManager.js";
 import registerInstanceHandler from "./handlers/instanceHandler.js";
 import InstanceManager from "./game/instance/instanceManager.js";
 import { PartyMessage } from "./components/message.js";
@@ -48,7 +48,7 @@ io.on("connection", (socket) => {
   registerLobbyHandler(io, socket, client);
   registerInstanceHandler(io, socket, client);
 
-  console.log(`${client.characterName} (${client.username}) connected`);
+  console.log(`${client.character.name} (${client.username}) connected`);
 
   const instance = InstanceManager.currentInstance(client);
   if (instance !== null) {
@@ -56,7 +56,7 @@ io.on("connection", (socket) => {
       .to(instance.socketRoom)
       .emit(
         "chat:message",
-        new PartyMessage(`${client.characterName} has reconnected`)
+        new PartyMessage(`${client.character.name} has reconnected`)
       );
   }
 
@@ -73,12 +73,12 @@ io.on("connection", (socket) => {
     if (instance) {
       io.to(instance.socketRoom).emit(
         "chat:message",
-        new PartyMessage(`${client.characterName} has disconnected`)
+        new PartyMessage(`${client.character.name} has disconnected`)
       );
     }
 
     console.log(
-      `${client.username} (${client.characterName}) disconnected (${reason})`
+      `${client.username} (${client.character.name}) disconnected (${reason})`
     );
   });
 });

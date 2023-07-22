@@ -12,7 +12,7 @@ class ClientManager {
 
   static getClientByCharacterName(characterName: string): Client | undefined {
     const client = Array.from(this.clients.values()).find(
-      (client) => client.characterName === characterName
+      (client) => client.character.name === characterName
     );
     return client;
   }

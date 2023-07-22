@@ -56,7 +56,7 @@ function registerChatHandler(io: Io, socket: IoSocket, client: Client) {
 
     io.to(roomName).emit(
       "chat:message",
-      new GlobalMessage(message, client.characterName)
+      new GlobalMessage(message, client.character.name)
     );
   };
 
