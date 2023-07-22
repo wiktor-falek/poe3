@@ -120,7 +120,7 @@ class Wearable {
   ) {
     if (PREFIX_MODIFIER_POOL.length < 2 || SUFFIX_MODIFIER_POOL.length < 2) {
       throw new Error(
-        "Method requires #PREFIX_MODIFIER_POOL and #SUFFIX_MODIFIER_POOL to have at least two prefix and two suffix modifiers"
+        "Method requires #PREFIX_MODIFIER_POOL and #SUFFIX_MODIFIER_POOL to have at least 2 prefix and 2 suffix modifiers"
       );
     }
 
@@ -146,7 +146,7 @@ class Wearable {
   ) {
     if (PREFIX_MODIFIER_POOL.length < 3 || SUFFIX_MODIFIER_POOL.length < 3) {
       throw new Error(
-        "Method requires #PREFIX_MODIFIER_POOL and #SUFFIX_MODIFIER_POOL to have at least two prefix and two suffix modifiers"
+        "Method requires #PREFIX_MODIFIER_POOL and #SUFFIX_MODIFIER_POOL to have at least 3 prefix and 3 suffix modifiers"
       );
     }
 

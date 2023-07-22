@@ -1,4 +1,4 @@
-export const baseCharacterClassAttributes = {
+export const baseClassAttributes = {
     swordsman: {
         strength: 8,
         dexterity: 6,

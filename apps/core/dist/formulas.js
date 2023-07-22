@@ -1,10 +1,12 @@
-export function maxHp(base = 20, level, vitality
+export function maxHp(level, vitality
 // increased?: number,
 // multiplier?: number
 ) {
+    const base = 20;
     return base + (level - 1) * 2 + vitality * 1;
 }
-export function maxMp(base = 10, level, intelligence) {
+export function maxMp(level, intelligence) {
+    const base = 20;
     return base + (level - 1) * 2 + intelligence * 1;
 }
 export function evasion(base, evasion, dexterity) {

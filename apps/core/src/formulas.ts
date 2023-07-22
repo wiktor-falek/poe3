@@ -1,14 +1,15 @@
 export function maxHp(
-  base: number = 20,
   level: number,
   vitality: number
   // increased?: number,
   // multiplier?: number
 ) {
+  const base = 20;
   return base + (level - 1) * 2 + vitality * 1;
 }
 
-export function maxMp(base: number = 10, level: number, intelligence: number) {
+export function maxMp(level: number, intelligence: number) {
+  const base = 20;
   return base + (level - 1) * 2 + intelligence * 1;
 }
 

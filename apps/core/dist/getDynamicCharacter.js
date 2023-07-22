@@ -1,4 +1,4 @@
-import { baseCharacterClassAttributes } from "./index.js";
+import { baseCharacterClassAttributes } from "./characterClassAttributes.js";
 function getDynamicCharacter(character) {
     const baseAttributes = baseCharacterClassAttributes[character.class];
     const attributes = { ...baseAttributes }; // calculate attributes
