@@ -1,12 +1,11 @@
 <script lang="ts" setup>
-import useCharacterStore from "../../stores/characterStore";
 import type WearableItem from "../../../../items/dist/wearable/wearable";
+import usePlayerStore from "../../stores/playerStore";
 
 const props = defineProps<{ item: WearableItem }>();
 
-const characterStore = useCharacterStore();
-const character = characterStore.character;
-const characterLvl = characterStore.character?.level;
+const playerStore = usePlayerStore();
+const { player } = playerStore;
 
 interface Mod {
   description: string;
@@ -39,7 +38,7 @@ function populateTemplateModDescription(mod: Mod) {
 <template>
   <div
     class="item-tooltip"
-    v-if="item && characterStore.character"
+    v-if="item"
     :style="{
       'border-color': `var(--item-rarity--${item.rarity})`,
     }"
@@ -74,12 +73,10 @@ function populateTemplateModDescription(mod: Mod) {
     <!-- Requirements -->
     <hr v-if="item.requirements" />
     <div class="item-tooltip__level-requirement" v-if="item.requirements">
-      <!-- TODO: comma signs between each span -->
-      <p
-        :class="{
-          'color--restricted': item.requirements.level,
-        }"
-      >
+      <p>
+        <!-- :class="{
+        'color--restricted': item.requirements.level > player?.level,
+      }" -->
         Requires
         <span v-if="item.requirements.level">
           Level
@@ -117,13 +114,17 @@ function populateTemplateModDescription(mod: Mod) {
     <hr
       v-if="
         item.rarity !== 'normal' &&
-        [...item.modifiers.affix.prefixes, ...item.modifiers.affix.suffixes].length
+        [...item.modifiers.affix.prefixes, ...item.modifiers.affix.suffixes]
+          .length
       "
     />
     <div class="item-tooltip__mods" v-if="item.modifiers.affix">
       <div
         class="item-tooltip__mods__mod color--magic"
-        v-for="affix in [...item.modifiers.affix.prefixes, ...item.modifiers.affix.suffixes]"
+        v-for="affix in [
+          ...item.modifiers.affix.prefixes,
+          ...item.modifiers.affix.suffixes,
+        ]"
       >
         {{ populateTemplateModDescription(affix) }}
       </div>
@@ -131,7 +132,10 @@ function populateTemplateModDescription(mod: Mod) {
 
     <!-- Description -->
     <hr v-if="item.uniqueDescription" />
-    <div class="item-tooltip__description color--unique" v-if="item.uniqueDescription">
+    <div
+      class="item-tooltip__description color--unique"
+      v-if="item.uniqueDescription"
+    >
       {{ item.uniqueDescription }}
     </div>
   </div>

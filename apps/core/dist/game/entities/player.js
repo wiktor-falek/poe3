@@ -8,6 +8,7 @@ class Player {
     name;
     level;
     class;
+    silver;
     attributes;
     resources;
     resistances;
@@ -16,6 +17,7 @@ class Player {
         this.name = character.name;
         this.level = character.level;
         this.class = character.class;
+        this.silver = character.silver;
         this.attributes = getBaseClassAttributes(this.class);
         this.resources = getResources(this.level, this.attributes);
         this.resistances = {

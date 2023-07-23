@@ -1,10 +1,26 @@
 <script lang="ts" setup>
 import { useRouter } from "vue-router";
 import { onUnmounted, onMounted, onBeforeMount, ref, watch } from "vue";
-import * as gameServer from "../socket/gameServer";
+// import * as gameServer from "../socket/gameServer";
 import Chat from "../components/Chat.vue";
 import Navigation from "../components/Navigation.vue";
-import Character from "../components/character/Character.vue";
+import CharacterVue from "../components/character/Character.vue";
+import usePlayerStore from "../stores/playerStore";
+import type { Character } from "@poe3/types";
+
+const playerStore = usePlayerStore();
+const mockCharacter: Character = {
+  id: 1,
+  userId: 1,
+  name: "Apdo",
+  class: "ranger",
+  level: 1,
+  xp: 0,
+  reqXp: 0,
+  silver: 20,
+};
+
+playerStore.setPlayer(mockCharacter);
 
 const router = useRouter();
 
@@ -14,7 +30,7 @@ onBeforeMount(() => {
   if (characterName === null) {
     router.push("/select");
   }
-  gameServer.socket.connect();
+  // gameServer.socket.connect();
 });
 
 const showLoading = ref(true);
@@ -22,39 +38,39 @@ const showLoading = ref(true);
 onMounted(() => {
   const start = Date.now();
 
-  const unwatch = watch(gameServer.state, () => {
-    if (gameServer.state.connected) {
-      const end = Date.now();
-      const timeSpentLoading = end - start;
+  // const unwatch = watch(gameServer.state, () => {
+  //   if (gameServer.state.connected) {
+  //     const end = Date.now();
+  //     const timeSpentLoading = end - start;
 
-      // if real load time was below MINIMUM_LOAD_TIME, timeout for the remaining duration
-      const MINIMUM_LOAD_TIME = 0;
-      const timeoutDuration = MINIMUM_LOAD_TIME - timeSpentLoading;
+  //     // if real load time was below MINIMUM_LOAD_TIME, timeout for the remaining duration
+  //     const MINIMUM_LOAD_TIME = 0;
+  //     const timeoutDuration = MINIMUM_LOAD_TIME - timeSpentLoading;
 
-      setTimeout(() => {
-        showLoading.value = false;
-      }, timeoutDuration);
+  //     setTimeout(() => {
+  //       showLoading.value = false;
+  //     }, timeoutDuration);
 
-      unwatch();
-    }
-  });
-  watch(
-    () => gameServer.state.instance,
-    (newInstance, oldInstance) => {
-      if (newInstance !== null) {
-        router.push("/game/instance");
-      }
-    }
-  );
+  //     unwatch();
+  //   }
+  // });
+  // watch(
+  //   () => gameServer.state.instance,
+  //   (newInstance, oldInstance) => {
+  //     if (newInstance !== null) {
+  //       router.push("/game/instance");
+  //     }
+  //   }
+  // );
 });
 
 onUnmounted(() => {
-  gameServer.socket.disconnect();
+  // gameServer.socket.disconnect();
 });
 </script>
 
 <template>
-  <main class="loading" v-if="showLoading">
+  <!-- <main class="loading" v-if="showLoading">
     <div class="lds-roller">
       <div></div>
       <div></div>
@@ -65,13 +81,13 @@ onUnmounted(() => {
       <div></div>
       <div></div>
     </div>
-  </main>
-  <main v-else :class="{ loaded: gameServer.state.connected }">
-    <RouterView class="game"></RouterView>
-    <Navigation />
-    <Chat />
-    <Character />
-  </main>
+  </main> -->
+  <!-- <main v-else :class="{ loaded: true /*gameServer.state.connected*/ }"> -->
+  <RouterView class="game"></RouterView>
+  <Navigation />
+  <Chat />
+  <CharacterVue />
+  <!-- </main> -->
 </template>
 
 <style scoped>

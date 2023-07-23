@@ -5,13 +5,13 @@ declare class Combat {
     players: Player[];
     enemies: Enemy[];
     constructor(players: Player[], enemies: Enemy[]);
-    get currentTurn(): Enemy | Player;
+    get currentTurn(): Player | Enemy;
     get playersWon(): boolean;
     get enemiesWon(): boolean;
     get hasConcluded(): boolean;
     begin(): void;
     continue(): void;
     playerAction(): void;
-    nextEntity(): Enemy | Player;
+    nextEntity(): Player | Enemy;
 }
 export default Combat;

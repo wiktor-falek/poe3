@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { ref } from "vue";
-import useCharacterStore from "../../stores/characterStore";
+import usePlayerStore from "../../stores/playerStore";
 import Equipment from "./Equipment.vue";
 import Inventory from "./Inventory.vue";
 
-const characterStore = useCharacterStore();
-const character = characterStore.character;
+const playerStore = usePlayerStore();
+const player = playerStore.player;
 
 const isCollapsed = ref(true);
 
@@ -13,16 +13,21 @@ const isCollapsed = ref(true);
 </script>
 
 <template>
-  <div class="character" v-if="character" @contextmenu.prevent="">
-    <button tabindex="4" class="toggle-collapsed" @click="isCollapsed = !isCollapsed"></button>
+  <div class="player" v-if="player" @contextmenu.prevent="">
+    <button
+      tabindex="4"
+      class="toggle-collapsed"
+      @click="isCollapsed = !isCollapsed"
+    ></button>
     <div class="accordion" :class="{ collapsed: isCollapsed }">
       <div class="overview">
-        <h3>{{ character.name }}</h3>
+        <h3>{{ player.name }}</h3>
         <h3>
-          Lvl {{ character.level }} <span class="capitalize">{{ character.class }}</span>
+          Lvl {{ player.level }}
+          <span class="capitalize">{{ player.class }}</span>
         </h3>
       </div>
-      <p>Silver: {{ character.silver }}</p>
+      <p>Silver: {{ player.silver }}</p>
       <Equipment />
       <Inventory />
     </div>
@@ -30,7 +35,7 @@ const isCollapsed = ref(true);
 </template>
 
 <style scoped>
-.character {
+.player {
   user-select: none;
   position: absolute;
   display: flex;
@@ -95,3 +100,4 @@ h6 {
   width: 0;
 }
 </style>
+../../stores/playerStore

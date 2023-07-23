@@ -23,6 +23,7 @@ declare class Player {
     name: string;
     level: number;
     class: CharacterClass;
+    silver: number;
     attributes: Attributes;
     resources: Resources;
     resistances: Resistances;

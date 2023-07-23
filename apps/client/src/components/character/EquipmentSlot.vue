@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import type { EquipmentSlot } from "@poe3/types";
-import useCharacterStore from "../../stores/characterStore";
+// import useCharacterStore from "../../stores/characterStore";
 import WearableItemTooltip from "../items/WearableItemTooltip.vue";
 
-const characterStore = useCharacterStore();
+// const characterStore = useCharacterStore();
 // const equipment = characterStore.character?.equipment;
 const equipment: unknown = {};
 
@@ -81,3 +81,4 @@ const isHovered = ref(false);
   border-color: var(--item-rarity--unique);
 }
 </style>
+../../stores/playerStore

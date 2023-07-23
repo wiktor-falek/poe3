@@ -7,7 +7,6 @@ import Verified from "./views/Verified.vue";
 import Recovery from "./views/Recovery.vue";
 import Game from "./views/Game.vue";
 import Instance from "./views/game-views/Instance.vue";
-import Lobby from "./views/game-views/Lobby.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -50,10 +49,7 @@ const router = createRouter({
       path: "/game",
       name: "game",
       component: Game,
-      children: [
-        { path: "instance", name: "instance", component: Instance },
-        { path: "lobby", name: "lobby", component: Lobby },
-      ],
+      children: [{ path: "instance", name: "instance", component: Instance }],
     },
   ],
 });

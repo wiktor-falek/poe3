@@ -7,10 +7,13 @@ const isCollapsed = ref(true);
 <template>
   <nav class="navigation">
     <div class="accordion" :class="{ collapsed: isCollapsed }">
-      <RouterLink to="/game/lobby" class="button">Lobby</RouterLink>
       <RouterLink to="/game/instance" class="button">Instance</RouterLink>
     </div>
-    <button tabindex="1" class="toggle-collapsed" @click="isCollapsed = !isCollapsed"></button>
+    <button
+      tabindex="1"
+      class="toggle-collapsed"
+      @click="isCollapsed = !isCollapsed"
+    ></button>
   </nav>
 </template>
 

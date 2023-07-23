@@ -15,3 +15,4 @@ const players = [new Player(mockCharacter)];
 const enemies = [new Enemy("Rat", 1, 10), new Enemy("Rat", 1, 10)];
 const combat = new Combat(players, enemies);
 console.log(combat);
+export { Player, Enemy, Combat };

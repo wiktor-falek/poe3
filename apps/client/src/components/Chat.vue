@@ -1,9 +1,12 @@
 <script lang="ts" setup>
 import { ref, Ref } from "vue";
-import * as gameServer from "../socket/gameServer";
-import useCharacterStore from "../stores/characterStore";
+// import * as gameServer from "../socket/gameServer";
+import useMessagesStore from "../stores/messageStore";
+import usePlayerStore from "../stores/playerStore";
 
-const characterStore = useCharacterStore();
+const messageStore = useMessagesStore();
+const playerStore = usePlayerStore();
+const { player } = playerStore;
 
 const content: Ref<string> = ref("");
 
@@ -13,31 +16,29 @@ type Commands = { [name: string]: Function | undefined };
 
 const clientSideCommands: Commands = {
   help: () => {
-    gameServer.state.messages.push({
-      sender: "SYSTEM",
-      group: "SYSTEM",
-      content: "/help - display this message\n" + "/clear - clear all the messages\n",
-    });
+    messageStore.systemMessage(
+      "/help - display this message\n" + "/clear - clear all the messages\n"
+    );
   },
   clear: () => {
-    gameServer.state.messages.splice(0); // same as set to [] but reactive
+    messageStore.clear();
   },
 };
 
 const serverSideCommands: Commands = {
-  global: (room: string) => {
-    try {
-      gameServer.socket.emit("chat:join", parseInt(room));
-    } catch (e) {
-      console.log("ERROR: expected integer input, got:", room, "instead");
-    }
-  },
+  // global: (room: string) => {
+  //   try {
+  //     gameServer.socket.emit("chat:join", parseInt(room));
+  //   } catch (e) {
+  //     console.log("ERROR: expected integer input, got:", room, "instead");
+  //   }
+  // },
 };
 
 function send() {
   const message = content.value.trim();
 
-  if (!message) {
+  if (!message || !player) {
     return;
   }
 
@@ -45,19 +46,19 @@ function send() {
     const command = message.slice(1).split(" ")[0];
     const args = message.split(" ").slice(1);
 
-    const cb = clientSideCommands[`${command}`] ?? serverSideCommands[`${command}`];
+    const cb =
+      clientSideCommands[`${command}`] ?? serverSideCommands[`${command}`];
 
     if (cb === undefined) {
-      gameServer.state.messages.push({
-        sender: "ERROR",
-        group: "SYSTEM",
-        content: `Invalid command '/${command}'\nUse /help to see the list of commands`,
-      });
+      messageStore.systemMessage(
+        `Invalid command '/${command}'\nUse /help to see the list of commands`
+      );
     } else {
       cb(...args);
     }
   } else {
-    gameServer.socket.emit("chat:send", message);
+    messageStore.globalMessage(message, player.name);
+    // gameServer.socket.emit("chat:send", message);
   }
 
   content.value = "";
@@ -66,12 +67,16 @@ function send() {
 
 <template>
   <div class="chat">
-    <button tabindex="2" class="toggle-collapsed" @click="isCollapsed = !isCollapsed"></button>
+    <button
+      tabindex="2"
+      class="toggle-collapsed"
+      @click="isCollapsed = !isCollapsed"
+    ></button>
     <div class="wrapper">
       <div class="accordion" :class="{ collapsed: isCollapsed }">
         <div class="top">
           <div class="messages">
-            <p class="message" v-for="message in gameServer.state.messages">
+            <p class="message" v-for="message in messageStore.messages">
               <span
                 class="message__sender"
                 :class="{
@@ -79,7 +84,7 @@ function send() {
                   'message__sender--system': message.sender === 'SYSTEM',
                   'message__sender--error': message.sender === 'ERROR',
                   'message__sender--current-character':
-                    message.sender === characterStore.character?.name,
+                    message.sender === playerStore.player?.name,
                 }"
                 >{{ message.sender }}</span
               >
@@ -88,7 +93,13 @@ function send() {
             </p>
           </div>
         </div>
-        <input tabindex="3" type="text" maxlength="128" @keydown.enter="send" v-model="content" />
+        <input
+          tabindex="3"
+          type="text"
+          maxlength="128"
+          @keydown.enter="send"
+          v-model="content"
+        />
       </div>
     </div>
   </div>
@@ -188,3 +199,4 @@ input {
   color: var(--current-character);
 }
 </style>
+../stores/playerStore

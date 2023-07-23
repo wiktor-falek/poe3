@@ -34,3 +34,4 @@ const character = characterStore.dynamicCharacter;
   width: 150px;
 }
 </style>
+../stores/playerStore

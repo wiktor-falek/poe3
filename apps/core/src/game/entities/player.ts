@@ -36,6 +36,7 @@ class Player {
   name: string;
   level: number;
   class: CharacterClass;
+  silver: number;
   attributes: Attributes;
   resources: Resources;
   resistances: Resistances;
@@ -44,6 +45,7 @@ class Player {
     this.name = character.name;
     this.level = character.level;
     this.class = character.class;
+    this.silver = character.silver;
     this.attributes = getBaseClassAttributes(this.class);
     this.resources = getResources(this.level, this.attributes);
     this.resistances = {

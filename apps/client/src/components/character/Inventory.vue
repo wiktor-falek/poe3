@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import useCharacterStore from "../../stores/characterStore";
-const characterStore = useCharacterStore();
+// import useCharacterStore from "../../stores/characterStore";
+// const characterStore = useCharacterStore();
 // const inventory: Array<any> | undefined = characterStore.character?.inventory;
 const inventory: Array<unknown> = [];
 </script>
@@ -49,3 +49,4 @@ const inventory: Array<unknown> = [];
   height: 48px;
 }
 </style>
+../../stores/playerStore
