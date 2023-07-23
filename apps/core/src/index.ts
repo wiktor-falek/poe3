@@ -1,6 +1,7 @@
 import { Character } from "@poe3/types";
 import Player from "./game/entities/player.js";
 import Enemy from "./game/entities/enemy.js";
+import Combat from "./game/combat.js";
 
 const mockCharacter: Character = {
   id: 1,
@@ -15,21 +16,6 @@ const mockCharacter: Character = {
 
 const players = [new Player(mockCharacter)];
 const enemies = [new Enemy("Rat", 1, 10), new Enemy("Rat", 1, 10)];
-
-class Combat {
-  players: Player[];
-  enemies: Enemy[];
-  constructor(players: Player[], enemies: Enemy[]) {
-    this.players = players;
-    this.enemies = enemies;
-  }
-
-  begin() {
-    // set turnOrder
-    // have enemies take actions
-    // wait for player
-  }
-}
 
 const combat = new Combat(players, enemies);
 console.log(combat);

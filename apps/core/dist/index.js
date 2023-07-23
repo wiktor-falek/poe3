@@ -1,5 +1,6 @@
 import Player from "./game/entities/player.js";
 import Enemy from "./game/entities/enemy.js";
+import Combat from "./game/combat.js";
 const mockCharacter = {
     id: 1,
     userId: 1,
@@ -12,18 +13,5 @@ const mockCharacter = {
 };
 const players = [new Player(mockCharacter)];
 const enemies = [new Enemy("Rat", 1, 10), new Enemy("Rat", 1, 10)];
-class Combat {
-    players;
-    enemies;
-    constructor(players, enemies) {
-        this.players = players;
-        this.enemies = enemies;
-    }
-    begin() {
-        // set turnOrder
-        // have enemies take actions
-        // wait for player
-    }
-}
 const combat = new Combat(players, enemies);
 console.log(combat);

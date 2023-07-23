@@ -2,7 +2,7 @@ import { nanoid } from "nanoid";
 import { Err, Ok } from "resultat";
 import { randint } from "pyrand";
 import { getBaseClassAttributes } from "../../baseClassAttributes.js";
-import getResources from "../../utils/getResources.js";
+import getResources from "../../components/getResources.js";
 class Player {
     id;
     name;

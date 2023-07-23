@@ -15,6 +15,7 @@
     "tsc-watch": "^6.0.4"
   },
   "dependencies": {
-    "@poe3/types": "file:../types"
+    "@poe3/types": "file:../types",
+    "pyrand": "^1.1.3"
   }
 }

@@ -2,7 +2,7 @@ import { nanoid } from "nanoid";
 import { Err, Ok, Result } from "resultat";
 import { randint } from "pyrand";
 import { getBaseClassAttributes } from "../../baseClassAttributes.js";
-import getResources from "../../utils/getResources.js";
+import getResources from "../../components/getResources.js";
 import type {
   Resistances,
   Attributes,
@@ -10,6 +10,7 @@ import type {
   Character,
   CharacterClass,
 } from "@poe3/types";
+import { DamageType } from "../../../types.js";
 
 export interface TurnStartUpdate {
   playerId: string;
@@ -29,8 +30,6 @@ export interface ActionResult {
     hp?: number;
   };
 }
-
-type DamageType = "fire" | "cold" | "lightning" | "poison" | "physical";
 
 class Player {
   id: string;

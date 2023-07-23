@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import { randint } from "pyrand";
+import { choice, randint } from "pyrand";
 class Enemy {
     id;
     name;
@@ -32,6 +32,12 @@ class Enemy {
     get isAlive() {
         return this.resources.hp > 0;
     }
+    randomAction(players) {
+        const alivePlayers = players.filter((player) => player.isAlive);
+        const action = { ...this.basicAttack(), target: choice(alivePlayers) };
+        action.target.takeDamage(action.damage, action.damageType);
+        return action;
+    }
     takeDamage(amount) {
         const amountAfterReduction = amount;
         this.resources.hp = Math.max(this.resources.hp - amountAfterReduction, 0);
@@ -40,13 +46,15 @@ class Enemy {
     basicAttack() {
         const CRIT_CHANCE = 5;
         const CRIT_MULTIPLIER = 1.5;
-        let damage = randint(2, 3);
+        const damageType = "physical";
+        let damage = randint(1, 2);
         const critRoll = randint(1, 100);
         const isCritical = CRIT_CHANCE > critRoll;
         if (isCritical) {
             damage = Math.floor(damage * CRIT_MULTIPLIER);
         }
-        return { damage, critical: isCritical, attackerId: this.id };
+        const attacker = this;
+        return { damage, damageType, critical: isCritical, attacker };
     }
 }
 export default Enemy;

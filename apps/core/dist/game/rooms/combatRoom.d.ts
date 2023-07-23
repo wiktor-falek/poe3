@@ -24,9 +24,9 @@ declare class CombatRoom {
     enemies: Array<Enemy>;
     currentTurnPlayerName: string;
     constructor(players: Array<Player>, enemies: Array<Enemy>);
-    get currentTurnEntity(): Player | Enemy | undefined;
+    get currentTurnEntity(): Enemy | Player | undefined;
     createTurnOrder(): void;
-    nextEntity(): Player | Enemy;
+    nextEntity(): Enemy | Player;
     get playersWon(): boolean;
     get enemiesWon(): boolean;
     get hasConcluded(): boolean;

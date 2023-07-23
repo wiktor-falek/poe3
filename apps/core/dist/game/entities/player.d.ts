@@ -1,5 +1,6 @@
 import { Result } from "resultat";
 import type { Resistances, Attributes, Resources, Character, CharacterClass } from "@poe3/types";
+import { DamageType } from "../../../types.js";
 export interface TurnStartUpdate {
     playerId: string;
     resources?: {
@@ -17,7 +18,6 @@ export interface ActionResult {
         hp?: number;
     };
 }
-type DamageType = "fire" | "cold" | "lightning" | "poison" | "physical";
 declare class Player {
     id: string;
     name: string;
