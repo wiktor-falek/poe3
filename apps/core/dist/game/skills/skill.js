@@ -21,7 +21,7 @@ class Ability {
         return { ...this, cost: {}, damage: {} };
     }
 }
-const ability = new Ability("Heavy Strike", "attack", "single_target", {
+const ability = new Ability("Heavy Strike", "attack", "target", {
     addedFlatEachLevel: {
         1: 2,
         2: 4,
@@ -49,4 +49,5 @@ const ability = new Ability("Heavy Strike", "attack", "single_target", {
     },
     ap: 2,
 });
+console.log(ability);
 export {};
