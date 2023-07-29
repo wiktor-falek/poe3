@@ -1,4 +1,4 @@
-import type { StackableItem } from "../wearable";
+import type { StackableItem } from "../wearable/index.js";
 
 export interface Options {
   name: string;

@@ -1,14 +1,12 @@
 import { choice, choices } from "pyrand";
-import materialBlueprints from "./materials/blueprints";
-import wearableBlueprints from "./wearable/blueprints";
-import { Chest, Ring, Weapon } from "./wearable";
+import materialBlueprints from "./materials/blueprints.js";
+import wearableBlueprints from "./wearable/blueprints.js";
+import { Chest, Ring, Weapon } from "./wearable/index.js";
 
 // export interface Options {}
 
-export class LootFactory {
-  constructor(/*options: Options*/) {}
-
-  generateMaterials(amount: number, ilvl: number) {
+class LootFactory {
+  static generateMaterials(amount: number, ilvl: number) {
     // TODO: filter out materials that cannot drop at given ilvl
 
     const materials = choices(Object.values(materialBlueprints), amount, {
@@ -18,7 +16,7 @@ export class LootFactory {
     return materials;
   }
 
-  generateWearables(amount: number, ilvl: number) {
+  static generateWearables(amount: number, ilvl: number) {
     // TODO: change to WearableSlot once all wearables are implemented aswell as blueprints
     const equipmentSlotWeights: {
       [slot in /*WearableSlot*/ "hand" | "chest" | "ring"]: number;
@@ -57,7 +55,7 @@ export class LootFactory {
     return wearables;
   }
 
-  generateLoot(ilvl: number, playerCount?: number, enemyCount?: number) {
+  static generateLoot(ilvl: number, playerCount?: number, enemyCount?: number) {
     const amountOfMaterials = choices([0, 1, 2], 1, {
       weights: [40, 50, 10],
     })[0];
@@ -70,3 +68,5 @@ export class LootFactory {
     return [...materials, ...wearables];
   }
 }
+
+export default LootFactory;

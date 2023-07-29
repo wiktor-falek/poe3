@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@poe3/core": "file:../core",
+    "@poe3/items": "file:../items",
     "@poe3/types": "file:../types",
     "babel-plugin-module-resolver": "^5.0.0",
     "pinia": "^2.1.3",

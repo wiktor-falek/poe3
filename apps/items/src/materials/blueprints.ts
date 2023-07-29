@@ -1,4 +1,4 @@
-import Material from "./material";
+import Material from "./material.js";
 
 const blueprints: { [name: string]: () => Material } = {
   augmentingCore: () =>

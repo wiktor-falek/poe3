@@ -1,4 +1,4 @@
-import { deepFreeze } from "./utils";
+import { deepFreeze } from "./utils/index.js";
 
 // IMPLICITS - can exist on any type of GearBase, regardless of rarity
 export const IMPLICIT_MODIFIERS = deepFreeze({

@@ -1,5 +1,5 @@
-import { BASE_MODIFIERS, IMPLICIT_MODIFIERS } from "../modifiers";
-import { Weapon, Chest, Ring } from "./index";
+import { BASE_MODIFIERS, IMPLICIT_MODIFIERS } from "../modifiers.js";
+import { Weapon, Chest, Ring } from "./index.js";
 
 const hand: { [key: string]: () => Weapon } = {
   brokenSword: () =>

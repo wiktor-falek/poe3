@@ -1,22 +1,21 @@
-import { PREFIX_MODIFIERS, SUFFIX_MODIFIERS } from "../modifiers";
-import { deepFreeze } from "../utils";
-import Wearable, { Options } from "./wearable";
+import { PREFIX_MODIFIERS, SUFFIX_MODIFIERS } from "../modifiers.js";
+import Wearable, { Options } from "./wearable.js";
 
 class Weapon extends Wearable {
-  #PREFIX_MODIFIER_POOL = deepFreeze([
+  #PREFIX_MODIFIER_POOL = [
     // Temporary
     { ...PREFIX_MODIFIERS.to_life, weight: 1000 },
     { ...PREFIX_MODIFIERS.to_mana, weight: 1000 },
     { ...PREFIX_MODIFIERS.to_life_regeneration, weight: 1000 },
-  ]);
+  ];
 
-  #SUFFIX_MODIFIER_POOL = deepFreeze([
+  #SUFFIX_MODIFIER_POOL = [
     { ...SUFFIX_MODIFIERS.to_strength, weight: 1000 },
     { ...SUFFIX_MODIFIERS.to_dexterity, weight: 1000 },
     { ...SUFFIX_MODIFIERS.to_intelligence, weight: 1000 },
     { ...SUFFIX_MODIFIERS.to_vitality, weight: 1000 },
     { ...SUFFIX_MODIFIERS.to_speed, weight: 1000 },
-  ]);
+  ];
 
   slot: WearableSlot;
   constructor(options: Options) {

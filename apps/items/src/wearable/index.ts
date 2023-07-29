@@ -1,6 +1,6 @@
-import Ring from "./ring";
-import Weapon from "./weapon";
-import Chest from "./chest";
+import Ring from "./ring.js";
+import Weapon from "./weapon.js";
+import Chest from "./chest.js";
 
 export interface Item {
   name: string;

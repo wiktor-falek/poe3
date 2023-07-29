@@ -1,4 +1,4 @@
-import { ObjectId } from "bson";
+// import { nanoid } from "nanoid";
 import pyrand from "pyrand";
 
 export interface Options {
@@ -12,7 +12,7 @@ export interface Options {
 }
 
 class Wearable {
-  _id: ObjectId;
+  // id: string;
   type: string;
   name: string;
   uniqueName?: string | undefined;
@@ -29,7 +29,7 @@ class Wearable {
     };
   };
   constructor(options: Options) {
-    this._id = new ObjectId();
+    // this.id = nanoid(18);
     this.type = "wearable";
     this.rarity = "normal";
     this.name = options.name;

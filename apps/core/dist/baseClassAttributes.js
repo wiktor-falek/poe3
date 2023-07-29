@@ -29,5 +29,5 @@ export const baseClassAttributes = {
     },
 };
 export function getBaseClassAttributes(characterClass) {
-    return { ...baseClassAttributes[characterClass] };
+    return Object.assign({}, baseClassAttributes[characterClass]);
 }

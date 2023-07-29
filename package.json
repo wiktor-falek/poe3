@@ -2,14 +2,7 @@
   "name": "poe3",
   "version": "1.0.0",
   "description": "Multiplayer browser game",
-  "scripts": {
-    "build": "npm run build --workspaces",
-    "api": "npm run dev -w api",
-    "client": "npm run dev -w client",
-    "game-server": "npm run dev -w game-server",
-    "core": "npm run dev -w core",
-    "items": "npm run dev -w items"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wiktor-falek/poe3.git"
@@ -22,8 +15,5 @@
   "homepage": "https://github.com/wiktor-falek/poe3#readme",
   "devDependencies": {
     "typescript": "^5.1.6"
-  },
-  "workspaces": [
-    "apps/*"
-  ]
+  }
 }

@@ -1,4 +1,6 @@
-import StartingItemsFactory from "./startingItemsFactory";
-import { LootFactory } from "./lootFactory";
+// import LootFactory from "./lootFactory";
+// import StartingItemsFactory from "./startingItemsFactory";
 
-export { StartingItemsFactory, LootFactory };
+export * from "./lootFactory.js";
+export * from "./startingItemsFactory.js";
+// export LootFactory;

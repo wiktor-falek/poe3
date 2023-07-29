@@ -4,14 +4,6 @@ import { randint } from "pyrand";
 import { getBaseClassAttributes } from "../../baseClassAttributes.js";
 import getResources from "../../components/getResources.js";
 class Player {
-    id;
-    name;
-    level;
-    class;
-    silver;
-    attributes;
-    resources;
-    resistances;
     constructor(character) {
         this.id = nanoid(12);
         this.name = character.name;

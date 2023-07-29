@@ -1,12 +1,6 @@
 import { nanoid } from "nanoid";
 import { choice, randint } from "pyrand";
 class Enemy {
-    id;
-    name;
-    level;
-    attributes;
-    resources;
-    resistances;
     constructor(name, level, maxHp) {
         this.id = nanoid(12);
         this.name = name;
@@ -34,7 +28,7 @@ class Enemy {
     }
     randomAction(players) {
         const alivePlayers = players.filter((player) => player.isAlive);
-        const action = { ...this.basicAttack(), target: choice(alivePlayers) };
+        const action = Object.assign(Object.assign({}, this.basicAttack()), { target: choice(alivePlayers) });
         action.target.takeDamage(action.damage, action.damageType);
         return action;
     }

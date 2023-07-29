@@ -39,10 +39,12 @@ class ErrorMessage extends BaseMessage {
   }
 }
 
-const useMessagesStore = defineStore("character", () => {
+const useMessagesStore = defineStore("messages", () => {
   const messages: Ref<Message[]> = ref([]);
 
-  function _push(message: Message) {}
+  function _push(message: Message) {
+    messages.value.push(message);
+  }
 
   function systemMessage(content: string) {
     const message = new SystemMessage(content);
@@ -60,8 +62,8 @@ const useMessagesStore = defineStore("character", () => {
   }
 
   function clear() {
-    // set to [] while maintaining reactivity
-    messages.value = messages.value.splice(0);
+    // splice instead of reassigning to maintain reactivity
+    messages.value.splice(0);
   }
 
   return {

@@ -1,16 +1,15 @@
-import { PREFIX_MODIFIERS, SUFFIX_MODIFIERS } from "../modifiers";
-import { deepFreeze } from "../utils";
-import Wearable, { Options } from "./wearable";
+import { PREFIX_MODIFIERS, SUFFIX_MODIFIERS } from "../modifiers.js";
+import Wearable, { Options } from "./wearable.js";
 
 class Chest extends Wearable {
-  #PREFIX_MODIFIER_POOL = deepFreeze([
+  #PREFIX_MODIFIER_POOL = [
     { ...PREFIX_MODIFIERS.to_life, weight: 1000 },
     { ...PREFIX_MODIFIERS.to_mana, weight: 1000 },
     { ...PREFIX_MODIFIERS.to_armor, weight: 1000 },
     { ...PREFIX_MODIFIERS.to_evasion, weight: 1000 },
-  ]);
+  ];
 
-  #SUFFIX_MODIFIER_POOL = deepFreeze([
+  #SUFFIX_MODIFIER_POOL = [
     { ...SUFFIX_MODIFIERS.to_strength, weight: 1000 },
     { ...SUFFIX_MODIFIERS.to_dexterity, weight: 1000 },
     { ...SUFFIX_MODIFIERS.to_intelligence, weight: 1000 },
@@ -19,7 +18,7 @@ class Chest extends Wearable {
     { ...SUFFIX_MODIFIERS.to_fire_resistance, weight: 1000 },
     { ...SUFFIX_MODIFIERS.to_cold_resistance, weight: 1000 },
     { ...SUFFIX_MODIFIERS.to_lightning_resistance, weight: 1000 },
-  ]);
+  ];
 
   slot: WearableSlot;
   constructor(options: Options) {
