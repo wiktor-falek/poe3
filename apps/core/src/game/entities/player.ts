@@ -11,15 +11,7 @@ import type {
   CharacterClass,
 } from "@poe3/types";
 import { DamageType } from "../../../types.js";
-
-export interface TurnStartUpdate {
-  playerId: string;
-  resources?: {
-    ap?: number;
-    mp?: number;
-    hp?: number;
-  };
-}
+import Enemy from "./enemy.js";
 
 export interface ActionResult {
   damage: number;
@@ -36,16 +28,18 @@ class Player {
   name: string;
   level: number;
   class: CharacterClass;
-  silver: number;
   attributes: Attributes;
   resources: Resources;
   resistances: Resistances;
+  lifeRecovery: number;
+  manaRecovery: number;
+  lifeRegeneration: number;
+  manaRegeneration: number;
   constructor(character: Character) {
     this.id = nanoid(12);
     this.name = character.name;
     this.level = character.level;
     this.class = character.class;
-    this.silver = character.silver;
     this.attributes = getBaseClassAttributes(this.class);
     this.resources = getResources(this.level, this.attributes);
     this.resistances = {
@@ -54,15 +48,30 @@ class Player {
       lightning: 0,
       poison: 0,
     };
+    this.lifeRecovery = 1; // on combat start
+    this.manaRecovery = 1;
+
+    this.lifeRegeneration = 1; // on turn start
+    this.manaRegeneration = 1;
   }
 
-  isAlive() {
+  get isAlive() {
     return this.resources.hp > 0;
   }
 
-  turnStart(): TurnStartUpdate {
+  turnStart() {
+    // start of turn effects
+
+    // set ap to maxAp
     this.resources.ap = this.resources.maxAp;
-    return { playerId: this.id, resources: { ap: this.resources.ap } };
+
+    // recover hp and mp
+    this.addHealth(this.lifeRegeneration);
+    this.addMana(this.manaRegeneration);
+
+    // apply damage over time effects
+
+    // decrement debuff timers
   }
 
   takeDamage(amount: number, damageType: DamageType): number {
@@ -71,7 +80,21 @@ class Player {
     return amountAfterReduction;
   }
 
-  basicAttack(): Result<ActionResult> {
+  addHealth(amount: number) {
+    this.resources.hp = Math.min(
+      this.resources.hp + amount,
+      this.resources.maxHp
+    );
+  }
+
+  addMana(amount: number) {
+    this.resources.mp = Math.min(
+      this.resources.mp + amount,
+      this.resources.maxMp
+    );
+  }
+
+  basicAttack(target: Enemy): Result<ActionResult> {
     const AP_COST = 1;
 
     // check if resource costs can be met

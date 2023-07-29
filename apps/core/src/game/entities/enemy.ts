@@ -38,6 +38,14 @@ class Enemy {
     return this.resources.hp > 0;
   }
 
+  turnStart() {
+    // start of turn effects
+    
+    // apply damage over time effects
+    
+    // decrement debuff timers
+  }
+
   randomAction(players: Player[]) {
     const alivePlayers = players.filter((player) => player.isAlive);
     const action = { ...this.basicAttack(), target: choice(alivePlayers) };
@@ -49,6 +57,13 @@ class Enemy {
     const amountAfterReduction = amount;
     this.resources.hp = Math.max(this.resources.hp - amountAfterReduction, 0);
     return amountAfterReduction;
+  }
+
+  addHealth(amount: number) {
+    this.resources.hp = Math.min(
+      this.resources.hp + amount,
+      this.resources.maxHp
+    );
   }
 
   basicAttack() {
