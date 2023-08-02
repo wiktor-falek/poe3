@@ -94,6 +94,10 @@ class Player {
     );
   }
 
+  action(skill: unknown, ) {
+
+  }
+
   basicAttack(target: Enemy): Result<ActionResult> {
     const AP_COST = 1;
 

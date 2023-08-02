@@ -62,19 +62,13 @@ class Combat {
   }
 
   playerAction(target: Enemy | Player, skillId: number) {
-    const entity = this.currentTurn;
-    if (!(entity instanceof Player)) {
+    // validate that you are the current player
+    const player = this.currentTurn;
+    if (!(player instanceof Player)) {
       return Err("Not your turn");
     }
 
-    if (skillId === 0) {
-      if (target instanceof Player) {
-        return Err("Cannot attack another player");
-      }
-      entity.basicAttack(target);
-      return Ok(1);
-    }
-    return Err("Invalid skillId");
+    player.action(null, )
   }
 
   nextEntity() {

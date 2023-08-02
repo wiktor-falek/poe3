@@ -1,7 +1,8 @@
-import { Character } from "@poe3/types";
+import type { Character } from "@poe3/types";
 import Player from "./game/entities/player.js";
 import Enemy from "./game/entities/enemy.js";
 import Combat from "./game/combat.js";
+import AttackAbility from "./game/abilities/attackAbility.js";
 
 // const mockCharacter: Character = {
 //   id: 1,
@@ -19,5 +20,7 @@ import Combat from "./game/combat.js";
 
 // const combat = new Combat(players, enemies);
 // console.log(combat);
+
+// console.log(heavyStrike);
 
 export { Player, Enemy, Combat };
