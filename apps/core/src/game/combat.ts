@@ -18,16 +18,31 @@ import { Err, Ok } from "resultat";
     if entity instanceof Player: Player.turnStart(), wait for playerAction 
 */
 
+type ActionResult = {
+  attacker: Player | Enemy;
+  target: Player | Enemy;
+  damage: number;
+  damageType: "physical";
+  critical: boolean;
+};
+
+type TurnStart = {
+  entity: Player | Enemy;
+};
+
 class Combat {
-  players: Player[];
-  enemies: Enemy[];
   #turnIdx: number;
   #turnOrder: ReadonlyArray<Player | Enemy>;
+  state: "UNINITIALIZED" | "ONGOING" | "CONCLUDED";
+  players: Player[];
+  enemies: Enemy[];
+  #logs: (ActionResult | TurnStart)[];
   constructor(players: Player[], enemies: Enemy[]) {
     this.players = players;
     this.enemies = enemies;
-
+    this.state = "UNINITIALIZED";
     this.#turnIdx = 0;
+    this.#logs = [];
     const turnOrder = [...this.players, ...this.enemies];
     shuffle(turnOrder);
     this.#turnOrder = turnOrder;
@@ -49,13 +64,29 @@ class Combat {
     return this.enemiesWon || this.playersWon;
   }
 
-  begin() {
-    // ...
+  get logs() {
+    return this.#logs.map((log) => {
+      if ("attacker" in log) {
+        `${log.attacker.name} attacked ${log.target.name}, received ${log.damage} ${log.damageType} damage.` +
+        log.critical
+          ? "Critical Hit!"
+          : "";
+      } else {
+        `${log.entity}'s turn.`;
+      }
+    });
   }
 
-  continue() {
+  begin() {
+    this.state = "ONGOING";
+    this.continue();
+  }
+
+  async continue() {
     let entity = this.nextEntity();
-    while (!this.hasConcluded && entity instanceof Enemy) {
+    while (entity instanceof Enemy) {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      console.log("enemy turn");
       const enemyAction = entity.randomAction(this.players);
       entity = this.nextEntity();
     }
@@ -68,16 +99,16 @@ class Combat {
       return Err("Not your turn");
     }
 
-    player.action(null, )
+    player.action(null);
   }
 
   nextEntity() {
-    if (this.#turnIdx > this.#turnOrder.length - 1) {
-      this.#turnIdx = 0; // circular array
-    }
-    const entity = this.#turnOrder[this.#turnIdx];
     this.#turnIdx++;
+    if (this.#turnIdx > this.#turnOrder.length - 1) {
+      this.#turnIdx = 0;
+    }
 
+    const entity = this.#turnOrder[this.#turnIdx];
     return entity;
   }
 }

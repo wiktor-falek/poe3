@@ -2,7 +2,11 @@ import { DatabasePool, SlonikError, sql } from "slonik";
 import { Ok, Err } from "resultat";
 import { z } from "zod";
 import { pool } from "../postgres.js";
-import type { CharacterClass, CharacterOverview, Character } from "@poe3/types";
+import type {
+  CharacterClass,
+  CharacterOverview,
+  Character,
+} from "../../../../types/index.js";
 
 /*
 CREATE TABLE characters (

@@ -13,16 +13,6 @@ import type {
 import { DamageType } from "../../../types.js";
 import Enemy from "./enemy.js";
 
-export interface ActionResult {
-  damage: number;
-  critical: boolean;
-  cost?: {
-    ap?: number;
-    mp?: number;
-    hp?: number;
-  };
-}
-
 class Player {
   id: string;
   name: string;
@@ -94,11 +84,9 @@ class Player {
     );
   }
 
-  action(skill: unknown, ) {
+  action(skill: unknown) {}
 
-  }
-
-  basicAttack(target: Enemy): Result<ActionResult> {
+  basicAttack(target: Enemy) {
     const AP_COST = 1;
 
     // check if resource costs can be met
@@ -119,8 +107,6 @@ class Player {
     if (isCritical) {
       damage = Math.floor(damage * CRIT_MULTIPLIER);
     }
-
-    return Ok({ damage, critical: isCritical, cost: { ap: AP_COST } });
   }
 }
 

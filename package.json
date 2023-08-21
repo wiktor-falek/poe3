@@ -15,5 +15,11 @@
   "homepage": "https://github.com/wiktor-falek/poe3#readme",
   "devDependencies": {
     "typescript": "^5.1.6"
-  }
+  },
+  "dependencies": {
+    "lerna": "^7.1.5"
+  },
+  "workspaces": [
+    "apps"
+  ]
 }

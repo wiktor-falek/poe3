@@ -1,10 +1,13 @@
 <script lang="ts" setup>
-import { Resources } from "../../../common/types/unorganized";
+import type { Resources } from "@poe3/types";
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
-type ResourcesOptionalAp = Optional<Resources, "mp" | "maxMp" | "ap" | "maxAp">;
+type ResourcesOptionalMpAndAp = Optional<
+  Resources,
+  "mp" | "maxMp" | "ap" | "maxAp"
+>;
 
-defineProps<{ resources: ResourcesOptionalAp }>();
+defineProps<{ resources: ResourcesOptionalMpAndAp }>();
 </script>
 
 <template>

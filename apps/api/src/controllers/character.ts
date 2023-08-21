@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import CharacterModel from "../db/models/characterModel.js";
 import Joi from "joi";
-import { CharacterClass } from "@poe3/types";
+import type { CharacterClass } from "../../../types/index.js";
 
 const Character = new CharacterModel();
 
