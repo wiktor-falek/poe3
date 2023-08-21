@@ -5,8 +5,10 @@ import type { Character } from "@poe3/types";
 import ResourceBars from "../../../components/ResourceBars.vue";
 import { ref } from "vue";
 import useMessagesStore from "../../../stores/messageStore";
-
-type Entity = Player | Enemy; // TODO: move to core/types
+import SkillIcon from "../../../components/SkillIcon.vue";
+import Icon from "../../../components/Icon.vue";
+import type { Entity, Action } from "@poe3/core/types";
+import { reactive } from "vue";
 
 const messageStore = useMessagesStore();
 
@@ -23,49 +25,55 @@ const character: Character = {
 
 const player = new Player(character);
 const enemies = [new Enemy("Rat", 1, 10), new Enemy("Rat", 1, 10)];
-const combat = new Combat([player], enemies);
+const combat = reactive(new Combat([player], enemies));
 combat.begin();
 
 const selectedTarget = ref<Entity>();
-const selectedAction = ref<unknown>();
+const selectedAction = ref<Action>();
 
 function selectTarget(target: Entity) {
+  if (selectedAction.value) {
+    return playerAction(selectedAction.value, target);
+  }
   selectedTarget.value = target;
 }
 
-function playerAction() {
-  if (!selectedTarget.value) {
-    return messageStore.errorMessage("Invalid target");
+function selectAction(action: Action) {
+  if (selectedTarget.value) {
+    return playerAction(action, selectedTarget.value);
   }
+  selectedAction.value = action;
+}
 
-  if (!selectedAction.value) {
-    return messageStore.errorMessage("Invalid action");
-  }
-
-  // TODO: perform the action
-  // gameServer.socket.emit("instance:action", targetId, actionId);
+function playerAction(action: Action, target: Entity) {
+  console.log("action", { target, action });
+  combat.playerAction(player, action, target);
 }
 
 function endTurn() {
+  combat.continue();
   // TODO: end the turn
 }
-
-playerAction();
 </script>
 
 <template>
   <p>current turn: {{ combat.currentTurn.name }}</p>
-  <p>logs: {{ combat.logs }}</p>
+  <p>logs: {{ combat.humanReadableLogs }}</p>
+  <!-- <RewardsModal /> -->
   <div class="combat-room">
     <div class="board">
       <div class="party">
-        <div class="entity" v-for="enemy in combat.enemies">
+        <div
+          class="entity"
+          v-for="enemy in combat.enemies"
+          @click="selectTarget(enemy)"
+        >
           <div class="entity__sprite">SPRITE</div>
 
           <hr
             class="entity__select"
             :class="{
-              'entity__select--selected': false,
+              'entity__select--selected': enemy.id === selectedTarget?.id,
               'entity__select--attacking': false,
             }"
           />
@@ -74,22 +82,25 @@ playerAction();
             <ResourceBars :resources="enemy.resources"></ResourceBars>
           </div>
 
-          <p class="entity__text">
-            <span class="entity__name">{{ enemy.name }}</span
-            >&nbsp;
-            <span class="entity__level"> Lv {{ enemy.level }}</span>
-          </p>
+          <div class="entity__text">
+            <p class="entity__name">{{ enemy.name }}</p>
+            <p class="entity__level">LVL {{ enemy.level }}</p>
+          </div>
         </div>
       </div>
 
       <div class="party">
-        <div class="entity" v-for="player in combat.players">
+        <div
+          class="entity"
+          v-for="player in combat.players"
+          @click="selectTarget(player)"
+        >
           <div class="entity__sprite">SPRITE</div>
 
           <hr
             class="entity__select"
             :class="{
-              'entity__select--selected': false,
+              'entity__select--selected': player.id === selectedTarget?.id,
               'entity__select--attacking': false,
             }"
           />
@@ -98,127 +109,13 @@ playerAction();
             <ResourceBars :resources="player.resources"></ResourceBars>
           </div>
 
-          <p class="entity__text">
-            <span class="entity__name">{{ player.name }}</span
-            >&nbsp
-            <span class="entity__level"> Lv {{ player.level }}</span>
-          </p>
+          <div class="entity__text">
+            <p class="entity__name">{{ player.name }}</p>
+            <p class="entity__level">LVL {{ player.level }}</p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</template>
-
-<!-- 
-  <template>
-  <RewardsModal></RewardsModal>
-  <div
-    class="combat-room"
-    v-if="gameServer.state.instance?.room"
-    @keydown="onPress($event)"
-    tabindex="-1"
-  >
-    <div class="board" v-if="gameServer.state.instance.room">
-      <div class="party party--enemy">
-        <div
-          class="entity"
-          v-for="enemy in gameServer.state.instance.room.enemies"
-          @click.stop="selectTarget(enemy.id)"
-        >
-          <div class="entity__damage-popup">
-            <p
-              class="entity__damage-popup__damage"
-              :class="{
-                'entity__damage-popup__damage--critical': damagePopup?.critical,
-                'entity__damage-popup__damage--hide': damagePopup?.targetId !== enemy.id,
-              }"
-            >
-              {{ damagePopup?.damage }}
-            </p>
-          </div>
-
-          <div class="entity__sprite">SPRITE</div>
-
-          <hr
-            class="entity__select"
-            :class="{
-              'entity__select--selected': targetId === enemy.id,
-              'entity__select--attacking': damagePopup?.attackerId === enemy.id,
-            }"
-          />
-
-          <div class="entity__resources">
-            <ResourceBars :resources="{ hp: enemy.hp, maxHp: enemy.maxHp }"></ResourceBars>
-          </div>
-
-          <p class="entity__text">
-            <span class="entity__name">{{ enemy.name }}</span
-            >&nbsp;
-            <span class="entity__level"> Lv {{ enemy.level }}</span>
-          </p>
-        </div>
-      </div>
-      <div class="party party--ally">
-        <div
-          class="entity"
-          v-for="player in gameServer.state.instance.room.players.sort((a, b) =>
-            a.name.localeCompare(b.name)
-          )"
-        >
-          <div class="entity__damage-popup">
-            <p
-              class="entity__damage-popup__damage"
-              :class="{
-                'entity__damage-popup__damage--critical': damagePopup?.critical,
-                'entity__damage-popup__damage--hide': damagePopup?.targetId !== player.id,
-              }"
-            >
-              {{ damagePopup?.damage }}
-            </p>
-          </div>
-
-          <div class="entity__sprite">SPRITE</div>
-
-          <hr
-            class="entity__select"
-            :class="{
-              'entity__select--selected': targetId === player.id,
-            }"
-          />
-
-          <div class="entity__resources">
-            <ResourceBars :resources="player.resources"></ResourceBars>
-          </div>
-
-          <p class="entity__text">
-            <span
-              class="entity__name"
-              :class="{
-                'entity--current-character': characterStore.character?.name === player.name,
-              }"
-              >{{ player.name }}</span
-            >&nbsp;
-            <span class="entity__level"> Lv {{ player.level }}</span>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <div class="info">
-      <p v-if="gameServer.state.instance.room.enemiesWon">Enemy Party Won</p>
-      <p v-if="gameServer.state.instance.room.playersWon">Your Party Won</p>
-      <p
-        v-if="
-          gameServer.state.instance.room.currentTurnPlayerName ===
-          characterStore.character?.name
-        "
-      >
-        Your Turn
-      </p>
-      <p v-else>Current turn: {{ gameServer.state.instance.room.currentTurnPlayerName }}</p>
-      <p class="red" v-if="player && player.resources.hp <= 0">You Are Dead</p>
-    </div>
-
     <div class="hud">
       <div class="wrapper">
         <div class="hud__side-skills">
@@ -226,8 +123,8 @@ playerAction();
             keyBind="spc"
             :apCost="1"
             imgId="0"
-            :selected="actionId === '0'"
-            @click.stop="selectSkill('0')"
+            :selected="selectedAction === 'BASIC_ATTACK'"
+            @click.stop="selectAction('BASIC_ATTACK')"
           />
         </div>
         <div class="hud__main-skills">
@@ -235,66 +132,69 @@ playerAction();
             keyBind="q"
             :apCost="1"
             imgId="1"
-            :selected="actionId === '1'"
-            @click.stop="selectSkill('1')"
+            :selected="selectedAction === 'ABILITY_1'"
+            @click.stop="selectAction('ABILITY_1')"
           />
           <SkillIcon
             keyBind="w"
             :apCost="1"
             imgId="1"
-            :selected="actionId === '2'"
-            @click.stop="selectSkill('2')"
+            :selected="selectedAction === 'ABILITY_2'"
+            @click.stop="selectAction('ABILITY_2')"
           />
           <SkillIcon
             keyBind="e"
             :apCost="1"
             imgId="1"
-            :selected="actionId === '3'"
-            @click.stop="selectSkill('3')"
+            :selected="selectedAction === 'ABILITY_3'"
+            @click.stop="selectAction('ABILITY_3')"
           />
           <SkillIcon
             keyBind="r"
             :apCost="1"
             imgId="1"
-            :selected="actionId === '4'"
-            @click.stop="selectSkill('4')"
+            :selected="selectedAction === 'ABILITY_4'"
+            @click.stop="selectAction('ABILITY_4')"
           />
           <SkillIcon
             keyBind="a"
             :apCost="1"
             imgId="1"
-            :selected="actionId === '5'"
-            @click.stop="selectSkill('5')"
+            :selected="selectedAction === 'ABILITY_5'"
+            @click.stop="selectAction('ABILITY_5')"
           />
           <SkillIcon
             keyBind="s"
             :apCost="1"
             imgId="1"
-            :selected="actionId === '6'"
-            @click.stop="selectSkill('6')"
+            :selected="selectedAction === 'ABILITY_6'"
+            @click.stop="selectAction('ABILITY_6')"
           />
           <SkillIcon
             keyBind="d"
             :apCost="1"
             imgId="1"
-            :selected="actionId === '7'"
-            @click.stop="selectSkill('7')"
+            :selected="selectedAction === 'ABILITY_7'"
+            @click.stop="selectAction('ABILITY_7')"
           />
           <SkillIcon
             keyBind="f"
             :apCost="1"
             imgId="1"
-            :selected="actionId === '8'"
-            @click.stop="selectSkill('8')"
+            :selected="selectedAction === 'ABILITY_8'"
+            @click.stop="selectAction('ABILITY_8')"
           />
         </div>
         <div class="hud__actions">
           <Icon keyBind="n" imgId="1" @click="endTurn"></Icon>
-          <Icon keyBind="l" imgId="0" @click="leaveInstance"></Icon>
+          <!-- <Icon keyBind="l" imgId="0" @click="leaveInstance"></Icon> -->
         </div>
       </div>
     </div>
   </div>
+</template>
+
+<!-- 
 </template>
  -->
 
@@ -596,18 +496,29 @@ onMounted(() => {
 }
 
 .entity__text {
-  margin: 0;
-  margin-top: 2px;
+  margin-top: 4px;
   font-weight: bold;
   font-size: 16px;
   text-align: center;
+  max-width: 96px;
+  line-height: normal;
+}
+
+.entity__name {
+  margin: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size: 0.8em;
+}
+
+.entity__level {
+  margin: 0;
+  font-size: 0.7em;
+  font-weight: 800;
 }
 
 .entity--current-character {
   color: var(--current-character);
-}
-
-.entity__level {
 }
 
 .entity__select {
@@ -617,7 +528,7 @@ onMounted(() => {
 }
 .entity__select--selected {
   visibility: visible;
-  color: var(--select);
+  color: rgb(69, 208, 255);
 }
 
 .entity__select--attacking {

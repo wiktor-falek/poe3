@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import { Err, Ok, Result } from "resultat";
+import { Err, Ok, Result, ResultErr } from "resultat";
 import { randint } from "pyrand";
 import { getBaseClassAttributes } from "../../baseClassAttributes.js";
 import getResources from "../../components/getResources.js";
@@ -10,7 +10,7 @@ import type {
   Character,
   CharacterClass,
 } from "@poe3/types";
-import { DamageType } from "../../../types.js";
+import { Action, ActionResult, DamageType, Entity } from "../../../types.js";
 import Enemy from "./enemy.js";
 
 class Player {
@@ -84,14 +84,12 @@ class Player {
     );
   }
 
-  action(skill: unknown) {}
-
   basicAttack(target: Enemy) {
     const AP_COST = 1;
 
     // check if resource costs can be met
     if (this.resources.ap < AP_COST) {
-      return Err("Resource costs not met");
+      return "Resource costs not met";
     }
 
     // deduct costs from resources
@@ -103,9 +101,36 @@ class Player {
 
     let damage = randint(3, 5);
     const critRoll = randint(1, 100);
-    const isCritical = CRIT_CHANCE > critRoll;
-    if (isCritical) {
+    const critical = CRIT_CHANCE > critRoll;
+    if (critical) {
       damage = Math.floor(damage * CRIT_MULTIPLIER);
+    }
+
+    const damageType = "physical";
+
+    target.takeDamage(damage, damageType);
+
+    const action: ActionResult = {
+      attacker: this,
+      target,
+      damage,
+      damageType,
+      critical,
+    };
+
+    return action;
+  }
+
+  action(action: Action, target: Entity) {
+    switch (action) {
+      case "BASIC_ATTACK":
+        if (target instanceof Player) {
+          return "Cannot attack another player";
+        }
+        return this.basicAttack(target);
+
+      default:
+        return "Unhandled action";
     }
   }
 }

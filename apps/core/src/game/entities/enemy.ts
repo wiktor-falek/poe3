@@ -2,7 +2,7 @@ import { Attributes, Resistances, Resources } from "@poe3/types";
 import { nanoid } from "nanoid";
 import { choice, randint } from "pyrand";
 import Player from "./player.js";
-import { DamageType } from "../../../types.js";
+import { ActionResult, DamageType } from "../../../types.js";
 
 class Enemy {
   id: string;
@@ -40,22 +40,25 @@ class Enemy {
 
   turnStart() {
     // start of turn effects
-    
     // apply damage over time effects
-    
     // decrement debuff timers
   }
 
-  randomAction(players: Player[]) {
+  randomAction(players: Player[]): ActionResult {
     const alivePlayers = players.filter((player) => player.isAlive);
-    const action = { ...this.basicAttack(), target: choice(alivePlayers) };
+    const action: ActionResult = {
+      ...this.basicAttack(),
+      target: choice(alivePlayers),
+    };
     action.target.takeDamage(action.damage, action.damageType);
     return action;
   }
 
-  takeDamage(amount: number): number {
+  takeDamage(amount: number, damageType: DamageType): number {
+    console.log({ enemy: this });
     const amountAfterReduction = amount;
-    this.resources.hp = Math.max(this.resources.hp - amountAfterReduction, 0);
+    this.resources.hp -= 2;
+    // this.resources.hp = Math.max(this.resources.hp - amountAfterReduction, 0);
     return amountAfterReduction;
   }
 
