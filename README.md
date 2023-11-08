@@ -2,7 +2,7 @@
 
 ### Multiplayer browser game that combines ARPG item and loot system similar to Diablo II and Path of Exile, randomised environment generation of roguelikes, with turn based strategy genre.
 
-### **Notice: This game is still in very early stages of development.**
+### **Notice: This game is still in very early stages of development, and is abandoned at the moment due to skill issue.**
 
 <br>
 
